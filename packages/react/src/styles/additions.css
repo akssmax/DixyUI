@@ -586,7 +586,8 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  :where(.dixy-calendar, .dixy-range-calendar) .dixy-aria-button:is([slot="previous"], [slot="next"]) {
+  :where(.dixy-calendar, .dixy-range-calendar)
+    .dixy-aria-button:is([slot="previous"], [slot="next"]) {
     display: inline-grid;
     place-items: center;
     inline-size: var(--dixy-interaction-target);
@@ -648,7 +649,11 @@
     outline-offset: -2px;
   }
   /* A range reads as one band: only its ends carry the outline. */
-  .dixy-range-calendar .dixy-aria-calendarcell[data-selected]:not([data-selection-start], [data-selection-end]) {
+  .dixy-range-calendar
+    .dixy-aria-calendarcell[data-selected]:not(
+      [data-selection-start],
+      [data-selection-end]
+    ) {
     outline: 0;
     font-weight: inherit;
   }

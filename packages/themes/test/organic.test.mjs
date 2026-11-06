@@ -78,7 +78,8 @@ test("v2 saved documents migrate with per-frame defaults and keep geometry and p
     const legacy = structuredClone(themeDocuments[0]);
     legacy.schemaVersion = 2;
     legacy.recipes.frame.id = frame;
-    for (const key of ["backdropBlur", "backdropSaturate"]) delete legacy.recipes.material.parameters[key];
+    for (const key of ["backdropBlur", "backdropSaturate"])
+      delete legacy.recipes.material.parameters[key];
     delete legacy.recipes.frame.ornament;
     delete legacy.character;
     legacy.recipes.frame.parameters.paddingTop = 19;

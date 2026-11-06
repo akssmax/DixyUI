@@ -1027,9 +1027,13 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Fonts: VT323 (`terminal`) and JetBrains Mono (`jetbrains`), pinned Fontsource 5.3.0 with `@font-face` rules in `docs.css`.
   - The painters live in a new file, `organic-paint-launch.ts`, which composes by card size instead of stamping:
     ```ts
-    const tierOf = (w, h) => w >= 440 && h >= 160 ? "hero" : w < 300 || h < 140 ? "small" : "card";
-    const choose = (index, seed, salt, n) => Math.floor(rand(seed * 0.173 + index * 7.31 + salt * 3.7) * n) % n;
-    function room(x, y, w, h, l) { /* distance to content box: soft marks stop short of it */ }
+    const tierOf = (w, h) =>
+      w >= 440 && h >= 160 ? "hero" : w < 300 || h < 140 ? "small" : "card";
+    const choose = (index, seed, salt, n) =>
+      Math.floor(rand(seed * 0.173 + index * 7.31 + salt * 3.7) * n) % n;
+    function room(x, y, w, h, l) {
+      /* distance to content box: soft marks stop short of it */
+    }
     ```
     - A hero card gets the full scene, a regular card one accent, and a small card one detail.
     - Each instance picks its accent corner and ink from its own index.
@@ -1083,6 +1087,7 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - upload with `Progress`, `AvatarGroup` and `IconButton`
 
   Every card is `Card.Header` + `Card.Content`, so wells, titlebars, frames and ornaments apply. The skin voice still drives the eyebrow, headline and toast copy. Full-width actions opt in with `.theme-wall-wide`.
+
 - Verified (in-app browser):
   - Before/after width diff of every button and badge across all eight preview views, with all 78 gallery demos loaded. Only the stretched cases changed, plus Player track rows, which were then fixed in docs.
   - Audit script (wrap, stretch, overflow, squeeze) is clean on the base theme at 1440px and 375px in light and dark. "In progress" no longer wraps. Papel Picado at 820px and 1280px is clean.

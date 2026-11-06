@@ -734,8 +734,22 @@ export const paintSumi: OrganicPainter = (
       }
     }
     // The growing tip ends in a pair of young leaves.
-    bambooLeaf(ctx, at(top), top, -Math.PI / 2 - 0.5 + sway, len * 0.55, colors.b);
-    bambooLeaf(ctx, at(top), top, -Math.PI / 2 + 0.35 + sway, len * 0.45, colors.b);
+    bambooLeaf(
+      ctx,
+      at(top),
+      top,
+      -Math.PI / 2 - 0.5 + sway,
+      len * 0.55,
+      colors.b,
+    );
+    bambooLeaf(
+      ctx,
+      at(top),
+      top,
+      -Math.PI / 2 + 0.35 + sway,
+      len * 0.45,
+      colors.b,
+    );
   }
   // A plum branch along the top edge, blossoms in the accent ink.
   if (state.style === "Plum blossom") {

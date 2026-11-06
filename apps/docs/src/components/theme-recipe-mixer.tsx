@@ -351,8 +351,9 @@ export function ThemeRecipeMixer({
                 {chromeLabels.well[character.chrome.well]} stays {clash.tone} in
                 both appearances, so the {clash.appearance} theme gets a{" "}
                 {clash.tone === "dark" ? "near-black" : "near-white"} panel on a{" "}
-                {clash.appearance} card ({clash.step.toFixed(0)}:1). That can read
-                as a hole in the page. Keep it if that is the look you want.
+                {clash.appearance} card ({clash.step.toFixed(0)}:1). That can
+                read as a hole in the page. Keep it if that is the look you
+                want.
               </p>
               <Button
                 size="sm"

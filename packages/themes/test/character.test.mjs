@@ -44,7 +44,8 @@ test("neutral character adds no component rules, so v3 documents keep their look
   const legacy = clone(base());
   legacy.schemaVersion = 3;
   delete legacy.character;
-  for (const key of ["backdropBlur", "backdropSaturate"]) delete legacy.recipes.material.parameters[key];
+  for (const key of ["backdropBlur", "backdropSaturate"])
+    delete legacy.recipes.material.parameters[key];
   const migrated = parseThemeDocument(legacy);
   assert.deepEqual(migrated.character, defaultCharacter);
   assert.equal(compileThemeDocument(migrated).css, neutral);
@@ -176,7 +177,8 @@ test("window chrome rebuilds card parts without new markup and migrates from v4"
   const v4 = base();
   v4.schemaVersion = 4;
   delete v4.character.chrome;
-  for (const key of ["backdropBlur", "backdropSaturate"]) delete v4.recipes.material.parameters[key];
+  for (const key of ["backdropBlur", "backdropSaturate"])
+    delete v4.recipes.material.parameters[key];
   const migrated = parseThemeDocument(v4);
   assert.equal(migrated.schemaVersion, 6);
   assert.deepEqual(migrated.character.chrome, defaultChrome);

@@ -746,7 +746,10 @@ function shuffleOnce(preset: ThemePreset, seed: number): ThemePreset {
   };
   if (next.document && isOrganicFrameId(next.document.recipes.frame.id))
     next = changeThemeOrnament(next, "seed", 1 + Math.floor(random() * 9998));
-  next = adaptWellForShuffle({ ...next, document: editableThemeDocument(next) });
+  next = adaptWellForShuffle({
+    ...next,
+    document: editableThemeDocument(next),
+  });
   return { ...next, document: editableThemeDocument(next) };
 }
 // The theme package owns which frames are canvas-painted; new frames need no docs change.

@@ -4,12 +4,7 @@ import { OrganicOrnament } from "../organic-ornament.js";
 import type { OrnamentProps } from "../ornament-parts.js";
 export function SailOrnament(props: OrnamentProps) {
   return (
-    <OrganicOrnament
-      {...props}
-      kind="orbit"
-      skin="sail"
-      painter={paintOrbit}
-    />
+    <OrganicOrnament {...props} kind="orbit" skin="sail" painter={paintOrbit} />
   );
 }
 export default SailOrnament;

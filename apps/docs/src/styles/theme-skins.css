@@ -530,7 +530,11 @@
   padding: 10px 12px;
   border: 1px solid var(--dixy-color-border-warning);
   border-radius: 8px;
-  background: color-mix(in srgb, var(--dixy-color-border-warning) 10%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--dixy-color-border-warning) 10%,
+    transparent
+  );
 }
 .theme-mixer-warning p {
   margin: 0;

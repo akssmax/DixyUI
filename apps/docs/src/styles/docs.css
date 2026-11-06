@@ -77,77 +77,88 @@
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+  src: url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "IBM Plex Mono";
   font-style: normal;
   font-display: swap;
   font-weight: 700;
-  src: url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-normal.woff2") format("woff2");
+  src: url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-700-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Archivo Black";
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2") format("woff2");
+  src: url("@fontsource/archivo-black/files/archivo-black-latin-400-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Tilt Neon";
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("@fontsource/tilt-neon/files/tilt-neon-latin-400-normal.woff2") format("woff2");
+  src: url("@fontsource/tilt-neon/files/tilt-neon-latin-400-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Shippori Mincho";
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("@fontsource/shippori-mincho/files/shippori-mincho-latin-400-normal.woff2") format("woff2");
+  src: url("@fontsource/shippori-mincho/files/shippori-mincho-latin-400-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Shippori Mincho";
   font-style: normal;
   font-display: swap;
   font-weight: 700;
-  src: url("@fontsource/shippori-mincho/files/shippori-mincho-latin-700-normal.woff2") format("woff2");
+  src: url("@fontsource/shippori-mincho/files/shippori-mincho-latin-700-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Zen Kaku Gothic New";
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("@fontsource/zen-kaku-gothic-new/files/zen-kaku-gothic-new-latin-400-normal.woff2") format("woff2");
+  src: url("@fontsource/zen-kaku-gothic-new/files/zen-kaku-gothic-new-latin-400-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Zen Kaku Gothic New";
   font-style: normal;
   font-display: swap;
   font-weight: 700;
-  src: url("@fontsource/zen-kaku-gothic-new/files/zen-kaku-gothic-new-latin-700-normal.woff2") format("woff2");
+  src: url("@fontsource/zen-kaku-gothic-new/files/zen-kaku-gothic-new-latin-700-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Playfair Display Variable";
   font-style: normal;
   font-display: swap;
   font-weight: 400 900;
-  src: url("@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2") format("woff2");
+  src: url("@fontsource-variable/playfair-display/files/playfair-display-latin-wght-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Caveat Variable";
   font-style: normal;
   font-display: swap;
   font-weight: 400 700;
-  src: url("@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2") format("woff2");
+  src: url("@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Bricolage Grotesque Variable";
   font-style: normal;
   font-display: swap;
   font-weight: 200 800;
-  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2") format("woff2");
+  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2")
+    format("woff2");
 }
 /* Original starters, redone (2026-11): Manrope (Prism Glass), Figtree (Forest, Atelier, Material), Cormorant Garamond (Atelier). */
 @font-face {
@@ -155,28 +166,32 @@
   font-style: normal;
   font-display: swap;
   font-weight: 200 800;
-  src: url("@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2") format("woff2");
+  src: url("@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Figtree Variable";
   font-style: normal;
   font-display: swap;
   font-weight: 300 900;
-  src: url("@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2") format("woff2");
+  src: url("@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Cormorant Garamond Variable";
   font-style: normal;
   font-display: swap;
   font-weight: 300 700;
-  src: url("@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2") format("woff2");
+  src: url("@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "Cormorant Garamond Variable";
   font-style: italic;
   font-display: swap;
   font-weight: 300 700;
-  src: url("@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-italic.woff2") format("woff2");
+  src: url("@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-italic.woff2")
+    format("woff2");
 }
 /* Terminal themes (2026-12): VT323 for Phosphor Terminal, JetBrains Mono 700 for ANSI Panes. */
 @font-face {
@@ -184,14 +199,16 @@
   font-style: normal;
   font-display: swap;
   font-weight: 400;
-  src: url("@fontsource/vt323/files/vt323-latin-400-normal.woff2") format("woff2");
+  src: url("@fontsource/vt323/files/vt323-latin-400-normal.woff2")
+    format("woff2");
 }
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;
   font-display: swap;
   font-weight: 700;
-  src: url("@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2") format("woff2");
+  src: url("@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2")
+    format("woff2");
 }
 * {
   box-sizing: border-box;

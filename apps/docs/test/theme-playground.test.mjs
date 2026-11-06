@@ -418,10 +418,16 @@ test("shuffle never sets a fixed dark well inside a light card", () => {
     const well = next.document.character.chrome.well;
     const { text, action, well: step } = themeContrast(next);
     assert.notEqual(wellGrounds[well].kind, "fixed", `seed ${seed} ${well}`);
-    assert.ok(step <= shuffleContrastTargets.wellStep, `seed ${seed} step ${step}`);
+    assert.ok(
+      step <= shuffleContrastTargets.wellStep,
+      `seed ${seed} step ${step}`,
+    );
     // Text and the accent button are measured on the well's own ground as well as the card.
     assert.ok(text >= shuffleContrastTargets.text, `seed ${seed} text ${text}`);
-    assert.ok(action >= shuffleContrastTargets.action, `seed ${seed} action ${action}`);
+    assert.ok(
+      action >= shuffleContrastTargets.action,
+      `seed ${seed} action ${action}`,
+    );
   }
 });
 
@@ -447,7 +453,12 @@ test("well traits flag the LCD clash and swap in its substitute", () => {
   // The inspector warns about the same clash but leaves the choice to the author.
   assert.deepEqual(
     { ...wellClash(winamp), step: undefined },
-    { appearance: "light", step: undefined, tone: "dark", substitute: "recessed" },
+    {
+      appearance: "light",
+      step: undefined,
+      tone: "dark",
+      substitute: "recessed",
+    },
   );
   assert.equal(wellClash(adapted), null);
   // Appearance-following wells are left alone.

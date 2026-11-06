@@ -96,7 +96,10 @@ function petal(
       const a = -spread + (spread * 2 * j) / 16,
         notch = Math.abs(a) < 0.1 ? 0.72 + Math.abs(a) * 2.8 : 1,
         wave = 1 + Math.sin(j * 2.3 + seed) * 0.035;
-      ctx.lineTo(Math.cos(a) * r * notch * wave, Math.sin(a) * r * notch * wave);
+      ctx.lineTo(
+        Math.cos(a) * r * notch * wave,
+        Math.sin(a) * r * notch * wave,
+      );
     }
     ctx.closePath();
     const fan = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
@@ -142,9 +145,15 @@ function petal(
       const prev = k ? lobes[k - 1][0] : a - 0.6;
       const sinus = (a + prev) / 2;
       ctx.lineTo(Math.cos(sinus) * R * 0.38, Math.sin(sinus) * R * 0.38);
-      ctx.lineTo(Math.cos(a - 0.16) * R * len * 0.72, Math.sin(a - 0.16) * R * len * 0.72);
+      ctx.lineTo(
+        Math.cos(a - 0.16) * R * len * 0.72,
+        Math.sin(a - 0.16) * R * len * 0.72,
+      );
       ctx.lineTo(Math.cos(a) * R * len, Math.sin(a) * R * len);
-      ctx.lineTo(Math.cos(a + 0.16) * R * len * 0.72, Math.sin(a + 0.16) * R * len * 0.72);
+      ctx.lineTo(
+        Math.cos(a + 0.16) * R * len * 0.72,
+        Math.sin(a + 0.16) * R * len * 0.72,
+      );
     }
     ctx.lineTo(Math.cos(1.95) * R * 0.32, Math.sin(1.95) * R * 0.32);
     ctx.closePath();
@@ -203,7 +212,14 @@ function petal(
       ctx.rotate(a);
       ctx.beginPath();
       ctx.moveTo(0, 0);
-      ctx.bezierCurveTo(r * 0.2, -r * 1.1, r * 1.5, -r * 0.9, r * 1.25, -r * 0.05);
+      ctx.bezierCurveTo(
+        r * 0.2,
+        -r * 1.1,
+        r * 1.5,
+        -r * 0.9,
+        r * 1.25,
+        -r * 0.05,
+      );
       ctx.lineTo(r * 1.1, 0);
       ctx.lineTo(r * 1.25, r * 0.05);
       ctx.bezierCurveTo(r * 1.5, r * 0.9, r * 0.2, r * 1.1, 0, 0);
@@ -638,12 +654,22 @@ export const paintForest: OrganicPainter = (
         u = 0.2 + rand(s + 9) * 0.8,
         v = 1 - u;
       // Point and tangent on the hanging stem's actual bezier, so leaves sit on it.
-      const bx = [st.x, st.x + st.bend * 0.3, st.x + st.bend, st.x + st.bend * 0.8],
+      const bx = [
+          st.x,
+          st.x + st.bend * 0.3,
+          st.x + st.bend,
+          st.x + st.bend * 0.8,
+        ],
         by = [0, st.len * 0.3, st.len * 0.65, st.len];
       const at = (c: number[]) =>
-          v * v * v * c[0] + 3 * v * v * u * c[1] + 3 * v * u * u * c[2] + u * u * u * c[3],
+          v * v * v * c[0] +
+          3 * v * v * u * c[1] +
+          3 * v * u * u * c[2] +
+          u * u * u * c[3],
         slope = (c: number[]) =>
-          3 * v * v * (c[1] - c[0]) + 6 * v * u * (c[2] - c[1]) + 3 * u * u * (c[3] - c[2]);
+          3 * v * v * (c[1] - c[0]) +
+          6 * v * u * (c[2] - c[1]) +
+          3 * u * u * (c[3] - c[2]);
       const t = Math.atan2(slope(by), slope(bx));
       q = { x: at(bx), y: at(by), t };
       // Leaves angle down-and-out from the stem, alternating sides like real nodes.
