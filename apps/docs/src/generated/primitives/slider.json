@@ -1,0 +1,398 @@
+{
+  "name": "Slider",
+  "slug": "slider",
+  "parts": [
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "form",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the form that owns the slider inputs.\nUseful when the slider is rendered outside the form.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "defaultValue",
+          "type": "Value | undefined",
+          "required": false,
+          "description": "The uncontrolled value of the slider when it's initially rendered.\n\nTo render a controlled slider, use the `value` prop instead.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "value",
+          "type": "Value | undefined",
+          "required": false,
+          "description": "The value of the slider.\nFor range sliders, provide an array with one value per thumb.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the slider should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: Value extends number ? number : Value, eventDetails: SliderRoot.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback function that is fired when the slider's value changed.\nReceives the new value as the first argument; the originating event is\navailable as `eventDetails.event`. The value is also reflected on\n`eventDetails.event.target.value` for form integration.\n\nThe `eventDetails.reason` indicates what triggered the change:\n\n- `'input-change'` when the hidden range input emits a change event (for example, via form integration)\n- `'track-press'` when the control track is pressed\n- `'drag'` while dragging a thumb\n- `'keyboard'` for keyboard input\n- `'none'` when the change is triggered without a specific interaction",
+          "default": "—"
+        },
+        {
+          "name": "orientation",
+          "type": "Orientation | undefined",
+          "required": false,
+          "description": "The component orientation.",
+          "default": "'horizontal'"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "max",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The maximum allowed value of the slider.\nShould not be equal to min.",
+          "default": "100"
+        },
+        {
+          "name": "min",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The minimum allowed value of the slider.\nShould not be equal to max.",
+          "default": "0"
+        },
+        {
+          "name": "name",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the field when a form is submitted.",
+          "default": "—"
+        },
+        {
+          "name": "step",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The granularity with which the slider can step through values. (A \"discrete\" slider.)\nThe `min` prop serves as the origin for the valid values.\nWe recommend (max - min) to be evenly divisible by the step.",
+          "default": "1"
+        },
+        {
+          "name": "locale",
+          "type": "Intl.LocalesArgument | undefined",
+          "required": false,
+          "description": "The locale used by `Intl.NumberFormat` when formatting the value.\nDefaults to the user's runtime locale.",
+          "default": "—"
+        },
+        {
+          "name": "format",
+          "type": "Intl.NumberFormatOptions | undefined",
+          "required": false,
+          "description": "Options to format the value.",
+          "default": "—"
+        },
+        {
+          "name": "largeStep",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The granularity with which the slider can step through values when using Page Up/Page Down or Shift + Arrow Up/Arrow Down.",
+          "default": "10"
+        },
+        {
+          "name": "onValueCommitted",
+          "type": "((value: Value extends number ? number : Value, eventDetails: SliderRoot.CommitEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback function that is fired when a value change is committed.\nDoes not fire if the value did not change, or if the change was canceled.\n**Warning**: This is a generic event, not a change event.\n\nThe `eventDetails.reason` indicates what triggered the commit:\n\n- `'drag'` while dragging a thumb\n- `'track-press'` when the control track is pressed\n- `'keyboard'` for keyboard input\n- `'input-change'` when the hidden range input emits a change event (for example, via form integration)\n- `'none'` when the commit occurs without a specific interaction",
+          "default": "—"
+        },
+        {
+          "name": "minStepsBetweenValues",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The minimum steps between values in a range slider.",
+          "default": "0"
+        },
+        {
+          "name": "thumbAlignment",
+          "type": "'center' | 'edge' | 'edge-client-only' | undefined",
+          "required": false,
+          "description": "How the thumb(s) are aligned relative to `Slider.Control` when the value is at `min` or `max`:\n- `center`: The center of the thumb is aligned with the control edge\n- `edge`: The thumb is inset within the control such that its edge is aligned with the control edge\n- `edge-client-only`: Same as `edge` but renders after React hydration on the client, reducing bundle size in return",
+          "default": "'center'"
+        },
+        {
+          "name": "thumbCollisionBehavior",
+          "type": "'push' | 'swap' | 'none' | undefined",
+          "required": false,
+          "description": "Controls how thumbs behave when they collide during pointer interactions.\n\n- `'push'` (default): Thumbs push each other without restoring their previous positions when dragged back.\n- `'swap'`: Thumbs swap places when dragged past each other.\n- `'none'`: Thumbs cannot move past each other; excess movement is ignored.",
+          "default": "'push'"
+        }
+      ]
+    },
+    {
+      "name": "Label",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Control",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Track",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Thumb",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "tabIndex",
+          "type": "number | undefined",
+          "required": false,
+          "description": "Optional tab index attribute forwarded to the `input`.",
+          "default": "—"
+        },
+        {
+          "name": "aria-valuetext",
+          "type": "React.AriaAttributes['aria-valuetext'] | undefined",
+          "required": false,
+          "description": "A string value forwarded to the [`aria-valuetext`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-valuetext) attribute of the `input`.\nIgnored when `getAriaValueText` is provided.",
+          "default": "—"
+        },
+        {
+          "name": "onFocus",
+          "type": "React.FocusEventHandler<HTMLInputElement> | undefined",
+          "required": false,
+          "description": "A focus handler forwarded to the `input`.",
+          "default": "—"
+        },
+        {
+          "name": "onBlur",
+          "type": "React.FocusEventHandler<HTMLInputElement> | undefined",
+          "required": false,
+          "description": "A blur handler forwarded to the `input`.",
+          "default": "—"
+        },
+        {
+          "name": "onKeyDown",
+          "type": "React.KeyboardEventHandler<HTMLInputElement> | undefined",
+          "required": false,
+          "description": "A keydown handler forwarded to the `input`.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the thumb should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "inputRef",
+          "type": "React.Ref<HTMLInputElement> | undefined",
+          "required": false,
+          "description": "A ref to access the nested input element.",
+          "default": "—"
+        },
+        {
+          "name": "getAriaValueText",
+          "type": "((formattedValue: string, value: number, index: number) => string) | null | undefined",
+          "required": false,
+          "description": "A function which returns a string value for the [`aria-valuetext`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-valuetext) attribute of the `input`.\nThis is important for screen reader users.",
+          "default": "—"
+        },
+        {
+          "name": "index",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The index of the thumb which corresponds to the index of its value in the\n`value` or `defaultValue` array.\nThis prop is required to support server-side rendering for range sliders\nwith multiple thumbs.",
+          "default": "—"
+        },
+        {
+          "name": "getAriaLabel",
+          "type": "((index: number) => string) | null | undefined",
+          "required": false,
+          "description": "A function which returns a string value for the [`aria-label`](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-label) attribute of the `input`.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Indicator",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Value",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "children",
+          "type": "null | ((formattedValues: readonly string[], values: readonly number[]) => React.ReactNode) | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,339 @@
+{
+  "name": "@dixy-ui/themes",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent 2D skins for Dixy's existing components.",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./catalog": {
+      "types": "./dist/catalog.d.ts",
+      "import": "./dist/catalog.js"
+    },
+    "./authoring": {
+      "types": "./dist/authoring.d.ts",
+      "import": "./dist/authoring.js"
+    },
+    "./living-forest": {
+      "types": "./dist/skins/living-forest.d.ts",
+      "import": "./dist/skins/living-forest.js"
+    },
+    "./living-forest.css": "./dist/living-forest.css",
+    "./retro-os": {
+      "types": "./dist/skins/retro-os.d.ts",
+      "import": "./dist/skins/retro-os.js"
+    },
+    "./retro-os.css": "./dist/retro-os.css",
+    "./winamp-signal": {
+      "types": "./dist/skins/winamp-signal.d.ts",
+      "import": "./dist/skins/winamp-signal.js"
+    },
+    "./winamp-signal.css": "./dist/winamp-signal.css",
+    "./studio-hardware": {
+      "types": "./dist/skins/studio-hardware.d.ts",
+      "import": "./dist/skins/studio-hardware.js"
+    },
+    "./studio-hardware.css": "./dist/studio-hardware.css",
+    "./prism-glass": {
+      "types": "./dist/skins/prism-glass.d.ts",
+      "import": "./dist/skins/prism-glass.js"
+    },
+    "./prism-glass.css": "./dist/prism-glass.css",
+    "./tactile-atelier": {
+      "types": "./dist/skins/tactile-atelier.d.ts",
+      "import": "./dist/skins/tactile-atelier.js"
+    },
+    "./tactile-atelier.css": "./dist/tactile-atelier.css",
+    "./living-forest/react": {
+      "types": "./dist/forest/ornament.d.ts",
+      "import": "./dist/forest/ornament.js"
+    },
+    "./retro-os/react": {
+      "types": "./dist/retro/ornament.d.ts",
+      "import": "./dist/retro/ornament.js"
+    },
+    "./winamp-signal/react": {
+      "types": "./dist/signal/ornament.d.ts",
+      "import": "./dist/signal/ornament.js"
+    },
+    "./studio-hardware/react": {
+      "types": "./dist/hardware/ornament.d.ts",
+      "import": "./dist/hardware/ornament.js"
+    },
+    "./prism-glass/react": {
+      "types": "./dist/prism/ornament.d.ts",
+      "import": "./dist/prism/ornament.js"
+    },
+    "./tactile-atelier/react": {
+      "types": "./dist/atelier/ornament.d.ts",
+      "import": "./dist/atelier/ornament.js"
+    },
+    "./documents": {
+      "types": "./dist/documents.d.ts",
+      "import": "./dist/documents.js"
+    },
+    "./foundations": {
+      "types": "./dist/foundations.d.ts",
+      "import": "./dist/foundations.js"
+    },
+    "./theme-document.schema.json": "./dist/theme-document.schema.json",
+    "./ocean-depths": {
+      "types": "./dist/skins/ocean-depths.d.ts",
+      "import": "./dist/skins/ocean-depths.js"
+    },
+    "./ocean-depths.css": "./dist/ocean-depths.css",
+    "./ocean-depths/react": {
+      "types": "./dist/ocean/ornament.d.ts",
+      "import": "./dist/ocean/ornament.js"
+    },
+    "./candy-clay": {
+      "types": "./dist/skins/candy-clay.d.ts",
+      "import": "./dist/skins/candy-clay.js"
+    },
+    "./candy-clay.css": "./dist/candy-clay.css",
+    "./candy-clay/react": {
+      "types": "./dist/clay/ornament.d.ts",
+      "import": "./dist/clay/ornament.js"
+    },
+    "./art-deco": {
+      "types": "./dist/skins/art-deco.d.ts",
+      "import": "./dist/skins/art-deco.js"
+    },
+    "./art-deco.css": "./dist/art-deco.css",
+    "./art-deco/react": {
+      "types": "./dist/deco/ornament.d.ts",
+      "import": "./dist/deco/ornament.js"
+    },
+    "./y2k-titanium": {
+      "types": "./dist/skins/y2k-titanium.d.ts",
+      "import": "./dist/skins/y2k-titanium.js"
+    },
+    "./y2k-titanium.css": "./dist/y2k-titanium.css",
+    "./y2k-titanium/react": {
+      "types": "./dist/titanium/ornament.d.ts",
+      "import": "./dist/titanium/ornament.js"
+    },
+    "./material-light": {
+      "types": "./dist/skins/material-light.d.ts",
+      "import": "./dist/skins/material-light.js"
+    },
+    "./material-light.css": "./dist/material-light.css",
+    "./scrapbook": {
+      "types": "./dist/skins/scrapbook.d.ts",
+      "import": "./dist/skins/scrapbook.js"
+    },
+    "./scrapbook.css": "./dist/scrapbook.css",
+    "./material-light/react": {
+      "types": "./dist/light/ornament.d.ts",
+      "import": "./dist/light/ornament.js"
+    },
+    "./blueprint": {
+      "types": "./dist/skins/blueprint.d.ts",
+      "import": "./dist/skins/blueprint.js"
+    },
+    "./blueprint.css": "./dist/blueprint.css",
+    "./blueprint/react": {
+      "types": "./dist/blueprint/ornament.d.ts",
+      "import": "./dist/blueprint/ornament.js"
+    },
+    "./riso-zine": {
+      "types": "./dist/skins/riso-zine.d.ts",
+      "import": "./dist/skins/riso-zine.js"
+    },
+    "./riso-zine.css": "./dist/riso-zine.css",
+    "./riso-zine/react": {
+      "types": "./dist/riso/ornament.d.ts",
+      "import": "./dist/riso/ornament.js"
+    },
+    "./neon-night-market": {
+      "types": "./dist/skins/neon-night-market.d.ts",
+      "import": "./dist/skins/neon-night-market.js"
+    },
+    "./neon-night-market.css": "./dist/neon-night-market.css",
+    "./neon-night-market/react": {
+      "types": "./dist/neon/ornament.d.ts",
+      "import": "./dist/neon/ornament.js"
+    },
+    "./sumi-ink": {
+      "types": "./dist/skins/sumi-ink.d.ts",
+      "import": "./dist/skins/sumi-ink.js"
+    },
+    "./sumi-ink.css": "./dist/sumi-ink.css",
+    "./sumi-ink/react": {
+      "types": "./dist/sumi/ornament.d.ts",
+      "import": "./dist/sumi/ornament.js"
+    },
+    "./tokyo-transit": {
+      "types": "./dist/skins/tokyo-transit.d.ts",
+      "import": "./dist/skins/tokyo-transit.js"
+    },
+    "./tokyo-transit.css": "./dist/tokyo-transit.css",
+    "./tokyo-transit/react": {
+      "types": "./dist/transit/ornament.d.ts",
+      "import": "./dist/transit/ornament.js"
+    },
+    "./phosphor-terminal": {
+      "types": "./dist/skins/phosphor-terminal.d.ts",
+      "import": "./dist/skins/phosphor-terminal.js"
+    },
+    "./phosphor-terminal.css": "./dist/phosphor-terminal.css",
+    "./phosphor-terminal/react": {
+      "types": "./dist/phosphor/ornament.d.ts",
+      "import": "./dist/phosphor/ornament.js"
+    },
+    "./ansi-panes": {
+      "types": "./dist/skins/ansi-panes.d.ts",
+      "import": "./dist/skins/ansi-panes.js"
+    },
+    "./ansi-panes.css": "./dist/ansi-panes.css",
+    "./ansi-panes/react": {
+      "types": "./dist/ansi/ornament.d.ts",
+      "import": "./dist/ansi/ornament.js"
+    },
+    "./swiss-poster": {
+      "types": "./dist/skins/swiss-poster.d.ts",
+      "import": "./dist/skins/swiss-poster.js"
+    },
+    "./swiss-poster.css": "./dist/swiss-poster.css",
+    "./swiss-poster/react": {
+      "types": "./dist/swiss/ornament.d.ts",
+      "import": "./dist/swiss/ornament.js"
+    },
+    "./azulejo-tile": {
+      "types": "./dist/skins/azulejo-tile.d.ts",
+      "import": "./dist/skins/azulejo-tile.js"
+    },
+    "./azulejo-tile.css": "./dist/azulejo-tile.css",
+    "./azulejo-tile/react": {
+      "types": "./dist/azulejo/ornament.d.ts",
+      "import": "./dist/azulejo/ornament.js"
+    },
+    "./brutalist-concrete": {
+      "types": "./dist/skins/brutalist-concrete.d.ts",
+      "import": "./dist/skins/brutalist-concrete.js"
+    },
+    "./brutalist-concrete.css": "./dist/brutalist-concrete.css",
+    "./brutalist-concrete/react": {
+      "types": "./dist/brutalist/ornament.d.ts",
+      "import": "./dist/brutalist/ornament.js"
+    },
+    "./atomic-lounge": {
+      "types": "./dist/skins/atomic-lounge.d.ts",
+      "import": "./dist/skins/atomic-lounge.js"
+    },
+    "./atomic-lounge.css": "./dist/atomic-lounge.css",
+    "./atomic-lounge/react": {
+      "types": "./dist/atomic/ornament.d.ts",
+      "import": "./dist/atomic/ornament.js"
+    },
+    "./orbital-hud": {
+      "types": "./dist/skins/orbital-hud.d.ts",
+      "import": "./dist/skins/orbital-hud.js"
+    },
+    "./orbital-hud.css": "./dist/orbital-hud.css",
+    "./orbital-hud/react": {
+      "types": "./dist/hud/ornament.d.ts",
+      "import": "./dist/hud/ornament.js"
+    },
+    "./freighter": {
+      "types": "./dist/skins/freighter.d.ts",
+      "import": "./dist/skins/freighter.js"
+    },
+    "./freighter.css": "./dist/freighter.css",
+    "./freighter/react": {
+      "types": "./dist/freighter/ornament.d.ts",
+      "import": "./dist/freighter/ornament.js"
+    },
+    "./solar-sail": {
+      "types": "./dist/skins/solar-sail.d.ts",
+      "import": "./dist/skins/solar-sail.js"
+    },
+    "./solar-sail.css": "./dist/solar-sail.css",
+    "./solar-sail/react": {
+      "types": "./dist/sail/ornament.d.ts",
+      "import": "./dist/sail/ornament.js"
+    },
+    "./diwali-lights": {
+      "types": "./dist/skins/diwali-lights.d.ts",
+      "import": "./dist/skins/diwali-lights.js"
+    },
+    "./diwali-lights.css": "./dist/diwali-lights.css",
+    "./diwali-lights/react": {
+      "types": "./dist/diwali/ornament.d.ts",
+      "import": "./dist/diwali/ornament.js"
+    },
+    "./lunar-new-year": {
+      "types": "./dist/skins/lunar-new-year.d.ts",
+      "import": "./dist/skins/lunar-new-year.js"
+    },
+    "./lunar-new-year.css": "./dist/lunar-new-year.css",
+    "./lunar-new-year/react": {
+      "types": "./dist/lunar/ornament.d.ts",
+      "import": "./dist/lunar/ornament.js"
+    },
+    "./papel-picado": {
+      "types": "./dist/skins/papel-picado.d.ts",
+      "import": "./dist/skins/papel-picado.js"
+    },
+    "./papel-picado.css": "./dist/papel-picado.css",
+    "./papel-picado/react": {
+      "types": "./dist/picado/ornament.d.ts",
+      "import": "./dist/picado/ornament.js"
+    },
+    "./holi-colours": {
+      "types": "./dist/skins/holi-colours.d.ts",
+      "import": "./dist/skins/holi-colours.js"
+    },
+    "./holi-colours.css": "./dist/holi-colours.css",
+    "./holi-colours/react": {
+      "types": "./dist/holi/ornament.d.ts",
+      "import": "./dist/holi/ornament.js"
+    },
+    "./yule-knit": {
+      "types": "./dist/skins/yule-knit.d.ts",
+      "import": "./dist/skins/yule-knit.js"
+    },
+    "./yule-knit.css": "./dist/yule-knit.css",
+    "./yule-knit/react": {
+      "types": "./dist/yule/ornament.d.ts",
+      "import": "./dist/yule/ornament.js"
+    },
+    "./glass-ui": {
+      "types": "./dist/skins/glass-ui.d.ts",
+      "import": "./dist/skins/glass-ui.js"
+    },
+    "./glass-ui.css": "./dist/glass-ui.css",
+    "./glass-ui/react": {
+      "types": "./dist/glass/ornament.d.ts",
+      "import": "./dist/glass/ornament.js"
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/generate-skins.mjs && tsc && node ../../scripts/generate-skins.mjs --dist",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.mjs",
+    "dev": "tsc --watch"
+  },
+  "dependencies": {
+    "@dixy-ui/tokens": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19.3.0",
+    "react": "19.3.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}

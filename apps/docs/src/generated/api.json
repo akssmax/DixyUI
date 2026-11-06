@@ -1,0 +1,2764 @@
+{
+  "SkinOrnamentProps": [
+    {
+      "name": "part",
+      "type": "\"theme\" | \"card\" | \"dialog\" | \"switch-thumb\"",
+      "required": true,
+      "description": "Surface decoration only. Button content and icons belong to the consumer.",
+      "default": "—"
+    },
+    {
+      "name": "ornament",
+      "type": "\"quiet\" | \"balanced\" | \"expressive\"",
+      "required": true,
+      "description": "",
+      "default": "—"
+    },
+    {
+      "name": "motion",
+      "type": "\"system\" | \"reduced\"",
+      "required": true,
+      "description": "",
+      "default": "—"
+    },
+    {
+      "name": "effects",
+      "type": "\"reduced\" | \"static\" | \"backdrop\"",
+      "required": true,
+      "description": "",
+      "default": "—"
+    },
+    {
+      "name": "animate",
+      "type": "boolean",
+      "required": true,
+      "description": "",
+      "default": "—"
+    }
+  ],
+  "ThemeProps": [
+    {
+      "name": "skin",
+      "type": "SkinDefinition | null | undefined",
+      "required": false,
+      "description": "Optional independently imported skin. Undefined inherits; null clears.",
+      "default": "—"
+    },
+    {
+      "name": "ornamentRenderer",
+      "type": "SkinOrnamentRenderer | null | undefined",
+      "required": false,
+      "description": "Optional code-rendered artwork from a separately imported skin entry. Null clears.",
+      "default": "—"
+    },
+    {
+      "name": "animateOrnaments",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Opt in to decorative skin animation; motion/effects reductions still win.",
+      "default": "false"
+    },
+    {
+      "name": "ornament",
+      "type": "OrnamentLevel | undefined",
+      "required": false,
+      "description": "Decorative detail, separate from readable content.",
+      "default": "balanced"
+    },
+    {
+      "name": "relief",
+      "type": "SkinRelief | undefined",
+      "required": false,
+      "description": "Surface relief; zero keeps borders and removes decorative depth.",
+      "default": "1"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Default finish for supported controls and Box. Import materials.css.",
+      "default": "matte"
+    },
+    {
+      "name": "effects",
+      "type": "EffectsPreference | undefined",
+      "required": false,
+      "description": "Optional rendering policy. Ancestor reduction always wins.",
+      "default": "static"
+    },
+    {
+      "name": "shape",
+      "type": "\"rounded\" | \"pill\" | \"square\" | undefined",
+      "required": false,
+      "description": "Semantic geometry for supported controls and Box; no clipping.",
+      "default": "rounded"
+    },
+    {
+      "name": "personality",
+      "type": "\"restrained\" | \"playful\" | \"tactile\" | undefined",
+      "required": false,
+      "description": "Coordinated finish, geometry and response. Explicit props override the preset.",
+      "default": "—"
+    },
+    {
+      "name": "density",
+      "type": "\"compact\" | \"default\" | \"comfortable\" | undefined",
+      "required": false,
+      "description": "Semantic spacing density; control heights stay fixed.",
+      "default": "default"
+    },
+    {
+      "name": "motion",
+      "type": "MotionPreference | undefined",
+      "required": false,
+      "description": "Respect the OS preference or reduce all Dixy motion. Reduction is inherited.",
+      "default": "system"
+    },
+    {
+      "name": "appearance",
+      "type": "\"light\" | \"dark\" | undefined",
+      "required": false,
+      "description": "The color appearance. Nested themes inherit unspecified settings.",
+      "default": "light"
+    },
+    {
+      "name": "neutralColor",
+      "type": "\"neutral\" | \"slate\" | \"gray\" | \"zinc\" | \"stone\" | \"taupe\" | \"mauve\" | \"mist\" | \"olive\" | \"sage\" | \"sand\" | undefined",
+      "required": false,
+      "description": "Base neutral family for surfaces, readable text and neutral actions.",
+      "default": "neutral"
+    },
+    {
+      "name": "accentColor",
+      "type": "\"ruby\" | \"neutral\" | \"slate\" | \"gray\" | \"zinc\" | \"stone\" | \"taupe\" | \"mauve\" | \"mist\" | \"olive\" | \"sage\" | \"sand\" | \"tomato\" | \"red\" | \"crimson\" | \"rose\" | \"pink\" | \"fuchsia\" | \"plum\" | ... 20 more ... | undefined",
+      "required": false,
+      "description": "The brand accent; feedback roles stay independent.",
+      "default": "blue"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual control/card/overlay rounding; full keeps panels rectangular.",
+      "default": "md"
+    }
+  ],
+  "VisualProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    }
+  ],
+  "AriaPopoverProps": [
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Required name for the portaled dialog surface.",
+      "default": "—"
+    }
+  ],
+  "AccordionRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Trigger height and typography.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "AlertDialogPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "AutocompleteInputProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "AutocompleteInputGroupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "AutocompletePopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "AvatarRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Image and fallback frame dimensions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "soft"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ButtonGroupProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "attached",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Connected edges or separate actions.",
+      "default": "true"
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Visual direction; buttons retain ordinary Tab stops.",
+      "default": "horizontal"
+    }
+  ],
+  "PaginationProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "AspectRatioProps": [
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "ratio",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Positive width / height ratio.",
+      "default": "1.7777777778"
+    }
+  ],
+  "SkeletonProps": [
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "SpinnerProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible loading message.",
+      "default": "Loading"
+    }
+  ],
+  "ProgressCircleProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "value",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Omit for indeterminate progress.",
+      "default": "—"
+    },
+    {
+      "name": "max",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Maximum positive value.",
+      "default": "100"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Required accessible name.",
+      "default": "—"
+    }
+  ],
+  "ScrollShadowProps": [
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Accessible name for the focusable scroll region.",
+      "default": "—"
+    }
+  ],
+  "TextareaProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "NativeSelectProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "InputGroupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "SidebarProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "ButtonProps": [
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional finish for solid/soft variants; requires materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "shape",
+      "type": "\"rounded\" | \"pill\" | \"square\" | undefined",
+      "required": false,
+      "description": "Geometry independent of emphasis. Inherits Theme; focus remains outside.",
+      "default": "—"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "The height and horizontal padding.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "The visual emphasis.",
+      "default": "solid"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "The semantic color palette.",
+      "default": "accent"
+    },
+    {
+      "name": "loading",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Show progress and prevent repeated activation.",
+      "default": "false"
+    }
+  ],
+  "IconButtonProps": [
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Required accessible name for the icon-only action.",
+      "default": "—"
+    }
+  ],
+  "CalendarRootProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    }
+  ],
+  "CarouselRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Defines a string value that labels the current element.",
+      "default": "—"
+    }
+  ],
+  "CarouselViewportProps": [],
+  "CarouselItemProps": [
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Defines a string value that labels the current element.",
+      "default": "—"
+    }
+  ],
+  "ChartProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "description": "Caption and accessible name.",
+      "default": "—"
+    },
+    {
+      "name": "data",
+      "type": "readonly { label: string; value: number; }[]",
+      "required": true,
+      "description": "Finite, nonnegative values for this bar-chart recipe.",
+      "default": "—"
+    }
+  ],
+  "CheckboxGroupProps": [
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Arrange labeled choices.",
+      "default": "vertical"
+    },
+    {
+      "name": "gap",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Spacing between choices.",
+      "default": "md"
+    }
+  ],
+  "CheckboxRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Visual box and indicator proportions; preserves the shared minimum interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Selected emphasis. Unchecked boxes remain neutral.",
+      "default": "solid"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Selected semantic color. Accent follows Theme.accentColor.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual box rounding.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Static box finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "CheckboxIndicatorProps": [
+    {
+      "name": "checkedIcon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Decorative checked artwork. Omit for the centered SVG check. Custom children take precedence.",
+      "default": "—"
+    },
+    {
+      "name": "indeterminateIcon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Decorative mixed-state artwork. Omit for the centered SVG dash. Custom children take precedence.",
+      "default": "—"
+    }
+  ],
+  "CollapsibleRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Trigger height and typography.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "ComboboxInputProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ComboboxInputGroupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ComboboxPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "CommandRootProps": [
+    {
+      "name": "inline",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Keep the command list inline.",
+      "default": "true"
+    },
+    {
+      "name": "open",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Controlled visibility; defaults to true for the inline command list.",
+      "default": "—"
+    },
+    {
+      "name": "autoHighlight",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Highlight the first matching command.",
+      "default": "true"
+    }
+  ],
+  "CardProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "AvatarGroupProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Fallback surface emphasis.",
+      "default": "soft"
+    }
+  ],
+  "AlertProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "BadgeProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "ChipProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "KbdProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "EmptyProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "ItemProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "TableProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "ContextMenuPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ContextMenuItemProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "ContextMenuLinkItemProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "DataTableRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    }
+  ],
+  "DateFieldRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    }
+  ],
+  "DatePickerRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    }
+  ],
+  "DateRangePickerRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    }
+  ],
+  "DialogPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "The maximum width of the dialog.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Panel rounding.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "DrawerPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "FieldsetRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Legend and field proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "FormProps": [
+    {
+      "name": "gap",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Space between fields without changing validation.",
+      "default": "md"
+    }
+  ],
+  "IconProps": [
+    {
+      "name": "render",
+      "type": "ReactElement<SVGProps<SVGSVGElement>>",
+      "required": true,
+      "description": "One SVG element or SVG icon component. Pack-specific props belong here.",
+      "default": "—"
+    },
+    {
+      "name": "size",
+      "type": "IconSize | undefined",
+      "required": false,
+      "description": "The existing icon sizing token. Button children inherit their control's icon size unless explicitly set.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "IconColor | undefined",
+      "required": false,
+      "description": "A semantic icon foreground, or the surrounding text/control color.",
+      "default": "inherit"
+    },
+    {
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name for a meaningful standalone image. Omit for decorative icons.",
+      "default": "—"
+    }
+  ],
+  "BoxOwnProps": [
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional surface finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "shape",
+      "type": "\"rounded\" | \"pill\" | \"square\" | undefined",
+      "required": false,
+      "description": "Semantic surface shape, without clipping children or focus. Inherits Theme.",
+      "default": "—"
+    }
+  ],
+  "ContainerOwnProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
+      "required": false,
+      "description": "Maximum inline size, including the responsive gutters.",
+      "default": "xl"
+    }
+  ],
+  "LinkProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Label size.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic link color.",
+      "default": "accent"
+    }
+  ],
+  "ListBoxRootProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    }
+  ],
+  "MenuPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "MenuItemProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "MenuLinkItemProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "MenubarProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "MeterRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Visual track thickness for a bounded measurement.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "NavigationMenuRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "NavigationMenuPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "NumberFieldRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Input and stepper proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "OTPFieldRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Digit slot dimensions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "PopoverPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "PreviewCardPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ProgressRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Visual track thickness for task progress.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "RadioGroupProps": [
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Visual layout; native radio keyboard behavior is unchanged.",
+      "default": "vertical"
+    }
+  ],
+  "RadioRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "solid"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "RangeCalendarRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    }
+  ],
+  "ResizableRootProps": [
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "value",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Size of the start panel as a percentage, controlled.",
+      "default": "—"
+    },
+    {
+      "name": "defaultValue",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Initial start-panel percentage.",
+      "default": "50"
+    },
+    {
+      "name": "onValueChange",
+      "type": "((value: number) => void) | undefined",
+      "required": false,
+      "description": "Called during direct manipulation and keyboard resizing.",
+      "default": "—"
+    },
+    {
+      "name": "min",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Minimum start-panel percentage.",
+      "default": "10"
+    },
+    {
+      "name": "max",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Maximum start-panel percentage.",
+      "default": "90"
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Split direction.",
+      "default": "horizontal"
+    }
+  ],
+  "ResizablePanelProps": [
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "side",
+      "type": "\"end\" | \"start\"",
+      "required": true,
+      "description": "",
+      "default": "—"
+    }
+  ],
+  "ResizableHandleProps": [],
+  "ScrollAreaRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Visual scrollbar thickness; viewport bounds are supplied by the consumer.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    }
+  ],
+  "SearchFieldRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    }
+  ],
+  "SelectTriggerProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "SelectPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "SeparatorProps": [
+    {
+      "name": "emphasis",
+      "type": "\"strong\" | \"subtle\" | undefined",
+      "required": false,
+      "description": "Divider emphasis.",
+      "default": "subtle"
+    }
+  ],
+  "ShapeProps": [
+    {
+      "name": "kind",
+      "type": "\"flower\" | \"clover\" | \"arch\" | \"cut\" | undefined",
+      "required": false,
+      "description": "Static decorative silhouette.",
+      "default": "flower"
+    },
+    {
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Give meaningful artwork a name; omit for decorative artwork.",
+      "default": "—"
+    }
+  ],
+  "SliderRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Track and thumb proportions.",
+      "default": "md"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Filled track and thumb emphasis.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Track rounding.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Static track finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "SwitchRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Track and thumb proportions, using Dixy's control sizes.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis of the selected track.",
+      "default": "solid"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic selected color. Accent follows Theme.accentColor.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Track rounding; thumb rounding is inset to match.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Static track finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "SwitchThumbProps": [
+    {
+      "name": "checkedIcon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Decorative on-state artwork. Custom children take precedence.",
+      "default": "—"
+    },
+    {
+      "name": "uncheckedIcon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Decorative off-state artwork. Custom children take precedence.",
+      "default": "—"
+    }
+  ],
+  "TabsRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Trigger proportions; preserves the shared minimum interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"line\" | \"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Selected emphasis. Line preserves Dixy's original underline treatment.",
+      "default": "line"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Selected semantic color; inactive labels stay neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Trigger and selected-surface rounding.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Static selected-surface finish for filled variants; import materials.css.",
+      "default": "Theme.material"
+    },
+    {
+      "name": "align",
+      "type": "\"center\" | \"end\" | \"start\" | undefined",
+      "required": false,
+      "description": "Align content inside each trigger.",
+      "default": "center"
+    },
+    {
+      "name": "fullWidth",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Expand horizontal triggers to fill the list.",
+      "default": "false"
+    }
+  ],
+  "TagGroupRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    }
+  ],
+  "TextFieldProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "The height and type size of the control.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "The visual surface treatment.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Input rounding.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "FieldRootProps": [
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Arrange a field and its label.",
+      "default": "vertical"
+    }
+  ],
+  "TimeFieldRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    }
+  ],
+  "ToastRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ToggleGroupProps": [
+    {
+      "name": "attached",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Visually connect adjacent toggles without changing single/multiple selection.",
+      "default": "false"
+    }
+  ],
+  "ToggleProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "soft"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic emphasis; unselected controls remain neutral.",
+      "default": "accent"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "ToolbarRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Proportions for contained toolbar controls.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "required": false,
+      "description": "Toolbar surface.",
+      "default": "plain"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Toolbar rounding.",
+      "default": "Theme.radius"
+    }
+  ],
+  "TooltipPopupProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Visual emphasis; behavioral state remains primitive-owned.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Contextual rounding; panels cap full rounding to preserve content.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    }
+  ],
+  "TextProps": [
+    {
+      "name": "as",
+      "type": "\"div\" | \"p\" | \"span\" | undefined",
+      "required": false,
+      "description": "The semantic HTML element.",
+      "default": "p"
+    },
+    {
+      "name": "variant",
+      "type": "TextVariant | undefined",
+      "required": false,
+      "description": "A complete semantic type style. Overrides size when supplied.",
+      "default": "body.md"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Convenience size within the body family.",
+      "default": "md"
+    },
+    {
+      "name": "tone",
+      "type": "\"default\" | \"accent\" | \"muted\" | undefined",
+      "required": false,
+      "description": "The text emphasis.",
+      "default": "default"
+    }
+  ],
+  "HeadingProps": [
+    {
+      "name": "as",
+      "type": "\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\" | undefined",
+      "required": false,
+      "description": "The semantic heading level, independent of visual size.",
+      "default": "h2"
+    },
+    {
+      "name": "variant",
+      "type": "HeadingVariant | undefined",
+      "required": false,
+      "description": "A complete visual style, independent of the heading level.",
+      "default": "heading.md"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Convenience size within the heading family.",
+      "default": "md"
+    }
+  ],
+  "FeedbackProviderProps": [
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "description": "",
+      "default": "—"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Explicit user opt-in; nested providers cannot override a disabled ancestor.",
+      "default": "false"
+    },
+    {
+      "name": "adapter",
+      "type": "FeedbackAdapter | undefined",
+      "required": false,
+      "description": "Host integration; omitting it always produces a no-op.",
+      "default": "—"
+    }
+  ]
+}

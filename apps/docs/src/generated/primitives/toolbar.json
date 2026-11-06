@@ -1,0 +1,251 @@
+{
+  "name": "Toolbar",
+  "slug": "toolbar",
+  "parts": [
+    {
+      "name": "Separator",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "orientation",
+          "type": "Orientation | undefined",
+          "required": false,
+          "description": "The orientation of the separator. Defaults to the opposite of the toolbar's\norientation, so a horizontal toolbar renders vertical separators.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "loopFocus",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "If `true`, using keyboard navigation will wrap focus to the other end of the toolbar once the end is reached.",
+          "default": "true"
+        },
+        {
+          "name": "orientation",
+          "type": "ToolbarRoot.Orientation | undefined",
+          "required": false,
+          "description": "The orientation of the toolbar.",
+          "default": "'horizontal'"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Group",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When `true` all toolbar items in the group are disabled.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When `true` the item is disabled.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "focusableWhenDisabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When `true` the item remains focusable when disabled.",
+          "default": "true"
+        },
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `false` if the rendered element is not a button (for example, `<div>`).",
+          "default": "true"
+        }
+      ]
+    },
+    {
+      "name": "Link",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "defaultValue",
+          "type": "React.ComponentProps<'input'>['defaultValue'] | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When `true` the item is disabled.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "focusableWhenDisabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When `true` the item remains focusable when disabled.",
+          "default": "true"
+        }
+      ]
+    }
+  ]
+}

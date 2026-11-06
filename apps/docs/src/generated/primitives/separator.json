@@ -1,0 +1,41 @@
+{
+  "name": "Separator",
+  "slug": "separator",
+  "parts": [
+    {
+      "name": "Separator",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "orientation",
+          "type": "Orientation | undefined",
+          "required": false,
+          "description": "The orientation of the separator.",
+          "default": "'horizontal'"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

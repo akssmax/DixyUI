@@ -1,0 +1,317 @@
+/* Presence stays with Base UI. These recipes add no second mount/unmount owner. */
+@layer dixy.components {
+  .dixy-switch-root::before {
+    transition:
+      background-color var(--dixy-switch-motion-feedback),
+      border-color var(--dixy-switch-motion-feedback);
+  }
+  .dixy-switch-thumb {
+    transition:
+      transform var(--dixy-switch-motion-thumb),
+      background-color var(--dixy-switch-motion-feedback),
+      color var(--dixy-switch-motion-feedback);
+  }
+  .dixy-switch-icon {
+    transition: opacity var(--dixy-switch-motion-feedback);
+  }
+  .dixy-checkbox-root::before {
+    transition:
+      background-color var(--dixy-checkbox-motion-feedback),
+      border-color var(--dixy-checkbox-motion-feedback);
+  }
+  .dixy-checkbox-indicator {
+    opacity: 1;
+    transform: scale(1);
+    transform-origin: center;
+    transition:
+      opacity var(--dixy-checkbox-motion-indicator),
+      transform var(--dixy-checkbox-motion-indicator);
+  }
+  .dixy-checkbox-indicator:is(
+    [data-starting-style],
+    [data-ending-style],
+    [data-unchecked]:not([data-indeterminate])
+  ) {
+    opacity: 0;
+    transform: scale(calc(1 - 0.2 * var(--dixy-motion-spatial-factor)));
+  }
+  .dixy-checkbox-symbol {
+    transform-box: view-box;
+    transform-origin: center;
+    transition:
+      opacity var(--dixy-checkbox-motion-indicator),
+      transform var(--dixy-checkbox-motion-indicator);
+  }
+  .dixy-button {
+    transition:
+      background-color var(--dixy-button-motion-feedback),
+      color var(--dixy-button-motion-feedback),
+      border-color var(--dixy-button-motion-feedback),
+      transform var(--dixy-button-motion-feedback);
+  }
+  .dixy-button:active:not([data-disabled]) {
+    transform: translateY(
+      calc(
+        var(--dixy-personality-press-distance, 1px) *
+          var(--dixy-motion-spatial-factor)
+      )
+    );
+  }
+  .dixy-spinner {
+    animation: dixy-spin var(--dixy-motion-loop-progress)
+      var(--dixy-motion-easing-linear) infinite;
+  }
+  :is(.dixy-dialog-popup, .dixy-alert-dialog-popup) {
+    transition:
+      opacity var(--dixy-dialog-motion-enter),
+      transform var(--dixy-dialog-motion-enter);
+  }
+  :is(.dixy-dialog-backdrop, .dixy-alert-dialog-backdrop) {
+    transition: opacity var(--dixy-dialog-motion-enter);
+  }
+  :is(.dixy-dialog-popup, .dixy-alert-dialog-popup):is(
+    [data-starting-style],
+    [data-ending-style]
+  ) {
+    opacity: 0;
+    transform: translateY(calc(8px * var(--dixy-motion-spatial-factor)))
+      scale(calc(1 - 0.02 * var(--dixy-motion-spatial-factor)));
+  }
+  :is(.dixy-dialog-popup, .dixy-alert-dialog-popup)[data-ending-style] {
+    transition:
+      opacity var(--dixy-dialog-motion-exit),
+      transform var(--dixy-dialog-motion-exit);
+  }
+  :is(.dixy-dialog-backdrop, .dixy-alert-dialog-backdrop)[data-ending-style] {
+    transition: opacity var(--dixy-dialog-motion-exit);
+  }
+  :is(.dixy-menu-popup, .dixy-context-menu-popup, .dixy-navigation-menu-popup) {
+    transition:
+      opacity var(--dixy-menu-motion-enter),
+      transform var(--dixy-menu-motion-enter);
+  }
+  :is(
+    .dixy-menu-popup,
+    .dixy-context-menu-popup,
+    .dixy-navigation-menu-popup
+  ):is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    transform: scale(calc(1 - 0.02 * var(--dixy-motion-spatial-factor)));
+  }
+  :is(
+    .dixy-menu-popup,
+    .dixy-context-menu-popup,
+    .dixy-navigation-menu-popup
+  )[data-ending-style] {
+    transition:
+      opacity var(--dixy-menu-motion-exit),
+      transform var(--dixy-menu-motion-exit);
+  }
+  :is(
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-radio-item,
+    .dixy-menu-submenu-trigger,
+    .dixy-context-menu-item,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-radio-item,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-navigation-menu-trigger,
+    .dixy-navigation-menu-link
+  ) {
+    transition:
+      background-color var(--dixy-menu-motion-feedback),
+      color var(--dixy-menu-motion-feedback);
+  }
+  .dixy-tabs-tab:not(.dixy-button) {
+    transition:
+      background-color var(--dixy-tabs-motion-feedback),
+      color var(--dixy-tabs-motion-feedback),
+      border-color var(--dixy-tabs-motion-feedback);
+  }
+  .dixy-tabs-indicator {
+    transition:
+      transform var(--dixy-tabs-motion-indicator),
+      inline-size var(--dixy-tabs-motion-indicator),
+      block-size var(--dixy-tabs-motion-indicator);
+  }
+  .dixy-drawer-popup {
+    --dixy-drawer-presence-distance: 0%;
+    transform: translateY(
+      calc(
+        var(--drawer-snap-point-offset, 0px) +
+          var(--drawer-swipe-movement-y, 0px) +
+          var(--dixy-drawer-presence-distance)
+      )
+    );
+    transition:
+      opacity var(--dixy-drawer-motion-enter),
+      transform var(--dixy-drawer-motion-enter);
+  }
+  .dixy-drawer-popup:is([data-starting-style], [data-ending-style]) {
+    --dixy-drawer-presence-distance: calc(
+      100% * var(--dixy-motion-spatial-factor)
+    );
+    opacity: 0;
+  }
+  .dixy-drawer-popup[data-swipe-direction="up"]:is(
+      [data-starting-style],
+      [data-ending-style]
+    ) {
+    --dixy-drawer-presence-distance: calc(
+      -100% * var(--dixy-motion-spatial-factor)
+    );
+  }
+  .dixy-drawer-popup:is(
+    [data-swipe-direction="left"],
+    [data-swipe-direction="right"]
+  ) {
+    transform: translateX(
+      calc(
+        var(--drawer-swipe-movement-x, 0px) +
+          var(--dixy-drawer-presence-distance)
+      )
+    );
+  }
+  .dixy-drawer-popup[data-swipe-direction="left"]:is(
+      [data-starting-style],
+      [data-ending-style]
+    ) {
+    --dixy-drawer-presence-distance: calc(
+      -100% * var(--dixy-motion-spatial-factor)
+    );
+  }
+  .dixy-drawer-backdrop {
+    opacity: calc(1 - var(--drawer-swipe-progress, 0));
+    transition: opacity var(--dixy-drawer-motion-enter);
+  }
+  .dixy-drawer-backdrop:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+  }
+  :is(.dixy-drawer-popup, .dixy-drawer-backdrop)[data-ending-style] {
+    transition-timing-function: var(--dixy-drawer-motion-exit-easing);
+    transition-duration: calc(
+      var(--dixy-drawer-motion-exit-duration) * var(--drawer-swipe-strength, 1)
+    );
+  }
+  /* Follow direct manipulation immediately; do not add interpolation lag. */
+  :is(.dixy-drawer-popup, .dixy-drawer-backdrop)[data-swiping] {
+    transition: none;
+  }
+  [data-motion="reduced"] .dixy-spinner {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-spinner {
+      animation: none;
+    }
+  }
+}
+
+@layer dixy.components {
+  .dixy-radio-root::before {
+    transition:
+      background-color var(--dixy-radio-motion-feedback),
+      border-color var(--dixy-radio-motion-feedback);
+  }
+  .dixy-radio-indicator {
+    transition:
+      opacity var(--dixy-radio-motion-indicator),
+      transform var(--dixy-radio-motion-indicator);
+    opacity: 1;
+    transform: scale(1);
+  }
+  .dixy-radio-indicator:is(
+    [data-starting-style],
+    [data-ending-style],
+    [data-unchecked]
+  ) {
+    opacity: 0;
+    transform: scale(calc(1 - 0.2 * var(--dixy-motion-spatial-factor)));
+  }
+  .dixy-toggle:not(.dixy-button) {
+    transition:
+      background-color var(--dixy-toggle-motion-feedback),
+      color var(--dixy-toggle-motion-feedback),
+      border-color var(--dixy-toggle-motion-feedback);
+  }
+  :is(
+    .dixy-input,
+    .dixy-select-trigger,
+    .dixy-combobox-input,
+    .dixy-autocomplete-input,
+    .dixy-number-field-group,
+    .dixy-otp-field-input
+  ):not(.dixy-button) {
+    transition:
+      background-color var(--dixy-field-motion-feedback),
+      border-color var(--dixy-field-motion-feedback),
+      color var(--dixy-field-motion-feedback);
+  }
+  :is(
+    .dixy-select-popup,
+    .dixy-combobox-popup,
+    .dixy-autocomplete-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-tooltip-popup
+  ) {
+    transition:
+      opacity var(--dixy-floating-motion-enter),
+      transform var(--dixy-floating-motion-enter);
+  }
+  :is(
+    .dixy-select-popup,
+    .dixy-combobox-popup,
+    .dixy-autocomplete-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-tooltip-popup
+  ):is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    transform: scale(calc(1 - 0.02 * var(--dixy-motion-spatial-factor)));
+  }
+  :is(
+    .dixy-select-popup,
+    .dixy-combobox-popup,
+    .dixy-autocomplete-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-tooltip-popup
+  )[data-ending-style] {
+    transition:
+      opacity var(--dixy-floating-motion-exit),
+      transform var(--dixy-floating-motion-exit);
+  }
+  .dixy-tooltip-popup[data-instant] {
+    transition: none;
+  }
+  .dixy-avatar-fallback {
+    transition: opacity var(--dixy-avatar-motion-enter);
+  }
+  .dixy-toast-root {
+    transition:
+      opacity var(--dixy-toast-motion-enter),
+      transform var(--dixy-toast-motion-enter);
+  }
+  .dixy-toast-root:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    transform: translateY(
+      calc(var(--dixy-space-100) * var(--dixy-motion-spatial-factor))
+    );
+  }
+  .dixy-toast-root[data-ending-style] {
+    transition:
+      opacity var(--dixy-toast-motion-exit),
+      transform var(--dixy-toast-motion-exit);
+  }
+  .dixy-scroll-area-thumb {
+    transition: background-color var(--dixy-scrollArea-motion-feedback);
+  }
+  .dixy-slider-thumb::before {
+    transition: background-color var(--dixy-range-motion-feedback);
+  }
+  /* Direct slider/scroll manipulation has no interpolated positional lag. */
+}

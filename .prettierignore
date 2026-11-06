@@ -1,0 +1,8 @@
+pnpm-lock.yaml
+dist
+node_modules
+.output
+.turbo
+output
+apps/docs/src/routeTree.gen.ts
+apps/docs/src/generated

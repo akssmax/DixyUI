@@ -1,0 +1,391 @@
+{
+  "name": "NumberField",
+  "slug": "number-field",
+  "parts": [
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "form",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the form that owns the hidden input.\nUseful when the number field is rendered outside the form.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "defaultValue",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The uncontrolled value of the field when it's initially rendered.\n\nTo render a controlled number field, use the `value` prop instead.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The id of the input element.",
+          "default": "—"
+        },
+        {
+          "name": "value",
+          "type": "number | null | undefined",
+          "required": false,
+          "description": "The raw numeric value of the field.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: number | null, eventDetails: NumberFieldRoot.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback fired when the number value changes.\n\nThe `eventDetails.reason` indicates what triggered the change:\n- `'input-change'` for parseable typing or programmatic text updates\n- `'input-clear'` when the field becomes empty\n- `'input-blur'` when formatting (and clamping, if enabled) occurs on blur\n- `'input-paste'` for paste interactions\n- `'keyboard'` for arrow-key/Home/End stepping (typing digits uses `'input-change'`/`'input-clear'`)\n- `'increment-press'` / `'decrement-press'` for button presses on the increment and decrement controls\n- `'wheel'` for wheel-based scrubbing\n- `'scrub'` for scrub area drags",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "max",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The maximum value of the input element.",
+          "default": "—"
+        },
+        {
+          "name": "min",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The minimum value of the input element.",
+          "default": "—"
+        },
+        {
+          "name": "name",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the field when a form is submitted.",
+          "default": "—"
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the user should be unable to change the field value.",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the user must enter a value before submitting a form.",
+          "default": "false"
+        },
+        {
+          "name": "step",
+          "type": "number | 'any' | undefined",
+          "required": false,
+          "description": "Amount to increment and decrement with the buttons and arrow keys, or to scrub with pointer movement in the scrub area.\nTo always enable step validation on form submission, specify the `min` prop explicitly in conjunction with this prop.\nSpecify `step=\"any\"` to always disable step validation; interactive stepping then uses a base amount of `1`, while the alt and shift keys still step by `smallStep` and `largeStep`.",
+          "default": "1"
+        },
+        {
+          "name": "inputRef",
+          "type": "React.Ref<HTMLInputElement> | undefined",
+          "required": false,
+          "description": "A ref to access the hidden input element.",
+          "default": "—"
+        },
+        {
+          "name": "locale",
+          "type": "Intl.LocalesArgument | undefined",
+          "required": false,
+          "description": "The locale of the input element.\nDefaults to the user's runtime locale.",
+          "default": "—"
+        },
+        {
+          "name": "format",
+          "type": "Intl.NumberFormatOptions | undefined",
+          "required": false,
+          "description": "Options to format the input value.",
+          "default": "—"
+        },
+        {
+          "name": "allowOutOfRange",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When true, direct text entry may be outside the `min`/`max` range without clamping,\nso native range underflow/overflow validation can occur.\nStep-based interactions (keyboard arrows, buttons, wheel, scrub) still clamp.",
+          "default": "false"
+        },
+        {
+          "name": "smallStep",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The small step value of the input element when incrementing while the alt key is held.\nSnaps to multiples of this value when `snapOnStep` is enabled.",
+          "default": "0.1"
+        },
+        {
+          "name": "largeStep",
+          "type": "number | undefined",
+          "required": false,
+          "description": "The large step value of the input element when incrementing while the shift key is held.\nSnaps to multiples of this value when `snapOnStep` is enabled.",
+          "default": "10"
+        },
+        {
+          "name": "allowWheelScrub",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether to allow the user to scrub the input value with the mouse wheel while focused and\nhovering over the input.",
+          "default": "false"
+        },
+        {
+          "name": "snapOnStep",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the value should snap to the nearest step when incrementing or decrementing.",
+          "default": "false"
+        },
+        {
+          "name": "onValueCommitted",
+          "type": "((value: number | null, eventDetails: NumberFieldRoot.CommitEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback function that is fired when the value is committed.\nIt runs later than `onValueChange`, when:\n- The input is blurred after typing a value.\n- The pointer is released after scrubbing or pressing the increment/decrement buttons.\n\nIt runs simultaneously with `onValueChange` when interacting with the keyboard or the\nmouse wheel.\n\n**Warning**: This is a generic event not a change event.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Group",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Increment",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `false` if the rendered element is not a button (for example, `<div>`).",
+          "default": "true"
+        }
+      ]
+    },
+    {
+      "name": "Decrement",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `false` if the rendered element is not a button (for example, `<div>`).",
+          "default": "true"
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "aria-roledescription",
+          "type": "React.AriaAttributes['aria-roledescription'] | undefined",
+          "required": false,
+          "description": "A user-friendly description of the input's role for assistive tech. This is a role\ndescription, not an accessible name — use `Field.Label` or `aria-label` to name the control.",
+          "default": "'Number field'"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "ScrubArea",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "direction",
+          "type": "'horizontal' | 'vertical' | undefined",
+          "required": false,
+          "description": "Cursor movement direction in the scrub area.",
+          "default": "'horizontal'"
+        },
+        {
+          "name": "pixelSensitivity",
+          "type": "number | undefined",
+          "required": false,
+          "description": "Determines how many pixels the cursor must move before the value changes.\nA higher value will make scrubbing less sensitive.",
+          "default": "2"
+        },
+        {
+          "name": "teleportDistance",
+          "type": "number | undefined",
+          "required": false,
+          "description": "If specified, determines the distance that the cursor may move from the center\nof the scrub area before it will loop back around.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "ScrubAreaCursor",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

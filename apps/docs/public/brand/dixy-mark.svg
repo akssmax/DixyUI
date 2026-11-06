@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="#7043ce" role="img" aria-labelledby="dixy-title">
+  <title id="dixy-title">Dixy — a smiling D</title>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M16 6h14c15.46 0 28 11.64 28 26S45.46 58 30 58H16C10.48 58 6 53.52 6 48V16C6 10.48 10.48 6 16 6Zm12 20a3 3 0 1 0-6 0 3 3 0 0 0 6 0Zm14 0a3 3 0 1 0-6 0 3 3 0 0 0 6 0ZM23.48 34.7a2 2 0 0 0-.18 2.82c4.5 5.12 12.9 5.12 17.4 0a2 2 0 1 0-3-2.64c-2.9 3.3-8.5 3.3-11.4 0a2 2 0 0 0-2.82-.18Z"/>
+</svg>

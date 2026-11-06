@@ -1,0 +1,1897 @@
+{
+  "name": "Breadcrumbs",
+  "slug": "aria-breadcrumbs",
+  "engine": "React Aria",
+  "parts": [
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "className",
+          "type": "string",
+          "required": false,
+          "description": "The CSS [className](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) for the\nelement.",
+          "default": "'react-aria-Breadcrumbs'"
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether the breadcrumbs are disabled.",
+          "default": "—"
+        },
+        {
+          "name": "onAction",
+          "type": "(key: Key) => void",
+          "required": false,
+          "description": "Handler that is called when a breadcrumb is clicked.",
+          "default": "—"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode | ((item: T) => ReactNode)",
+          "required": false,
+          "description": "The contents of the collection.",
+          "default": "—"
+        },
+        {
+          "name": "items",
+          "type": "Iterable<T>",
+          "required": false,
+          "description": "Item objects in the collection.",
+          "default": "—"
+        },
+        {
+          "name": "dependencies",
+          "type": "ReadonlyArray<any>",
+          "required": false,
+          "description": "Values that should invalidate the item cache when using dynamic collections.",
+          "default": "—"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "The element's unique identifier. See\n[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id).",
+          "default": "—"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "description": "Defines a string value that labels the current element.",
+          "default": "—"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that labels the current element.",
+          "default": "—"
+        },
+        {
+          "name": "aria-describedby",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that describes the object.",
+          "default": "—"
+        },
+        {
+          "name": "aria-details",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that provide a detailed, extended description for the\nobject.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "CSSProperties",
+          "required": false,
+          "description": "The inline [style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style) for the\nelement.",
+          "default": "—"
+        },
+        {
+          "name": "slot",
+          "type": "string | null",
+          "required": false,
+          "description": "A slot name for the component. Slots allow the component to receive props from a parent\ncomponent. An explicit `null` value indicates that the local props completely override all\nprops received from a parent.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "DOMRenderFunction<E, T>",
+          "required": false,
+          "description": "Overrides the default DOM element with a custom render function.\nThis allows rendering existing components with built-in styles and behaviors\nsuch as router links, animation libraries, and pre-styled components.\n\nRequirements:\n\n- You must render the expected element type (e.g. if `<button>` is expected, you cannot render an\n  `<a>`).\n- Only a single root DOM element can be rendered (no fragments).\n- You must pass through props and ref to the underlying DOM element, merging with your own prop\n  as appropriate.",
+          "default": "—"
+        },
+        {
+          "name": "dir",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "translate",
+          "type": "'yes' | 'no' | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "suppressHydrationWarning",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "A React-only flag that suppresses the warning React normally logs when an element's\nserver-rendered content doesn't match the client render during hydration. See [React\ndocs](https://react.dev/reference/react-dom/client/hydrateRoot#suppressing-unavoidable-hydration-mismatch-errors).",
+          "default": "—"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAuxClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAuxClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onContextMenu",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onContextMenuCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onDoubleClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onDoubleClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseDown",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseDownCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseEnter",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseLeave",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseMove",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseMoveCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOut",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOutCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOver",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOverCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseUp",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseUpCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchCancel",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchCancelCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchEnd",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchEndCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchMove",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchMoveCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchStart",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchStartCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerDown",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerDownCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerMove",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerMoveCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerUp",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerUpCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerCancel",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerCancelCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerEnter",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerLeave",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOver",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOverCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOut",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOutCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onGotPointerCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onGotPointerCaptureCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onLostPointerCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onLostPointerCaptureCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onScroll",
+          "type": "UIEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onScrollCapture",
+          "type": "UIEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onWheel",
+          "type": "WheelEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onWheelCapture",
+          "type": "WheelEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationStart",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationStartCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationEnd",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationEndCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationIteration",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationIterationCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionCancel",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionCancelCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionEnd",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionEndCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionRun",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionRunCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionStart",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionStartCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Item",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "className",
+          "type": "ClassNameOrFunction<BreadcrumbRenderProps>",
+          "required": false,
+          "description": "The CSS [className](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) for the\nelement. A function may be provided to compute the class based on component state.",
+          "default": "'react-aria-Breadcrumb'"
+        },
+        {
+          "name": "id",
+          "type": "Key",
+          "required": false,
+          "description": "A unique id for the breadcrumb, which will be passed to `onAction` when the breadcrumb is\npressed.",
+          "default": "—"
+        },
+        {
+          "name": "children",
+          "type": "ChildrenOrFunction<T>",
+          "required": false,
+          "description": "The children of the component. A function may be provided to alter the children based on\ncomponent state.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "StyleOrFunction<T>",
+          "required": false,
+          "description": "The inline [style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style) for the\nelement. A function may be provided to compute the style based on component state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "DOMRenderFunction<E, T>",
+          "required": false,
+          "description": "Overrides the default DOM element with a custom render function.\nThis allows rendering existing components with built-in styles and behaviors\nsuch as router links, animation libraries, and pre-styled components.\n\nRequirements:\n\n- You must render the expected element type (e.g. if `<button>` is expected, you cannot render an\n  `<a>`).\n- Only a single root DOM element can be rendered (no fragments).\n- You must pass through props and ref to the underlying DOM element, merging with your own prop\n  as appropriate.",
+          "default": "—"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "description": "Defines a string value that labels the current element.",
+          "default": "—"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that labels the current element.",
+          "default": "—"
+        },
+        {
+          "name": "aria-describedby",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that describes the object.",
+          "default": "—"
+        },
+        {
+          "name": "aria-details",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that provide a detailed, extended description for the\nobject.",
+          "default": "—"
+        },
+        {
+          "name": "dir",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "translate",
+          "type": "'yes' | 'no' | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "suppressHydrationWarning",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "A React-only flag that suppresses the warning React normally logs when an element's\nserver-rendered content doesn't match the client render during hydration. See [React\ndocs](https://react.dev/reference/react-dom/client/hydrateRoot#suppressing-unavoidable-hydration-mismatch-errors).",
+          "default": "—"
+        },
+        {
+          "name": "onClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAuxClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAuxClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onContextMenu",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onContextMenuCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onDoubleClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onDoubleClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseDown",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseDownCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseEnter",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseLeave",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseMove",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseMoveCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOut",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOutCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOver",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOverCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseUp",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseUpCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchCancel",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchCancelCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchEnd",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchEndCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchMove",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchMoveCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchStart",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchStartCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerDown",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerDownCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerMove",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerMoveCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerUp",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerUpCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerCancel",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerCancelCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerEnter",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerLeave",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOver",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOverCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOut",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOutCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onGotPointerCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onGotPointerCaptureCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onLostPointerCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onLostPointerCaptureCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onScroll",
+          "type": "UIEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onScrollCapture",
+          "type": "UIEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onWheel",
+          "type": "WheelEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onWheelCapture",
+          "type": "WheelEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationStart",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationStartCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationEnd",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationEndCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationIteration",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationIterationCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionCancel",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionCancelCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionEnd",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionEndCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionRun",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionRunCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionStart",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionStartCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Link",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "slot",
+          "type": "string | null",
+          "required": false,
+          "description": "A slot name for the component. Slots allow the component to receive props from a parent\ncomponent. An explicit `null` value indicates that the local props completely override all\nprops received from a parent.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "StyleOrFunction<T>",
+          "required": false,
+          "description": "The inline [style](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/style) for the\nelement. A function may be provided to compute the style based on component state.",
+          "default": "—"
+        },
+        {
+          "name": "suppressHydrationWarning",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "A React-only flag that suppresses the warning React normally logs when an element's\nserver-rendered content doesn't match the client render during hydration. See [React\ndocs](https://react.dev/reference/react-dom/client/hydrateRoot#suppressing-unavoidable-hydration-mismatch-errors).",
+          "default": "—"
+        },
+        {
+          "name": "autoFocus",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether the element should receive focus on render.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "ClassNameOrFunction<LinkRenderProps>",
+          "required": false,
+          "description": "The CSS [className](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) for the\nelement. A function may be provided to compute the class based on component state.",
+          "default": "'react-aria-Link'"
+        },
+        {
+          "name": "dir",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "required": false,
+          "description": "The element's unique identifier. See\n[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/id).",
+          "default": "—"
+        },
+        {
+          "name": "lang",
+          "type": "string | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "translate",
+          "type": "'yes' | 'no' | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "rel",
+          "type": "string",
+          "required": false,
+          "description": "The relationship between the linked resource and the current page. See\n[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel).",
+          "default": "—"
+        },
+        {
+          "name": "inert",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "aria-current",
+          "type": "boolean | 'true' | 'false' | 'page' | 'step' | 'location' | 'date' | 'time'",
+          "required": false,
+          "description": "Indicates whether this element represents the current item within a container or set of related\nelements.",
+          "default": "—"
+        },
+        {
+          "name": "aria-describedby",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that describes the object.",
+          "default": "—"
+        },
+        {
+          "name": "aria-details",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that provide a detailed, extended description for the\nobject.",
+          "default": "—"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "required": false,
+          "description": "Defines a string value that labels the current element.",
+          "default": "—"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "required": false,
+          "description": "Identifies the element (or elements) that labels the current element.",
+          "default": "—"
+        },
+        {
+          "name": "children",
+          "type": "ChildrenOrFunction<T>",
+          "required": false,
+          "description": "The children of the component. A function may be provided to alter the children based on\ncomponent state.",
+          "default": "—"
+        },
+        {
+          "name": "onFocus",
+          "type": "(e: FocusEvent<Target>) => void",
+          "required": false,
+          "description": "Handler that is called when the element receives focus.",
+          "default": "—"
+        },
+        {
+          "name": "onBlur",
+          "type": "(e: FocusEvent<Target>) => void",
+          "required": false,
+          "description": "Handler that is called when the element loses focus.",
+          "default": "—"
+        },
+        {
+          "name": "onKeyDown",
+          "type": "(e: KeyboardEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a key is pressed.",
+          "default": "—"
+        },
+        {
+          "name": "onKeyUp",
+          "type": "(e: KeyboardEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a key is released.",
+          "default": "—"
+        },
+        {
+          "name": "onAuxClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAuxClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onClick",
+          "type": "(e: MouseEvent<FocusableElement>) => void",
+          "required": false,
+          "description": "**Not recommended – use `onPress` instead.** `onClick` is an alias for `onPress`\nprovided for compatibility with other libraries. `onPress` provides\nadditional event details for non-mouse interactions.",
+          "default": "—"
+        },
+        {
+          "name": "onClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onContextMenu",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onContextMenuCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onDoubleClick",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onDoubleClickCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseDown",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseDownCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseEnter",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseLeave",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseMove",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseMoveCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOut",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOutCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOver",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseOverCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseUp",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onMouseUpCapture",
+          "type": "MouseEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchCancel",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchCancelCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchEnd",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchEndCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchMove",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchMoveCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchStart",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTouchStartCapture",
+          "type": "TouchEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerDown",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerDownCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerMove",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerMoveCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerUp",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerUpCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerCancel",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerCancelCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerEnter",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerLeave",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOver",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOverCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOut",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onPointerOutCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onGotPointerCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onGotPointerCaptureCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onLostPointerCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onLostPointerCaptureCapture",
+          "type": "PointerEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onScroll",
+          "type": "UIEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onScrollCapture",
+          "type": "UIEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onWheel",
+          "type": "WheelEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onWheelCapture",
+          "type": "WheelEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationStart",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationStartCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationEnd",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationEndCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationIteration",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onAnimationIterationCapture",
+          "type": "AnimationEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionCancel",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionCancelCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionEnd",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionEndCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionRun",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionRunCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionStart",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "onTransitionStartCapture",
+          "type": "TransitionEventHandler<T> | undefined",
+          "required": false,
+          "description": "",
+          "default": "—"
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "required": false,
+          "description": "Whether the link is disabled.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "(props: DetailedHTMLProps<LinkWithRequiredHref, HTMLAnchorElement> | React.JSX.IntrinsicElements[Fallback], renderProps: T) => ReactElement",
+          "required": false,
+          "description": "Overrides the default DOM element with a custom render function.\nThis allows rendering existing components with built-in styles and behaviors\nsuch as router links, animation libraries, and pre-styled components.\n\nNote: You can check if `'href' in props` in order to tell whether to render an `<a>` element.\n\nRequirements:\n\n- You must render the expected element type (e.g. if `<a>` is expected, you cannot render a\n  `<button>`).\n- Only a single root DOM element can be rendered (no fragments).\n- You must pass through props and ref to the underlying DOM element, merging with your own prop\n  as appropriate.",
+          "default": "—"
+        },
+        {
+          "name": "onFocusChange",
+          "type": "(isFocused: boolean) => void",
+          "required": false,
+          "description": "Handler that is called when the element's focus status changes.",
+          "default": "—"
+        },
+        {
+          "name": "download",
+          "type": "boolean | string",
+          "required": false,
+          "description": "Causes the browser to download the linked URL. A string may be provided to suggest a file name.\nSee [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#download).",
+          "default": "—"
+        },
+        {
+          "name": "href",
+          "type": "Href",
+          "required": false,
+          "description": "A URL to link to. See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#href).",
+          "default": "—"
+        },
+        {
+          "name": "hrefLang",
+          "type": "string",
+          "required": false,
+          "description": "Hints at the human language of the linked URL.\nSee[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#hreflang).",
+          "default": "—"
+        },
+        {
+          "name": "ping",
+          "type": "string",
+          "required": false,
+          "description": "A space-separated list of URLs to ping when the link is followed. See\n[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#ping).",
+          "default": "—"
+        },
+        {
+          "name": "target",
+          "type": "HTMLAttributeAnchorTarget",
+          "required": false,
+          "description": "The target window for the link. See\n[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#target).",
+          "default": "—"
+        },
+        {
+          "name": "referrerPolicy",
+          "type": "HTMLAttributeReferrerPolicy",
+          "required": false,
+          "description": "How much of the referrer to send when following the link. See\n[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#referrerpolicy).",
+          "default": "—"
+        },
+        {
+          "name": "onPress",
+          "type": "(e: PressEvent) => void",
+          "required": false,
+          "description": "Handler that is called when the press is released over the target.",
+          "default": "—"
+        },
+        {
+          "name": "onPressStart",
+          "type": "(e: PressEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a press interaction starts.",
+          "default": "—"
+        },
+        {
+          "name": "onPressEnd",
+          "type": "(e: PressEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a press interaction ends, either\nover the target or when the pointer leaves the target.",
+          "default": "—"
+        },
+        {
+          "name": "onPressChange",
+          "type": "(isPressed: boolean) => void",
+          "required": false,
+          "description": "Handler that is called when the press state changes.",
+          "default": "—"
+        },
+        {
+          "name": "onPressUp",
+          "type": "(e: PressEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a press is released over the target, regardless of\nwhether it started on the target or not.",
+          "default": "—"
+        },
+        {
+          "name": "routerOptions",
+          "type": "RouterOptions",
+          "required": false,
+          "description": "Options for the configured client side router.",
+          "default": "—"
+        },
+        {
+          "name": "onHoverStart",
+          "type": "(e: HoverEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a hover interaction starts.",
+          "default": "—"
+        },
+        {
+          "name": "onHoverEnd",
+          "type": "(e: HoverEvent) => void",
+          "required": false,
+          "description": "Handler that is called when a hover interaction ends.",
+          "default": "—"
+        },
+        {
+          "name": "onHoverChange",
+          "type": "(isHovering: boolean) => void",
+          "required": false,
+          "description": "Handler that is called when the hover state changes.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

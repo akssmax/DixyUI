@@ -1,0 +1,15 @@
+packages:
+  - apps/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - esbuild
+
+minimumReleaseAge: 1440
+
+allowBuilds:
+  "@parcel/watcher": false
+
+# The one-shot Tailwind validator uses the prebuilt watcher; no native build is needed.
+ignoredBuiltDependencies:
+  - "@parcel/watcher"

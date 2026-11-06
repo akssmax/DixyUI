@@ -1,0 +1,592 @@
+{
+  "name": "Drawer",
+  "slug": "drawer",
+  "parts": [
+    {
+      "name": "Backdrop",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "forceRender",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the backdrop is forced to render even when nested.",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "Close",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `false` if the rendered element is not a button (for example, `<div>`).",
+          "default": "true"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Content",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Description",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Indent",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "IndentBackground",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Popup",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "initialFocus",
+          "type": "boolean | React.RefObject<HTMLElement | null> | ((openType: InteractionType) => boolean | HTMLElement | null | void) | undefined",
+          "required": false,
+          "description": "Determines the element to focus when the drawer is opened.\n\n- `false`: Do not move focus.\n- `true`: Move focus based on the default behavior (first tabbable element or popup).\n- `RefObject`: Move focus to the ref element.\n- `function`: Called with the interaction type (`mouse`, `touch`, `pen`, or `keyboard`).\n  Return an element to focus, `true` to use the default behavior, or `false`/`undefined` to do nothing.",
+          "default": "—"
+        },
+        {
+          "name": "finalFocus",
+          "type": "boolean | React.RefObject<HTMLElement | null> | ((closeType: InteractionType) => boolean | HTMLElement | null | void) | undefined",
+          "required": false,
+          "description": "Determines the element to focus when the drawer is closed.\n\n- `false`: Do not move focus.\n- `true`: Move focus based on the default behavior (trigger or previously focused element).\n- `RefObject`: Move focus to the ref element.\n- `function`: Called with the interaction type (`mouse`, `touch`, `pen`, or `keyboard`).\n  Return an element to focus, `true` to use the default behavior, or `false`/`undefined` to do nothing.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "SwipeArea",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the swipe area is disabled.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "swipeDirection",
+          "type": "DrawerSwipeDirection | undefined",
+          "required": false,
+          "description": "The swipe direction that opens the drawer.\nDefaults to the opposite of `Drawer.Root` `swipeDirection`.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Title",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Trigger",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "handle",
+          "type": "DrawerHandle<Payload> | undefined",
+          "required": false,
+          "description": "A handle to associate the trigger with a drawer.\nCan be created with the Drawer.createHandle() method.",
+          "default": "—"
+        },
+        {
+          "name": "payload",
+          "type": "Payload | undefined",
+          "required": false,
+          "description": "A payload to pass to the drawer when it is opened.",
+          "default": "—"
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "required": false,
+          "description": "ID of the trigger. In addition to being forwarded to the rendered element,\nit is also used to specify the active trigger for drawers in controlled mode (with the Drawer.Root `triggerId` prop).",
+          "default": "—"
+        },
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `false` if the rendered element is not a button (for example, `<div>`).",
+          "default": "true"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Viewport",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Portal",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "keepMounted",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether to keep the portal mounted in the DOM while the popup is hidden.",
+          "default": "false"
+        },
+        {
+          "name": "container",
+          "type": "HTMLElement | ShadowRoot | React.RefObject<HTMLElement | ShadowRoot | null> | null | undefined",
+          "required": false,
+          "description": "A parent element to render the portal element into.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Provider",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the drawer is currently open.",
+          "default": "—"
+        },
+        {
+          "name": "defaultOpen",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the drawer is initially open.\n\nTo render a controlled drawer, use the `open` prop instead.",
+          "default": "false"
+        },
+        {
+          "name": "modal",
+          "type": "boolean | 'trap-focus' | undefined",
+          "required": false,
+          "description": "Determines if the drawer enters a modal state when open.\n- `true`: user interaction is limited to just the drawer: focus is trapped, document page scroll is locked, and pointer interactions on outside elements are disabled.\n- `false`: user interaction with the rest of the document is allowed.\n- `'trap-focus'`: focus is trapped inside the drawer, but document page scroll is not locked and pointer interactions outside of it remain enabled.",
+          "default": "true"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "((open: boolean, eventDetails: DrawerRoot.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Event handler called when the drawer is opened or closed.",
+          "default": "—"
+        },
+        {
+          "name": "onOpenChangeComplete",
+          "type": "((open: boolean) => void) | undefined",
+          "required": false,
+          "description": "Event handler called after any animations complete when the drawer is opened or closed.",
+          "default": "—"
+        },
+        {
+          "name": "disablePointerDismissal",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether to prevent the drawer from closing on outside presses.\nFor non-modal drawers, this also prevents the drawer from closing when focus moves outside of it.",
+          "default": "false"
+        },
+        {
+          "name": "actionsRef",
+          "type": "React.RefObject<DrawerRoot.Actions | null> | undefined",
+          "required": false,
+          "description": "A ref to imperative actions.\n- `unmount`: Ends the closing phase of the drawer after an externally controlled closing animation finishes.\nCall `preventUnmountOnClose()` in `onOpenChange` first, otherwise the drawer completes closing on its own.\nWhether it leaves the DOM is decided by `keepMounted` on the portal.\n- `close`: Closes the drawer imperatively when called.",
+          "default": "—"
+        },
+        {
+          "name": "handle",
+          "type": "DrawerHandle<Payload> | undefined",
+          "required": false,
+          "description": "A handle to associate the drawer with a trigger.\nIf specified, allows detached triggers to control the drawer's open state.\nCan be created with the Drawer.createHandle() method.",
+          "default": "—"
+        },
+        {
+          "name": "triggerId",
+          "type": "string | null | undefined",
+          "required": false,
+          "description": "ID of the trigger that the drawer is associated with.\nThis is useful in conjunction with the `open` prop to create a controlled drawer.\nThere's no need to specify this prop when the drawer is uncontrolled (that is, when the `open` prop is not set).",
+          "default": "—"
+        },
+        {
+          "name": "defaultTriggerId",
+          "type": "string | null | undefined",
+          "required": false,
+          "description": "ID of the trigger that the drawer is associated with.\nThis is useful in conjunction with the `defaultOpen` prop to create an initially open drawer.",
+          "default": "—"
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode | PayloadChildRenderFunction<Payload>",
+          "required": false,
+          "description": "The content of the drawer.",
+          "default": "—"
+        },
+        {
+          "name": "swipeDirection",
+          "type": "DrawerSwipeDirection | undefined",
+          "required": false,
+          "description": "The swipe direction used to dismiss the drawer.",
+          "default": "'down'"
+        },
+        {
+          "name": "snapPoints",
+          "type": "DrawerSnapPoint[] | undefined",
+          "required": false,
+          "description": "Snap points used to position the drawer.\nUse numbers between 0 and 1 to represent fractions of the viewport height,\nnumbers greater than 1 as pixel values, or strings in `px`/`rem` units\n(for example, `'148px'` or `'30rem'`).",
+          "default": "—"
+        },
+        {
+          "name": "snapToSequentialPoints",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Disables velocity-based snap skipping so drag distance determines the next snap point.",
+          "default": "false"
+        },
+        {
+          "name": "snapPoint",
+          "type": "DrawerSnapPoint | null | undefined",
+          "required": false,
+          "description": "The currently active snap point. Use with `onSnapPointChange` to control the snap point.",
+          "default": "—"
+        },
+        {
+          "name": "defaultSnapPoint",
+          "type": "DrawerSnapPoint | null | undefined",
+          "required": false,
+          "description": "The initial snap point value when uncontrolled.",
+          "default": "—"
+        },
+        {
+          "name": "onSnapPointChange",
+          "type": "((snapPoint: DrawerSnapPoint | null, eventDetails: DrawerRoot.SnapPointChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback fired when the snap point changes.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "VirtualKeyboardProvider",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": false,
+          "description": "",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "createHandle",
+      "kind": "helper",
+      "description": "",
+      "props": []
+    },
+    {
+      "name": "Handle",
+      "kind": "helper",
+      "description": "",
+      "props": []
+    }
+  ]
+}

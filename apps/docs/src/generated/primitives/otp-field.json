@@ -1,0 +1,223 @@
+{
+  "name": "OTPField",
+  "slug": "otp-field",
+  "parts": [
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "form",
+          "type": "string | undefined",
+          "required": false,
+          "description": "A string specifying the `form` element with which the hidden input is associated.\nThis string's value must match the id of a `form` element in the same document.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "mask",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the slot inputs should mask entered characters.\nPass `type` directly to individual `<OTPField.Input>` parts to use a custom\ninput type.",
+          "default": "false"
+        },
+        {
+          "name": "defaultValue",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The uncontrolled OTP value when the component is initially rendered.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The id of the first input element.\nSubsequent inputs derive their ids from it (`{id}-2`, `{id}-3`, and so on).",
+          "default": "—"
+        },
+        {
+          "name": "inputMode",
+          "type": "React.HTMLAttributes<HTMLInputElement>['inputMode'] | undefined",
+          "required": false,
+          "description": "The virtual keyboard hint applied to the slot inputs and hidden validation input.\n\nBuilt-in validation modes provide sensible defaults, but you can override them when needed.",
+          "default": "—"
+        },
+        {
+          "name": "value",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The OTP value.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((value: string, eventDetails: OTPFieldRoot.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback fired when the OTP value changes.\n\nThe `eventDetails.reason` indicates what triggered the change:\n- `'input-change'` for typing or autofill\n- `'input-clear'` when a character is removed by text input\n- `'input-paste'` for paste interactions\n- `'keyboard'` for keyboard interactions that change the value",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "length",
+          "type": "number",
+          "required": true,
+          "description": "The number of OTP input slots.\nRequired so the root can clamp values, detect completion, and generate\nconsistent validation markup before all slots hydrate.",
+          "default": "—"
+        },
+        {
+          "name": "autoComplete",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The input autocomplete attribute. Applied to the first slot and hidden validation input.",
+          "default": "'one-time-code'"
+        },
+        {
+          "name": "name",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the field when a form is submitted.",
+          "default": "—"
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the user should be unable to change the field value.",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the user must enter a value before submitting a form.",
+          "default": "false"
+        },
+        {
+          "name": "autoSubmit",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether to submit the owning form when the OTP becomes complete.",
+          "default": "false"
+        },
+        {
+          "name": "validationType",
+          "type": "OTPFieldRoot.ValidationType | undefined",
+          "required": false,
+          "description": "The type of input validation to apply to the OTP value.",
+          "default": "'numeric'"
+        },
+        {
+          "name": "normalizeValue",
+          "type": "((value: string) => string) | undefined",
+          "required": false,
+          "description": "Function that normalizes the OTP value after whitespace and `validationType` filtering.\nIt runs whenever OTP Field normalizes a value, including initial/default values, controlled\nvalues, and user edits.\n\nThe returned value is filtered by `validationType` again, then clamped to `length`.\nIt should be idempotent because OTP Field may normalize the same value more than once while\nhandling edits, storing state, and rendering controlled or uncontrolled values. Non-idempotent\nnormalizers can compound across those normalization passes. Characters rejected while\nnormalizing typed or pasted text are reported through `onValueInvalid`.",
+          "default": "—"
+        },
+        {
+          "name": "onValueInvalid",
+          "type": "((value: string, eventDetails: OTPFieldRoot.InvalidEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback fired when entered text contains characters that are rejected by validation or\nnormalization before the OTP value updates.\n\nThe `value` argument is the attempted user-entered string before normalization.",
+          "default": "—"
+        },
+        {
+          "name": "onValueComplete",
+          "type": "((value: string, eventDetails: OTPFieldRoot.CompleteEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback function that is fired when the OTP value becomes complete, or when a complete value\nis pasted while the OTP is already complete.\n\nWhen the value changes, it runs later than `onValueChange`, after the internal value update is\napplied. If a complete pasted value matches the current value, `onValueChange` does not fire.\n\nIf `autoSubmit` is enabled, it runs immediately before the owning form is submitted.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Input",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Separator",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "orientation",
+          "type": "Orientation | undefined",
+          "required": false,
+          "description": "The orientation of the separator.",
+          "default": "'horizontal'"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

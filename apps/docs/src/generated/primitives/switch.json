@@ -1,0 +1,153 @@
+{
+  "name": "Switch",
+  "slug": "switch",
+  "parts": [
+    {
+      "name": "Root",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "form",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the form that owns the hidden input.\nUseful when the switch is rendered outside the form.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "defaultChecked",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the switch is initially active.\n\nTo render a controlled switch, use the `checked` prop instead.",
+          "default": "false"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "id",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The id of the hidden input element.\n\nWhen `nativeButton` is `true`, the id is applied to the root element.",
+          "default": "—"
+        },
+        {
+          "name": "value",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The value submitted with the form when the switch is on.\nBy default, switch submits the \"on\" value, matching native checkbox behavior.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "checked",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the switch is currently active.\n\nTo render an uncontrolled switch, use the `defaultChecked` prop instead.",
+          "default": "—"
+        },
+        {
+          "name": "name",
+          "type": "string | undefined",
+          "required": false,
+          "description": "Identifies the field when a form is submitted.",
+          "default": "—"
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the user should be unable to activate or deactivate the switch.",
+          "default": "false"
+        },
+        {
+          "name": "required",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the user must activate the switch before submitting a form.",
+          "default": "false"
+        },
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `true` if the rendered element is a native button.",
+          "default": "false"
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "((checked: boolean, eventDetails: SwitchRoot.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Event handler called when the switch is activated or deactivated.",
+          "default": "—"
+        },
+        {
+          "name": "inputRef",
+          "type": "React.Ref<HTMLInputElement> | undefined",
+          "required": false,
+          "description": "A ref to access the hidden `<input>` element.",
+          "default": "—"
+        },
+        {
+          "name": "uncheckedValue",
+          "type": "string | undefined",
+          "required": false,
+          "description": "The value submitted with the form when the switch is off.\nBy default, unchecked switches do not submit any value, matching native checkbox behavior.",
+          "default": "—"
+        }
+      ]
+    },
+    {
+      "name": "Thumb",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

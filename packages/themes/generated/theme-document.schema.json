@@ -1,0 +1,790 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "schemaVersion": { "enum": [6] },
+    "id": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100,
+      "pattern": "^[a-z][a-z0-9-]*/[a-z][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "\\S"
+    },
+    "revision": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
+    "foundations": {
+      "type": "object",
+      "properties": {
+        "accentColor": {
+          "enum": [
+            "neutral",
+            "slate",
+            "gray",
+            "zinc",
+            "stone",
+            "taupe",
+            "mauve",
+            "mist",
+            "olive",
+            "sage",
+            "sand",
+            "tomato",
+            "red",
+            "ruby",
+            "crimson",
+            "rose",
+            "pink",
+            "fuchsia",
+            "plum",
+            "purple",
+            "violet",
+            "iris",
+            "indigo",
+            "blue",
+            "sky",
+            "cyan",
+            "teal",
+            "emerald",
+            "jade",
+            "green",
+            "grass",
+            "lime",
+            "mint",
+            "yellow",
+            "amber",
+            "orange",
+            "brown",
+            "bronze",
+            "gold"
+          ]
+        },
+        "customAccent": { "enum": [false, true] },
+        "lightness": {
+          "type": "number",
+          "title": "Accent lightness",
+          "minimum": 0.48,
+          "maximum": 0.83
+        },
+        "chroma": {
+          "type": "number",
+          "title": "Accent chroma",
+          "minimum": 0,
+          "maximum": 0.3
+        },
+        "hue": {
+          "type": "number",
+          "title": "Accent hue",
+          "minimum": 0,
+          "maximum": 360
+        },
+        "neutralColor": {
+          "enum": [
+            "neutral",
+            "slate",
+            "gray",
+            "zinc",
+            "stone",
+            "taupe",
+            "mauve",
+            "mist",
+            "olive",
+            "sage",
+            "sand"
+          ]
+        },
+        "radius": { "enum": ["none", "sm", "md", "lg", "full"] },
+        "density": { "enum": ["compact", "default", "comfortable"] },
+        "material": { "enum": ["matte", "glossy", "soft", "metal", "paper"] },
+        "componentFinish": {
+          "enum": ["inherit", "matte", "glossy", "soft", "metal", "paper"]
+        },
+        "shape": { "enum": ["rounded", "pill", "square"] },
+        "appearance": { "enum": ["light", "dark"] },
+        "bodyFont": {
+          "enum": [
+            "inter",
+            "grotesk",
+            "system",
+            "serif",
+            "mono",
+            "fraunces",
+            "deco",
+            "pixel",
+            "techno",
+            "rounded",
+            "lcd",
+            "plex",
+            "archivo",
+            "neon",
+            "mincho",
+            "gothic",
+            "playfair",
+            "caveat",
+            "bricolage",
+            "terminal",
+            "jetbrains",
+            "manrope",
+            "figtree",
+            "cormorant"
+          ]
+        },
+        "headingFont": {
+          "enum": [
+            "inter",
+            "grotesk",
+            "system",
+            "serif",
+            "mono",
+            "fraunces",
+            "deco",
+            "pixel",
+            "techno",
+            "rounded",
+            "lcd",
+            "plex",
+            "archivo",
+            "neon",
+            "mincho",
+            "gothic",
+            "playfair",
+            "caveat",
+            "bricolage",
+            "terminal",
+            "jetbrains",
+            "manrope",
+            "figtree",
+            "cormorant"
+          ]
+        },
+        "border": { "enum": [1, 2] },
+        "depth": { "enum": ["none", "raised", "floating"] },
+        "ornament": { "enum": ["quiet", "balanced", "expressive"] },
+        "relief": { "enum": [0, 1, 2] },
+        "effects": { "enum": ["static", "backdrop", "reduced"] }
+      },
+      "required": [
+        "accentColor",
+        "customAccent",
+        "lightness",
+        "chroma",
+        "hue",
+        "neutralColor",
+        "radius",
+        "density",
+        "material",
+        "componentFinish",
+        "shape",
+        "appearance",
+        "bodyFont",
+        "headingFont",
+        "border",
+        "depth",
+        "ornament",
+        "relief",
+        "effects"
+      ],
+      "additionalProperties": false
+    },
+    "recipes": {
+      "type": "object",
+      "properties": {
+        "material": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "enum": [
+                "botanical-paper",
+                "pixel-enamel",
+                "gunmetal",
+                "ceramic",
+                "prismatic-glass",
+                "atelier-paper",
+                "sea-glass",
+                "candy-clay",
+                "lacquer-brass",
+                "titanium",
+                "frosted-porcelain",
+                "scrapbook-paper",
+                "cyanotype",
+                "riso-paper",
+                "wet-asphalt",
+                "washi",
+                "station-enamel",
+                "phosphor-glass",
+                "ansi-term",
+                "poster-stock",
+                "glazed-tile",
+                "concrete",
+                "atomic-laminate",
+                "hologram",
+                "painted-steel",
+                "gold-foil",
+                "marigold-silk",
+                "red-paper",
+                "fiesta-paper",
+                "powder-wash",
+                "wool",
+                "liquid-glass"
+              ]
+            },
+            "version": { "enum": [1] },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "surfaceMix": {
+                  "type": "number",
+                  "title": "Light surface neutral mix",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "darkSurfaceMix": {
+                  "type": "number",
+                  "title": "Dark surface neutral mix",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "sheen": {
+                  "type": "number",
+                  "title": "Highlight strength",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "cushion": {
+                  "type": "number",
+                  "title": "Cushion relief",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "inkTint": {
+                  "type": "number",
+                  "title": "Text tint strength",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "textureScale": {
+                  "type": "number",
+                  "title": "Grain scale",
+                  "minimum": 0.5,
+                  "maximum": 3
+                },
+                "lightAngle": {
+                  "type": "number",
+                  "title": "Light angle",
+                  "minimum": 0,
+                  "maximum": 360
+                },
+                "backdropBlur": {
+                  "type": "number",
+                  "title": "Glass blur (px)",
+                  "minimum": 0,
+                  "maximum": 40
+                },
+                "backdropSaturate": {
+                  "type": "number",
+                  "title": "Glass saturation (%)",
+                  "minimum": 100,
+                  "maximum": 200
+                }
+              },
+              "required": [
+                "surfaceMix",
+                "darkSurfaceMix",
+                "sheen",
+                "cushion",
+                "inkTint",
+                "textureScale",
+                "lightAngle",
+                "backdropBlur",
+                "backdropSaturate"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": ["id", "version", "parameters"],
+          "additionalProperties": false
+        },
+        "frame": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "enum": [
+                "none",
+                "forest",
+                "pixel",
+                "rails",
+                "ceramic",
+                "glass",
+                "stitch",
+                "coral",
+                "cushion",
+                "deco",
+                "chamfer",
+                "halo",
+                "drafting",
+                "riso",
+                "neon",
+                "sumi",
+                "transit",
+                "crt",
+                "panes",
+                "swiss",
+                "azulejo",
+                "formwork",
+                "atomic",
+                "hud",
+                "hazard",
+                "orbit",
+                "rangoli",
+                "papercut",
+                "picado",
+                "gulal",
+                "knit",
+                "liquid"
+              ]
+            },
+            "version": { "enum": [1] },
+            "ornament": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "enum": [
+                    "Woodland mix",
+                    "Wild ivy",
+                    "Fern grove",
+                    "Willow canopy",
+                    "Oak & moss",
+                    "Spring growth",
+                    "Ginkgo fans",
+                    "Maple grove",
+                    "Eucalyptus",
+                    "Olive branch",
+                    "Clover meadow",
+                    "Wildflower hedge",
+                    "Piped petals",
+                    "Twisted rope",
+                    "Candy pebbles",
+                    "Ribbon folds",
+                    "Tidal ribbons",
+                    "Seafoam beads",
+                    "Glass droplets",
+                    "Quiet currents",
+                    "Fine filigree",
+                    "Art deco",
+                    "Hammered edge",
+                    "Quiet gilding",
+                    "Dimensioned",
+                    "Ruler ticks",
+                    "Construction lines",
+                    "Quiet draft",
+                    "Misprint",
+                    "Halftone",
+                    "Taped corners",
+                    "Clean stamp",
+                    "Tube outline",
+                    "Broken tubes",
+                    "Sign shapes",
+                    "Low hum",
+                    "Bamboo",
+                    "Plum blossom",
+                    "Dry brush",
+                    "Ensō",
+                    "Line map",
+                    "Station roundels",
+                    "Platform edge",
+                    "Quiet line",
+                    "Box corners",
+                    "Status line",
+                    "Raster ticks",
+                    "Quiet cursor",
+                    "Pane titles",
+                    "Key hints",
+                    "Split panes",
+                    "Bare panes",
+                    "Crop marks",
+                    "Red block",
+                    "Grid ticks",
+                    "Bare grid",
+                    "Corner tiles",
+                    "Border run",
+                    "Floral rosette",
+                    "Single tile",
+                    "Tie holes",
+                    "Stencil marks",
+                    "Board seams",
+                    "Bare concrete",
+                    "Starbursts",
+                    "Boomerangs",
+                    "Orbit atoms",
+                    "Lone star",
+                    "Target brackets",
+                    "Telemetry",
+                    "Reticle",
+                    "Clean brackets",
+                    "Hazard stripes",
+                    "Rivet seams",
+                    "Cargo stencils",
+                    "Clean plate",
+                    "Orbit rings",
+                    "Gold foil",
+                    "Star field",
+                    "Single orbit",
+                    "Rangoli corners",
+                    "Diya row",
+                    "Marigold string",
+                    "Single diya",
+                    "Lanterns",
+                    "Scallop edge",
+                    "Cloud scrolls",
+                    "Single lantern",
+                    "Bunting",
+                    "Marigold garland",
+                    "Paper confetti",
+                    "Short string",
+                    "Powder clouds",
+                    "Splashes",
+                    "Speckle dust",
+                    "Soft haze",
+                    "Fair Isle band",
+                    "Snowflakes",
+                    "Cable stitch",
+                    "Plain rib",
+                    "Specular rim",
+                    "Refraction",
+                    "Light catch",
+                    "Clear"
+                  ]
+                },
+                "canopy": {
+                  "enum": [
+                    "Scattered trails",
+                    "Corner cascades",
+                    "Overhead boughs",
+                    "Long tendrils",
+                    "Open crown"
+                  ]
+                },
+                "stem": {
+                  "enum": [
+                    "Twining vines",
+                    "Woody branches",
+                    "Tender shoots",
+                    "Mossy roots"
+                  ]
+                },
+                "density": {
+                  "type": "number",
+                  "title": "Detail density",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "cornerDensity": {
+                  "type": "number",
+                  "title": "Corner clusters",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "canopyDepth": {
+                  "type": "number",
+                  "title": "Canopy depth / relief",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "variation": {
+                  "type": "number",
+                  "title": "Organic variation",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "scale": {
+                  "type": "number",
+                  "title": "Detail size",
+                  "minimum": 10,
+                  "maximum": 32
+                },
+                "stemWeight": {
+                  "type": "number",
+                  "title": "Stem / rim weight",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "motion": {
+                  "type": "number",
+                  "title": "Motion strength",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "seed": {
+                  "type": "integer",
+                  "title": "Variation seed",
+                  "minimum": 1,
+                  "maximum": 9999
+                }
+              },
+              "required": [
+                "style",
+                "canopy",
+                "stem",
+                "density",
+                "cornerDensity",
+                "canopyDepth",
+                "variation",
+                "scale",
+                "stemWeight",
+                "motion",
+                "seed"
+              ],
+              "additionalProperties": false
+            },
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "number",
+                  "title": "Decorative frame width",
+                  "minimum": 0,
+                  "maximum": 12
+                },
+                "paddingTop": {
+                  "type": "number",
+                  "title": "Panel top inset",
+                  "minimum": 16,
+                  "maximum": 64
+                },
+                "paddingInline": {
+                  "type": "number",
+                  "title": "Panel inline inset",
+                  "minimum": 16,
+                  "maximum": 64
+                },
+                "paddingBottom": {
+                  "type": "number",
+                  "title": "Panel bottom inset",
+                  "minimum": 16,
+                  "maximum": 64
+                },
+                "inset": {
+                  "type": "number",
+                  "title": "Scene frame inset",
+                  "minimum": 0,
+                  "maximum": 24
+                },
+                "cornerVariation": {
+                  "type": "number",
+                  "title": "Organic corner variation",
+                  "minimum": 0,
+                  "maximum": 0.5
+                },
+                "cornerScale": {
+                  "type": "number",
+                  "title": "Corner fullness",
+                  "minimum": 0.5,
+                  "maximum": 3
+                }
+              },
+              "required": [
+                "width",
+                "paddingTop",
+                "paddingInline",
+                "paddingBottom",
+                "inset",
+                "cornerVariation",
+                "cornerScale"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": ["id", "version", "ornament", "parameters"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["material", "frame"],
+      "additionalProperties": false
+    },
+    "character": {
+      "type": "object",
+      "properties": {
+        "controls": {
+          "enum": [
+            "standard",
+            "botanical",
+            "pixel",
+            "instrument",
+            "hardware",
+            "glass",
+            "stitched",
+            "pearl",
+            "clay",
+            "brass",
+            "chrome",
+            "halo"
+          ]
+        },
+        "motion": {
+          "type": "object",
+          "properties": {
+            "style": {
+              "enum": [
+                "standard",
+                "snappy",
+                "stepped",
+                "springy",
+                "weighted",
+                "drift"
+              ]
+            },
+            "press": {
+              "type": "number",
+              "title": "Press depth",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "tempo": {
+              "type": "number",
+              "title": "Tempo",
+              "minimum": 0.5,
+              "maximum": 2
+            }
+          },
+          "required": ["style", "press", "tempo"],
+          "additionalProperties": false
+        },
+        "type": {
+          "type": "object",
+          "properties": {
+            "headingCase": { "enum": ["none", "uppercase", "small-caps"] },
+            "headingTracking": {
+              "type": "number",
+              "title": "Heading tracking",
+              "minimum": -0.05,
+              "maximum": 0.2
+            },
+            "headingWeight": { "enum": [300, 400, 500, 600, 700, 800, 900] },
+            "numerals": { "enum": ["proportional", "tabular", "oldstyle"] }
+          },
+          "required": [
+            "headingCase",
+            "headingTracking",
+            "headingWeight",
+            "numerals"
+          ],
+          "additionalProperties": false
+        },
+        "states": {
+          "enum": ["standard", "led", "marching", "inlay", "glow", "stamp"]
+        },
+        "details": {
+          "type": "object",
+          "properties": {
+            "focus": { "enum": ["ring", "double", "dashed", "glow", "offset"] },
+            "divider": {
+              "enum": ["line", "dashed", "dotted", "double", "groove"]
+            },
+            "selection": { "enum": ["accent", "inverse", "highlighter"] },
+            "scrollbar": { "enum": ["native", "thin", "accent"] },
+            "iconStroke": {
+              "type": "number",
+              "title": "Icon stroke",
+              "minimum": 1,
+              "maximum": 2.75
+            }
+          },
+          "required": [
+            "focus",
+            "divider",
+            "selection",
+            "scrollbar",
+            "iconStroke"
+          ],
+          "additionalProperties": false
+        },
+        "backdrop": {
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "enum": [
+                "none",
+                "grid",
+                "scanlines",
+                "sunburst",
+                "caustics",
+                "fibre",
+                "dots",
+                "topo",
+                "halftone"
+              ]
+            },
+            "intensity": {
+              "type": "number",
+              "title": "Backdrop intensity",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "scale": {
+              "type": "number",
+              "title": "Backdrop scale",
+              "minimum": 0.5,
+              "maximum": 3
+            }
+          },
+          "required": ["pattern", "intensity", "scale"],
+          "additionalProperties": false
+        },
+        "chrome": {
+          "type": "object",
+          "properties": {
+            "titlebar": {
+              "enum": [
+                "none",
+                "grip",
+                "caption",
+                "gradient",
+                "tab",
+                "glass",
+                "chrome"
+              ]
+            },
+            "edge": { "enum": ["line", "bevel", "double", "pill", "stepped"] },
+            "well": {
+              "enum": [
+                "none",
+                "lcd",
+                "recessed",
+                "tinted",
+                "paper",
+                "glass",
+                "sunken"
+              ]
+            },
+            "corners": { "enum": ["inherit", "pixel", "notched", "round"] }
+          },
+          "required": ["titlebar", "edge", "well", "corners"],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "controls",
+        "motion",
+        "type",
+        "states",
+        "details",
+        "backdrop",
+        "chrome"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "revision",
+    "foundations",
+    "recipes",
+    "character"
+  ],
+  "additionalProperties": false
+}

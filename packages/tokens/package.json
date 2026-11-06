@@ -1,0 +1,40 @@
+{
+  "name": "@dixy-ui/tokens",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "description": "Framework-independent Dixy color, typography, sizing and spacing contracts.",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./spacing.css": "./dist/spacing.css",
+    "./typography.css": "./dist/typography.css",
+    "./sizing.css": "./dist/sizing.css",
+    "./layout.css": "./dist/layout.css",
+    "./color.css": "./dist/color.css",
+    "./tailwind.css": "./dist/tailwind.css",
+    "./radius.css": "./dist/radius.css",
+    "./border.css": "./dist/border.css",
+    "./shadow.css": "./dist/shadow.css",
+    "./motion.css": "./dist/motion.css",
+    "./materials.css": "./dist/materials.css",
+    "./shapes.css": "./dist/shapes.css"
+  },
+  "scripts": {
+    "build": "tsc && node ../../scripts/generate-spacing.mjs --dist && node ../../scripts/generate-typography.mjs --dist && node ../../scripts/generate-sizing-layout.mjs --dist && node ../../scripts/generate-color.mjs --dist && node ../../scripts/generate-surfaces.mjs --dist && node ../../scripts/generate-motion.mjs --dist && node ../../scripts/generate-materials.mjs --dist",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/*.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

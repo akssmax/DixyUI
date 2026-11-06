@@ -1,0 +1,63 @@
+import { CodeBlock } from "../src/components/code-block";
+
+<div className="page-eyebrow">THE DESIGN ENGINEERING JOURNEY</div>
+
+# Build it. Understand it.
+
+<p className="page-deck">
+  The code is the starting point. The reasoning is the real work.
+</p>
+
+This library is a place to practice design engineering: shaping how an interface looks, how it behaves, how it is used, and how it holds up under change. The root `DESIGN_ENGINEERING_CHECKLIST.md` tracks implementation evidence separately from your own mastery.
+
+## 01 — A component is a contract
+
+Button owns its visual vocabulary while Base UI owns its interaction foundation. The wrapper must preserve refs, event handlers, native attributes, and the render composition API.
+
+<CodeBlock
+  code={
+    'export interface ButtonProps extends BaseButtonProps {\n  size?: "sm" | "md" | "lg";\n  variant?: "solid" | "soft" | "outline" | "ghost";\n  loading?: boolean;\n}'
+  }
+/>
+
+The snippet above illustrates the contract. Read the source disclosure on the Button page for the complete implementation and exact imported types.
+
+**Your exercise:** add a new visual variant, then verify hover, focus, pressed, disabled, loading, and both appearances. Explain why a visual state can require a behavioral change.
+
+## 02 — Tokens describe relationships
+
+A hard-coded violet button is a style. A button that consumes an accent role is part of a system. Appearance changes the role’s value while the component keeps its meaning.
+
+<CodeBlock
+  language="css"
+  filename="components.css"
+  code={
+    ".dixy-button {\n  background: var(--dixy-accent);\n  color: var(--dixy-accent-contrast);\n}"
+  }
+/>
+
+**Your exercise:** create another accent theme without editing a component stylesheet. Check its text and focus contrast before deciding it is finished.
+
+## 03 — Portals expose the browser model
+
+React context follows the component tree. CSS inheritance follows the DOM tree. A dialog can belong to a nested Theme in React while its DOM is rendered under the document body.
+
+Dixy’s portal wrapper reads the theme context and reapplies its settings to the portaled subtree. That is why a dark dialog can appear correctly inside a light documentation page.
+
+**Your exercise:** remove the theme scope locally, reproduce the visual bug, then explain why React context alone did not fix it.
+
+## 04 — Good documentation is a consumer test
+
+The docs import the built package through its public exports. Playground previews use real typed example modules. Code views use those same source files, with selected defaults applied. API metadata is generated from the local TypeScript interfaces.
+
+**Your exercise:** change a prop union, regenerate metadata, update the controls, and explain every place that needed to change. Can you make that process safer?
+
+## 05 — A passing test is specific evidence
+
+An interaction test can establish that loading prevents duplicate activation. It cannot establish that the component works for every screen reader. A production build can establish that files compile; it cannot establish that the packaged server starts correctly.
+
+**Your exercise:** break focus restoration in a test branch, see the failure, and fix it without asking an agent for the solution.
+
+## Keep an evidence trail
+
+Record what you changed, why you changed it, how you tested it, and what remains uncertain. Keep personal learning items unchecked until you can implement and explain them independently.

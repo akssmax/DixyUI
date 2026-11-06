@@ -1,0 +1,70 @@
+{
+  "name": "@dixy-ui/react",
+  "version": "0.1.0-alpha.0",
+  "description": "Expressive, accessible React components built on Base UI.",
+  "type": "module",
+  "private": true,
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/dixy.js"
+    },
+    "./styles.css": "./dist/styles.css",
+    "./motion": {
+      "types": "./dist/motion.d.ts",
+      "import": "./dist/motion.js"
+    },
+    "./materials.css": "./dist/materials.css",
+    "./backdrop-pilot.css": "./dist/backdrop-pilot.css",
+    "./feedback": {
+      "types": "./dist/feedback.d.ts",
+      "import": "./dist/feedback.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "node ../../scripts/generate-icons.mjs && node ../../scripts/generate-spacing.mjs && node ../../scripts/generate-sizing-layout.mjs && node ../../scripts/generate-surfaces.mjs && node ../../scripts/generate-motion.mjs && node ../../scripts/generate-materials.mjs && vite build && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "dev:types": "tsc -p tsconfig.build.json --watch --preserveWatchOutput"
+  },
+  "dependencies": {
+    "@base-ui/react": "1.9.0",
+    "@dixy-ui/tokens": "workspace:*",
+    "@internationalized/date": "3.12.4",
+    "react-aria-components": "1.22.1"
+  },
+  "peerDependencies": {
+    "motion": "^14.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@dixy-ui/typescript-config": "workspace:*",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.8",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "jsdom": "30.1.2",
+    "motion": "14.2.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.4",
+    "vitest": "5.0.4"
+  },
+  "peerDependenciesMeta": {
+    "motion": {
+      "optional": true
+    }
+  }
+}

@@ -1,0 +1,359 @@
+@layer dixy.components {
+  .dixy-container {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin-inline: auto;
+    padding-inline: var(--dixy-layout-gutter);
+  }
+  .dixy-stack,
+  .dixy-inline {
+    display: flex;
+    min-inline-size: 0;
+  }
+  .dixy-stack {
+    flex-direction: column;
+  }
+  .dixy-inline {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .dixy-inline[data-wrap="false"] {
+    flex-wrap: nowrap;
+  }
+  .dixy-inline[data-align="start"] {
+    align-items: flex-start;
+  }
+  .dixy-inline[data-align="end"] {
+    align-items: flex-end;
+  }
+  .dixy-inline[data-align="stretch"] {
+    align-items: stretch;
+  }
+  .dixy-inline[data-align="baseline"] {
+    align-items: baseline;
+  }
+  .dixy-button {
+    --button-color: var(--dixy-button-primary-background);
+    --button-hover: var(--dixy-button-primary-hover);
+    --button-pressed: var(--dixy-button-primary-pressed);
+    --button-soft: var(--dixy-button-primary-soft);
+    --button-soft-hover: var(--dixy-button-primary-soft-hover);
+    --button-soft-pressed: var(--dixy-button-primary-soft-pressed);
+    --button-text: var(--dixy-button-primary-text);
+    --button-contrast: var(--dixy-button-primary-foreground);
+    --button-border: var(--dixy-color-border-focus);
+    box-sizing: border-box;
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dixy-button-gap);
+    flex-shrink: 0;
+    /* Size to the label; set inline-size: 100% for a full-width action. */
+    inline-size: fit-content;
+    height: var(--dixy-height-md);
+    min-block-size: var(--dixy-interaction-target);
+    min-inline-size: var(--dixy-interaction-target);
+    padding-block: 0;
+    padding-inline: var(--dixy-button-padding);
+    border: var(--dixy-button-border-width) var(--dixy-border-style-solid)
+      transparent;
+    border-radius: var(--dixy-button-radius);
+    background-color: var(--button-color);
+    color: var(--button-contrast);
+    font: var(--dixy-font-label-md);
+    letter-spacing: var(--dixy-font-label-md-letter-spacing);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .dixy-button {
+    --dixy-control-icon-size: var(--dixy-size-icon-sm);
+  }
+  .dixy-button[data-size="lg"] {
+    --dixy-control-icon-size: var(--dixy-size-icon-md);
+  }
+  .dixy-button svg:not(.dixy-icon) {
+    inline-size: var(--dixy-control-icon-size);
+    block-size: var(--dixy-control-icon-size);
+    flex-shrink: 0;
+  }
+  .dixy-icon {
+    display: inline-block;
+    inline-size: var(
+      --dixy-icon-size,
+      var(--dixy-control-icon-size, var(--dixy-size-icon-md))
+    );
+    block-size: var(
+      --dixy-icon-size,
+      var(--dixy-control-icon-size, var(--dixy-size-icon-md))
+    );
+    flex: none;
+    vertical-align: -0.125em;
+    color: inherit;
+  }
+  .dixy-button[data-color="neutral"] {
+    --button-color: var(--dixy-button-secondary-background);
+    --button-hover: var(--dixy-button-secondary-hover);
+    --button-pressed: var(--dixy-button-secondary-pressed);
+    --button-soft: var(--dixy-button-secondary-soft);
+    --button-soft-hover: var(--dixy-button-secondary-soft-hover);
+    --button-soft-pressed: var(--dixy-button-secondary-soft-pressed);
+    --button-text: var(--dixy-button-secondary-text);
+    --button-contrast: var(--dixy-button-secondary-foreground);
+    --button-border: var(--dixy-color-border-default);
+  }
+  .dixy-button[data-color="danger"] {
+    --button-color: var(--dixy-button-destructive-background);
+    --button-hover: var(--dixy-button-destructive-hover);
+    --button-pressed: var(--dixy-button-destructive-pressed);
+    --button-soft: var(--dixy-button-destructive-soft);
+    --button-soft-hover: var(--dixy-button-destructive-soft-hover);
+    --button-soft-pressed: var(--dixy-button-destructive-soft-pressed);
+    --button-text: var(--dixy-button-destructive-text);
+    --button-contrast: var(--dixy-button-destructive-foreground);
+    --button-border: var(--dixy-color-border-danger);
+  }
+  .dixy-button[data-color="success"] {
+    --button-color: var(--dixy-button-success-background);
+    --button-hover: var(--dixy-button-success-hover);
+    --button-pressed: var(--dixy-button-success-pressed);
+    --button-soft: var(--dixy-button-success-soft);
+    --button-soft-hover: var(--dixy-button-success-soft-hover);
+    --button-soft-pressed: var(--dixy-button-success-soft-pressed);
+    --button-text: var(--dixy-button-success-text);
+    --button-contrast: var(--dixy-button-success-foreground);
+    --button-border: var(--dixy-color-border-success);
+  }
+  .dixy-button[data-size="sm"] {
+    height: var(--dixy-height-sm);
+    padding-inline: var(--dixy-button-padding-sm);
+    font: var(--dixy-font-label-md);
+  }
+  .dixy-button[data-size="lg"] {
+    height: var(--dixy-height-lg);
+    padding-inline: var(--dixy-button-padding-lg);
+    font: var(--dixy-font-label-lg);
+  }
+  .dixy-button[data-variant="soft"] {
+    background-color: var(--button-soft);
+    color: var(--button-text);
+  }
+  .dixy-button[data-variant="outline"] {
+    background-color: transparent;
+    color: var(--button-text);
+    border-color: var(--dixy-color-border-default);
+  }
+  .dixy-button[data-variant="ghost"] {
+    background-color: transparent;
+    color: var(--button-text);
+  }
+  @media (hover: hover) {
+    .dixy-button:hover:not([data-disabled]) {
+      background-color: var(--button-hover);
+    }
+    .dixy-button[data-variant="soft"]:hover:not([data-disabled]),
+    .dixy-button[data-variant="outline"]:hover:not([data-disabled]),
+    .dixy-button[data-variant="ghost"]:hover:not([data-disabled]) {
+      background-color: var(--button-soft-hover);
+      border-color: var(--button-border);
+    }
+  }
+  .dixy-button:active:not([data-disabled]) {
+    background-color: var(--button-pressed);
+  }
+  .dixy-button[data-variant="soft"]:active:not([data-disabled]),
+  .dixy-button[data-variant="outline"]:active:not([data-disabled]),
+  .dixy-button[data-variant="ghost"]:active:not([data-disabled]) {
+    background-color: var(--button-soft-pressed);
+  }
+  .dixy-button:focus-visible,
+  .dixy-input:focus-visible {
+    outline: var(--dixy-focus-ring-width) var(--dixy-border-style-solid)
+      var(--dixy-focus-ring);
+    outline-offset: var(--dixy-focus-ring-offset);
+  }
+  .dixy-button[data-disabled] {
+    background-color: var(--dixy-color-background-disabled);
+    color: var(--dixy-color-text-disabled);
+    cursor: not-allowed;
+  }
+  .dixy-icon-button {
+    width: var(--dixy-height-md);
+    min-inline-size: max(
+      var(--dixy-interaction-target),
+      var(--dixy-size-target-comfortable)
+    );
+    min-block-size: max(
+      var(--dixy-interaction-target),
+      var(--dixy-size-target-comfortable)
+    );
+    padding: 0;
+  }
+  .dixy-icon-button[data-size="sm"] {
+    width: var(--dixy-height-sm);
+    padding: 0;
+  }
+  .dixy-icon-button[data-size="lg"] {
+    width: var(--dixy-height-lg);
+    padding: 0;
+  }
+  .dixy-spinner {
+    inline-size: var(--dixy-size-icon-sm);
+    block-size: var(--dixy-size-icon-sm);
+    border: 1.5px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+  }
+  @keyframes dixy-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .dixy-text {
+    margin: 0;
+  }
+  .dixy-text[data-tone="muted"] {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-text[data-tone="accent"] {
+    color: var(--dixy-color-text-link);
+  }
+  .dixy-heading {
+    margin: 0;
+  }
+  .dixy-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-form-field-gap);
+    min-width: 0;
+  }
+  .dixy-label {
+    font: var(--dixy-font-label-md);
+    letter-spacing: var(--dixy-font-label-md-letter-spacing);
+  }
+  .dixy-description,
+  .dixy-error {
+    margin: 0;
+    font: var(--dixy-font-body-sm);
+    letter-spacing: var(--dixy-font-body-sm-letter-spacing);
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-error {
+    color: var(--dixy-field-error-text);
+  }
+  .dixy-input {
+    box-sizing: border-box;
+    width: 100%;
+    min-inline-size: var(--dixy-interaction-target);
+    height: var(--dixy-height-md);
+    min-block-size: var(--dixy-interaction-target);
+    border: var(--dixy-input-border-width) var(--dixy-border-style-solid)
+      var(--dixy-input-border);
+    border-radius: var(--dixy-input-radius);
+    padding-block: 0;
+    padding-inline: var(--dixy-input-padding);
+    background: var(--dixy-input-background);
+    box-shadow: var(--dixy-input-shadow);
+    color: var(--dixy-input-text);
+    font: var(--dixy-font-body-md);
+    letter-spacing: var(--dixy-font-body-md-letter-spacing);
+    transition: border-color var(--dixy-motion-transition-feedback);
+  }
+  .dixy-input::placeholder {
+    color: var(--dixy-color-text-secondary);
+    opacity: 1;
+  }
+  .dixy-input[data-size="sm"] {
+    height: var(--dixy-height-sm);
+    font: var(--dixy-font-body-md);
+  }
+  .dixy-input[data-size="lg"] {
+    height: var(--dixy-height-lg);
+    font: var(--dixy-font-body-md);
+  }
+  .dixy-input[data-variant="soft"] {
+    background: var(--dixy-color-background-subtle);
+    border-color: transparent;
+  }
+  .dixy-input[data-invalid],
+  .dixy-input[aria-invalid="true"] {
+    border-color: var(--dixy-field-error-text);
+  }
+  .dixy-input:disabled {
+    background: var(--dixy-color-background-disabled);
+    color: var(--dixy-color-text-disabled);
+    cursor: not-allowed;
+  }
+  .dixy-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    background: var(--dixy-color-background-overlay);
+    backdrop-filter: blur(5px);
+  }
+  .dixy-dialog-backdrop[data-starting-style],
+  .dixy-dialog-backdrop[data-ending-style] {
+    opacity: 0;
+  }
+  .dixy-dialog-viewport {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--dixy-spacing-inset-lg);
+    box-sizing: border-box;
+  }
+  .dixy-dialog-popup {
+    box-sizing: border-box;
+    width: min(100%, 28rem);
+    padding: var(--dixy-dialog-padding);
+    border: var(--dixy-dialog-border-width) var(--dixy-border-style-solid)
+      var(--dixy-dialog-border);
+    border-radius: var(--dixy-dialog-radius);
+    background: var(--dixy-dialog-background);
+    color: var(--dixy-dialog-text);
+    box-shadow: var(--dixy-dialog-shadow);
+    outline: none;
+  }
+  .dixy-dialog-popup[data-size="sm"] {
+    max-width: 23rem;
+  }
+  .dixy-dialog-title {
+    margin: 0;
+    margin-block-end: var(--dixy-spacing-stack-sm);
+    font: var(--dixy-font-heading-sm);
+    letter-spacing: var(--dixy-font-heading-sm-letter-spacing);
+  }
+  .dixy-dialog-description {
+    margin: 0;
+    margin-block-end: var(--dixy-spacing-stack-lg);
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-body-md);
+    letter-spacing: var(--dixy-font-body-md-letter-spacing);
+  }
+  @supports (-webkit-touch-callout: none) {
+    .dixy-dialog-backdrop {
+      position: absolute;
+      min-height: 100%;
+    }
+  }
+  @media (any-pointer: coarse) {
+    .dixy-button,
+    .dixy-input {
+      min-inline-size: max(
+        var(--dixy-interaction-target),
+        var(--dixy-size-target-comfortable)
+      );
+      min-block-size: max(
+        var(--dixy-interaction-target),
+        var(--dixy-size-target-comfortable)
+      );
+    }
+  }
+}

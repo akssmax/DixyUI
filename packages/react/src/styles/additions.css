@@ -1,0 +1,951 @@
+/* Dixy-owned styling for native compositions and unstyled React Aria behavior. */
+@layer dixy.components {
+  :where(
+    .dixy-card,
+    .dixy-alert,
+    .dixy-empty,
+    .dixy-item,
+    .dixy-sidebar,
+    .dixy-aria-root
+  ) {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-md);
+  }
+  :where(
+    .dixy-card,
+    .dixy-alert,
+    .dixy-empty,
+    .dixy-sidebar,
+    .dixy-list-box,
+    .dixy-calendar,
+    .dixy-range-calendar
+  ) {
+    border: var(--dixy-border-default);
+    border-radius: min(
+      var(--dixy-component-radius, var(--dixy-radius-card)),
+      24px
+    );
+    background-color: var(--dixy-color-background-surface);
+    padding: var(--dixy-spacing-inset-lg);
+  }
+  /* Content edges are decorative; control borders keep their contrast role. */
+  .dixy-card {
+    border: var(--dixy-card-border-width) solid var(--dixy-color-border-subtle);
+    background-color: var(--dixy-color-background-surface-raised);
+    box-shadow: var(--dixy-card-shadow);
+  }
+  :where(
+    .dixy-card,
+    .dixy-alert,
+    .dixy-empty,
+    .dixy-sidebar,
+    .dixy-list-box,
+    .dixy-calendar,
+    .dixy-range-calendar
+  )[data-variant="soft"] {
+    background-color: var(--dixy-component-subtle);
+  }
+  :where(.dixy-card, .dixy-alert)[data-variant="solid"] {
+    background-color: var(--dixy-component-fill);
+    color: var(--dixy-component-on-fill);
+  }
+  :where(
+    .dixy-card,
+    .dixy-alert,
+    .dixy-empty,
+    .dixy-list-box,
+    .dixy-calendar,
+    .dixy-range-calendar
+  )[data-size="sm"] {
+    padding: var(--dixy-spacing-inset-sm);
+    font: var(--dixy-font-body-sm);
+  }
+  :where(
+    .dixy-card,
+    .dixy-alert,
+    .dixy-empty,
+    .dixy-list-box,
+    .dixy-calendar,
+    .dixy-range-calendar
+  )[data-size="lg"] {
+    padding: var(--dixy-spacing-inset-xl);
+  }
+  :where(
+    .dixy-card-header,
+    .dixy-card-content,
+    .dixy-empty-content,
+    .dixy-item-content
+  ) {
+    display: grid;
+    gap: var(--dixy-spacing-stack-sm);
+    min-inline-size: 0;
+  }
+  :where(.dixy-card-footer, .dixy-item-actions) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dixy-spacing-inline-sm);
+    margin-block-start: var(--dixy-spacing-stack-md);
+  }
+  :where(
+    .dixy-card-title,
+    .dixy-alert-title,
+    .dixy-empty-title,
+    .dixy-item-title
+  ) {
+    font: var(--dixy-font-title-sm);
+    margin: 0;
+  }
+  .dixy-card-content {
+    margin-block: var(--dixy-spacing-stack-md);
+  }
+  .dixy-description {
+    font: var(--dixy-font-body-sm);
+    margin: 0;
+    color: inherit;
+    opacity: 0.85;
+  }
+  .dixy-empty {
+    text-align: center;
+    display: grid;
+    gap: var(--dixy-spacing-stack-md);
+  }
+  /* Intrinsic actions follow the centered copy. */
+  .dixy-empty-content {
+    justify-items: center;
+  }
+  .dixy-item {
+    display: flex;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-md);
+    padding: var(--dixy-spacing-inset-md);
+    border-block-end: var(--dixy-border-default);
+  }
+  :where(.dixy-badge, .dixy-chip, .dixy-kbd, .dixy-avatar-count) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Labels, not containers: keep one line at intrinsic width, even as a
+       stretched grid or column-flex child. */
+    flex-shrink: 0;
+    inline-size: fit-content;
+    white-space: nowrap;
+    gap: var(--dixy-spacing-inline-xs);
+    padding: 2px 8px;
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-component-radius);
+    font: var(--dixy-component-font);
+    background-color: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+  :where(.dixy-badge, .dixy-chip)[data-variant="solid"] {
+    background-color: var(--dixy-component-fill);
+    color: var(--dixy-component-on-fill);
+  }
+  :where(.dixy-badge, .dixy-chip)[data-variant="soft"] {
+    background-color: var(--dixy-component-subtle);
+    color: var(--dixy-component-text);
+  }
+  .dixy-kbd {
+    font: var(--dixy-font-code-sm);
+    box-shadow: 0 2px 0 var(--dixy-color-border-default);
+  }
+  :where(.dixy-button-group, .dixy-pagination-list, .dixy-breadcrumbs) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--dixy-spacing-inline-sm);
+  }
+  .dixy-button-group[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dixy-button-group[data-orientation="vertical"] > .dixy-button {
+    inline-size: auto;
+  }
+  .dixy-button-group[data-attached="true"] {
+    gap: 0;
+    isolation: isolate;
+  }
+  .dixy-button-group[data-attached="true"] > .dixy-button {
+    border-radius: 0;
+  }
+  .dixy-button-group[data-attached="true"] > .dixy-button:first-child {
+    border-start-start-radius: var(--dixy-component-radius);
+    border-end-start-radius: var(--dixy-component-radius);
+  }
+  .dixy-button-group[data-attached="true"] > .dixy-button:last-child {
+    border-start-end-radius: var(--dixy-component-radius);
+    border-end-end-radius: var(--dixy-component-radius);
+  }
+  .dixy-button-group[data-orientation="vertical"][data-attached="true"]
+    > .dixy-button:first-child {
+    border-radius: var(--dixy-component-radius) var(--dixy-component-radius) 0 0;
+  }
+  .dixy-button-group[data-orientation="vertical"][data-attached="true"]
+    > .dixy-button:last-child {
+    border-radius: 0 0 var(--dixy-component-radius) var(--dixy-component-radius);
+  }
+  .dixy-button-group > .dixy-button:focus-visible {
+    z-index: 1;
+  }
+  .dixy-avatar-group {
+    display: flex;
+    align-items: center;
+    padding-inline-start: 8px;
+  }
+  .dixy-avatar-group > :is(.dixy-avatar-root, .dixy-avatar-count) {
+    margin-inline-start: -8px;
+    box-shadow: 0 0 0 2px var(--dixy-color-background-surface);
+  }
+  .dixy-avatar-count {
+    min-block-size: 40px;
+    min-inline-size: 40px;
+  }
+  :where(
+    .dixy-textarea,
+    .dixy-native-select,
+    .dixy-input-group,
+    .dixy-aria-dateinput,
+    .dixy-aria-input,
+    .dixy-aria-group
+  ) {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    padding: 8px 12px;
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-component-radius, var(--dixy-radius-control));
+    background-color: var(--dixy-color-background-surface);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-component-font, var(--dixy-font-body-md));
+    min-block-size: max(
+      var(--dixy-component-height, 40px),
+      var(--dixy-interaction-target)
+    );
+  }
+  .dixy-textarea {
+    resize: vertical;
+    min-block-size: 6rem;
+    inline-size: 100%;
+    font: var(--dixy-font-body-md);
+  }
+  :where(
+    .dixy-textarea,
+    .dixy-native-select,
+    .dixy-input-group
+  )[data-variant="soft"] {
+    background-color: var(--dixy-color-background-subtle);
+  }
+  :where(.dixy-textarea, .dixy-native-select):disabled,
+  :where(.dixy-aria-root, .dixy-link)[data-disabled] {
+    opacity: 0.55;
+  }
+  .dixy-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dixy-input-group > .dixy-input {
+    flex: 1;
+    inline-size: 100%;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  .dixy-input-addon {
+    flex: none;
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-body-sm);
+  }
+  :where(.dixy-link, .dixy-pagination-link) {
+    color: var(--dixy-color-text-action-primary);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+  .dixy-link[data-disabled] {
+    cursor: default;
+  }
+  .dixy-pagination-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .dixy-pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--dixy-interaction-target);
+    min-block-size: var(--dixy-interaction-target);
+    padding: 8px;
+    border-radius: var(--dixy-radius-control);
+  }
+  .dixy-pagination-link[aria-current="page"] {
+    background-color: var(--dixy-color-background-selected);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .dixy-breadcrumbs {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-breadcrumb + .dixy-breadcrumb::before {
+    content: "/";
+    margin-inline: 8px;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-table,
+  .dixy-data-table {
+    border-collapse: collapse;
+    inline-size: 100%;
+    font: var(--dixy-font-body-sm);
+    color: var(--dixy-color-text-primary);
+  }
+  :where(
+    .dixy-table-head,
+    .dixy-table-cell,
+    .dixy-aria-column,
+    .dixy-aria-cell
+  ) {
+    text-align: start;
+    padding: var(--dixy-spacing-inset-md);
+    border-block-end: var(--dixy-border-default);
+  }
+  .dixy-table-caption {
+    text-align: start;
+    padding-block: 12px;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-aria-row[data-selected] {
+    background-color: var(--dixy-color-background-selected);
+  }
+  .dixy-aria-column[aria-sort] {
+    cursor: pointer;
+  }
+  .dixy-aria-column[aria-sort="ascending"]::after {
+    content: " ↑";
+  }
+  .dixy-aria-column[aria-sort="descending"]::after {
+    content: " ↓";
+  }
+  .dixy-skeleton {
+    min-block-size: 1rem;
+    inline-size: 100%;
+    border-radius: var(--dixy-component-radius);
+    background-color: var(--dixy-color-background-subtle);
+    border: var(--dixy-border-default);
+  }
+  .dixy-loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-block-size: var(--dixy-component-height);
+  }
+  .dixy-progress-circle {
+    inline-size: var(--dixy-component-height);
+    block-size: var(--dixy-component-height);
+  }
+  .dixy-progress-circle svg {
+    inline-size: 100%;
+    block-size: 100%;
+    transform: rotate(-90deg);
+    fill: none;
+    stroke-width: 4;
+  }
+  .dixy-progress-ring-track {
+    stroke: var(--dixy-color-background-subtle);
+  }
+  .dixy-progress-ring-fill {
+    stroke: var(--dixy-component-fill);
+  }
+  .dixy-visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .dixy-aspect-ratio {
+    position: relative;
+    inline-size: 100%;
+    overflow: hidden;
+  }
+  .dixy-aspect-ratio > :is(img, video) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  .dixy-scroll-shadow {
+    overflow: auto;
+    max-block-size: 16rem;
+    scrollbar-gutter: stable;
+    box-shadow:
+      inset 0 12px 12px -12px var(--dixy-color-border-default),
+      inset 0 -12px 12px -12px var(--dixy-color-border-default);
+  }
+  .dixy-sidebar-nav {
+    display: grid;
+    gap: 8px;
+  }
+  .dixy-resizable {
+    display: flex;
+    inline-size: 100%;
+    min-block-size: 12rem;
+    min-inline-size: 0;
+    border: var(--dixy-border-default);
+    border-radius: min(var(--dixy-component-radius), 24px);
+  }
+  .dixy-resizable[data-orientation="vertical"] {
+    flex-direction: column;
+    block-size: 20rem;
+  }
+  .dixy-resizable-panel {
+    min-inline-size: 0;
+    min-block-size: 0;
+    overflow: auto;
+    padding: 12px;
+    box-sizing: border-box;
+  }
+  .dixy-resizable-handle {
+    flex: 0 0 12px;
+    background: var(--dixy-color-background-subtle);
+    cursor: col-resize;
+    touch-action: none;
+  }
+  .dixy-resizable[data-orientation="vertical"] .dixy-resizable-handle {
+    cursor: row-resize;
+  }
+  .dixy-carousel {
+    min-inline-size: 0;
+    display: grid;
+    gap: 12px;
+  }
+  .dixy-carousel-viewport {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+  }
+  .dixy-carousel-item {
+    box-sizing: border-box;
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    padding: 24px;
+    min-inline-size: 0;
+  }
+  .dixy-chart {
+    margin: 0;
+    min-inline-size: 0;
+  }
+  .dixy-chart svg {
+    inline-size: 100%;
+    height: auto;
+  }
+  .dixy-chart rect {
+    fill: var(--dixy-component-fill);
+  }
+  .dixy-chart text {
+    fill: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-aria-root {
+    display: grid;
+    gap: 8px;
+  }
+  .dixy-list-box {
+    max-block-size: 18rem;
+    overflow: auto;
+    padding: 8px;
+  }
+  :where(.dixy-aria-listboxitem, .dixy-aria-tag) {
+    padding: 8px 12px;
+    border-radius: var(--dixy-radius-control);
+    min-block-size: var(--dixy-interaction-target);
+    box-sizing: border-box;
+    font: var(--dixy-font-body-md);
+  }
+  .dixy-aria-listboxitem[data-selected] {
+    background-color: var(--dixy-color-background-selected);
+    font-weight: 600;
+  }
+  .dixy-aria-listboxitem[data-selected]::after {
+    content: " ✓";
+    float: inline-end;
+  }
+  .dixy-aria-taglist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dixy-aria-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: var(--dixy-border-default);
+  }
+  .dixy-aria-label {
+    font: var(--dixy-font-label-md);
+  }
+  .dixy-aria-text {
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-aria-fielderror {
+    color: var(--dixy-color-text-action-destructive);
+    font: var(--dixy-font-body-sm);
+  }
+  :where(.dixy-aria-button, .dixy-aria-columnresizer) {
+    box-sizing: border-box;
+    min-block-size: var(--dixy-interaction-target);
+    min-inline-size: var(--dixy-interaction-target);
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-control);
+    background-color: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-label-md);
+    cursor: pointer;
+    padding: 6px 10px;
+  }
+  .dixy-aria-button[slot="remove"] {
+    padding: 2px;
+  }
+  .dixy-aria-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dixy-aria-group > .dixy-aria-dateinput {
+    border: 0;
+    background: transparent;
+    padding: 0;
+    flex: 1;
+  }
+  .dixy-aria-dateinput {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .dixy-aria-datesegment {
+    padding: 2px;
+    border-radius: 3px;
+    min-inline-size: 1ch;
+  }
+  .dixy-aria-datesegment[data-placeholder] {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-aria-datesegment[data-focused] {
+    background: var(--dixy-color-background-selected);
+    outline: 2px solid var(--dixy-color-border-focus);
+  }
+  /* A definite width from the day size: seven columns, their 2px gaps, padding and border.
+     It never stretches to a popover's maximum, and max-inline-size lets it shrink in narrow
+     containers, where the fluid grid below keeps the days square. */
+  :where(.dixy-calendar, .dixy-range-calendar) {
+    --dixy-calendar-cell: max(
+      var(--dixy-component-height, 40px),
+      var(--dixy-interaction-target)
+    );
+    --dixy-calendar-pad: var(--dixy-spacing-inset-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-sm, 12px);
+    box-sizing: border-box;
+    padding: var(--dixy-calendar-pad);
+    inline-size: calc(
+      7 * var(--dixy-calendar-cell) + 12px + 2 * var(--dixy-calendar-pad) + 4px
+    );
+    max-inline-size: 100%;
+  }
+  :where(.dixy-calendar, .dixy-range-calendar)[data-size="sm"] {
+    --dixy-calendar-pad: var(--dixy-spacing-inset-sm);
+    padding: var(--dixy-calendar-pad);
+  }
+  :where(.dixy-calendar, .dixy-range-calendar)[data-size="lg"] {
+    --dixy-calendar-pad: var(--dixy-spacing-inset-xl);
+    padding: var(--dixy-calendar-pad);
+  }
+  /* The navigation row, whatever element wraps it: previous and next sit at the edges and
+     the month heading centres between them, so the header spans the grid below. */
+  :where(.dixy-calendar, .dixy-range-calendar) > :has(> [slot="previous"]) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dixy-spacing-inline-sm, 8px);
+  }
+  :where(.dixy-calendar, .dixy-range-calendar) .dixy-aria-heading {
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :where(.dixy-calendar, .dixy-range-calendar) .dixy-aria-button:is([slot="previous"], [slot="next"]) {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--dixy-interaction-target);
+    block-size: var(--dixy-interaction-target);
+    flex: none;
+    padding: 0;
+    line-height: 1;
+  }
+  /* Fluid grid: at full size each day is a 44px target; in a narrow container the seven
+     columns shrink evenly and stay square instead of spilling out of the card. */
+  .dixy-aria-calendargrid {
+    inline-size: calc(100% + 4px);
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 2px;
+    margin-inline: -2px;
+  }
+  .dixy-aria-calendarheadercell {
+    block-size: 28px;
+    padding: 0;
+    font: var(--dixy-font-label-sm, var(--dixy-font-body-sm));
+    color: var(--dixy-color-text-secondary);
+    text-align: center;
+    vertical-align: middle;
+  }
+  .dixy-aria-calendargridbody td {
+    padding: 0;
+  }
+  .dixy-aria-calendarcell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--dixy-calendar-cell, 40px);
+    max-inline-size: 100%;
+    aspect-ratio: 1;
+    margin-inline: auto;
+    box-sizing: border-box;
+    border-radius: var(--dixy-radius-control);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: background-color var(--dixy-field-motion-feedback, 120ms);
+  }
+  .dixy-aria-calendarcell[data-hovered]:not([data-selected], [data-disabled]) {
+    background: var(--dixy-color-background-subtle);
+  }
+  .dixy-aria-calendarcell[data-pressed]:not([data-disabled]) {
+    background: var(--dixy-color-background-selected);
+  }
+  .dixy-aria-calendarcell[data-today]:not([data-selected]) {
+    font-weight: 700;
+    color: var(--dixy-component-text, var(--dixy-color-text-primary));
+    text-decoration: underline 2px;
+    text-underline-offset: 4px;
+  }
+  .dixy-aria-calendarcell[data-selected] {
+    background: var(--dixy-color-background-selected);
+    font-weight: 700;
+    outline: 1px solid currentColor;
+    outline-offset: -2px;
+  }
+  /* A range reads as one band: only its ends carry the outline. */
+  .dixy-range-calendar .dixy-aria-calendarcell[data-selected]:not([data-selection-start], [data-selection-end]) {
+    outline: 0;
+    font-weight: inherit;
+  }
+  .dixy-aria-calendarcell[data-outside-month] {
+    color: var(--dixy-color-text-tertiary, var(--dixy-color-text-secondary));
+    opacity: 0.6;
+  }
+  .dixy-aria-calendarcell[data-disabled] {
+    cursor: default;
+  }
+  .dixy-aria-calendarcell[data-unavailable] {
+    text-decoration: line-through;
+  }
+  .dixy-aria-popover {
+    z-index: 100;
+    max-inline-size: calc(100vw - 24px);
+  }
+  .dixy-aria-popover > .dixy-theme {
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-card);
+    padding: var(--dixy-spacing-inset-md);
+    background-color: var(--dixy-color-background-surface-raised);
+    color: var(--dixy-color-text-primary);
+    max-inline-size: 100%;
+    overflow: auto;
+    max-block-size: min(30rem, 80vh);
+  }
+  .dixy-color-area {
+    position: relative;
+    inline-size: 12rem;
+    block-size: 10rem;
+    border-radius: var(--dixy-radius-control);
+    touch-action: none;
+  }
+  .dixy-color-thumb {
+    inline-size: 24px;
+    block-size: 24px;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px black;
+    box-sizing: border-box;
+  }
+  .dixy-color-slider {
+    display: grid;
+    gap: 8px;
+  }
+  .dixy-color-track {
+    position: relative;
+    block-size: 24px;
+    border-radius: var(--dixy-radius-full);
+  }
+  .dixy-color-swatch {
+    inline-size: 32px;
+    block-size: 32px;
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-control);
+  }
+  :where(
+    .dixy-textarea,
+    .dixy-native-select,
+    .dixy-link,
+    .dixy-pagination-link,
+    .dixy-scroll-shadow,
+    .dixy-resizable-handle,
+    .dixy-carousel-viewport,
+    .dixy-aria-button
+  ):focus-visible,
+  [class*="dixy-aria-"][data-focus-visible],
+  .dixy-color-thumb[data-focus-visible] {
+    outline: 2px solid var(--dixy-color-border-focus);
+    outline-offset: 2px;
+  }
+  :where(.dixy-textarea, .dixy-native-select, .dixy-link, .dixy-aria-button) {
+    transition:
+      background-color var(--dixy-field-motion-feedback),
+      color var(--dixy-field-motion-feedback),
+      border-color var(--dixy-field-motion-feedback);
+  }
+  [data-motion="reduced"] .dixy-spinner {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-spinner {
+      animation: none;
+    }
+  }
+  @media (forced-colors: active) {
+    .dixy-resizable-handle {
+      background: ButtonBorder;
+    }
+    .dixy-progress-ring-fill {
+      stroke: Highlight;
+    }
+    .dixy-progress-ring-track {
+      stroke: CanvasText;
+    }
+    .dixy-chart rect {
+      fill: Highlight;
+    }
+  }
+}
+@layer dixy.components {
+  .dixy-loading {
+    color: var(--dixy-component-fill);
+  }
+  .dixy-link[data-dixy-visual] {
+    color: var(--dixy-component-text);
+    font: var(--dixy-component-font);
+  }
+  .dixy-textarea[data-size="sm"] {
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-textarea[data-size="lg"] {
+    font: var(--dixy-font-body-lg);
+  }
+  .dixy-kbd[data-size="sm"] {
+    font-size: 0.75rem;
+  }
+  .dixy-kbd[data-size="lg"] {
+    font-size: 1rem;
+  }
+  .dixy-tag-group[data-size="sm"] .dixy-aria-tag {
+    font: var(--dixy-font-body-sm);
+    padding: 4px 8px;
+  }
+  .dixy-tag-group[data-size="lg"] .dixy-aria-tag {
+    padding: 12px 16px;
+  }
+  .dixy-tag-group .dixy-aria-tag {
+    border-radius: var(--dixy-component-radius);
+  }
+  .dixy-item[data-size="sm"] {
+    padding: 8px;
+  }
+  .dixy-item[data-size="lg"] {
+    padding: 24px;
+  }
+  .dixy-data-table {
+    display: table;
+  }
+  :is(.dixy-table, .dixy-data-table)[data-size="sm"] :is(th, td) {
+    padding: 8px;
+  }
+  :is(.dixy-table, .dixy-data-table)[data-size="lg"] :is(th, td) {
+    padding: 20px;
+  }
+  :is(
+      .dixy-date-field,
+      .dixy-time-field,
+      .dixy-date-picker,
+      .dixy-date-range-picker,
+      .dixy-search-field
+    )
+    :is(.dixy-aria-dateinput, .dixy-aria-input, .dixy-aria-group) {
+    border-radius: var(--dixy-component-radius);
+    min-block-size: var(--dixy-component-height);
+  }
+  .dixy-calendar[data-size="sm"] .dixy-aria-calendarcell,
+  .dixy-range-calendar[data-size="sm"] .dixy-aria-calendarcell {
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-scroll-shadow {
+    border-radius: var(--dixy-component-radius);
+    background:
+      linear-gradient(var(--dixy-color-background-surface) 30%, transparent)
+        center top,
+      linear-gradient(transparent, var(--dixy-color-background-surface) 70%)
+        center bottom,
+      radial-gradient(
+          farthest-side at 50% 0,
+          var(--dixy-color-border-default),
+          transparent
+        )
+        center top,
+      radial-gradient(
+          farthest-side at 50% 100%,
+          var(--dixy-color-border-default),
+          transparent
+        )
+        center bottom;
+    background-repeat: no-repeat;
+    background-size:
+      100% 40px,
+      100% 40px,
+      100% 14px,
+      100% 14px;
+    background-attachment: local, local, scroll, scroll;
+    box-shadow: none;
+  }
+}
+@layer dixy.components {
+  .dixy-button-group > .dixy-button {
+    border-radius: var(--dixy-component-radius);
+  }
+}
+
+@layer dixy.components {
+  .dixy-aria-heading {
+    font: var(--dixy-font-label-lg);
+    margin: 0;
+  }
+}
+
+@layer dixy.components {
+  .dixy-aria-popover[data-entering] {
+    animation: dixy-aria-appear var(--dixy-floating-motion-enter);
+  }
+  .dixy-aria-popover[data-exiting] {
+    animation: dixy-aria-disappear var(--dixy-floating-motion-exit);
+  }
+  .dixy-aria-popover:has(> [data-motion="reduced"]) {
+    animation: none;
+  }
+  @keyframes dixy-aria-appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes dixy-aria-disappear {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-aria-popover {
+      animation: none;
+    }
+  }
+}
+@layer dixy.components {
+  .dixy-avatar-count {
+    min-block-size: var(--dixy-component-height, 40px);
+    min-inline-size: var(--dixy-component-height, 40px);
+  }
+  .dixy-pagination-link {
+    min-block-size: max(
+      var(--dixy-component-height, 40px),
+      var(--dixy-interaction-target)
+    );
+    font: var(--dixy-component-font);
+  }
+  .dixy-list-box .dixy-aria-listboxitem {
+    font: var(--dixy-component-font);
+    min-block-size: max(
+      var(--dixy-component-height),
+      var(--dixy-interaction-target)
+    );
+  }
+  .dixy-aria-listboxitem[data-selected],
+  .dixy-aria-calendarcell[data-selected] {
+    background-color: var(--dixy-component-subtle);
+    color: var(--dixy-component-text);
+  }
+  .dixy-empty[data-variant="solid"] {
+    background-color: var(--dixy-component-fill);
+    color: var(--dixy-component-on-fill);
+  }
+  :is(.dixy-card, .dixy-alert, .dixy-empty)[data-variant="ghost"] {
+    border-color: transparent;
+    background-color: transparent;
+  }
+}
+
+@layer dixy.components {
+  .dixy-resizable {
+    box-sizing: border-box;
+  }
+}
+
+@layer dixy.components {
+  .dixy-resizable {
+    --dixy-resize-handle-size: 24px;
+  }
+  .dixy-resizable-handle {
+    position: relative;
+    flex-basis: var(--dixy-resize-handle-size);
+    background: transparent;
+  }
+  .dixy-resizable-handle::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inline-size: 2px;
+    inset-inline-start: calc(50% - 1px);
+    background: var(--dixy-color-border-default);
+    pointer-events: none;
+  }
+  .dixy-resizable[data-orientation="vertical"] .dixy-resizable-handle::after {
+    inset-inline: 0;
+    block-size: 2px;
+    inline-size: auto;
+    inset-block-start: calc(50% - 1px);
+  }
+}

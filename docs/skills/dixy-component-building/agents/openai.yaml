@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dixy Component Building"
+  short_description: "Build accessible Dixy components and clear docs"
+  default_prompt: "Use $dixy-component-building to add or update a Dixy component with its composition, visual foundations, examples, and accessibility evidence."

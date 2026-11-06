@@ -1,0 +1,53 @@
+import { CodeBlock } from "../src/components/code-block";
+
+<div className="page-eyebrow">GETTING STARTED</div>
+
+# A small beginning.
+
+<p className="page-deck">A package, a theme, and room to make it yours.</p>
+
+Dixy is an early, local alpha. The package name is provisional and has not been published to npm. Use the workspace package while we build and validate it.
+
+## Run this monorepo
+
+Use Node 24 or newer and the pnpm version recorded in the root package.json.
+
+<CodeBlock
+  language="shellscript"
+  filename="terminal"
+  code={"pnpm install\npnpm dev"}
+/>
+
+The root development command builds the React package first, then watches its output alongside the TanStack Start documentation app.
+
+## Import through the public API
+
+The documentation app declares `@dixy-ui/react` as a `workspace:*` dependency. It imports the same JavaScript, types, and stylesheet that a future consumer will receive.
+
+<CodeBlock
+  code={
+    'import "@dixy-ui/react/styles.css";\nimport { Theme, Button } from "@dixy-ui/react";\n\nexport function App() {\n  return (\n    <Theme appearance="light" accentColor="violet" radius="md">\n      <Button>Make something good</Button>\n    </Theme>\n  );\n}'
+  }
+/>
+
+## Add the stylesheet once
+
+Import the stylesheet at the application root. Dixy ships CSS variables and component styles; consumers do not need a Tailwind compiler. CSS layers allow application styles to override library defaults.
+
+For TanStack Start, the root route imports the stylesheet before rendering the page. Verify the production HTML includes styles before hydration.
+
+## Make room for overlays
+
+Your application layout root should use `isolation: isolate`. Keep `body` positioned relatively so dialog backdrops can cover the scrolled viewport on iOS Safari. Avoid transforms on an overlay’s containing block.
+
+<CodeBlock
+  language="css"
+  filename="app.css"
+  code={"body { position: relative; }\n.app-root { isolation: isolate; }"}
+/>
+
+## What is supported today
+
+Theme, Button, IconButton, Text, Heading, Field, TextField, and Dialog form the first slice. React 19 is the initial peer dependency target. More components and broader compatibility follow after the initial contracts are validated.
+
+The current scope is modern evergreen browsers. Accessibility is a development target, with manual validation tracked separately from automated checks.

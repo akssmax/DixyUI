@@ -1,0 +1,59 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "docs",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["dev"],
+      "port": 3000,
+      "url": "http://127.0.0.1:3000"
+    },
+    {
+      "name": "docs-alt",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "./apps/docs",
+        "exec",
+        "vite",
+        "dev",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3001"
+      ],
+      "port": 3001,
+      "url": "http://127.0.0.1:3001"
+    },
+    {
+      "name": "overview-mockups",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4318",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "output/overview-mockups"
+      ],
+      "port": 4318,
+      "url": "http://127.0.0.1:4318"
+    },
+    {
+      "name": "theme-candidates",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4317",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "/private/tmp/claude-501/-Users-akshaysainistarbase-Design-System/0938def1-9d52-4c68-ad50-a79e85734dc6/scratchpad"
+      ],
+      "port": 4317,
+      "url": "http://127.0.0.1:4317"
+    }
+  ]
+}

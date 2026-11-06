@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.output/
+.tanstack/
+.turbo/
+.pnpm-store/
+coverage/
+output/
+.playwright-cli/
+*.tgz
+.DS_Store
+playwright-report/
+test-results/
+.claude/scheduled_tasks.lock

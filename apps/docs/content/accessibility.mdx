@@ -1,0 +1,31 @@
+<div className="page-eyebrow">BUILDING WITH CARE</div>
+
+# Consider everyone.
+
+<p className="page-deck">
+  Accessible foundations. Deliberate implementation. Honest evidence.
+</p>
+
+Our target is WCAG 2.2 AA. Using Base UI gives us a strong behavioral foundation, but our styling, composition, examples, and application decisions still need validation. This alpha is not a claim of full conformance.
+
+## Keyboard comes first
+
+Every action must be reachable and usable without a pointer. Focus should remain visible. A dialog needs predictable focus entry, containment, dismissal, and restoration. Search supports a keyboard shortcut, arrow-key result selection, Enter, and Escape.
+
+## Names and relationships
+
+Visible labels help everyone. Icon-only actions need an accessible name. Field labels, supporting descriptions, and validation errors should be programmatically connected to the control. Loading states must communicate progress and prevent unintended repeated actions.
+
+## More than one appearance
+
+Review text, icons, borders, focus indicators, and error states in both light and dark modes. A theme picker is not evidence of sufficient contrast. Check disabled states for legibility even where minimum contrast rules differ.
+
+## Motion is a preference
+
+Reduced motion removes Dixy’s component transitions and spinner rotation. Decorative demos are finite and only replay when requested. No information should depend solely on animation.
+
+## Evidence and remaining work
+
+Behavioral unit tests, browser checks, and automated accessibility scans are separate forms of evidence. Manual VoiceOver/Safari, NVDA/Firefox or Chrome, high-contrast, touch, and 200%/400% zoom checks remain release requirements until recorded in the root checklist.
+
+Use the component pages for their keyboard contracts and known constraints. Use `DESIGN_ENGINEERING_CHECKLIST.md` for the current validation state.

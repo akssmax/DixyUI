@@ -1,0 +1,83 @@
+{
+  "name": "ToggleGroup",
+  "slug": "toggle-group",
+  "parts": [
+    {
+      "name": "ToggleGroup",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "value",
+          "type": "readonly Value[] | undefined",
+          "required": false,
+          "description": "The pressed state of the toggle group represented by an array of\nthe values of all pressed toggle buttons.\nThis is the controlled counterpart of `defaultValue`.",
+          "default": "—"
+        },
+        {
+          "name": "defaultValue",
+          "type": "readonly Value[] | undefined",
+          "required": false,
+          "description": "The pressed state of the toggle group represented by an array of\nthe values of all pressed toggle buttons.\nThis is the uncontrolled counterpart of `value`.",
+          "default": "—"
+        },
+        {
+          "name": "onValueChange",
+          "type": "((groupValue: Value[], eventDetails: ToggleGroup.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback fired when the pressed states of the toggle group changes.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the toggle group should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "orientation",
+          "type": "Orientation | undefined",
+          "required": false,
+          "description": "",
+          "default": "'horizontal'"
+        },
+        {
+          "name": "loopFocus",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether to loop keyboard focus back to the first item\nwhen the end of the list is reached while using the arrow keys.",
+          "default": "true"
+        },
+        {
+          "name": "multiple",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "When `false` only one item in the group can be pressed. If any item in\nthe group becomes pressed, the others will become unpressed.\nWhen `true` multiple items can be pressed.",
+          "default": "false"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

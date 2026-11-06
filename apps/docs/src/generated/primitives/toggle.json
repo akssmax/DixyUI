@@ -1,0 +1,76 @@
+{
+  "name": "Toggle",
+  "slug": "toggle",
+  "parts": [
+    {
+      "name": "Toggle",
+      "kind": "component",
+      "description": "",
+      "props": [
+        {
+          "name": "style",
+          "type": "React.CSSProperties | ((state: State) => React.CSSProperties | undefined) | undefined",
+          "required": false,
+          "description": "Style applied to the element, or a function that\nreturns a style object based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "className",
+          "type": "string | ((state: State) => string | undefined) | undefined",
+          "required": false,
+          "description": "CSS class applied to the element, or a function that\nreturns a class based on the component's state.",
+          "default": "—"
+        },
+        {
+          "name": "value",
+          "type": "Value | undefined",
+          "required": false,
+          "description": "A unique string that identifies the toggle when used\ninside a toggle group.",
+          "default": "—"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component should ignore user interaction.",
+          "default": "false"
+        },
+        {
+          "name": "render",
+          "type": "React.ReactElement | ComponentRenderFn<RenderFunctionProps, State> | undefined",
+          "required": false,
+          "description": "Allows you to replace the component's HTML element\nwith a different tag, or compose it with another component.\n\nAccepts a `ReactElement` or a function that returns the element to render.",
+          "default": "—"
+        },
+        {
+          "name": "nativeButton",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the component renders a native `<button>` element when replacing it\nvia the `render` prop.\nSet to `false` if the rendered element is not a button (for example, `<div>`).",
+          "default": "true"
+        },
+        {
+          "name": "pressed",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the toggle button is currently pressed.\nThis is the controlled counterpart of `defaultPressed`.",
+          "default": "—"
+        },
+        {
+          "name": "defaultPressed",
+          "type": "boolean | undefined",
+          "required": false,
+          "description": "Whether the toggle button is currently pressed.\nThis is the uncontrolled counterpart of `pressed`.",
+          "default": "false"
+        },
+        {
+          "name": "onPressedChange",
+          "type": "((pressed: boolean, eventDetails: Toggle.ChangeEventDetails) => void) | undefined",
+          "required": false,
+          "description": "Callback fired when the pressed state is changed.",
+          "default": "—"
+        }
+      ]
+    }
+  ]
+}

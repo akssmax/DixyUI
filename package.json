@@ -1,0 +1,36 @@
+{
+  "name": "dixy-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.4.2",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @dixy-ui/tokens build && pnpm --filter @dixy-ui/react build && pnpm --filter @dixy-ui/themes build && pnpm docs:generate && turbo run dev dev:types dev:metadata",
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "docs:generate": "node scripts/generate-api.mjs",
+    "docs:check": "node scripts/generate-api.mjs --check",
+    "check": "pnpm tokens:check && pnpm skins:check && pnpm docs:check && pnpm typecheck && pnpm test && pnpm build",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "package:check": "pnpm --filter @dixy-ui/tokens build && pnpm --filter @dixy-ui/react build && pnpm --filter @dixy-ui/themes build && node scripts/verify-package.mjs",
+    "examples:check": "node scripts/check-examples.mjs",
+    "tokens:generate": "node scripts/generate-spacing.mjs && node scripts/generate-typography.mjs && node scripts/generate-sizing-layout.mjs && node scripts/generate-color.mjs && node scripts/generate-surfaces.mjs && node scripts/generate-icons.mjs && node scripts/generate-motion.mjs && node scripts/generate-materials.mjs",
+    "tokens:check": "node scripts/generate-spacing.mjs --check && node scripts/generate-typography.mjs --check && node scripts/generate-sizing-layout.mjs --check && node scripts/generate-color.mjs --check && node scripts/generate-surfaces.mjs --check && node scripts/generate-icons.mjs --check && node scripts/generate-motion.mjs --check && node scripts/generate-materials.mjs --check",
+    "skins:generate": "node scripts/generate-skins.mjs",
+    "skins:check": "node scripts/generate-skins.mjs --check"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "axe-core": "4.14.0",
+    "prettier": "3.9.10",
+    "turbo": "2.11.8",
+    "typescript": "5.9.3",
+    "@tailwindcss/cli": "4.3.3"
+  }
+}

@@ -1,0 +1,17 @@
+@layer dixy.tokens {
+  .dixy-theme {
+    font: var(--dixy-font-body-md);
+    letter-spacing: var(--dixy-font-body-md-letter-spacing);
+    font-optical-sizing: auto;
+    color: var(--dixy-color-text-primary);
+    accent-color: var(--dixy-color-background-action-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dixy-theme[data-appearance="light"] {
+    color-scheme: light;
+  }
+  .dixy-theme[data-appearance="dark"] {
+    color-scheme: dark;
+  }
+}

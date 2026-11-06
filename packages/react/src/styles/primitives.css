@@ -1,0 +1,1580 @@
+/* Shared recipes for the public Base UI families. Values reference Dixy foundations. */
+@layer dixy.tokens {
+  :root,
+  .dixy-theme {
+    --dixy-choice-size: var(--dixy-size-icon-md);
+    --dixy-choice-radius: min(
+      var(--dixy-radius-control),
+      var(--dixy-space-100)
+    );
+    --dixy-switch-track-width: var(--dixy-size-control-md);
+    --dixy-switch-track-height: var(--dixy-size-icon-lg);
+    --dixy-switch-thumb-size: var(--dixy-size-icon-md);
+    --dixy-choice-gap: var(--dixy-spacing-inline-sm);
+    --dixy-primitive-inset: var(--dixy-spacing-inset-sm);
+    --dixy-primitive-gap: var(--dixy-spacing-stack-sm);
+    --dixy-popup-padding: var(--dixy-spacing-inset-sm);
+    --dixy-popup-radius: var(--dixy-radius-overlay);
+    --dixy-popup-background: var(--dixy-color-background-surface-raised);
+    --dixy-popup-shadow: var(--dixy-shadow-floating);
+    --dixy-popup-max-width: var(--dixy-container-sm);
+    --dixy-avatar-size: var(--dixy-size-control-lg);
+    --dixy-track-size: var(--dixy-space-100);
+    --dixy-slider-thumb-size: var(--dixy-size-icon-md);
+    --dixy-scrollbar-size: var(--dixy-space-150);
+    --dixy-popup-layer: 50;
+    --dixy-toast-layer: 60;
+  }
+  /* Inherit from the nearest explicit direction scope. CSS optimizers can
+     lower :dir() to :lang(), which loses runtime direction changes. */
+  :where([dir="ltr"]) {
+    --dixy-switch-travel-direction: 1;
+  }
+  :where([dir="rtl"]) {
+    --dixy-switch-travel-direction: -1;
+  }
+}
+@layer dixy.components {
+  :is(
+    .dixy-checkbox-root,
+    .dixy-checkbox-indicator,
+    .dixy-switch-root,
+    .dixy-switch-thumb,
+    .dixy-tabs-root,
+    .dixy-tabs-tab,
+    .dixy-tabs-indicator,
+    .dixy-tabs-panel,
+    .dixy-tabs-list,
+    .dixy-tooltip-trigger,
+    .dixy-tooltip-positioner,
+    .dixy-tooltip-popup,
+    .dixy-tooltip-arrow,
+    .dixy-tooltip-viewport,
+    .dixy-accordion-root,
+    .dixy-accordion-item,
+    .dixy-accordion-header,
+    .dixy-accordion-trigger,
+    .dixy-accordion-panel,
+    .dixy-alert-dialog-backdrop,
+    .dixy-alert-dialog-close,
+    .dixy-alert-dialog-description,
+    .dixy-alert-dialog-popup,
+    .dixy-alert-dialog-title,
+    .dixy-alert-dialog-trigger,
+    .dixy-alert-dialog-viewport,
+    .dixy-autocomplete-trigger,
+    .dixy-autocomplete-input,
+    .dixy-autocomplete-input-group,
+    .dixy-autocomplete-icon,
+    .dixy-autocomplete-clear,
+    .dixy-autocomplete-list,
+    .dixy-autocomplete-status,
+    .dixy-autocomplete-backdrop,
+    .dixy-autocomplete-positioner,
+    .dixy-autocomplete-popup,
+    .dixy-autocomplete-arrow,
+    .dixy-autocomplete-group,
+    .dixy-autocomplete-group-label,
+    .dixy-autocomplete-item,
+    .dixy-autocomplete-row,
+    .dixy-autocomplete-empty,
+    .dixy-autocomplete-separator,
+    .dixy-avatar-root,
+    .dixy-avatar-image,
+    .dixy-avatar-fallback,
+    .dixy-checkbox-group,
+    .dixy-collapsible-root,
+    .dixy-collapsible-trigger,
+    .dixy-collapsible-panel,
+    .dixy-combobox-label,
+    .dixy-combobox-input,
+    .dixy-combobox-input-group,
+    .dixy-combobox-trigger,
+    .dixy-combobox-list,
+    .dixy-combobox-status,
+    .dixy-combobox-backdrop,
+    .dixy-combobox-positioner,
+    .dixy-combobox-popup,
+    .dixy-combobox-arrow,
+    .dixy-combobox-icon,
+    .dixy-combobox-group,
+    .dixy-combobox-group-label,
+    .dixy-combobox-item,
+    .dixy-combobox-item-indicator,
+    .dixy-combobox-chips,
+    .dixy-combobox-chip,
+    .dixy-combobox-chip-remove,
+    .dixy-combobox-row,
+    .dixy-combobox-empty,
+    .dixy-combobox-clear,
+    .dixy-combobox-separator,
+    .dixy-context-menu-trigger,
+    .dixy-context-menu-backdrop,
+    .dixy-context-menu-positioner,
+    .dixy-context-menu-popup,
+    .dixy-context-menu-arrow,
+    .dixy-context-menu-group,
+    .dixy-context-menu-group-label,
+    .dixy-context-menu-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-checkbox-item-indicator,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-radio-group,
+    .dixy-context-menu-radio-item,
+    .dixy-context-menu-radio-item-indicator,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-context-menu-separator,
+    .dixy-drawer-backdrop,
+    .dixy-drawer-close,
+    .dixy-drawer-content,
+    .dixy-drawer-description,
+    .dixy-drawer-indent,
+    .dixy-drawer-indent-background,
+    .dixy-drawer-popup,
+    .dixy-drawer-swipe-area,
+    .dixy-drawer-title,
+    .dixy-drawer-trigger,
+    .dixy-drawer-viewport,
+    .dixy-fieldset-root,
+    .dixy-fieldset-legend,
+    .dixy-form,
+    .dixy-menu-arrow,
+    .dixy-menu-backdrop,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-checkbox-item-indicator,
+    .dixy-menu-group,
+    .dixy-menu-group-label,
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-popup,
+    .dixy-menu-positioner,
+    .dixy-menu-radio-group,
+    .dixy-menu-radio-item,
+    .dixy-menu-radio-item-indicator,
+    .dixy-menu-trigger,
+    .dixy-menu-viewport,
+    .dixy-menu-separator,
+    .dixy-menu-submenu-trigger,
+    .dixy-menu-input,
+    .dixy-menu-list,
+    .dixy-menu-clear,
+    .dixy-menu-empty,
+    .dixy-menubar,
+    .dixy-meter-root,
+    .dixy-meter-track,
+    .dixy-meter-indicator,
+    .dixy-meter-label,
+    .dixy-navigation-menu-root,
+    .dixy-navigation-menu-list,
+    .dixy-navigation-menu-item,
+    .dixy-navigation-menu-content,
+    .dixy-navigation-menu-trigger,
+    .dixy-navigation-menu-positioner,
+    .dixy-navigation-menu-viewport,
+    .dixy-navigation-menu-backdrop,
+    .dixy-navigation-menu-popup,
+    .dixy-navigation-menu-arrow,
+    .dixy-navigation-menu-link,
+    .dixy-navigation-menu-icon,
+    .dixy-number-field-root,
+    .dixy-number-field-group,
+    .dixy-number-field-increment,
+    .dixy-number-field-decrement,
+    .dixy-number-field-input,
+    .dixy-number-field-scrub-area,
+    .dixy-number-field-scrub-area-cursor,
+    .dixy-otp-field-root,
+    .dixy-otp-field-input,
+    .dixy-otp-field-separator,
+    .dixy-popover-trigger,
+    .dixy-popover-positioner,
+    .dixy-popover-popup,
+    .dixy-popover-arrow,
+    .dixy-popover-backdrop,
+    .dixy-popover-title,
+    .dixy-popover-description,
+    .dixy-popover-close,
+    .dixy-popover-viewport,
+    .dixy-preview-card-trigger,
+    .dixy-preview-card-positioner,
+    .dixy-preview-card-popup,
+    .dixy-preview-card-arrow,
+    .dixy-preview-card-backdrop,
+    .dixy-preview-card-viewport,
+    .dixy-progress-root,
+    .dixy-progress-track,
+    .dixy-progress-indicator,
+    .dixy-progress-label,
+    .dixy-radio-root,
+    .dixy-radio-indicator,
+    .dixy-radio-group,
+    .dixy-scroll-area-root,
+    .dixy-scroll-area-viewport,
+    .dixy-scroll-area-scrollbar,
+    .dixy-scroll-area-content,
+    .dixy-scroll-area-thumb,
+    .dixy-scroll-area-corner,
+    .dixy-select-label,
+    .dixy-select-trigger,
+    .dixy-select-icon,
+    .dixy-select-backdrop,
+    .dixy-select-positioner,
+    .dixy-select-popup,
+    .dixy-select-list,
+    .dixy-select-item,
+    .dixy-select-item-indicator,
+    .dixy-select-item-text,
+    .dixy-select-arrow,
+    .dixy-select-scroll-down-arrow,
+    .dixy-select-scroll-up-arrow,
+    .dixy-select-group,
+    .dixy-select-group-label,
+    .dixy-select-separator,
+    .dixy-separator,
+    .dixy-slider-root,
+    .dixy-slider-label,
+    .dixy-slider-control,
+    .dixy-slider-track,
+    .dixy-slider-thumb,
+    .dixy-slider-indicator,
+    .dixy-toast-viewport,
+    .dixy-toast-root,
+    .dixy-toast-content,
+    .dixy-toast-description,
+    .dixy-toast-title,
+    .dixy-toast-close,
+    .dixy-toast-action,
+    .dixy-toast-positioner,
+    .dixy-toast-arrow,
+    .dixy-toggle,
+    .dixy-toggle-group,
+    .dixy-toolbar-separator,
+    .dixy-toolbar-root,
+    .dixy-toolbar-group,
+    .dixy-toolbar-button,
+    .dixy-toolbar-link,
+    .dixy-toolbar-input
+  ) {
+    box-sizing: border-box;
+  }
+  :is(
+    .dixy-switch-thumb,
+    .dixy-tabs-tab,
+    .dixy-tooltip-trigger,
+    .dixy-accordion-item,
+    .dixy-accordion-trigger,
+    .dixy-alert-dialog-close,
+    .dixy-alert-dialog-trigger,
+    .dixy-autocomplete-trigger,
+    .dixy-autocomplete-input,
+    .dixy-autocomplete-clear,
+    .dixy-autocomplete-item,
+    .dixy-collapsible-trigger,
+    .dixy-combobox-input,
+    .dixy-combobox-trigger,
+    .dixy-combobox-item,
+    .dixy-combobox-chip-remove,
+    .dixy-combobox-clear,
+    .dixy-context-menu-trigger,
+    .dixy-context-menu-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-radio-item,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-drawer-close,
+    .dixy-drawer-trigger,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-radio-item,
+    .dixy-menu-trigger,
+    .dixy-menu-submenu-trigger,
+    .dixy-menu-input,
+    .dixy-menu-clear,
+    .dixy-navigation-menu-item,
+    .dixy-navigation-menu-trigger,
+    .dixy-number-field-increment,
+    .dixy-number-field-decrement,
+    .dixy-number-field-input,
+    .dixy-otp-field-input,
+    .dixy-popover-trigger,
+    .dixy-popover-close,
+    .dixy-preview-card-trigger,
+    .dixy-scroll-area-thumb,
+    .dixy-select-trigger,
+    .dixy-select-item,
+    .dixy-slider-thumb,
+    .dixy-toast-close,
+    .dixy-toast-action,
+    .dixy-toolbar-button,
+    .dixy-toolbar-input,
+    .dixy-checkbox-root,
+    .dixy-radio-root,
+    .dixy-switch-root,
+    .dixy-toggle
+  ):focus-visible {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: var(--dixy-focus-ring-offset);
+  }
+  :is(
+    .dixy-tabs-tab,
+    .dixy-tooltip-trigger,
+    .dixy-accordion-trigger,
+    .dixy-alert-dialog-close,
+    .dixy-alert-dialog-trigger,
+    .dixy-autocomplete-trigger,
+    .dixy-autocomplete-clear,
+    .dixy-collapsible-trigger,
+    .dixy-combobox-trigger,
+    .dixy-combobox-chip-remove,
+    .dixy-combobox-clear,
+    .dixy-context-menu-trigger,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-drawer-close,
+    .dixy-drawer-trigger,
+    .dixy-menu-trigger,
+    .dixy-menu-submenu-trigger,
+    .dixy-menu-clear,
+    .dixy-navigation-menu-trigger,
+    .dixy-number-field-increment,
+    .dixy-number-field-decrement,
+    .dixy-popover-trigger,
+    .dixy-popover-close,
+    .dixy-preview-card-trigger,
+    .dixy-select-trigger,
+    .dixy-toast-close,
+    .dixy-toast-action,
+    .dixy-toolbar-button,
+    .dixy-toggle
+  ):not(.dixy-button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: max(
+      var(--dixy-size-control-sm),
+      var(--dixy-interaction-target)
+    );
+    min-inline-size: var(--dixy-interaction-target);
+    gap: var(--dixy-choice-gap);
+    padding: var(--dixy-spacing-inset-sm);
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-control);
+    background: var(--dixy-color-background-surface);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-label-md);
+    letter-spacing: var(--dixy-font-label-md-letter-spacing);
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background var(--dixy-motion-transition-feedback),
+      color var(--dixy-motion-transition-feedback);
+  }
+  :is(
+      .dixy-tabs-tab,
+      .dixy-tooltip-trigger,
+      .dixy-accordion-trigger,
+      .dixy-alert-dialog-close,
+      .dixy-alert-dialog-trigger,
+      .dixy-autocomplete-trigger,
+      .dixy-collapsible-trigger,
+      .dixy-combobox-trigger,
+      .dixy-context-menu-trigger,
+      .dixy-context-menu-submenu-trigger,
+      .dixy-drawer-close,
+      .dixy-drawer-trigger,
+      .dixy-menu-trigger,
+      .dixy-menu-submenu-trigger,
+      .dixy-navigation-menu-trigger,
+      .dixy-popover-trigger,
+      .dixy-popover-close,
+      .dixy-preview-card-trigger,
+      .dixy-select-trigger,
+      .dixy-toast-close,
+      .dixy-toast-action,
+      .dixy-toolbar-button,
+      .dixy-toggle
+    ):not(.dixy-button):hover {
+    background: var(--dixy-color-background-subtle);
+  }
+  :is(.dixy-toggle[data-pressed], .dixy-tabs-tab[data-active]) {
+    background: var(--dixy-color-background-selected);
+    color: var(--dixy-color-text-selected);
+    border-color: var(--dixy-color-border-focus);
+  }
+  :is(
+    .dixy-checkbox-root,
+    .dixy-checkbox-indicator,
+    .dixy-switch-root,
+    .dixy-switch-thumb,
+    .dixy-tabs-root,
+    .dixy-tabs-tab,
+    .dixy-tabs-indicator,
+    .dixy-tabs-panel,
+    .dixy-tabs-list,
+    .dixy-tooltip-trigger,
+    .dixy-tooltip-positioner,
+    .dixy-tooltip-popup,
+    .dixy-tooltip-arrow,
+    .dixy-tooltip-viewport,
+    .dixy-accordion-root,
+    .dixy-accordion-item,
+    .dixy-accordion-header,
+    .dixy-accordion-trigger,
+    .dixy-accordion-panel,
+    .dixy-alert-dialog-backdrop,
+    .dixy-alert-dialog-close,
+    .dixy-alert-dialog-description,
+    .dixy-alert-dialog-popup,
+    .dixy-alert-dialog-title,
+    .dixy-alert-dialog-trigger,
+    .dixy-alert-dialog-viewport,
+    .dixy-autocomplete-trigger,
+    .dixy-autocomplete-input,
+    .dixy-autocomplete-input-group,
+    .dixy-autocomplete-icon,
+    .dixy-autocomplete-clear,
+    .dixy-autocomplete-list,
+    .dixy-autocomplete-status,
+    .dixy-autocomplete-backdrop,
+    .dixy-autocomplete-positioner,
+    .dixy-autocomplete-popup,
+    .dixy-autocomplete-arrow,
+    .dixy-autocomplete-group,
+    .dixy-autocomplete-group-label,
+    .dixy-autocomplete-item,
+    .dixy-autocomplete-row,
+    .dixy-autocomplete-empty,
+    .dixy-autocomplete-separator,
+    .dixy-avatar-root,
+    .dixy-avatar-image,
+    .dixy-avatar-fallback,
+    .dixy-checkbox-group,
+    .dixy-collapsible-root,
+    .dixy-collapsible-trigger,
+    .dixy-collapsible-panel,
+    .dixy-combobox-label,
+    .dixy-combobox-input,
+    .dixy-combobox-input-group,
+    .dixy-combobox-trigger,
+    .dixy-combobox-list,
+    .dixy-combobox-status,
+    .dixy-combobox-backdrop,
+    .dixy-combobox-positioner,
+    .dixy-combobox-popup,
+    .dixy-combobox-arrow,
+    .dixy-combobox-icon,
+    .dixy-combobox-group,
+    .dixy-combobox-group-label,
+    .dixy-combobox-item,
+    .dixy-combobox-item-indicator,
+    .dixy-combobox-chips,
+    .dixy-combobox-chip,
+    .dixy-combobox-chip-remove,
+    .dixy-combobox-row,
+    .dixy-combobox-empty,
+    .dixy-combobox-clear,
+    .dixy-combobox-separator,
+    .dixy-context-menu-trigger,
+    .dixy-context-menu-backdrop,
+    .dixy-context-menu-positioner,
+    .dixy-context-menu-popup,
+    .dixy-context-menu-arrow,
+    .dixy-context-menu-group,
+    .dixy-context-menu-group-label,
+    .dixy-context-menu-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-checkbox-item-indicator,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-radio-group,
+    .dixy-context-menu-radio-item,
+    .dixy-context-menu-radio-item-indicator,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-context-menu-separator,
+    .dixy-drawer-backdrop,
+    .dixy-drawer-close,
+    .dixy-drawer-content,
+    .dixy-drawer-description,
+    .dixy-drawer-indent,
+    .dixy-drawer-indent-background,
+    .dixy-drawer-popup,
+    .dixy-drawer-swipe-area,
+    .dixy-drawer-title,
+    .dixy-drawer-trigger,
+    .dixy-drawer-viewport,
+    .dixy-fieldset-root,
+    .dixy-fieldset-legend,
+    .dixy-form,
+    .dixy-menu-arrow,
+    .dixy-menu-backdrop,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-checkbox-item-indicator,
+    .dixy-menu-group,
+    .dixy-menu-group-label,
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-popup,
+    .dixy-menu-positioner,
+    .dixy-menu-radio-group,
+    .dixy-menu-radio-item,
+    .dixy-menu-radio-item-indicator,
+    .dixy-menu-trigger,
+    .dixy-menu-viewport,
+    .dixy-menu-separator,
+    .dixy-menu-submenu-trigger,
+    .dixy-menu-input,
+    .dixy-menu-list,
+    .dixy-menu-clear,
+    .dixy-menu-empty,
+    .dixy-menubar,
+    .dixy-meter-root,
+    .dixy-meter-track,
+    .dixy-meter-indicator,
+    .dixy-meter-label,
+    .dixy-navigation-menu-root,
+    .dixy-navigation-menu-list,
+    .dixy-navigation-menu-item,
+    .dixy-navigation-menu-content,
+    .dixy-navigation-menu-trigger,
+    .dixy-navigation-menu-positioner,
+    .dixy-navigation-menu-viewport,
+    .dixy-navigation-menu-backdrop,
+    .dixy-navigation-menu-popup,
+    .dixy-navigation-menu-arrow,
+    .dixy-navigation-menu-link,
+    .dixy-navigation-menu-icon,
+    .dixy-number-field-root,
+    .dixy-number-field-group,
+    .dixy-number-field-increment,
+    .dixy-number-field-decrement,
+    .dixy-number-field-input,
+    .dixy-number-field-scrub-area,
+    .dixy-number-field-scrub-area-cursor,
+    .dixy-otp-field-root,
+    .dixy-otp-field-input,
+    .dixy-otp-field-separator,
+    .dixy-popover-trigger,
+    .dixy-popover-positioner,
+    .dixy-popover-popup,
+    .dixy-popover-arrow,
+    .dixy-popover-backdrop,
+    .dixy-popover-title,
+    .dixy-popover-description,
+    .dixy-popover-close,
+    .dixy-popover-viewport,
+    .dixy-preview-card-trigger,
+    .dixy-preview-card-positioner,
+    .dixy-preview-card-popup,
+    .dixy-preview-card-arrow,
+    .dixy-preview-card-backdrop,
+    .dixy-preview-card-viewport,
+    .dixy-progress-root,
+    .dixy-progress-track,
+    .dixy-progress-indicator,
+    .dixy-progress-label,
+    .dixy-radio-root,
+    .dixy-radio-indicator,
+    .dixy-radio-group,
+    .dixy-scroll-area-root,
+    .dixy-scroll-area-viewport,
+    .dixy-scroll-area-scrollbar,
+    .dixy-scroll-area-content,
+    .dixy-scroll-area-thumb,
+    .dixy-scroll-area-corner,
+    .dixy-select-label,
+    .dixy-select-trigger,
+    .dixy-select-icon,
+    .dixy-select-backdrop,
+    .dixy-select-positioner,
+    .dixy-select-popup,
+    .dixy-select-list,
+    .dixy-select-item,
+    .dixy-select-item-indicator,
+    .dixy-select-item-text,
+    .dixy-select-arrow,
+    .dixy-select-scroll-down-arrow,
+    .dixy-select-scroll-up-arrow,
+    .dixy-select-group,
+    .dixy-select-group-label,
+    .dixy-select-separator,
+    .dixy-separator,
+    .dixy-slider-root,
+    .dixy-slider-label,
+    .dixy-slider-control,
+    .dixy-slider-track,
+    .dixy-slider-thumb,
+    .dixy-slider-indicator,
+    .dixy-toast-viewport,
+    .dixy-toast-root,
+    .dixy-toast-content,
+    .dixy-toast-description,
+    .dixy-toast-title,
+    .dixy-toast-close,
+    .dixy-toast-action,
+    .dixy-toast-positioner,
+    .dixy-toast-arrow,
+    .dixy-toggle,
+    .dixy-toggle-group,
+    .dixy-toolbar-separator,
+    .dixy-toolbar-root,
+    .dixy-toolbar-group,
+    .dixy-toolbar-button,
+    .dixy-toolbar-link,
+    .dixy-toolbar-input
+  ):is([data-disabled], :disabled) {
+    cursor: not-allowed;
+  }
+  :is(
+    .dixy-checkbox-root,
+    .dixy-radio-root,
+    .dixy-switch-root,
+    .dixy-toggle,
+    .dixy-tabs-tab,
+    .dixy-toolbar-button
+  )[data-disabled] {
+    opacity: 0.5;
+  }
+  :is(
+    .dixy-autocomplete-input,
+    .dixy-combobox-input,
+    .dixy-menu-input,
+    .dixy-number-field-input,
+    .dixy-otp-field-input,
+    .dixy-toolbar-input
+  ) {
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--dixy-size-control-md);
+    min-block-size: var(--dixy-interaction-target);
+    padding-inline: var(--dixy-primitive-inset);
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-control);
+    background: var(--dixy-color-background-surface);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-md);
+    letter-spacing: var(--dixy-font-body-md-letter-spacing);
+  }
+  :is(
+    .dixy-autocomplete-input,
+    .dixy-combobox-input,
+    .dixy-menu-input,
+    .dixy-number-field-input,
+    .dixy-otp-field-input,
+    .dixy-toolbar-input
+  )[data-invalid] {
+    border-color: var(--dixy-color-border-danger);
+  }
+  :is(
+    .dixy-autocomplete-group-label,
+    .dixy-combobox-label,
+    .dixy-combobox-group-label,
+    .dixy-context-menu-group-label,
+    .dixy-fieldset-legend,
+    .dixy-menu-group-label,
+    .dixy-meter-label,
+    .dixy-progress-label,
+    .dixy-select-label,
+    .dixy-select-group-label,
+    .dixy-slider-label
+  ) {
+    font: var(--dixy-font-label-md);
+    letter-spacing: var(--dixy-font-label-md-letter-spacing);
+    color: var(--dixy-color-text-primary);
+  }
+  :is(
+    .dixy-alert-dialog-title,
+    .dixy-drawer-title,
+    .dixy-popover-title,
+    .dixy-toast-title
+  ) {
+    margin: 0;
+    font: var(--dixy-font-title-md);
+  }
+  :is(
+    .dixy-alert-dialog-description,
+    .dixy-drawer-description,
+    .dixy-popover-description,
+    .dixy-toast-description
+  ) {
+    margin-block: var(--dixy-primitive-gap);
+    font: var(--dixy-font-body-sm);
+    color: var(--dixy-color-text-secondary);
+  }
+  :is(
+    .dixy-tooltip-positioner,
+    .dixy-autocomplete-positioner,
+    .dixy-combobox-positioner,
+    .dixy-context-menu-positioner,
+    .dixy-menu-positioner,
+    .dixy-navigation-menu-positioner,
+    .dixy-popover-positioner,
+    .dixy-preview-card-positioner,
+    .dixy-select-positioner,
+    .dixy-toast-positioner
+  ) {
+    z-index: var(--dixy-popup-layer);
+    max-inline-size: 100vw;
+  }
+  :is(
+    .dixy-tooltip-popup,
+    .dixy-alert-dialog-popup,
+    .dixy-autocomplete-popup,
+    .dixy-combobox-popup,
+    .dixy-context-menu-popup,
+    .dixy-drawer-popup,
+    .dixy-menu-popup,
+    .dixy-navigation-menu-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-select-popup
+  ) {
+    padding: var(--dixy-popup-padding);
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-popup-radius);
+    background: var(--dixy-popup-background);
+    color: var(--dixy-color-text-primary);
+    box-shadow: var(--dixy-popup-shadow);
+    max-inline-size: min(
+      var(--dixy-container-sm, 32rem),
+      calc(100vw - var(--dixy-space-400))
+    );
+    max-block-size: var(
+      --available-height,
+      calc(100dvh - var(--dixy-space-400))
+    );
+    overflow: auto;
+    font: var(--dixy-font-body-md);
+    transform-origin: var(--transform-origin);
+  }
+  :is(
+    .dixy-tooltip-popup,
+    .dixy-autocomplete-popup,
+    .dixy-combobox-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-select-popup
+  ) {
+    transition:
+      opacity var(--dixy-motion-transition-enter),
+      transform var(--dixy-motion-transition-enter);
+  }
+
+  :is(
+    .dixy-tooltip-popup,
+    .dixy-autocomplete-popup,
+    .dixy-combobox-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-select-popup
+  )[data-starting-style],
+  :is(
+    .dixy-tooltip-popup,
+    .dixy-autocomplete-popup,
+    .dixy-combobox-popup,
+    .dixy-popover-popup,
+    .dixy-preview-card-popup,
+    .dixy-select-popup
+  )[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  :is(
+    .dixy-tooltip-arrow,
+    .dixy-autocomplete-arrow,
+    .dixy-combobox-arrow,
+    .dixy-context-menu-arrow,
+    .dixy-menu-arrow,
+    .dixy-navigation-menu-arrow,
+    .dixy-popover-arrow,
+    .dixy-preview-card-arrow,
+    .dixy-select-arrow,
+    .dixy-select-scroll-down-arrow,
+    .dixy-select-scroll-up-arrow,
+    .dixy-toast-arrow
+  ) {
+    inline-size: var(--dixy-size-icon-sm);
+    block-size: var(--dixy-size-icon-sm);
+    fill: var(--dixy-popup-background);
+  }
+  :is(
+    .dixy-tabs-list,
+    .dixy-autocomplete-list,
+    .dixy-combobox-list,
+    .dixy-menu-list,
+    .dixy-navigation-menu-list,
+    .dixy-select-list
+  ) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  :is(
+    .dixy-accordion-item,
+    .dixy-autocomplete-item,
+    .dixy-combobox-item,
+    .dixy-context-menu-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-radio-item,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-radio-item,
+    .dixy-menu-submenu-trigger,
+    .dixy-navigation-menu-item,
+    .dixy-select-item
+  ) {
+    gap: var(--dixy-choice-gap);
+    min-block-size: max(
+      var(--dixy-size-control-sm),
+      var(--dixy-interaction-target)
+    );
+    padding: var(--dixy-spacing-inset-sm);
+    border-radius: var(--dixy-choice-radius);
+    outline: none;
+    font: var(--dixy-font-label-md);
+    cursor: default;
+  }
+  :is(
+    .dixy-accordion-item,
+    .dixy-autocomplete-item,
+    .dixy-combobox-item,
+    .dixy-context-menu-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-radio-item,
+    .dixy-context-menu-submenu-trigger,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-radio-item,
+    .dixy-menu-submenu-trigger,
+    .dixy-navigation-menu-item,
+    .dixy-select-item
+  )[data-highlighted] {
+    background: var(--dixy-color-background-selected);
+    color: var(--dixy-color-text-selected);
+  }
+  :is(
+    .dixy-accordion-item,
+    .dixy-autocomplete-item,
+    .dixy-combobox-item,
+    .dixy-context-menu-item,
+    .dixy-context-menu-checkbox-item,
+    .dixy-context-menu-link-item,
+    .dixy-context-menu-radio-item,
+    .dixy-menu-checkbox-item,
+    .dixy-menu-item,
+    .dixy-menu-link-item,
+    .dixy-menu-radio-item,
+    .dixy-navigation-menu-item,
+    .dixy-select-item
+  )[data-disabled] {
+    color: var(--dixy-color-text-disabled);
+  }
+  :is(
+    .dixy-autocomplete-separator,
+    .dixy-combobox-separator,
+    .dixy-context-menu-separator,
+    .dixy-menu-separator,
+    .dixy-otp-field-separator,
+    .dixy-select-separator,
+    .dixy-separator,
+    .dixy-toolbar-separator,
+    .dixy-separator
+  ) {
+    flex-shrink: 0;
+    block-size: var(--dixy-border-width-1);
+    border: 0;
+    margin-block: var(--dixy-primitive-gap);
+    background: var(--dixy-color-border-subtle);
+  }
+  :is(
+    .dixy-autocomplete-separator,
+    .dixy-combobox-separator,
+    .dixy-context-menu-separator,
+    .dixy-menu-separator,
+    .dixy-otp-field-separator,
+    .dixy-select-separator,
+    .dixy-separator,
+    .dixy-toolbar-separator,
+    .dixy-separator
+  )[data-orientation="vertical"] {
+    inline-size: var(--dixy-border-width-1);
+    block-size: auto;
+    align-self: stretch;
+    margin-block: 0;
+    margin-inline: var(--dixy-choice-gap);
+  }
+  :is(.dixy-checkbox-root, .dixy-radio-root) {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    inline-size: max(var(--dixy-choice-size), var(--dixy-interaction-target));
+    block-size: max(var(--dixy-choice-size), var(--dixy-interaction-target));
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--dixy-color-text-on-action-primary);
+    cursor: pointer;
+  }
+  :is(.dixy-checkbox-root, .dixy-radio-root)::before {
+    content: "";
+    position: absolute;
+    inline-size: var(--dixy-choice-size);
+    block-size: var(--dixy-choice-size);
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-choice-radius);
+    background: var(--dixy-color-background-surface);
+    box-sizing: border-box;
+    transition: background var(--dixy-motion-transition-feedback);
+  }
+  :is(.dixy-checkbox-root, .dixy-radio-root):is(
+      [data-checked],
+      [data-indeterminate]
+    )::before {
+    background: var(--dixy-color-background-action-primary);
+    border-color: var(--dixy-color-background-action-primary);
+  }
+  :is(.dixy-checkbox-root, .dixy-radio-root)[data-invalid]::before {
+    border-color: var(--dixy-color-border-danger);
+  }
+  .dixy-checkbox-indicator {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--dixy-size-icon-sm);
+    block-size: var(--dixy-size-icon-sm);
+    font: var(--dixy-font-label-md);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .dixy-checkbox-mark {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+  }
+  .dixy-radio-root::before {
+    border-radius: 50%;
+  }
+  .dixy-radio-indicator {
+    position: relative;
+    inline-size: var(--dixy-space-100);
+    block-size: var(--dixy-space-100);
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .dixy-switch-root {
+    --dixy-switch-selected: var(--dixy-color-background-action-primary);
+    --dixy-switch-selected-soft: var(
+      --dixy-color-background-action-primary-subtle
+    );
+    --dixy-switch-selected-text: var(--dixy-color-text-action-primary);
+    --dixy-switch-selected-contrast: var(--dixy-color-text-on-action-primary);
+    --dixy-switch-radius: var(--dixy-radius-control);
+    --dixy-switch-inset: calc(
+      (var(--dixy-switch-track-height) - var(--dixy-switch-thumb-size)) / 2
+    );
+    --dixy-switch-icon-size: var(--dixy-size-icon-xs);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    inline-size: max(
+      var(--dixy-switch-track-width),
+      var(--dixy-interaction-target)
+    );
+    block-size: max(
+      var(--dixy-switch-track-height),
+      var(--dixy-interaction-target)
+    );
+    /* The thumb travels a fixed distance, so a squeezed track lets it overshoot. */
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .dixy-switch-root[data-size="sm"] {
+    --dixy-switch-track-width: var(--dixy-size-control-sm);
+    --dixy-switch-track-height: var(--dixy-size-icon-md);
+    --dixy-switch-thumb-size: var(--dixy-size-icon-sm);
+  }
+  .dixy-switch-root[data-size="lg"] {
+    --dixy-switch-track-width: var(--dixy-size-control-lg);
+    --dixy-switch-track-height: calc(
+      var(--dixy-size-icon-lg) + var(--dixy-space-050)
+    );
+    --dixy-switch-thumb-size: var(--dixy-size-icon-lg);
+    --dixy-switch-icon-size: var(--dixy-size-icon-sm);
+  }
+  .dixy-switch-root[data-radius="none"] {
+    --dixy-switch-radius: var(--dixy-radius-0);
+  }
+  .dixy-switch-root[data-radius="sm"] {
+    --dixy-switch-radius: var(--dixy-radius-4);
+  }
+  .dixy-switch-root[data-radius="md"] {
+    --dixy-switch-radius: var(--dixy-radius-10);
+  }
+  .dixy-switch-root[data-radius="lg"] {
+    --dixy-switch-radius: var(--dixy-radius-16);
+  }
+  .dixy-switch-root[data-radius="full"] {
+    --dixy-switch-radius: var(--dixy-radius-full);
+  }
+  .dixy-switch-root[data-color="neutral"] {
+    --dixy-switch-selected: var(--dixy-color-background-action-secondary);
+    --dixy-switch-selected-soft: var(
+      --dixy-color-background-action-secondary-subtle
+    );
+    --dixy-switch-selected-text: var(--dixy-color-text-action-secondary);
+    --dixy-switch-selected-contrast: var(--dixy-color-text-on-action-secondary);
+  }
+  .dixy-switch-root[data-color="danger"] {
+    --dixy-switch-selected: var(--dixy-color-background-action-destructive);
+    --dixy-switch-selected-soft: var(
+      --dixy-color-background-action-destructive-subtle
+    );
+    --dixy-switch-selected-text: var(--dixy-color-text-action-destructive);
+    --dixy-switch-selected-contrast: var(
+      --dixy-color-text-on-action-destructive
+    );
+  }
+  .dixy-switch-root[data-color="success"] {
+    --dixy-switch-selected: var(--dixy-color-background-action-success);
+    --dixy-switch-selected-soft: var(
+      --dixy-color-background-action-success-subtle
+    );
+    --dixy-switch-selected-text: var(--dixy-color-text-action-success);
+    --dixy-switch-selected-contrast: var(--dixy-color-text-on-action-success);
+  }
+  .dixy-switch-root::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inline-size: var(--dixy-switch-track-width);
+    block-size: var(--dixy-switch-track-height);
+    border-radius: var(--dixy-switch-radius);
+    box-sizing: border-box;
+    border: var(--dixy-border-default);
+    background-color: var(--dixy-color-background-subtle);
+  }
+  .dixy-switch-root[data-checked]::before {
+    background-color: var(--dixy-switch-selected);
+    border-color: var(--dixy-switch-selected);
+  }
+  .dixy-switch-root[data-variant="soft"][data-checked]::before {
+    background-color: var(--dixy-switch-selected-soft);
+    border-color: var(--dixy-switch-selected-text);
+  }
+  .dixy-switch-root[data-variant="outline"][data-checked]::before {
+    background-color: var(--dixy-color-background-surface);
+    border-color: var(--dixy-switch-selected-text);
+  }
+  .dixy-switch-root[data-invalid]::before {
+    border-color: var(--dixy-color-border-danger);
+  }
+  .dixy-switch-thumb {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    inline-size: var(--dixy-switch-thumb-size);
+    block-size: var(--dixy-switch-thumb-size);
+    margin-inline-start: var(--dixy-switch-inset);
+    border-radius: max(
+      0px,
+      calc(var(--dixy-switch-radius) - var(--dixy-switch-inset))
+    );
+    background-color: var(--dixy-color-text-primary);
+    color: var(--dixy-color-background-surface);
+    box-shadow: var(--dixy-shadow-raised);
+  }
+  .dixy-switch-thumb[data-checked] {
+    background-color: var(--dixy-switch-selected-contrast);
+    color: var(--dixy-switch-selected);
+    transform: translateX(
+      calc(
+        (var(--dixy-switch-track-width) - var(--dixy-switch-track-height)) *
+          var(--dixy-switch-travel-direction, 1)
+      )
+    );
+  }
+  .dixy-switch-root:is([data-variant="soft"], [data-variant="outline"])
+    .dixy-switch-thumb[data-checked] {
+    background-color: var(--dixy-switch-selected-text);
+    color: var(--dixy-switch-selected-soft);
+  }
+  .dixy-switch-icon {
+    grid-area: 1 / 1;
+    display: grid;
+    place-items: center;
+    inline-size: var(--dixy-switch-icon-size);
+    block-size: var(--dixy-switch-icon-size);
+    pointer-events: none;
+  }
+  .dixy-switch-icon > svg {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+  .dixy-switch-thumb[data-checked] .dixy-switch-icon[data-state="unchecked"],
+  .dixy-switch-thumb:not([data-checked])
+    .dixy-switch-icon[data-state="checked"] {
+    opacity: 0;
+  }
+  :is(
+    .dixy-tabs-root,
+    .dixy-accordion-root,
+    .dixy-collapsible-panel,
+    .dixy-checkbox-group,
+    .dixy-radio-group,
+    .dixy-fieldset-root,
+    .dixy-form,
+    .dixy-number-field-root,
+    .dixy-slider-root,
+    .dixy-progress-root,
+    .dixy-meter-root
+  ) {
+    display: grid;
+    gap: var(--dixy-primitive-gap);
+    min-inline-size: 0;
+  }
+  .dixy-fieldset-root {
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-card);
+    padding: var(--dixy-spacing-inset-md);
+  }
+  :is(
+    .dixy-tabs-list,
+    .dixy-toggle-group,
+    .dixy-toolbar-root,
+    .dixy-toolbar-group,
+    .dixy-navigation-menu-list
+  ) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dixy-choice-gap);
+  }
+  :is(
+    .dixy-tabs-list,
+    .dixy-toggle-group,
+    .dixy-toolbar-root
+  )[data-orientation="vertical"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dixy-tabs-list {
+    position: relative;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    min-inline-size: 0;
+    border-block-end: var(--dixy-border-default);
+    padding-block-end: var(--dixy-primitive-gap);
+  }
+  .dixy-tabs-tab {
+    border-color: transparent;
+  }
+  .dixy-tabs-panel {
+    padding-block: var(--dixy-spacing-inset-sm);
+    font: var(--dixy-font-body-md);
+  }
+  .dixy-tabs-panel[hidden] {
+    display: none;
+  }
+  .dixy-accordion-item {
+    padding: 0;
+    border-block-end: var(--dixy-border-default);
+  }
+  .dixy-accordion-header {
+    margin: 0;
+  }
+  .dixy-accordion-trigger {
+    inline-size: 100%;
+    justify-content: space-between;
+    border: 0;
+    background: transparent;
+  }
+  :is(.dixy-accordion-panel, .dixy-collapsible-panel) {
+    overflow: hidden;
+    block-size: var(--collapsible-panel-height, var(--accordion-panel-height));
+    transition: height var(--dixy-motion-transition-reveal);
+  }
+  :is(.dixy-accordion-panel, .dixy-collapsible-panel):is(
+    [data-starting-style],
+    [data-ending-style]
+  ) {
+    block-size: 0;
+  }
+  .dixy-avatar-root {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    inline-size: var(--dixy-avatar-size);
+    block-size: var(--dixy-avatar-size);
+    border-radius: 50%;
+    background: var(--dixy-color-background-selected);
+    color: var(--dixy-color-text-selected);
+    font: var(--dixy-font-label-lg);
+  }
+  .dixy-avatar-image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  :is(.dixy-progress-track, .dixy-meter-track, .dixy-slider-track) {
+    position: relative;
+    overflow: hidden;
+    block-size: var(--dixy-track-size);
+    border-radius: var(--dixy-radius-control);
+    background: var(--dixy-color-background-subtle);
+  }
+  :is(.dixy-progress-indicator, .dixy-meter-indicator) {
+    block-size: 100%;
+    border-radius: inherit;
+    background: var(--dixy-color-background-action-primary);
+  }
+  .dixy-progress-indicator[data-indeterminate] {
+    inline-size: 50%;
+  }
+  .dixy-slider-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    block-size: max(
+      var(--dixy-size-control-md),
+      var(--dixy-interaction-target)
+    );
+    touch-action: none;
+  }
+  .dixy-slider-track {
+    inline-size: 100%;
+  }
+  .dixy-slider-indicator {
+    background: var(--dixy-color-background-action-primary);
+  }
+  .dixy-slider-thumb {
+    inline-size: max(
+      var(--dixy-slider-thumb-size),
+      var(--dixy-interaction-target)
+    );
+    block-size: max(
+      var(--dixy-slider-thumb-size),
+      var(--dixy-interaction-target)
+    );
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+  }
+  .dixy-slider-thumb::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    inline-size: var(--dixy-slider-thumb-size);
+    block-size: var(--dixy-slider-thumb-size);
+    border-radius: 50%;
+    background: var(--dixy-color-background-action-primary);
+    border: var(--dixy-border-default);
+  }
+  .dixy-slider-control[data-orientation="vertical"] {
+    inline-size: var(--dixy-size-control-md);
+    block-size: var(--dixy-space-1200);
+  }
+  .dixy-slider-track[data-orientation="vertical"] {
+    inline-size: var(--dixy-track-size);
+    block-size: 100%;
+  }
+  :is(.dixy-select-popup, .dixy-combobox-popup, .dixy-autocomplete-popup) {
+    min-inline-size: var(--anchor-width);
+  }
+  :is(
+    .dixy-select-list,
+    .dixy-combobox-list,
+    .dixy-autocomplete-list,
+    .dixy-menu-list
+  ) {
+    max-block-size: min(var(--available-height, 20rem), 20rem);
+    overflow: auto;
+  }
+  :is(
+    .dixy-combobox-input-group,
+    .dixy-autocomplete-input-group,
+    .dixy-number-field-group,
+    .dixy-combobox-chips
+  ) {
+    display: flex;
+    align-items: center;
+    gap: var(--dixy-choice-gap);
+  }
+  .dixy-combobox-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--dixy-spacing-inset-xs);
+    background: var(--dixy-color-background-selected);
+    border-radius: var(--dixy-radius-control);
+  }
+  .dixy-otp-field-root {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dixy-choice-gap);
+  }
+  .dixy-otp-field-input {
+    inline-size: var(--dixy-size-control-md);
+    text-align: center;
+    font: var(--dixy-font-code-md);
+  }
+  .dixy-scroll-area-root {
+    position: relative;
+    overflow: hidden;
+  }
+  .dixy-scroll-area-viewport {
+    inline-size: 100%;
+    block-size: 100%;
+    overscroll-behavior: contain;
+    border-radius: inherit;
+  }
+  .dixy-scroll-area-scrollbar {
+    display: flex;
+    inline-size: var(--dixy-scrollbar-size);
+    margin: var(--dixy-space-025);
+    border-radius: var(--dixy-radius-control);
+  }
+  .dixy-scroll-area-scrollbar[data-orientation="horizontal"] {
+    block-size: var(--dixy-scrollbar-size);
+    inline-size: auto;
+  }
+  .dixy-scroll-area-thumb {
+    flex: 1;
+    border-radius: inherit;
+    background: var(--dixy-color-border-strong);
+  }
+  :is(.dixy-alert-dialog-backdrop, .dixy-drawer-backdrop) {
+    position: fixed;
+    inset: 0;
+    z-index: var(--dixy-popup-layer);
+    background: var(--dixy-color-background-overlay);
+    transition: opacity var(--dixy-motion-transition-enter);
+  }
+  :is(.dixy-alert-dialog-backdrop, .dixy-drawer-backdrop):is(
+    [data-starting-style],
+    [data-ending-style]
+  ) {
+    opacity: 0;
+  }
+  .dixy-alert-dialog-viewport {
+    position: fixed;
+    inset: 0;
+    z-index: var(--dixy-popup-layer);
+    display: grid;
+    place-items: center;
+    padding: var(--dixy-spacing-inset-lg);
+  }
+  .dixy-alert-dialog-popup {
+    inline-size: var(--dixy-container-sm, 32rem);
+    box-shadow: var(--dixy-shadow-overlay);
+  }
+  .dixy-drawer-viewport {
+    position: fixed;
+    inset: 0;
+    z-index: var(--dixy-popup-layer);
+    display: flex;
+    align-items: flex-end;
+  }
+  .dixy-drawer-popup {
+    inline-size: 100%;
+    max-inline-size: 100%;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    max-block-size: calc(100dvh - var(--dixy-space-800));
+  }
+  .dixy-tooltip-popup {
+    max-inline-size: 20rem;
+    font: var(--dixy-font-body-sm);
+    padding: var(--dixy-spacing-inset-sm);
+  }
+  .dixy-menubar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dixy-choice-gap);
+  }
+  .dixy-navigation-menu-link {
+    display: inline-flex;
+    color: var(--dixy-color-text-link);
+    padding: var(--dixy-spacing-inset-sm);
+  }
+  .dixy-toast-viewport {
+    position: fixed;
+    z-index: var(--dixy-toast-layer);
+    inset-block-end: var(--dixy-space-400);
+    inset-inline-end: var(--dixy-space-400);
+    display: grid;
+    gap: var(--dixy-primitive-gap);
+    inline-size: min(22rem, calc(100vw - var(--dixy-space-800)));
+  }
+  .dixy-toast-root {
+    padding: var(--dixy-spacing-inset-md);
+    border: var(--dixy-border-default);
+    border-radius: var(--dixy-radius-overlay);
+    background: var(--dixy-color-background-surface-raised);
+    color: var(--dixy-color-text-primary);
+    box-shadow: var(--dixy-shadow-floating);
+    transition:
+      opacity var(--dixy-motion-transition-enter),
+      transform var(--dixy-motion-transition-enter);
+  }
+  .dixy-toast-root:is([data-starting-style], [data-ending-style]) {
+    opacity: 0;
+    transform: translateY(var(--dixy-space-100));
+  }
+  .dixy-toast-root[data-type="success"] {
+    border-color: var(--dixy-color-border-success);
+  }
+  .dixy-toast-root[data-type="error"] {
+    border-color: var(--dixy-color-border-danger);
+  }
+  .dixy-toast-root[data-expanded] {
+    transform: none;
+  }
+  @media (forced-colors: active) {
+    :is(.dixy-checkbox-root, .dixy-radio-root)::before {
+      border-color: ButtonText;
+    }
+    :is(.dixy-checkbox-root, .dixy-radio-root):is(
+        [data-checked],
+        [data-indeterminate]
+      )::before {
+      background: Highlight;
+    }
+    .dixy-switch-root::before {
+      border: 1px solid ButtonText;
+    }
+    .dixy-switch-thumb {
+      background: ButtonText;
+    }
+  }
+}
+@layer dixy.components {
+  .dixy-field-item {
+    display: flex;
+    align-items: center;
+    gap: var(--dixy-choice-gap);
+  }
+  .dixy-tabs-panel[inert] {
+    visibility: hidden;
+  }
+  .dixy-tabs-root[data-orientation="vertical"] {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .dixy-tabs-list[data-orientation="vertical"] {
+    border-block-end: 0;
+    border-inline-end: var(--dixy-border-default);
+    padding-inline-end: var(--dixy-primitive-gap);
+  }
+  .dixy-navigation-menu-popup {
+    inline-size: var(--popup-width);
+    block-size: var(--popup-height);
+    overflow: visible;
+  }
+  .dixy-navigation-menu-content {
+    display: grid;
+    padding: var(--dixy-spacing-inset-md);
+  }
+  .dixy-navigation-menu-viewport {
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: hidden;
+  }
+  .dixy-number-field-scrub-area {
+    cursor: ew-resize;
+    user-select: none;
+  }
+  .dixy-number-field-scrub-area-cursor {
+    filter: drop-shadow(
+      0 0 var(--dixy-space-025) var(--dixy-color-border-strong)
+    );
+  }
+  .dixy-tooltip-popup[data-instant] {
+    transition: none;
+  }
+}
+@layer dixy.components {
+  .dixy-drawer-viewport:has(.dixy-drawer-popup[data-swipe-direction="up"]) {
+    align-items: flex-start;
+  }
+  .dixy-drawer-popup[data-swipe-direction="up"] {
+    border-radius: 0 0 var(--dixy-popup-radius) var(--dixy-popup-radius);
+  }
+  .dixy-drawer-viewport:has(
+    .dixy-drawer-popup:is(
+      [data-swipe-direction="left"],
+      [data-swipe-direction="right"]
+    )
+  ) {
+    align-items: stretch;
+  }
+  .dixy-drawer-popup:is(
+    [data-swipe-direction="left"],
+    [data-swipe-direction="right"]
+  ) {
+    max-block-size: 100dvh;
+    inline-size: min(
+      var(--dixy-container-sm),
+      calc(100vw - var(--dixy-space-400))
+    );
+    border-radius: var(--dixy-popup-radius);
+  }
+  .dixy-drawer-popup[data-swipe-direction="left"] {
+    margin-right: auto;
+  }
+  .dixy-drawer-popup[data-swipe-direction="right"] {
+    margin-left: auto;
+  }
+}
+@layer dixy.components {
+  :is(.dixy-checkbox-root, .dixy-radio-root)[data-disabled] {
+    color: var(--dixy-color-icon-disabled);
+    opacity: 1;
+  }
+  :is(.dixy-checkbox-root, .dixy-radio-root)[data-disabled]::before {
+    background: var(--dixy-color-background-disabled);
+    border-color: var(--dixy-color-border-subtle);
+  }
+  .dixy-switch-root[data-disabled] {
+    opacity: 1;
+  }
+  .dixy-switch-root[data-disabled][data-variant]::before {
+    background: var(--dixy-color-background-disabled);
+    border: var(--dixy-border-default);
+  }
+  .dixy-switch-root[data-disabled][data-variant] .dixy-switch-thumb {
+    background: var(--dixy-color-icon-disabled);
+    color: var(--dixy-color-background-disabled);
+    box-shadow: none;
+  }
+  @media (forced-colors: active) {
+    .dixy-switch-root::before {
+      background: Canvas !important;
+      border-color: ButtonText !important;
+    }
+    .dixy-switch-root[data-checked]::before {
+      border-color: Highlight !important;
+    }
+    .dixy-switch-thumb {
+      background: ButtonText !important;
+      color: Canvas !important;
+      box-shadow: none;
+    }
+  }
+  :is(.dixy-toggle, .dixy-tabs-tab, .dixy-toolbar-button)[data-disabled] {
+    opacity: 1;
+    color: var(--dixy-color-text-disabled);
+    background: var(--dixy-color-background-disabled);
+  }
+}
