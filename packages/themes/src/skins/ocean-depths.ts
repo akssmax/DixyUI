@@ -64,17 +64,6 @@ export const oceanDepthsTheme = {
       '"Fraunces Variable", "Fraunces", ui-serif, Georgia, serif',
     "--dixy-font-title-sm-family":
       '"Fraunces Variable", "Fraunces", ui-serif, Georgia, serif',
-    "--dixy-organic-density": "38",
-    "--dixy-organic-cornerDensity": "65",
-    "--dixy-organic-canopyDepth": "60",
-    "--dixy-organic-variation": "60",
-    "--dixy-organic-scale": "18",
-    "--dixy-organic-stemWeight": "45",
-    "--dixy-organic-motion": "45",
-    "--dixy-organic-seed": "47",
-    "--dixy-organic-style": "0",
-    "--dixy-organic-canopy": "0",
-    "--dixy-organic-stem": "0",
   },
 } as const;
 export default oceanDepths;

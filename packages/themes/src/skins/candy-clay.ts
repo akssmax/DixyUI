@@ -64,17 +64,6 @@ export const candyClayTheme = {
       '"Fredoka Variable", "Fredoka", ui-rounded, "SF Pro Rounded", "Nunito", sans-serif',
     "--dixy-font-title-sm-family":
       '"Fredoka Variable", "Fredoka", ui-rounded, "SF Pro Rounded", "Nunito", sans-serif',
-    "--dixy-organic-density": "42",
-    "--dixy-organic-cornerDensity": "72",
-    "--dixy-organic-canopyDepth": "62",
-    "--dixy-organic-variation": "68",
-    "--dixy-organic-scale": "22",
-    "--dixy-organic-stemWeight": "65",
-    "--dixy-organic-motion": "42",
-    "--dixy-organic-seed": "31",
-    "--dixy-organic-style": "0",
-    "--dixy-organic-canopy": "0",
-    "--dixy-organic-stem": "0",
   },
 } as const;
 export default candyClay;

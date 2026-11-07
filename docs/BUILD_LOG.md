@@ -1323,3 +1323,28 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - On the Toggle Group docs page, the Segmented switch sets `data-segmented` on the preview, and the code sample includes it.
   - `pnpm check` and `pnpm package:check` pass.
 - Not tested: forced colours and screen readers in a real browser; segmented with `orientation="vertical"` (no vertical-specific styles were written); each material finish visually.
+
+### 2026-11-07 — Ocean Depths and Candy Clay use plain cards, as in the HTML redesign
+
+- Request: the user preferred the frame borders from the HTML mockup for these two starters. Everything else in both themes stays as it was.
+- Change (`packages/themes/src/documents.ts`):
+  - Both starters' frame changes from the painted organic ornament (`coral` bubble rope, `cushion` flower and striped band) to `none`. The card material now carries the look: Ocean is frosted sea glass with a thin light rim; Candy is a clay card defined only by its shadows.
+  - Candy's chrome edge changes from `pill` (a thick two-tone 3px accent border the mockup never had) to `line`.
+  - Candy keeps corner scale 1.5 and variation 0.15, which gives the softer clay rounding and is what the "soft-machine" test checks.
+  - The `coral` and `cushion` frames and the `/ocean-depths/react` and `/candy-clay/react` ornament exports still exist, for the mixer and for consumers.
+- Verified:
+  - In-app browser (:3001 playground): both starters in light and dark. Computed card border for Candy is 0px.
+  - Themes and docs tests pass, as do `pnpm check` and `pnpm package:check`.
+- Not tested: mobile width, forced colours, reduced transparency (Ocean's glass), and Safari.
+
+### 2026-11-07 — Selected toggle reads as a raised thumb in every skin
+
+- Problem (user screenshot, Candy Clay "Pro plan"): in an attached toggle group, the selected segment got only the base library's faint tint and a dark outline. The unselected one looked just as filled, so it was hard to tell which was active.
+- Change (`packages/themes/src/compile-css.ts`, all skins):
+  - Attached or segmented toggle groups get the same sunken track as the tabs list: canvas colour, skin edge, skin inset.
+  - The pressed, non-solid toggle gets `--dixy-skin-selected`, falling back to `--dixy-skin-thumb`, plus the control relief, so it matches the slider and switch knob. In dark appearance `--dixy-skin-selected` is the raised finish. The thumb paint stays light in dark themes, and its label would vanish (it was measured unreadable in dark Candy Clay and Winamp).
+  - Unpressed toggles stay transparent in the track.
+- Verified:
+  - In-app browser: Candy Clay in light (selected toggle paint equals the knob's white-to-pink gradient) and dark; Winamp Signal (dark). Clicking Monthly moves the thumb.
+  - `pnpm check` and `pnpm package:check` passed.
+- Not tested: other skins' light themes one by one, forced colours, keyboard focus ring on the new thumb, and mobile.
