@@ -17,4 +17,4 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm check
-      - run: pnpm package:check
+      - run: pnpm package:check --online
