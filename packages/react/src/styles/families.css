@@ -473,6 +473,40 @@
   .dixy-toggle-group[data-attached] > .dixy-toggle {
     border-radius: 0;
   }
+  /* Segmented: sunken track, raised surface thumb on pressed toggles. */
+  .dixy-toggle-group[data-segmented] {
+    flex-wrap: nowrap;
+    gap: var(--dixy-space-025);
+    padding: var(--dixy-space-025);
+    border-radius: var(--dixy-radius-control);
+    background: var(--dixy-color-background-surface-sunken);
+  }
+  .dixy-toggle-group[data-segmented]
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button) {
+    border-color: transparent;
+    border-radius: calc(var(--dixy-radius-control) - var(--dixy-space-025));
+    background: transparent;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-toggle-group[data-segmented]
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button):not(
+      [data-disabled]
+    ):hover {
+    background: transparent;
+    color: var(--dixy-color-text-primary);
+  }
+  .dixy-toggle-group[data-segmented]
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button)[data-pressed] {
+    border-color: var(--dixy-color-border-subtle);
+    background: var(--dixy-color-background-surface-raised);
+    color: var(--dixy-color-text-primary);
+    box-shadow: var(--dixy-shadow-raised);
+  }
+  .dixy-toggle-group[data-segmented]
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button)[data-disabled] {
+    background: transparent;
+    color: var(--dixy-color-text-disabled);
+  }
   .dixy-toggle-group[data-attached] > .dixy-toggle:first-child {
     border-start-start-radius: var(--dixy-radius-control);
     border-end-start-radius: var(--dixy-radius-control);
@@ -911,6 +945,9 @@
       background: Highlight;
       color: HighlightText;
       border-color: Highlight;
+    }
+    .dixy-toggle-group[data-segmented] {
+      border: var(--dixy-border-width-1) solid CanvasText;
     }
     :is(
       .dixy-progress-indicator,

@@ -333,9 +333,6 @@
   overflow: auto;
   max-width: 100%;
 }
-.theme-preview-toolbar > div:first-child {
-  flex-wrap: wrap;
-}
 @media (max-width: 1000px) {
   .theme-skin-strip {
     display: flex;

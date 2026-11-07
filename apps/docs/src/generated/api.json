@@ -2444,9 +2444,9 @@
     },
     {
       "name": "variant",
-      "type": "\"line\" | \"soft\" | \"solid\" | \"outline\" | undefined",
+      "type": "\"line\" | \"soft\" | \"solid\" | \"outline\" | \"segmented\" | undefined",
       "required": false,
-      "description": "Selected emphasis. Line preserves Dixy's original underline treatment.",
+      "description": "Selected emphasis. Line preserves Dixy's original underline treatment.\nSegmented draws a sunken track with a raised surface thumb for dense\nview switchers; it stays neutral, so `color` does not tint it.",
       "default": "line"
     },
     {
@@ -2592,6 +2592,13 @@
       "type": "boolean | undefined",
       "required": false,
       "description": "Visually connect adjacent toggles without changing single/multiple selection.",
+      "default": "false"
+    },
+    {
+      "name": "segmented",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Draw the group as a segmented control: a sunken track with a raised\nsurface thumb on each pressed toggle. Replaces `attached` and overrides\nthe toggles' variant and color for the pressed state; selection,\nfocus and keyboard behaviour are unchanged.",
       "default": "false"
     }
   ],

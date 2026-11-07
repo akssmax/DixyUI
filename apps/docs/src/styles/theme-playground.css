@@ -126,16 +126,6 @@
   padding: 8px 16px;
   border-block-end: var(--dixy-border-subtle);
 }
-.theme-preview-toolbar > div:first-child {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font: var(--dixy-font-caption);
-}
-.theme-preview-toolbar > div:first-child > strong,
-.theme-preview-toolbar > div:first-child > span:not(.theme-live-dot) {
-  display: none;
-}
 .theme-live-dot {
   width: 5px;
   height: 5px;
@@ -146,13 +136,6 @@
 .theme-preview-toolbar .dixy-button[aria-pressed="true"] {
   background: var(--doc-soft);
   color: var(--dixy-color-text-primary);
-}
-.theme-appearance {
-  display: flex;
-  gap: 2px;
-}
-.theme-appearance .dixy-button {
-  padding-inline: 8px;
 }
 .theme-preview-canvas {
   padding: clamp(18px, 2.5vw, 32px);
@@ -849,9 +832,6 @@
   .theme-preview-toolbar {
     padding: 8px;
     gap: 8px;
-  }
-  .theme-preview-toolbar > div:first-child {
-    flex-wrap: wrap;
   }
   .theme-preview-toolbar .dixy-button {
     padding-inline: 8px;

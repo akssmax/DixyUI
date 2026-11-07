@@ -2,7 +2,8 @@ import {
   ThemeInspectorAccordion,
   ThemeInspectorSection,
 } from "./theme-inspector-accordion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { InspectorGroup } from "./theme-inspector-parts";
 import { Button, TextField } from "@dixy-ui/react";
 import { DocsSelect } from "./docs-controls";
 import { Slider as DialSlider } from "dialkit";
@@ -60,12 +61,21 @@ const titleCase = (value: string | number) =>
 const storageKey = "dixy.custom-themes.v1";
 type SavedTheme = { id: string; name: string; preset: string };
 
+/** Which slice of the recipe editor to render; the inspector tabs place each one. */
+export type RecipeMixerPart =
+  "material" | "frame" | "advanced" | "character" | "borrow" | "save";
+
 export function ThemeRecipeMixer({
   preset,
   onChange,
+  part,
+  motionExtra,
 }: {
   preset: ThemePreset;
   onChange: (next: ThemePreset) => void;
+  part: RecipeMixerPart;
+  /** Extra controls placed at the end of the Motion group. */
+  motionExtra?: ReactNode;
 }) {
   const document = useMemo(() => editableThemeDocument(preset), [preset]);
   const [name, setName] = useState(document.name);
@@ -254,76 +264,187 @@ export function ThemeRecipeMixer({
       </label>
     );
   }
-  return (
-    <section
-      className="theme-recipe-mixer dialkit-root"
-      aria-label="Theme recipe mixer"
-      data-theme={preset.appearance === "dark" ? "dark" : "light"}
-      data-mode="inline"
-    >
-      <div className="theme-inspector-section-title">
-        <h3>Character</h3>
-        <span>Controls · motion · voice</span>
-      </div>
+  function picker(
+    label: string,
+    value: string,
+    onValue: (value: string) => void,
+    options: readonly (readonly [string, string])[],
+  ) {
+    return (
       <label className="theme-recipe-picker">
-        <span>Control language</span>
-        <DocsSelect
-          value={character.controls}
-          onValueChange={(value) =>
-            onChange(changeThemeCharacter(preset, "controls", value))
-          }
-        >
-          {controlStyles.map((id) => (
+        <span>{label}</span>
+        <DocsSelect value={value} onValueChange={onValue}>
+          {options.map(([id, text]) => (
             <option key={id} value={id}>
-              {characterLabels.controls[id]}
+              {text}
             </option>
           ))}
         </DocsSelect>
       </label>
-      <label className="theme-recipe-picker">
-        <span>Motion personality</span>
-        <DocsSelect
-          value={character.motion.style}
-          onValueChange={(value) =>
-            onChange(changeThemeCharacter(preset, ["motion", "style"], value))
-          }
-        >
-          {motionStyles.map((id) => (
-            <option key={id} value={id}>
-              {characterLabels.motion[id]}
-            </option>
-          ))}
-        </DocsSelect>
-      </label>
-      <div className="theme-dial-stack">
-        {characterSlider("motion", "press", 0.25, "px")}
-        {characterSlider("motion", "tempo", 0.05, "×")}
-      </div>
-      <label className="theme-recipe-picker">
-        <span>Backdrop</span>
-        <DocsSelect
-          value={character.backdrop.pattern}
-          onValueChange={(value) =>
-            onChange(
-              changeThemeCharacter(preset, ["backdrop", "pattern"], value),
-            )
-          }
-        >
-          {backdropPatterns.map((id) => (
-            <option key={id} value={id}>
-              {characterLabels.backdrop[id]}
-            </option>
-          ))}
-        </DocsSelect>
-      </label>
-      {character.backdrop.pattern !== "none" && (
+    );
+  }
+  const content =
+    part === "material" ? (
+      <>
+        {picker(
+          "Material",
+          document.recipes.material.id,
+          (id) => onChange(mixThemeRecipe(preset, "material", id)),
+          Object.entries(materialRecipes).map(([id, r]) => [id, r.label]),
+        )}
         <div className="theme-dial-stack">
-          {characterSlider("backdrop", "intensity", 0.05)}
-          {characterSlider("backdrop", "scale", 0.05, "×")}
+          {parameters("material", ["sheen", "cushion", "textureScale"])}
         </div>
-      )}
-      <ThemeInspectorAccordion>
-        <ThemeInspectorSection title="Window chrome" value="chrome">
+      </>
+    ) : part === "advanced" ? (
+      <div className="theme-dial-stack">
+        {parameters("material", [
+          "surfaceMix",
+          "darkSurfaceMix",
+          "inkTint",
+          "lightAngle",
+          "backdropBlur",
+          "backdropSaturate",
+        ])}
+      </div>
+    ) : part === "frame" ? (
+      <>
+        {picker(
+          "Frame",
+          frame.id,
+          (id) => onChange(mixThemeRecipe(preset, "frame", id)),
+          Object.entries(frameRecipes).map(([id, r]) => [id, r.label]),
+        )}
+        <div className="theme-dial-stack">{parameters("frame")}</div>
+        {organic && (
+          <div className="theme-inspector-subgroup">
+            <span className="theme-inspector-label">{organic.label}</span>
+            {picker(
+              frame.id === "forest" ? "Botanical mix" : "Frame style",
+              frame.ornament.style,
+              (value) => onChange(changeThemeOrnament(preset, "style", value)),
+              organic.styles.map((style) => [style, style]),
+            )}
+            <div className="theme-dial-stack">
+              {ornamentSlider(
+                "density",
+                frame.id === "forest" ? "Leaf density" : undefined,
+              )}
+              {ornamentSlider(
+                "cornerDensity",
+                frame.id === "forest" ? "Corner groves" : undefined,
+              )}
+              {ornamentSlider(
+                "canopyDepth",
+                frame.id === "forest"
+                  ? "Canopy depth"
+                  : frame.id === "cushion"
+                    ? "Squish"
+                    : frame.id === "coral"
+                      ? "Wave depth"
+                      : "Relief",
+              )}
+              {ornamentSlider("variation")}
+            </div>
+            <ThemeInspectorAccordion key={frame.id}>
+              <ThemeInspectorSection
+                title="Shape & motion"
+                value="organic-shape"
+              >
+                {frame.id === "forest" && (
+                  <>
+                    {picker(
+                      "Canopy shape",
+                      frame.ornament.canopy,
+                      (value) =>
+                        onChange(changeThemeOrnament(preset, "canopy", value)),
+                      canopyShapes.map((shape) => [shape, shape]),
+                    )}
+                    {picker(
+                      "Stem character",
+                      frame.ornament.stem,
+                      (value) =>
+                        onChange(changeThemeOrnament(preset, "stem", value)),
+                      stemCharacters.map((stem) => [stem, stem]),
+                    )}
+                  </>
+                )}
+                <div className="theme-dial-stack">
+                  {ornamentSlider("scale")}
+                  {ornamentSlider("stemWeight")}
+                  {ornamentSlider(
+                    "motion",
+                    frame.id === "forest" ? "Breeze" : "Motion strength",
+                  )}
+                  {ornamentSlider("seed")}
+                </div>
+              </ThemeInspectorSection>
+            </ThemeInspectorAccordion>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() =>
+                onChange(
+                  changeThemeOrnament(
+                    preset,
+                    "seed",
+                    (frame.ornament.seed % 9999) + 1,
+                  ),
+                )
+              }
+            >
+              New variation
+            </Button>
+          </div>
+        )}
+      </>
+    ) : part === "character" ? (
+      <>
+        <InspectorGroup title="Controls">
+          {picker(
+            "Control language",
+            character.controls,
+            (value) =>
+              onChange(changeThemeCharacter(preset, "controls", value)),
+            controlStyles.map((id) => [id, characterLabels.controls[id]]),
+          )}
+          <div className="theme-dial-stack">
+            {characterSlider("motion", "press", 0.25, "px")}
+          </div>
+        </InspectorGroup>
+        <InspectorGroup title="Motion">
+          {picker(
+            "Personality",
+            character.motion.style,
+            (value) =>
+              onChange(
+                changeThemeCharacter(preset, ["motion", "style"], value),
+              ),
+            motionStyles.map((id) => [id, characterLabels.motion[id]]),
+          )}
+          <div className="theme-dial-stack">
+            {characterSlider("motion", "tempo", 0.05, "×")}
+          </div>
+          {motionExtra}
+        </InspectorGroup>
+        <InspectorGroup title="Backdrop">
+          {picker(
+            "Pattern",
+            character.backdrop.pattern,
+            (value) =>
+              onChange(
+                changeThemeCharacter(preset, ["backdrop", "pattern"], value),
+              ),
+            backdropPatterns.map((id) => [id, characterLabels.backdrop[id]]),
+          )}
+          {character.backdrop.pattern !== "none" && (
+            <div className="theme-dial-stack">
+              {characterSlider("backdrop", "intensity", 0.05)}
+              {characterSlider("backdrop", "scale", 0.05, "×")}
+            </div>
+          )}
+        </InspectorGroup>
+        <InspectorGroup title="Window chrome">
           {characterSelect(
             "chrome",
             "titlebar",
@@ -395,8 +516,8 @@ export function ThemeRecipeMixer({
             Card.Header becomes the title bar; the Card.Content right after it
             becomes the display well.
           </p>
-        </ThemeInspectorSection>
-        <ThemeInspectorSection title="Type voice" value="type-voice">
+        </InspectorGroup>
+        <InspectorGroup title="Type voice">
           {characterSelect("type", "headingCase", "Heading case", headingCases)}
           {characterSelect(
             "type",
@@ -408,23 +529,14 @@ export function ThemeRecipeMixer({
           <div className="theme-dial-stack">
             {characterSlider("type", "headingTracking", 0.005, "em")}
           </div>
-        </ThemeInspectorSection>
-        <ThemeInspectorSection title="States &amp; details" value="details">
-          <label className="theme-recipe-picker">
-            <span>State cues</span>
-            <DocsSelect
-              value={character.states}
-              onValueChange={(value) =>
-                onChange(changeThemeCharacter(preset, "states", value))
-              }
-            >
-              {stateStyles.map((id) => (
-                <option key={id} value={id}>
-                  {characterLabels.states[id]}
-                </option>
-              ))}
-            </DocsSelect>
-          </label>
+        </InspectorGroup>
+        <InspectorGroup title="States & details">
+          {picker(
+            "State cues",
+            character.states,
+            (value) => onChange(changeThemeCharacter(preset, "states", value)),
+            stateStyles.map((id) => [id, characterLabels.states[id]]),
+          )}
           {characterSelect("details", "focus", "Focus style", focusStyles)}
           {characterSelect("details", "divider", "Dividers", dividerStyles)}
           {characterSelect(
@@ -442,234 +554,79 @@ export function ThemeRecipeMixer({
           <div className="theme-dial-stack">
             {characterSlider("details", "iconStroke", 0.25, "px")}
           </div>
-        </ThemeInspectorSection>
-        <ThemeInspectorSection title="Borrow a character" value="borrow">
-          <label className="theme-recipe-picker">
-            <span>Copy character from</span>
-            <DocsSelect
-              value=""
-              onValueChange={(id) =>
-                id && onChange(applyStarterCharacter(preset, id))
-              }
-            >
-              <option value="">Choose a starter</option>
-              <option value="none">Neutral (Original Dixy)</option>
-              {Object.values(installedThemeDocuments).map((doc) => (
-                <option key={doc.id} value={doc.id}>
-                  {doc.name}
-                </option>
-              ))}
-            </DocsSelect>
-          </label>
-        </ThemeInspectorSection>
-      </ThemeInspectorAccordion>
-      <div className="theme-inspector-section-title">
-        <h3>Surface</h3>
-        <span>DialKit</span>
-      </div>
+        </InspectorGroup>
+      </>
+    ) : part === "borrow" ? (
       <label className="theme-recipe-picker">
-        <span>Material</span>
+        <span>Copy character from</span>
         <DocsSelect
-          value={document.recipes.material.id}
+          value=""
           onValueChange={(id) =>
-            onChange(mixThemeRecipe(preset, "material", id))
+            id && onChange(applyStarterCharacter(preset, id))
           }
         >
-          {Object.entries(materialRecipes).map(([id, recipe]) => (
-            <option key={id} value={id}>
-              {recipe.label}
+          <option value="">Choose a starter</option>
+          <option value="none">Neutral (Original Dixy)</option>
+          {Object.values(installedThemeDocuments).map((doc) => (
+            <option key={doc.id} value={doc.id}>
+              {doc.name}
             </option>
           ))}
         </DocsSelect>
       </label>
-      <div className="theme-dial-stack">
-        {parameters("material", ["sheen", "cushion", "textureScale"])}
-      </div>
-      <ThemeInspectorAccordion
-        key={frame.id}
-        defaultValue={organic ? ["organic"] : []}
-      >
-        {organic && (
-          <ThemeInspectorSection title={organic.label} value="organic">
-            <label className="theme-recipe-picker">
-              <span>
-                {frame.id === "forest" ? "Botanical mix" : "Frame style"}
-              </span>
+    ) : (
+      <>
+        <div className="theme-mixer-controls">
+          <label>
+            <span>Theme name</span>
+            <TextField
+              aria-label="Theme name"
+              value={name}
+              maxLength={80}
+              onChange={(event) => setName(event.target.value)}
+            />
+          </label>
+          <Button size="sm" onClick={save}>
+            Save theme locally
+          </Button>
+          {saved.length > 0 && (
+            <label>
+              <span>Saved themes</span>
               <DocsSelect
-                value={frame.ornament.style}
-                onValueChange={(value) =>
-                  onChange(changeThemeOrnament(preset, "style", value))
+                value={
+                  saved.some((s) => s.id === document.id) ? document.id : ""
                 }
+                onValueChange={(id) => {
+                  const entry = saved.find((s) => s.id === id);
+                  if (entry) onChange(parseThemePreset(entry.preset));
+                }}
               >
-                {organic.styles.map((style) => (
-                  <option key={style} value={style}>
-                    {style}
+                <option value="">Choose a saved theme</option>
+                {saved.map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
                   </option>
                 ))}
               </DocsSelect>
             </label>
-            <div className="theme-dial-stack">
-              {ornamentSlider(
-                "density",
-                frame.id === "forest" ? "Leaf density" : undefined,
-              )}
-              {ornamentSlider(
-                "cornerDensity",
-                frame.id === "forest" ? "Corner groves" : undefined,
-              )}
-              {ornamentSlider(
-                "canopyDepth",
-                frame.id === "forest"
-                  ? "Canopy depth"
-                  : frame.id === "cushion"
-                    ? "Squish"
-                    : frame.id === "coral"
-                      ? "Wave depth"
-                      : "Relief",
-              )}
-              {ornamentSlider("variation")}
-            </div>
-            <ThemeInspectorAccordion>
-              <ThemeInspectorSection
-                title="Shape & motion"
-                value="organic-shape"
-              >
-                {frame.id === "forest" && (
-                  <>
-                    <label className="theme-recipe-picker">
-                      <span>Canopy shape</span>
-                      <DocsSelect
-                        value={frame.ornament.canopy}
-                        onValueChange={(value) =>
-                          onChange(changeThemeOrnament(preset, "canopy", value))
-                        }
-                      >
-                        {canopyShapes.map((shape) => (
-                          <option key={shape} value={shape}>
-                            {shape}
-                          </option>
-                        ))}
-                      </DocsSelect>
-                    </label>
-                    <label className="theme-recipe-picker">
-                      <span>Stem character</span>
-                      <DocsSelect
-                        value={frame.ornament.stem}
-                        onValueChange={(value) =>
-                          onChange(changeThemeOrnament(preset, "stem", value))
-                        }
-                      >
-                        {stemCharacters.map((stem) => (
-                          <option key={stem} value={stem}>
-                            {stem}
-                          </option>
-                        ))}
-                      </DocsSelect>
-                    </label>
-                  </>
-                )}
-                <div className="theme-dial-stack">
-                  {ornamentSlider("scale")}
-                  {ornamentSlider("stemWeight")}
-                  {ornamentSlider(
-                    "motion",
-                    frame.id === "forest" ? "Breeze" : "Motion strength",
-                  )}
-                  {ornamentSlider("seed")}
-                </div>
-              </ThemeInspectorSection>
-            </ThemeInspectorAccordion>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() =>
-                onChange(
-                  changeThemeOrnament(
-                    preset,
-                    "seed",
-                    (frame.ornament.seed % 9999) + 1,
-                  ),
-                )
-              }
-            >
-              New variation
-            </Button>
-          </ThemeInspectorSection>
+          )}
+        </div>
+        {notice && (
+          <p role="status" className="theme-mixer-notice">
+            {notice}
+          </p>
         )}
-        <ThemeInspectorSection title="Frame &amp; spacing" value="frame">
-          <label className="theme-recipe-picker">
-            <span>Frame</span>
-            <DocsSelect
-              value={document.recipes.frame.id}
-              onValueChange={(id) =>
-                onChange(mixThemeRecipe(preset, "frame", id))
-              }
-            >
-              {Object.entries(frameRecipes).map(([id, recipe]) => (
-                <option key={id} value={id}>
-                  {recipe.label}
-                </option>
-              ))}
-            </DocsSelect>
-          </label>
-          <div className="theme-dial-stack">{parameters("frame")}</div>
-        </ThemeInspectorSection>
-        <ThemeInspectorSection title="Advanced surface" value="surface">
-          <div className="theme-dial-stack">
-            {parameters("material", [
-              "surfaceMix",
-              "darkSurfaceMix",
-              "inkTint",
-              "lightAngle",
-              "backdropBlur",
-              "backdropSaturate",
-            ])}
-          </div>
-        </ThemeInspectorSection>
-        <ThemeInspectorSection title="Save &amp; restore" value="save">
-          <div className="theme-mixer-controls">
-            <label>
-              <span>Theme name</span>
-              <TextField
-                aria-label="Theme name"
-                value={name}
-                maxLength={80}
-                onChange={(event) => setName(event.target.value)}
-              />
-            </label>
-            <Button size="sm" onClick={save}>
-              Save theme locally
-            </Button>
-            {saved.length > 0 && (
-              <label>
-                <span>Saved themes</span>
-                <DocsSelect
-                  value={
-                    saved.some((s) => s.id === document.id) ? document.id : ""
-                  }
-                  onValueChange={(id) => {
-                    const entry = saved.find((s) => s.id === id);
-                    if (entry) onChange(parseThemePreset(entry.preset));
-                  }}
-                >
-                  <option value="">Choose a saved theme</option>
-                  {saved.map((entry) => (
-                    <option key={entry.id} value={entry.id}>
-                      {entry.name}
-                    </option>
-                  ))}
-                </DocsSelect>
-              </label>
-            )}
-          </div>
-        </ThemeInspectorSection>
-      </ThemeInspectorAccordion>
-      {notice && (
-        <p role="status" className="theme-mixer-notice">
-          {notice}
-        </p>
-      )}
-      <p className="theme-mixer-help">Changes are included in Get code.</p>
-    </section>
+      </>
+    );
+  // DialKit reads its tokens from a .dialkit-root ancestor.
+  return (
+    <div
+      className="theme-recipe-mixer dialkit-root"
+      data-theme={preset.appearance === "dark" ? "dark" : "light"}
+      data-mode="inline"
+      data-part={part}
+    >
+      {content}
+    </div>
   );
 }

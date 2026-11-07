@@ -1,10 +1,5 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useContext, useState, type ReactNode } from "react";
+import { AppAppearanceContext } from "./app-appearance-context";
 import { appAppearanceCookie, type AppAppearance } from "../lib/app-appearance";
 import {
   defaultPreviewTheme,
@@ -22,14 +17,6 @@ function saveCookie(name: string, value: string) {
     // Settings still work for this visit if cookie access is blocked.
   }
 }
-
-const AppAppearanceContext = createContext<{
-  appearance: AppAppearance;
-  setAppearance: (appearance: AppAppearance) => void;
-  previewTheme: PreviewThemeSettings;
-  setPreviewTheme: (patch: Partial<PreviewThemeSettings>) => void;
-  resetPreviewTheme: () => void;
-} | null>(null);
 
 export function AppAppearanceProvider({
   initialAppearance,

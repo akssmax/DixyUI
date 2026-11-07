@@ -168,7 +168,7 @@ export const baseComponentRegistry = {
       {
         name: "variant",
         label: "Variant",
-        options: ["line", "solid", "soft", "outline"],
+        options: ["line", "solid", "soft", "outline", "segmented"],
         initial: "line",
       },
       {
@@ -1865,7 +1865,7 @@ export const baseComponentRegistry = {
     category: "Inputs",
     description: "Related states, held together.",
     detail:
-      "ToggleGroup owns selection and roving focus. Toggle owns size, emphasis, color, radius and finish. attached connects borders; it does not turn the group into a ButtonGroup.",
+      "ToggleGroup owns selection and roving focus. Toggle owns size, emphasis, color, radius and finish. attached connects borders; it does not turn the group into a ButtonGroup. segmented draws a sunken track with a raised thumb on the pressed toggle, for compact exclusive choices.",
     primitive: "ToggleGroup",
     api: ["ToggleProps", "ToggleGroupProps"],
     source: "components/toggle-group.tsx",
@@ -1874,7 +1874,7 @@ export const baseComponentRegistry = {
     composition: {
       tree: "ToggleGroup (value, multiple, orientation)\n\u251c\u2500\u2500 Toggle value=bold\n\u251c\u2500\u2500 Toggle value=italic\n\u2514\u2500\u2500 Toggle value=underline",
       detail:
-        "ToggleGroup owns selection and roving focus. Toggle owns size, emphasis, color, radius and finish. attached connects borders; it does not turn the group into a ButtonGroup.",
+        "ToggleGroup owns selection and roving focus. Toggle owns size, emphasis, color, radius and finish. attached connects borders; it does not turn the group into a ButtonGroup. segmented draws a sunken track with a raised thumb on the pressed toggle, for compact exclusive choices.",
     },
     controls: [
       {
@@ -1916,6 +1916,11 @@ export const baseComponentRegistry = {
       {
         name: "attached",
         label: "Attached",
+        initial: false,
+      },
+      {
+        name: "segmented",
+        label: "Segmented",
         initial: false,
       },
       {

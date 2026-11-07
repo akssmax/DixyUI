@@ -1,0 +1,530 @@
+/*
+ * Playground inspector: a fixed header, four tabs, one scrolling body and a
+ * footer that always shows how far the theme has moved from its starter.
+ * Loaded after theme-skins.css so these rules settle the older panel styles.
+ */
+.theme-standalone .theme-editor-layout {
+  grid-template-columns: minmax(0, 1fr) 340px;
+}
+.theme-standalone .theme-customization-panel.theme-inspector {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+.theme-inspector:focus-visible {
+  outline: 2px solid var(--dixy-color-border-focus);
+  outline-offset: -2px;
+}
+
+/* Header */
+.theme-inspector-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 18px 12px;
+}
+.theme-inspector-swatch {
+  flex-shrink: 0;
+  inline-size: 36px;
+  block-size: 36px;
+  border-radius: 10px;
+  background: conic-gradient(
+    var(--swatch-a) 0 50%,
+    var(--swatch-b) 0 75%,
+    var(--swatch-c) 0
+  );
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--dixy-color-text-primary) 12%, transparent);
+}
+.theme-inspector-head > div {
+  flex: 1;
+  min-inline-size: 0;
+}
+.theme-inspector-head h2 {
+  margin: 0;
+  font: 600 14px/1.35 var(--dixy-font-sans);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.theme-inspector-head p {
+  margin: 2px 0 0;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.theme-inspector > .theme-message {
+  margin: 0 18px 8px;
+}
+
+/* Tabs */
+.theme-inspector-tabs.dixy-tabs-root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-block-size: 0;
+}
+.theme-inspector-tablist {
+  flex-shrink: 0;
+  padding-inline: 10px;
+}
+.theme-inspector-tablist .dixy-tabs-tab {
+  flex-direction: column;
+  gap: 3px;
+  block-size: auto;
+  min-block-size: 54px;
+  padding-block: 8px;
+  font-size: 12px;
+}
+.theme-inspector-tab-icon {
+  position: relative;
+  display: inline-flex;
+}
+.theme-inspector-dot {
+  position: absolute;
+  inset-block-start: -2px;
+  inset-inline-end: -5px;
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: var(--dixy-color-background-action-primary);
+  box-shadow: 0 0 0 2px var(--dixy-color-background-surface-raised);
+}
+.theme-inspector-body {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+}
+.theme-inspector-panel {
+  padding: 4px 18px 18px;
+}
+.theme-inspector-panel:focus-visible {
+  outline: 2px solid var(--dixy-color-border-focus);
+  outline-offset: -2px;
+}
+.theme-inspector-intro {
+  margin: 12px 0 2px;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+}
+
+/* Groups and fields */
+.theme-inspector-group {
+  display: grid;
+  gap: 14px;
+  padding-block: 16px;
+  border-block-end: 1px solid var(--dixy-color-border-subtle);
+}
+.theme-inspector-panel > .theme-inspector-group:last-child,
+.theme-recipe-mixer[data-part="character"] > .theme-inspector-group:last-child {
+  border-block-end: 0;
+}
+.theme-inspector-group-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-block-size: 24px;
+}
+.theme-inspector-group-head h3 {
+  margin: 0;
+  font: 600 13px/1.4 var(--dixy-font-sans);
+}
+.theme-inspector-hint {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+}
+.theme-inspector-field {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+}
+.theme-inspector-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+}
+.theme-inspector-label em {
+  font-style: normal;
+  color: var(--dixy-color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.theme-inspector .theme-control {
+  display: grid;
+  gap: 8px;
+  min-inline-size: 0;
+  font: var(--dixy-font-caption);
+  color: var(--dixy-color-text-secondary);
+}
+.theme-inspector .theme-control .docs-select,
+.theme-inspector .theme-recipe-picker .docs-select {
+  inline-size: 100%;
+}
+.theme-inspector-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.theme-inspector-subgroup {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: 10px;
+}
+
+/* The recipe mixer slices sit flat inside the groups. */
+.theme-customization-panel.theme-inspector .theme-recipe-mixer {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.theme-inspector .theme-recipe-mixer[data-part="character"] {
+  gap: 0;
+}
+.theme-inspector .theme-recipe-picker {
+  margin: 0;
+}
+.theme-inspector .theme-mixer-help {
+  margin: 0;
+}
+/* The group above already draws the divider; avoid a doubled rule. */
+.theme-customization-panel.theme-inspector .theme-inspector-accordion {
+  margin-top: 0;
+  border-top: 0;
+}
+
+/* Starter gallery */
+.theme-customization-panel .theme-inspector-starters.theme-skin-strip {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+/*
+ * The shared miniature is drawn for 150px cards. Three columns leave ~90px,
+ * so the parts are rescaled here: smaller type, the switch tucked into the
+ * corner, and room kept for skins that draw an offset shadow (Retro OS).
+ */
+.theme-inspector-starters .theme-skin-option.dixy-button {
+  position: relative;
+  gap: 6px;
+  padding: 4px;
+}
+.theme-inspector-starters .theme-skin-miniature {
+  box-sizing: border-box;
+  inline-size: calc(100% - 2px);
+  block-size: 46px;
+}
+.theme-inspector-starters .theme-mini-title {
+  inset-inline-start: 8px;
+  inset-block-start: 3px;
+  font-size: 17px;
+}
+.theme-inspector-starters .theme-mini-title::after {
+  display: none;
+}
+.theme-inspector-starters .theme-mini-switch {
+  inset-inline-end: 6px;
+  inset-block-start: 6px;
+  inline-size: 20px;
+  block-size: 10px;
+  box-shadow: inset -9px 0 0 2px var(--skin-mid);
+}
+.theme-inspector-starters .theme-mini-line {
+  inset-inline-start: 8px;
+  inset-block-start: 28px;
+  inline-size: 50%;
+}
+.theme-inspector-starters .theme-mini-button {
+  inset-inline-start: 8px;
+  inset-block-start: 35px;
+  inline-size: 22px;
+  block-size: 6px;
+}
+.theme-inspector-starters .theme-skin-option-name {
+  display: block;
+  padding: 0 3px 2px;
+  font-size: 11px;
+  line-height: 1.3;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+/* The check sits on the thumbnail so it never squeezes the name. */
+.theme-inspector-starters .theme-skin-check {
+  position: absolute;
+  inset-block-start: 30px;
+  inset-inline-end: 11px;
+  display: grid;
+  place-items: center;
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: 50%;
+  color: var(--dixy-color-text-on-action-primary, white);
+  background: var(--dixy-color-background-action-primary);
+  box-shadow: 0 0 0 2px var(--dixy-color-background-surface-raised);
+}
+.theme-inspector .theme-inspector-more {
+  justify-self: start;
+}
+.theme-inspector-empty {
+  margin: 0;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+}
+
+/* Accent swatches: one tab stop, arrow keys move between colours. */
+.theme-accent-swatches.dixy-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.theme-accent-swatch.dixy-toggle {
+  inline-size: 22px;
+  block-size: 22px;
+  min-inline-size: 0;
+  min-block-size: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--dixy-color-text-primary) 14%, transparent);
+}
+.theme-accent-swatch.dixy-toggle:hover {
+  background: var(--swatch);
+  transform: scale(1.08);
+}
+.theme-accent-swatch.dixy-toggle[data-pressed] {
+  background: var(--swatch);
+  box-shadow:
+    0 0 0 2px var(--dixy-color-background-surface-raised),
+    0 0 0 4px var(--dixy-color-text-primary);
+}
+.theme-accent-custom.dixy-toggle,
+.theme-accent-custom.dixy-toggle:hover,
+.theme-accent-custom.dixy-toggle[data-pressed] {
+  background: conic-gradient(
+    oklch(0.7 0.18 0),
+    oklch(0.7 0.18 90),
+    oklch(0.7 0.18 180),
+    oklch(0.7 0.18 270),
+    oklch(0.7 0.18 360)
+  );
+}
+.theme-inspector .theme-custom-color {
+  margin: 0;
+}
+
+/* Component finish tiles */
+.theme-finish-grid.dixy-toggle-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.theme-finish-option.dixy-toggle {
+  flex-direction: column;
+  gap: 5px;
+  block-size: auto;
+  padding: 8px 4px;
+  font-size: 11px;
+}
+.theme-finish-option i {
+  inline-size: 28px;
+  block-size: 16px;
+  border-radius: 5px;
+  background: var(--dixy-color-background-action-primary);
+}
+.theme-finish-option i[data-finish="inherit"] {
+  background: repeating-linear-gradient(
+    135deg,
+    var(--dixy-color-border-subtle) 0 4px,
+    transparent 4px 8px
+  );
+  box-shadow: inset 0 0 0 1px var(--dixy-color-border-subtle);
+}
+.theme-finish-option i[data-finish="glossy"] {
+  background: linear-gradient(
+    color-mix(in oklab, var(--dixy-color-background-action-primary) 60%, white),
+    var(--dixy-color-background-action-primary)
+  );
+}
+.theme-finish-option i[data-finish="soft"] {
+  background: color-mix(
+    in oklab,
+    var(--dixy-color-background-action-primary) 55%,
+    white
+  );
+  box-shadow: inset 0 -3px 0 rgb(0 0 0 / 0.15);
+}
+.theme-finish-option i[data-finish="metal"] {
+  background: linear-gradient(135deg, #dcdcdc, #8a8a8a, #efefef);
+}
+.theme-finish-option i[data-finish="paper"] {
+  background: #e9e1d2;
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08);
+}
+
+/* Export */
+.theme-inspector-code {
+  max-block-size: 260px;
+  overflow: auto;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.theme-inspector-actions {
+  display: grid;
+  gap: 8px;
+}
+.theme-inspector-actions .dixy-button {
+  justify-content: flex-start;
+}
+
+/* Footer */
+.theme-inspector-foot {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 10px 18px;
+  border-block-start: 1px solid var(--dixy-color-border-subtle);
+}
+.theme-inspector-foot > span {
+  flex: 1;
+  min-inline-size: 0;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Preview scene tabs replace the old scene dropdown. */
+.theme-standalone .theme-preview-toolbar {
+  flex-wrap: nowrap;
+}
+.theme-scene-tabs-root.dixy-tabs-root {
+  display: block;
+}
+.theme-scene-tabs.dixy-tabs-list {
+  flex: 0 1 auto;
+  flex-wrap: nowrap;
+  min-inline-size: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.theme-scene-tabs::-webkit-scrollbar {
+  display: none;
+}
+.theme-scene-tabs .dixy-tabs-tab {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.theme-scene-rule {
+  flex-shrink: 0;
+  inline-size: 1px;
+  margin: 8px 4px;
+  background: var(--dixy-color-border-subtle);
+}
+.theme-preview-toolbar .theme-appearance {
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+.theme-scene-panel:focus-visible {
+  outline: 2px solid var(--dixy-color-border-focus);
+  outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .theme-standalone .theme-editor-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .theme-standalone .theme-customization-panel.theme-inspector {
+    overflow: visible;
+  }
+  .theme-inspector-body {
+    overflow: visible;
+  }
+  .theme-inspector-foot {
+    position: sticky;
+    inset-block-end: 0;
+    background: var(--dixy-color-background-surface-raised);
+  }
+}
+@media (max-width: 540px) {
+  .theme-standalone .theme-preview-toolbar {
+    flex-wrap: wrap;
+  }
+  .theme-scene-tabs {
+    flex-basis: 100%;
+  }
+  .theme-preview-toolbar .theme-appearance {
+    margin-inline-start: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-accent-swatch.dixy-toggle:hover {
+    transform: none;
+  }
+}
+.theme-preview-toolbar .theme-animate-toggle {
+  flex-shrink: 0;
+}
+/* Shiki emits both palettes; follow the playground's own appearance. */
+.theme-standalone[data-appearance="dark"] .theme-inspector-code .shiki,
+.theme-standalone[data-appearance="dark"] .theme-inspector-code .shiki span {
+  color: var(--shiki-dark);
+}
+
+/*
+ * Segmented choices come from the library (Tabs variant="segmented",
+ * ToggleGroup segmented). Only layout is set here: fill the row and let long
+ * labels truncate instead of overflowing.
+ */
+.theme-segmented.dixy-toggle-group {
+  display: flex;
+  inline-size: 100%;
+}
+.theme-segmented > .dixy-toggle {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  padding-inline: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Inspector tabs: line variant, its rule matched to the panel dividers. */
+.theme-inspector-tablist.dixy-tabs-list {
+  border-color: var(--dixy-color-border-subtle);
+  background: transparent;
+}
+.theme-inspector-tablist .dixy-tabs-tab {
+  color: var(--dixy-color-text-secondary);
+}
+.theme-inspector-tablist .dixy-tabs-tab[data-active] {
+  color: var(--dixy-color-text-primary);
+  background: transparent;
+}
+
+/* Card pickers (finish tiles, like starter cards) share one selected style. */
+.theme-finish-grid > .theme-finish-option.dixy-toggle {
+  border: var(--dixy-border-subtle);
+  background: var(--dixy-color-background-surface-raised);
+  color: var(--dixy-color-text-secondary);
+}
+.theme-finish-grid > .theme-finish-option.dixy-toggle[data-pressed] {
+  border-color: var(--dixy-color-border-focus);
+  box-shadow: 0 0 0 1px var(--dixy-color-border-focus);
+  color: var(--dixy-color-text-primary);
+}

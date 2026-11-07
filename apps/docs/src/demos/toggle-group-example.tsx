@@ -7,6 +7,7 @@ type Props = Pick<
   "size" | "variant" | "color" | "radius" | "material"
 > & {
   attached?: boolean;
+  segmented?: boolean;
   orientation?: "horizontal" | "vertical";
   disabled?: boolean;
   multiple?: boolean;
@@ -14,6 +15,7 @@ type Props = Pick<
 
 export default function ToggleGroupExample({
   attached = false,
+  segmented = false,
   orientation = "horizontal",
   size = "md",
   variant = "soft",
@@ -28,6 +30,7 @@ export default function ToggleGroupExample({
       <ToggleGroup
         orientation={orientation}
         attached={attached}
+        segmented={segmented}
         aria-label="Text formatting"
         multiple={multiple}
         disabled={disabled}

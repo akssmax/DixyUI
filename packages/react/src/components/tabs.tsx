@@ -11,8 +11,13 @@ export interface TabsRootProps extends Omit<
 > {
   /** Trigger proportions; preserves the shared minimum interaction target. @default md */
   size?: "sm" | "md" | "lg";
-  /** Selected emphasis. Line preserves Dixy's original underline treatment. @default line */
-  variant?: "line" | "solid" | "soft" | "outline";
+  /**
+   * Selected emphasis. Line preserves Dixy's original underline treatment.
+   * Segmented draws a sunken track with a raised surface thumb for dense
+   * view switchers; it stays neutral, so `color` does not tint it.
+   * @default line
+   */
+  variant?: "line" | "solid" | "soft" | "outline" | "segmented";
   /** Selected semantic color; inactive labels stay neutral. @default accent */
   color?: "accent" | "neutral" | "danger" | "success";
   /** Trigger and selected-surface rounding. @default Theme.radius */

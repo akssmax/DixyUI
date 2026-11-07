@@ -1,0 +1,639 @@
+/* Landing page. One Theme wraps the whole page and wears the starter the
+   visitor picks, so this file is layout only: colour, type, radius, material
+   and chrome all come from Dixy components and the active skin. */
+
+.landing {
+  /* The docs CodeBlock reads these docs-shell variables. */
+  --doc-line: var(--dixy-color-border-subtle);
+  --doc-code: var(--dixy-color-background-surface-sunken);
+  --doc-muted: var(--dixy-color-text-secondary);
+  --landing-gutter: clamp(16px, 4vw, 48px);
+  --landing-max: 1200px;
+  min-block-size: 100svh;
+  background-color: var(
+    --dixy-skin-ground,
+    var(--dixy-color-background-canvas)
+  );
+  background-image: var(--dixy-skin-canvas, none);
+  color: var(--dixy-color-text-primary);
+  font: var(--dixy-font-body-md);
+  font-family: var(--dixy-font-sans);
+  letter-spacing: var(--dixy-font-body-md-letter-spacing);
+  isolation: isolate;
+  overflow-x: clip;
+}
+/* Shiki ships both palettes; docs.css switches them for .docs-app only. */
+.landing[data-appearance="dark"] .shiki,
+.landing[data-appearance="dark"] .shiki span {
+  color: var(--shiki-dark);
+}
+.landing main {
+  outline: none;
+}
+.landing .dixy-heading,
+.landing .dixy-text {
+  margin: 0;
+}
+.landing ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Header */
+.landing-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  block-size: 60px;
+  padding-inline: var(--landing-gutter);
+  background: color-mix(
+    in oklab,
+    var(--dixy-skin-ground, var(--dixy-color-background-canvas)) 88%,
+    transparent
+  );
+  backdrop-filter: blur(12px);
+  border-block-end: 1px solid var(--dixy-color-border-subtle);
+}
+.landing-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--dixy-accent);
+  text-decoration: none;
+}
+.landing-brand strong {
+  font: 700 22px/1 var(--dixy-font-display);
+  letter-spacing: -0.05em;
+  color: var(--dixy-color-text-primary);
+}
+.landing-brand strong span {
+  margin-inline-start: 3px;
+  font: var(--dixy-font-caption);
+  letter-spacing: 0;
+  color: var(--dixy-color-text-secondary);
+}
+.landing-header nav {
+  display: flex;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+
+/* Hero */
+.landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 20px;
+  max-inline-size: 860px;
+  margin-inline: auto;
+  padding: clamp(56px, 10vw, 120px) var(--landing-gutter) clamp(32px, 5vw, 56px);
+  text-align: center;
+}
+.landing .landing-display {
+  font: 650 clamp(40px, 8vw, 84px) / 1 var(--dixy-font-display);
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+.landing-display em {
+  font-style: italic;
+  color: var(--dixy-color-text-action-primary, var(--dixy-accent));
+}
+.landing-lede {
+  max-inline-size: 36rem;
+  text-wrap: pretty;
+}
+.landing-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.landing a.dixy-button {
+  text-decoration: none;
+}
+.landing-install {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  inline-size: min(100%, 26rem);
+  margin-block-start: 8px;
+}
+.landing-install .dixy-input {
+  flex: 1;
+  min-inline-size: 0;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+}
+
+/* Sections */
+.landing-section {
+  display: grid;
+  gap: 28px;
+  max-inline-size: var(--landing-max);
+  margin-inline: auto;
+  padding: clamp(48px, 8vw, 96px) var(--landing-gutter) 0;
+}
+.landing-section-head {
+  display: grid;
+  gap: 12px;
+  max-inline-size: 44rem;
+}
+.landing-section-head-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  max-inline-size: none;
+}
+.landing-section-head-row > div {
+  display: grid;
+  gap: 12px;
+}
+.landing .landing-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 600 11px/1.5 var(--dixy-font-sans);
+  letter-spacing: 0.16em;
+}
+.landing .landing-title {
+  font: 650 clamp(28px, 4.4vw, 46px) / 1.08 var(--dixy-font-display);
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+/* Showcase composition: layout only. */
+.landing-composition {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.landing-card,
+.landing-feature,
+.landing-final {
+  /* Skin frames and ornaments paint outside the card. */
+  overflow: visible;
+  min-inline-size: 0;
+}
+.landing-card-intro,
+.landing-card-team {
+  grid-column: span 5;
+}
+.landing-card-table,
+.landing-card-form {
+  grid-column: span 7;
+}
+.landing-card > .dixy-card-header,
+.landing-card > .dixy-tabs > .dixy-card-header,
+.landing-feature > .dixy-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+.landing-feature > .dixy-card-header {
+  justify-content: flex-start;
+}
+.landing-feature > .dixy-card-header svg {
+  color: var(--dixy-accent);
+}
+.landing-card .dixy-card-content {
+  display: grid;
+  gap: 14px;
+  margin-block-end: 0;
+}
+.landing-card-eyebrow {
+  color: var(--dixy-color-text-secondary);
+  font: 600 11px/1.5 var(--dixy-font-sans);
+  letter-spacing: 0.14em;
+}
+.landing-card-headline {
+  font: var(--dixy-font-heading-lg, 600 26px/1.15 var(--dixy-font-display));
+  text-wrap: balance;
+}
+.landing-card-actions,
+.landing-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.landing-dialog-actions {
+  justify-content: flex-end;
+  margin-block-start: 20px;
+}
+.landing-progress {
+  display: grid;
+  gap: 8px;
+  margin-block-start: 6px;
+}
+.landing-progress-label,
+.landing-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.landing-setting > span {
+  display: grid;
+}
+.landing-settings {
+  display: grid;
+  gap: 16px;
+  padding-block: 6px;
+}
+.landing-table-scroll {
+  overflow-x: auto;
+  margin-inline: -4px;
+  padding-inline: 4px;
+}
+.landing-table-scroll .dixy-table {
+  inline-size: 100%;
+}
+/* Narrow cards scroll the table sideways instead of breaking words. */
+.landing-table-scroll th,
+.landing-table-scroll td {
+  white-space: nowrap;
+}
+.landing-table-scroll code {
+  font:
+    12px/1.5 "JetBrains Mono",
+    ui-monospace,
+    monospace;
+}
+.landing-table-time {
+  display: block;
+  color: var(--dixy-color-text-tertiary);
+  font: var(--dixy-font-caption);
+}
+.landing-form {
+  display: grid;
+  gap: 14px;
+}
+.landing-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: var(--dixy-font-body-sm);
+}
+.landing-wide {
+  inline-size: 100%;
+}
+.landing-person {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Snippet */
+.landing-snippet {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px;
+  align-items: start;
+  margin-block-start: 12px;
+}
+.landing-snippet > div:first-child {
+  display: grid;
+  gap: 8px;
+}
+
+/* Closing call to action */
+.landing-final > .dixy-card-content {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding-block: clamp(24px, 5vw, 56px);
+  text-align: center;
+}
+.landing-final .dixy-text {
+  max-inline-size: 32rem;
+}
+.landing-footer {
+  display: grid;
+  gap: 24px;
+  max-inline-size: var(--landing-max);
+  margin-inline: auto;
+  padding: clamp(48px, 8vw, 96px) var(--landing-gutter) 40px;
+}
+.landing-footer > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+.landing-footer .dixy-text:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* App window: the live product demo with a floating theme dock. */
+.landing-window-section {
+  position: relative;
+  max-inline-size: var(--landing-max);
+  margin-inline: auto;
+  padding-inline: var(--landing-gutter);
+}
+.landing-window {
+  overflow: hidden;
+  border: 1px solid
+    var(--dixy-color-border-default, var(--dixy-color-border-subtle));
+  border-radius: 18px;
+  background-color: var(
+    --dixy-skin-ground,
+    var(--dixy-color-background-canvas)
+  );
+  background-image: var(--dixy-skin-canvas, none);
+  box-shadow: var(--dixy-shadow-floating, 0 24px 60px rgb(0 0 0 / 0.18));
+}
+.landing-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-inline-size: 0;
+  padding: 8px 16px 0;
+  border-block-end: 1px solid var(--dixy-color-border-subtle);
+  background: var(--dixy-color-background-surface, transparent);
+}
+.landing-window-lights {
+  display: flex;
+  gap: 6px;
+}
+.landing-window-lights i {
+  inline-size: 11px;
+  block-size: 11px;
+  border-radius: 50%;
+  background: var(--dixy-color-border-default, var(--dixy-color-border-subtle));
+}
+.landing-window-tabs {
+  min-inline-size: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.landing-window-body {
+  /* Room under the scenes for the floating dock. */
+  padding: clamp(14px, 2.5vw, 28px) clamp(14px, 2.5vw, 28px) 96px;
+  min-block-size: 520px;
+}
+.landing-window-body > .dixy-tabs-panel {
+  outline-offset: 4px;
+}
+.landing-window-loading {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  min-block-size: 420px;
+}
+.landing-dock-rail {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 24px;
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--landing-gutter);
+  pointer-events: none;
+}
+.landing-dock {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-inline-size: 100%;
+  padding: 8px;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: 999px;
+  background: color-mix(
+    in oklab,
+    var(
+        --dixy-color-background-surface-raised,
+        var(--dixy-color-background-canvas)
+      )
+      92%,
+    transparent
+  );
+  backdrop-filter: blur(14px);
+  box-shadow: var(--dixy-shadow-floating, 0 16px 40px rgb(0 0 0 / 0.2));
+  pointer-events: auto;
+}
+.landing-dock .dixy-select-trigger {
+  min-inline-size: 0;
+  inline-size: 11.5rem;
+}
+.landing-dock-swatch {
+  flex-shrink: 0;
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--starter-a) 0 50%,
+    var(--starter-b) 0 75%,
+    var(--starter-c) 0
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, currentColor 18%, transparent);
+}
+.landing-dock-swatch.is-small {
+  inline-size: 16px;
+  block-size: 16px;
+}
+.landing-dock-rule {
+  align-self: stretch;
+}
+
+/* Starter gallery */
+.landing-section-aside {
+  max-inline-size: 30rem;
+}
+.landing-gallery {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.landing .landing-gallery-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  justify-items: start;
+  gap: 2px 12px;
+  block-size: auto;
+  min-inline-size: 0;
+  padding: 12px;
+  text-align: start;
+  white-space: normal;
+}
+.landing-gallery-swatch {
+  grid-row: span 2;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  inline-size: 40px;
+  block-size: 40px;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, currentColor 14%, transparent);
+}
+.landing-gallery-swatch i:first-child {
+  grid-row: span 2;
+  background: var(--starter-a);
+}
+.landing-gallery-swatch i:nth-child(2) {
+  background: var(--starter-b);
+}
+.landing-gallery-swatch i:nth-child(3) {
+  background: var(--starter-c);
+}
+.landing-gallery-name {
+  font: var(--dixy-font-label-md);
+}
+.landing-gallery-note {
+  overflow: hidden;
+  max-inline-size: 100%;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Bento */
+.landing-bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.landing-bento-wide {
+  grid-column: span 2;
+}
+.landing-bento-card {
+  overflow: visible;
+  min-inline-size: 0;
+}
+.landing-bento-card > .dixy-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.landing-bento-card > .dixy-card-header svg {
+  color: var(--dixy-accent);
+}
+.landing-bento-card .dixy-card-content {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+.landing-keys,
+.landing-layers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.landing-parts {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.landing-parts > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.landing-parts dt {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-body-sm);
+}
+.landing-parts dd {
+  margin: 0;
+}
+
+/* Components strip */
+.landing-components > .dixy-card-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+.landing-components > .dixy-card-content > div {
+  display: grid;
+  gap: 4px;
+  flex: 1 1 16rem;
+}
+.landing-component-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 2 1 22rem;
+}
+
+/* Smooth anchor jumps only when motion is welcome. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.landing) {
+    scroll-behavior: smooth;
+  }
+}
+@media (max-width: 960px) {
+  .landing-card-intro,
+  .landing-card-table,
+  .landing-card-form,
+  .landing-card-team {
+    grid-column: span 12;
+  }
+  .landing-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .landing-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .landing-snippet {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .landing-nav-wide {
+    display: none;
+  }
+  .landing-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .landing-gallery-note {
+    display: none;
+  }
+  .landing-bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .landing-bento-wide {
+    grid-column: auto;
+  }
+  .landing-dock-label {
+    display: none;
+  }
+  /* Two tidy rows on phones: starter picker, then appearance and CTA. */
+  .landing-dock {
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 20px;
+  }
+  .landing-dock .dixy-select-trigger {
+    flex: 1 1 8rem;
+    inline-size: auto;
+  }
+  .landing-dock .dixy-toggle-group {
+    flex-direction: row;
+  }
+  .landing-dock-rule {
+    display: none;
+  }
+  .landing-window-body {
+    padding-block-end: 150px;
+  }
+  .landing-window-tabs .dixy-tabs-tab svg {
+    display: none;
+  }
+}

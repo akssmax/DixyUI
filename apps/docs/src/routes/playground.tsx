@@ -1,6 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ThemePlayground } from "../components/theme-playground";
+import {
+  ThemePlayground,
+  defaultInspectorTab,
+  defaultPreviewScene,
+  inspectorTabIds,
+  previewSceneIds,
+} from "../components/theme-playground";
 import {
   defaultThemePreset,
   parseThemePreset,
@@ -13,8 +19,24 @@ import {
   deduplicateSkinStyles,
 } from "../lib/theme-skin-catalogue";
 export const Route = createFileRoute("/playground")({
-  validateSearch: (search: Record<string, unknown>): { theme?: string } => ({
+  // Unknown or default view/panel values are dropped, so links stay short and
+  // a stale link falls back to Overview and the Theme tab.
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { theme?: string; view?: string; panel?: string } => ({
     theme: typeof search.theme === "string" ? search.theme : undefined,
+    view:
+      typeof search.view === "string" &&
+      search.view !== defaultPreviewScene &&
+      previewSceneIds.includes(search.view)
+        ? search.view
+        : undefined,
+    panel:
+      typeof search.panel === "string" &&
+      search.panel !== defaultInspectorTab &&
+      inspectorTabIds.includes(search.panel)
+        ? search.panel
+        : undefined,
   }),
   loaderDeps: ({ search }) => {
     try {
@@ -74,7 +96,7 @@ export const Route = createFileRoute("/playground")({
   component: PlaygroundRoute,
 });
 function PlaygroundRoute() {
-  const { theme } = Route.useSearch();
+  const { theme, view, panel } = Route.useSearch();
   const { loadWarning } = Route.useLoaderData();
   const navigate = Route.useNavigate();
   const incoming = useMemo(() => {
@@ -118,7 +140,7 @@ function PlaygroundRoute() {
           pendingWrites.current.values().next().value!,
         );
       void navigate({
-        search: { theme: serialized },
+        search: (previous) => ({ ...previous, theme: serialized }),
         replace: true,
         resetScroll: false,
       });
@@ -128,11 +150,26 @@ function PlaygroundRoute() {
   function change(next: ThemePreset) {
     setDraft(next);
   }
+  // Tabs are a view of the page, not history: replace, keep scroll, keep the theme.
+  function setSearch(key: "view" | "panel", value: string, fallback: string) {
+    void navigate({
+      search: (previous) => ({
+        ...previous,
+        [key]: value === fallback ? undefined : value,
+      }),
+      replace: true,
+      resetScroll: false,
+    });
+  }
   return (
     <ThemePlayground
       preset={draft}
       onChange={change}
       warning={incoming.warning || loadWarning}
+      view={view ?? defaultPreviewScene}
+      onViewChange={(next) => setSearch("view", next, defaultPreviewScene)}
+      panel={panel ?? defaultInspectorTab}
+      onPanelChange={(next) => setSearch("panel", next, defaultInspectorTab)}
     />
   );
 }

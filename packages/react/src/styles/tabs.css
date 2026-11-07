@@ -73,6 +73,12 @@
     --dixy-tabs-active-background: var(--dixy-color-background-surface);
     --dixy-tabs-active-border: var(--dixy-tabs-text);
   }
+  /* Segmented: sunken track, raised surface thumb, neutral by design. */
+  .dixy-tabs-root[data-variant="segmented"] {
+    --dixy-tabs-active-text: var(--dixy-color-text-primary);
+    --dixy-tabs-active-background: var(--dixy-color-background-surface-raised);
+    --dixy-tabs-active-border: var(--dixy-color-border-subtle);
+  }
   .dixy-tabs-root[data-orientation="vertical"] {
     grid-template-columns: fit-content(40%) minmax(0, 1fr);
     gap: var(--dixy-spacing-inline-lg);
@@ -99,6 +105,24 @@
     border-width: 0 0 var(--dixy-border-width-1);
     border-radius: 0;
     background: transparent;
+  }
+  .dixy-tabs-list[data-variant="segmented"] {
+    gap: var(--dixy-space-025);
+    padding: var(--dixy-space-025);
+    border: 0;
+    border-radius: min(
+      calc(var(--dixy-tabs-radius) + var(--dixy-space-025)),
+      var(--dixy-radius-16)
+    );
+    background: var(--dixy-color-background-surface-sunken);
+    scroll-padding: var(--dixy-space-025);
+  }
+  /* Without an Indicator the active tab is the thumb; with one, the Indicator is. */
+  .dixy-tabs-list[data-variant="segmented"]:not(
+      :has(> .dixy-tabs-indicator-ready)
+    )
+    > .dixy-tabs-tab[data-active] {
+    box-shadow: var(--dixy-shadow-raised);
   }
   .dixy-tabs-list[data-orientation="vertical"] {
     align-self: start;
@@ -198,6 +222,16 @@
     background-color: var(--dixy-color-background-surface);
     border-color: var(--dixy-tabs-text);
   }
+  /*
+   * Scoped through the list so the thumb keeps its raised shadow when
+   * materials.css is loaded; a material still adds its texture image.
+   */
+  .dixy-tabs-list[data-variant="segmented"]
+    > .dixy-tabs-indicator[data-variant="segmented"] {
+    background-color: var(--dixy-color-background-surface-raised);
+    border-color: var(--dixy-color-border-subtle);
+    box-shadow: var(--dixy-shadow-raised);
+  }
   .dixy-tabs-indicator[data-variant="line"] {
     top: auto;
     bottom: 0;
@@ -246,6 +280,9 @@
     }
     .dixy-tabs-tab:not(.dixy-button)[data-disabled] {
       color: GrayText;
+    }
+    .dixy-tabs-list[data-variant="segmented"] {
+      border: var(--dixy-border-width-1) solid CanvasText;
     }
   }
 }

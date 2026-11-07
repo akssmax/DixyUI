@@ -1154,3 +1154,172 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The mockup's feature pieces (LCD readout, knob, orb, tape) are preview-only.
   - Winamp keeps its fixed-dark LCD well in light mode. The well-clash warning flags this; it was left alone.
   - The Studio Hardware orange renders darker than in the mockup, because of the accent contrast mapping.
+
+### 2026-11-07 — Landing page with a live theme studio
+
+- Decision: the landing page **replaces** the home route (`/`) instead of living alongside it. The old `/` was already a marketing-style overview inside the docs shell, and two front doors would compete. `/` now renders outside `DocsShell` (like `/playground`) with its own sticky header, so the hero and showcase can use the full width. The docs nav "Introduction" and the shell's home links still point at `/`.
+- Change:
+  - `apps/docs/src/routes/index.tsx`: hero (pill, headline, install command with copy + status, CTAs to installation and `#themes`), a theme studio, a features grid, an index of every registry component, and a closing CTA to `/playground`.
+  - Theme studio reuses the playground machinery, not a copy: `skinThemePreset(id)` builds the preset, `prepareSkin()` injects the starter's CSS, `materials.css` loads on demand, and `playgroundThemeProps()` feeds a nested `<Theme>`. Copy comes from `previewVoice()`. A request counter drops stale loads when someone clicks quickly. "Customise in playground" passes `serializeThemePreset()` as `?theme=`, so the playground opens on the same starter and appearance.
+  - Starters are a Base UI `ToggleGroup` (one tab stop, arrow keys). On phones it is a horizontal strip. The preview follows the page appearance until the visitor picks Light or Dark for it.
+  - `apps/docs/src/components/landing-showcase.tsx`: one small product built only from public exports. It has Card, Badge, Button, a Dialog with a Form, Progress, Tabs, a Table with a per-row Menu (checkbox item and danger item), a Switch, a Select, TextField, a Checkbox, Avatar and Toast.
+  - `apps/docs/src/styles/landing.css`: layout only inside the canvas. Smooth anchor scrolling only under `prefers-reduced-motion: no-preference`.
+  - The install command reads `pnpm add @dixy-ui/react @dixy-ui/themes`, labelled "Provisional package names. Not yet published to npm."
+- Verified (in-app browser, docs dev server on :3001):
+  - All 33 options (Original + 32 starters) applied by script with no horizontal overflow and no console errors. Visually checked: Living Forest (light), Neon Night Market (dark), Glass UI, Winamp Signal (dark).
+  - Page dark mode via the header toggle; the preview follows it.
+  - 375px: `scrollWidth` = 375 after fixes (install pill now shrinks; table cells no longer break mid-word and scroll inside a focusable `role="region"`).
+  - Keyboard: one tab stop in the starter group, ArrowRight ×3 + Space selects Winamp Signal; the Invite dialog opens on Enter, focuses the email field, is themed through the portal, and Escape returns focus to Invite; the Select changes region by keyboard; the form submit raises a toast.
+  - "Customise in playground" opened `/playground` with Neon Night Market in dark.
+  - `/docs/installation` still renders inside the docs shell.
+- Not tested: OS reduced motion (no emulation in the pane; reviewed in code only: the smooth-scroll rule is gated, and the nested Theme uses `motion: "system"`), forced colours, screen readers, Safari, touch scrolling of the starter strip on a real phone, and the visual quality of every starter at 375px (only the base theme was viewed at 375px).
+- Known gaps: the old overview styles in `docs.css` (`.overview-*`, `.hero-*`, `.principle-strip`, `.component-card*`, `.learning-banner`) are now unused and were left in place to avoid colliding with other sessions' edits to that file.
+
+### 2026-11-07 — Landing v2: whole-page theming and HeroUI-style sections
+
+- Bug fixed: "App appearance requires its root provider" after a package rebuild. `app-appearance-provider.tsx` imports `preview-theme.ts`, which imports `@dixy-ui/tokens`. A tokens rebuild therefore re-ran the module, so Vite created a new context object while the mounted root still provided the old one. Every consumer then threw until a full reload. The context now lives alone in `components/app-appearance-context.ts` with type-only imports, so hot updates keep its identity. Verified: with `/docs/installation` open, `pnpm --filter @dixy-ui/tokens build` hot-updated `__root` and `docs-shell` with no new errors.
+- Change (user request): the chosen starter now themes the **whole landing page**, not just a framed preview. One `<Theme {...playgroundThemeProps(preset)}>` wraps the page. The page background uses `--dixy-skin-ground` / `--dixy-skin-canvas`. Light/dark is the site-wide appearance (header toggle and dock share it).
+- Change (user request): every visible piece is a Dixy component: Button, IconButton, Badge, Heading, Text, TextField, Card, Toggle/ToggleGroup, Select, Tabs, Separator, Chip, Kbd, Switch, Slider. Navigation buttons use a docs-only `ButtonLink` / `ButtonAnchor` (`components/button-link.tsx`): a Dixy Button rendering the router `Link`, with `nativeButton={false}` and `role="link"`. This is needed because Base UI gives non-native buttons `role="button"`, and navigation must announce as a link.
+- Change (user request, after reviewing heroui.com): sections were re-planned before building.
+  1. Header.
+  2. Hero with install field.
+  3. **Live app window**: Dixy Tabs switch between Mail, Dashboard and Music (the playground's scene components, imported unchanged and lazy-loaded) and the original Blocks composition. A **floating theme dock** holds a starter Select, Shuffle, Light/Dark and "Customise".
+  4. Starter gallery: 33 selectable cards in a ToggleGroup.
+  5. Bento "why Dixy" with live widgets, including the current theme's material/frame/fonts.
+  6. Ship-it code snippet.
+  7. A **small** components strip: count, 8 links, Browse all.
+  8. Final CTA card and footer.
+- Fix during build: one `<Suspense>` around all four panels broke panel swapping; now each panel has its own boundary.
+- Fix during build: dark Shiki colours were keyed to `.docs-app` only; `landing.css` adds the same rule for `.landing`.
+- Verified (in-app browser, :3001):
+  - All 33 starters applied from the gallery: no horizontal overflow, no console errors.
+  - Visually checked Living Forest (dark) across every section, and Retro OS at 375px.
+  - With rendered frames, each window tab mounts only its own panel. Scripted runs while the pane was hidden showed panels piling up: Base UI unmounts an exiting panel after an animation frame, and hidden documents pause frames.
+  - All 18 link-buttons have `role="link"`.
+  - Keyboard: dock Select (Enter, ↓↓, Enter) applied Living Forest, returned focus to the trigger, and announced "Living Forest applied."
+  - 375px: page `scrollWidth` 375. The dock wraps into two rows after a fix (it was cramped). The dashboard's own table scrolls inside its card.
+- Not tested:
+  - OS reduced motion (no emulation; code review only: smooth scroll is gated, and the Theme uses `motion: "system"`).
+  - Forced colours, screen readers, Safari, real touch devices.
+  - Every starter at 375px (only Retro OS).
+  - The Mail/Dashboard/Music scenes at 375px under each starter.
+  - Light appearance for most starters on the new sections.
+- Known gaps:
+  - The chosen starter is not persisted (no URL param or cookie); a reload returns to Original Dixy.
+  - Docs pages do not adopt the landing's starter.
+  - `theme-skins.css` is imported for the Music scene and also carries playground inspector styles.
+  - The old overview styles in `docs.css` are still unused.
+
+### 2026-11-07 — Landing starter saved in the URL
+
+- Decision (user): persist the chosen starter in the URL, so a reload or a shared link keeps it.
+- Change in `apps/docs/src/routes/index.tsx`:
+  - `/?starter=<slug>` (for example `living-forest`). `validateSearch` drops unknown slugs, so a bad link falls back to Original Dixy. Choosing Original Dixy removes the parameter.
+  - The route loader inlines the starter's CSS (and `materials.css` when the starter uses a finish) through `head.styles`, as `/playground` does, so the server HTML is already themed.
+  - `useStarter` reads the URL as the source of truth. Selection still loads the CSS first, then commits with `navigate({ replace: true, resetScroll: false })`: replace, so browsing 33 starters doesn't fill Back history. An effect deduplicates the head style against the client-injected one and retries the CSS if the server load failed.
+- Fix found while verifying: lazy scenes inside the window's Base UI tab panels caused a hydration mismatch, because `React.lazy` suspends on the server. `ClientScene` (`landing-window.tsx`) now mounts them only after hydration, and both sides render the same loading state first.
+- Verified (in-app browser, :3001):
+  - Selecting Neon Night Market sets `?starter=neon-night-market`; after a reload the page, dock and gallery still show it, with one skin style tag.
+  - `curl` of `/?starter=neon-night-market` returns HTML with the skin style and `data-dixy-skin` on the page Theme. `?starter=not-a-theme` renders the default.
+  - Choosing Original Dixy clears the query.
+  - Fresh tabs at `/?starter=living-forest` and `/` → Swiss Poster had no console errors (no hydration mismatch).
+- Not tested: Back/forward behaviour (by design it doesn't record history), and production build behaviour beyond `pnpm check`.
+
+### 2026-11-07 — Playground inspector in four tabs
+
+- Decision (user): make the playground side panel easier to use with tabs. A static HTML/CSS mock (`output/overview-mockups/playground-panel.html`, gitignored) was reviewed and approved before any React work.
+- Change:
+  - **Scene picker:** the "Overview" dropdown above the preview is now a Dixy `Tabs` bar: Overview · Components | Email · Dashboard · Player | States · Compare · Surfaces. It stays one row and scrolls sideways when narrow. Each scene renders in its own `Tabs.Panel`, which replaces a long chain of ternaries.
+  - **Inspector:** a header (theme swatch, name, description, edit count), four tabs, one scrolling body, and a footer ("N changes from <starter>" + Reset all).
+    - **Theme:** a searchable starter grid (6 shown, then "Show all 33"), an accent swatch `ToggleGroup` with a custom OKLCH option, corners and neutral base.
+    - **Style:** material and its dials, component finish as tiles, type, depth (elevation, relief, stroke, effects), layout (density, geometry, frame, direction), and a collapsed advanced surface section.
+    - **Character:** controls, motion (plus reduce motion), backdrop, window chrome, type voice, states & details, ornament, borrow a character.
+    - **Export:** inline code with React/CSS/Preset/Document formats (Expand opens the existing dialog); copy link, copy, download or import a preset; save in this browser.
+  - A dot on a tab marks unsaved edits in that tab. Edits are counted against the starter's defaults (`countChanges`). The accent counts as one decision. Direction, reduce motion and effects are not counted, because they carry across starter switches and Reset all.
+  - `ThemeRecipeMixer` now takes a `part` prop (`material | frame | advanced | character | borrow | save`), so each tab places the slice it needs. Shared `InspectorGroup` / `InspectorField` / `Segmented` live in `theme-inspector-parts.tsx`. Segmented choices are `ToggleGroup`s: one tab stop, arrow keys.
+  - Removed the "Advanced foundations" dialog, whose controls are now in the tabs, and its quick "Start somewhere" starter presets. The 33 skins cover that role.
+  - Styles live in `styles/theme-inspector.css`. Old toolbar rules that targeted the removed dropdown wrapper (`.theme-preview-toolbar > div:first-child`) were deleted, because they hid the tab dividers and wrapped the bar.
+- Fixes during verification:
+  - Picking a named accent on a custom-accent starter counted two edits; the accent now counts once.
+  - Finish chips used a token that doesn't exist; they now use `--dixy-color-background-action-primary`.
+  - Inline code used light Shiki colours in dark mode; it now follows the playground's appearance.
+- Verified (in-app browser, :3001):
+  - Every tab renders its groups.
+  - Living Forest plus blue accent plus Full corners shows "2 changes" and a dot on Theme; adding Expressive ornament gives 3 and a dot on Character; Reset all returns to "Matches Living Forest".
+  - Export renders tsx code. Light and dark both checked.
+  - 375px: no horizontal overflow, and the footer sticks to the bottom of the stacked panel.
+  - Keyboard: arrows move across scene tabs (skipping dividers), Enter selects Dashboard; the inspector tabs wrap with arrows, and Tab enters the panel.
+  - No console errors. `pnpm check` passes.
+- Not tested:
+  - Reduced motion with real emulation, forced colours, screen readers, Safari.
+  - Saving and loading local themes in the new tab.
+  - Every starter's organic frame controls in the Style tab (only Living Forest).
+  - Import from the Export tab.
+- Known gap: the scene bar scrolls with a hidden scrollbar and has no edge fade to hint at more tabs.
+
+### 2026-11-07 — Playground scene and tab in the URL; compact starter thumbnails
+
+- Decision (user): keep the chosen scene and inspector tab in the URL.
+  - `/playground?view=<scene>&panel=<tab>`. `validateSearch` drops unknown values and the defaults (`workspace`, `theme`), so links stay short and stale links fall back.
+  - `ThemePlayground` is now controlled (`view`/`panel` props). The route writes the values with `replace: true, resetScroll: false`, since a tab is a view of the page, not history.
+  - The debounced theme write now merges into the existing search instead of replacing it, so editing a theme no longer drops `view`/`panel`.
+  - The loader deps are unchanged, so switching tabs does not reload skin CSS.
+- Fix (user report): starter thumbnails in the three-column inspector grid overlapped ("Aa" ran into the switch), Retro OS's offset shadow spilled past the card, and the check squeezed the name.
+  - Inspector-only overrides now scale the miniature parts for ~90px cards, keep 2px for offset shadows, and let names wrap.
+  - The selected check is a small badge on the thumbnail's empty corner.
+  - The shared `.theme-skin-miniature` rules are unchanged for other layouts.
+- Verified (in-app browser, :3001):
+  - Dashboard plus Style gives `?view=dashboard&panel=style`; choosing Theme removes `panel`.
+  - A Floating elevation edit keeps both params; a reload restores Dashboard, Style and "1 change".
+  - Server HTML for `?view=email&panel=export` already selects Email/Export; `?view=bogus&panel=nope` renders Overview/Theme.
+  - No console errors.
+  - All 33 thumbnails: no title/switch overlap and no overflow past the card edge, checked by measuring them; first 15 also checked visually.
+  - `pnpm check` passes.
+- Not tested: Back/forward (by design tab changes don't add history entries), and thumbnails in dark appearance.
+
+### 2026-11-07 — Playground chrome on Dixy tokens
+
+- User report: segmented controls, scene tabs and dividers in the playground looked like wireframes, with inconsistent border colours.
+- Audit (computed styles):
+  - Selected items used the library's **soft** variant: `action.secondary.subtle` fill (the same value as the sunken track, so no fill contrast) plus a 1px border in `text.action.secondary`, i.e. an ink outline.
+  - Track outlines used `border.default`.
+  - Dividers and my select override used `border.subtle`.
+  - The inspector tab rule used `border.default`.
+  - The Light/Dark buttons used a third style (`--doc-soft` fill, no border).
+  - Above "Advanced surface", the group rule and the accordion's top border drew a double line.
+- Change, scoped to the playground in `theme-inspector.css` (the library's soft variant is unchanged):
+  - Track: `background.surface.sunken`, no outline.
+  - Selected thumb: `background.surface.raised` + `border.subtle` + `shadow.raised`.
+  - Text: `text.secondary` at rest, `text.primary` when selected.
+  - Applied to segmented toggles, the scene tab indicator and the Light/Dark pair.
+  - Dividers and the inspector tab rule: `border.subtle`. Text-entry controls (selects) are back on the library's `border.default` (3:1 control boundary).
+  - The doubled rule is removed. The file now references `--dixy-*` tokens directly instead of the `--doc-*` aliases.
+- Verified: computed styles map every value above to its token. Screenshot of the Style tab and preview bar (light). `pnpm check` passes.
+- Not tested: dark appearance visually (the tokens are appearance-aware, but not looked at), and forced colours, where the thumb relies on its border.
+- Open question: whether the library should offer this track-and-thumb look as its own Tabs/ToggleGroup variant instead of a docs-level override.
+
+### 2026-11-07 — Segmented variants in the library
+
+- Decision (user): promote the playground's track-and-thumb look into the library instead of keeping a docs-only override.
+- Library (`@dixy-ui/react`):
+  - `Tabs.Root variant="segmented"`:
+    - The list is a `background.surface.sunken` track with no outline.
+    - The thumb (Indicator, or the active tab when there is no Indicator) is `background.surface.raised` + `border.subtle` + `shadow.raised`.
+    - Text is `text.secondary` at rest and `text.primary` when selected. It stays neutral by design, so `color` does not tint it.
+  - `ToggleGroup segmented` (boolean): the same track and thumb, on pressed toggles. It replaces `attached` (the group never gets `data-attached` as well), and overrides the toggles' variant and colour for the pressed state. Selection, roving focus and the keyboard are unchanged.
+  - Materials: the segmented thumb rule is scoped through the list, so `materials.css` adds its texture without erasing the raised shadow. Segmented toggles already outrank the material edge.
+  - Forced colours: the segmented track gets a `CanvasText` outline, and the existing `Highlight` rules mark the selection.
+  - Tests in `segmented.test.tsx`:
+    - Tabs: `data-variant` on the list and Indicator, arrows + Enter selection, panel association, axe.
+    - ToggleGroup: `data-segmented` without `data-attached`, one tab stop, arrows + Space pressing, axe.
+- Docs:
+  - The Tabs registry variant control and the variants comparison include `segmented`. Toggle Group has a Segmented switch and the demo passes it.
+  - `api.json` regenerated with `pnpm docs:generate`, not hand-edited.
+- Playground: the scene bar uses `variant="segmented"`. Light/Dark is now a segmented ToggleGroup instead of two pressed Buttons. The inspector's `Segmented` helper uses `segmented`. The override block in `theme-inspector.css` is replaced by layout-only rules. Two old `.theme-appearance` rules in `theme-playground.css` were removed, because as unlayered CSS they would beat the library's track gap.
+- Card pickers: finish tiles now match starter cards (`border.subtle` at rest; `border.focus` plus a 1px ring when selected) instead of the outline toggle's ink border.
+- Verified (in-app browser, :3001, separate tab):
+  - Computed styles on the scene bar, Light/Dark and inspector rows map to the tokens above. The thumb keeps `shadow.raised` with the matte finish.
+  - Light and dark screenshots.
+  - On the Toggle Group docs page, the Segmented switch sets `data-segmented` on the preview, and the code sample includes it.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested: forced colours and screen readers in a real browser; segmented with `orientation="vertical"` (no vertical-specific styles were written); each material finish visually.

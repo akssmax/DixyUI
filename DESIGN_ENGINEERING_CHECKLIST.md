@@ -741,3 +741,43 @@ Verification for this pass:
 - [ ] Mobile, keyboard, reduced motion, reduced transparency, forced colours, Safari backdrop-filter.
 - [ ] Redesign the ornament painters of the 12 originals to match the mockup.
 - [ ] Personally explain why glass is a material parameter with a `@supports` guard rather than a chrome well, before claiming mastery.
+
+### Landing page — 2026-11-07
+
+- [x] Replace `/` with a full-width landing page outside the docs shell: hero with an install command and CTAs, a live component showcase, a starter-theme studio, a features grid, a component index, and links to the docs and `/playground`.
+- [x] Reuse the playground's theme machinery (`skinThemePreset`, `prepareSkin`, `playgroundThemeProps`, `previewVoice`, `serializeThemePreset`) instead of duplicating it.
+- [x] In-app browser: all 33 options applied with no overflow or console errors; light/dark page and preview; 375px with no horizontal overflow; keyboard for the starter group, Dialog, Select and Toast; playground hand-off.
+- [ ] Check OS reduced motion with real emulation, forced colours, screen readers, Safari, and each starter at 375px.
+- [ ] Remove the now-unused overview styles from `docs.css`.
+- [ ] Personally explain why the showcase nests a second `Theme` inside the page's own Theme, and what that means for portals and tokens, before claiming mastery.
+
+### Landing v2: whole-page theming and sections — 2026-11-07
+
+- [x] Keep the app-appearance context identity stable across hot updates by moving it to a dependency-free module; verified with a tokens rebuild while a docs page was open.
+- [x] Theme the whole landing page with the chosen starter, using Dixy components throughout; navigation buttons keep link semantics (`role="link"`).
+- [x] Re-plan sections after reviewing heroui.com: live app window (Mail, Dashboard, Music, Blocks) with a floating theme dock, starter gallery, bento, snippet, a small components strip, final CTA.
+- [x] In-app browser: 33 starters with no overflow or errors; 375px with no overflow; keyboard dock Select; per-panel Suspense fix.
+- [x] Persist the chosen starter in the URL (`/?starter=<slug>`), server-rendered with its CSS; verified reload, shared link, invalid slug and clearing (2026-11-07).
+- [ ] Decide whether docs pages should adopt the landing's starter.
+- [ ] Check reduced motion with real emulation, forced colours, screen readers, Safari, and the scenes under each starter at 375px and in light.
+- [ ] Personally explain why a React context must live in a module whose identity survives hot updates, and why `nativeButton={false}` needs `role="link"` for navigation, before claiming mastery.
+
+### Playground inspector tabs — 2026-11-07
+
+- [x] Mock the tabbed inspector in plain HTML/CSS and get approval before building.
+- [x] Replace the scene dropdown with a Dixy `Tabs` bar, one panel per scene.
+- [x] Group every control into Theme / Style / Character / Export tabs of flat sections; split `ThemeRecipeMixer` into placeable parts.
+- [x] Show edits per tab (dots) and in total against the starter, with Reset all.
+- [x] In-app browser: all tabs, edit counts and reset, light/dark, 375px with no overflow, keyboard for both tab lists; `pnpm check` passes.
+- [ ] Check reduced motion with real emulation, forced colours, screen readers, Safari; exercise save/load and import from the Export tab.
+- [x] Keep the inspector tab and scene in the URL (`?view=&panel=`), server-rendered, replacing history; fix the cramped starter thumbnails (2026-11-07).
+- [ ] Personally explain why segmented choices use `ToggleGroup` (one tab stop) while the scene picker uses `Tabs`, before claiming mastery.
+
+### Segmented variants — 2026-11-07
+
+- [x] Audit the playground chrome's border and surface tokens; record the soft variant's ink-outline selection as the cause of the wireframe look.
+- [x] Add `Tabs variant="segmented"` and `ToggleGroup segmented` built only from surface, border, shadow and text tokens, with forced-colours outlines and material compatibility.
+- [x] Tests for selection, focus and axe; registry controls, demo and generated API updated; `pnpm check` and `pnpm package:check` pass.
+- [x] Playground uses the library variants; docs-level override removed.
+- [ ] Check segmented in forced colours, with a screen reader, vertically oriented, and under each material finish.
+- [ ] Personally explain why the segmented thumb rule is scoped through the list (cascade order versus materials.css in the same layer), before claiming mastery.
