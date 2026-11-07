@@ -781,3 +781,21 @@ Verification for this pass:
 - [x] Playground uses the library variants; docs-level override removed.
 - [ ] Check segmented in forced colours, with a screen reader, vertically oriented, and under each material finish.
 - [ ] Personally explain why the segmented thumb rule is scoped through the list (cascade order versus materials.css in the same layer), before claiming mastery.
+
+## Library gap fill (shadcn / HeroUI / Radix comparison) — 2026-11-07
+
+Components that shadcn/ui, HeroUI or Radix (Primitives + Themes) ship and Dixy did not. Spacer was skipped (Stack and Grid gaps cover it); Portal and Slot are not needed (Base UI portals and `useRender`/`mergeProps`).
+
+- [x] Grid — fixed equal columns or `minColumnWidth` auto-fit with a `min(…, 100%)` overflow guard; stack spacing gaps.
+- [x] VisuallyHidden — public utility; `focusable` reveals skip links on focus.
+- [x] Code and Blockquote — native elements on `nativePart`, so they take theme colour, radius and skin attributes.
+- [x] Snippet — copy to clipboard, an uncopied prompt symbol, a polite status for Copied/Copy failed, timer cleanup.
+- [x] PasswordField — Base UI Input inside Field, a toggle with a constant name and `aria-pressed`, controlled and uncontrolled visibility.
+- [x] DataList — native `dl`/`dt`/`dd` with subgrid alignment, horizontal or vertical.
+- [x] User — Avatar + name + description; the avatar is decorative; initials are derived from the name.
+- [x] Image — lazy loading, a placeholder, one fallback, `data-status`, a reduced-motion-aware fade, a pre-hydration `complete` check.
+- [x] Navbar — a header landmark, Collapsible menu, container-query collapse (`sm`/`md`/`lg`/`never`), `aria-current`, closes the menu on navigation.
+- [x] 10 interaction/axe tests in `extras.test.tsx`; registry entries, demos and generated API; `pnpm check` and `pnpm package:check` (run with `--online` in a fresh worktree) pass.
+- [ ] Forced colours, screen readers (VoiceOver/NVDA), touch, and 200%/400% zoom for all ten components.
+- [ ] Each material finish and skin looked at visually on Snippet, PasswordField and Navbar.
+- [ ] Personally explain why Navbar uses a container query rather than a media query, and why Image resets its state during render instead of in an effect.

@@ -1390,6 +1390,29 @@
       "default": "—"
     }
   ],
+  "DataListProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "orientation",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "Label beside its value, or stacked above it.",
+      "default": "horizontal"
+    }
+  ],
   "ContextMenuPopupProps": [
     {
       "name": "size",
@@ -1666,6 +1689,50 @@
       "default": "—"
     }
   ],
+  "ImageProps": [
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "alt",
+      "type": "string",
+      "required": true,
+      "description": "Required. Describe the image, or pass \"\" when it is purely decorative.",
+      "default": "—"
+    },
+    {
+      "name": "fallbackSrc",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Shown once if src fails to load.",
+      "default": "—"
+    },
+    {
+      "name": "placeholder",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Show a subtle surface until the image has loaded.",
+      "default": "true"
+    },
+    {
+      "name": "loading",
+      "type": "\"lazy\" | \"eager\" | undefined",
+      "required": false,
+      "description": "Native lazy loading.",
+      "default": "lazy"
+    }
+  ],
   "BoxOwnProps": [
     {
       "name": "material",
@@ -1689,6 +1756,36 @@
       "required": false,
       "description": "Maximum inline size, including the responsive gutters.",
       "default": "xl"
+    }
+  ],
+  "GridOwnProps": [
+    {
+      "name": "columns",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Fixed number of equal columns. Ignored when minColumnWidth is set.",
+      "default": "2"
+    },
+    {
+      "name": "minColumnWidth",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Fit as many columns as this minimum width allows, e.g. \"12rem\". Never overflows a narrow parent.",
+      "default": "—"
+    },
+    {
+      "name": "gap",
+      "type": "SpacingSize<\"stack\"> | undefined",
+      "required": false,
+      "description": "Space between rows and columns.",
+      "default": "md"
+    },
+    {
+      "name": "align",
+      "type": "\"center\" | \"end\" | \"start\" | \"stretch\" | undefined",
+      "required": false,
+      "description": "Block-axis alignment of items within their row.",
+      "default": "stretch"
     }
   ],
   "LinkProps": [
@@ -1873,6 +1970,100 @@
       "default": "Theme.material"
     }
   ],
+  "NavbarProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Bar height and type size.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "outline"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Rounding for links and the toggle.",
+      "default": "Theme.radius"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css.",
+      "default": "Theme.material"
+    },
+    {
+      "name": "collapseBelow",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"never\" | undefined",
+      "required": false,
+      "description": "Bar width below which Content hides and the Toggle and Menu appear. Actions stay visible. \"never\" always shows Content.",
+      "default": "md (48rem)"
+    },
+    {
+      "name": "sticky",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Keep the bar at the top of its scroll container.",
+      "default": "false"
+    }
+  ],
+  "NavbarContentProps": [
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Landmark name.",
+      "default": "Main"
+    }
+  ],
+  "NavbarLinkProps": [
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "active",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Marks the current page with aria-current=\"page\".",
+      "default": "false"
+    }
+  ],
+  "NavbarToggleProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name; aria-expanded conveys open state.",
+      "default": "Menu"
+    }
+  ],
+  "NavbarMenuProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Landmark name; matches Content because only one is visible at a time.",
+      "default": "Main"
+    }
+  ],
   "NavigationMenuRootProps": [
     {
       "name": "size",
@@ -1984,6 +2175,36 @@
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
+    }
+  ],
+  "PasswordFieldProps": [
+    {
+      "name": "visible",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Controlled visibility of the password text.",
+      "default": "—"
+    },
+    {
+      "name": "defaultVisible",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Initial visibility when uncontrolled.",
+      "default": "false"
+    },
+    {
+      "name": "onVisibleChange",
+      "type": "((visible: boolean) => void) | undefined",
+      "required": false,
+      "description": "Called when the visibility toggle is pressed.",
+      "default": "—"
+    },
+    {
+      "name": "toggleLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the toggle; its pressed state says whether the password is shown.",
+      "default": "Show password"
     }
   ],
   "PopoverPopupProps": [
@@ -2381,6 +2602,113 @@
       "default": "Theme.material"
     }
   ],
+  "SnippetProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "material",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "required": false,
+      "description": "Optional static finish; import materials.css. Inherits Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "string",
+      "required": true,
+      "description": "The command or code to show. Line breaks are preserved.",
+      "default": "—"
+    },
+    {
+      "name": "copyValue",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Text to copy when it differs from what is shown.",
+      "default": "children"
+    },
+    {
+      "name": "symbol",
+      "type": "string | undefined",
+      "required": false,
+      "description": "A leading prompt such as \"$\". Shown on every line, never copied or announced.",
+      "default": "—"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "soft"
+    },
+    {
+      "name": "copyLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the copy button.",
+      "default": "Copy to clipboard"
+    },
+    {
+      "name": "copiedLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Status message announced after a successful copy.",
+      "default": "Copied"
+    },
+    {
+      "name": "failedLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Status message announced when the clipboard is unavailable.",
+      "default": "Copy failed"
+    },
+    {
+      "name": "timeout",
+      "type": "number | undefined",
+      "required": false,
+      "description": "How long the copied state lasts, in milliseconds.",
+      "default": "2000"
+    },
+    {
+      "name": "hideCopyButton",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Hide the copy action, e.g. for read-only output.",
+      "default": "false"
+    },
+    {
+      "name": "onCopy",
+      "type": "((value: string) => void) | undefined",
+      "required": false,
+      "description": "Called with the copied text after the clipboard write succeeds.",
+      "default": "—"
+    }
+  ],
   "SwitchRootProps": [
     {
       "name": "size",
@@ -2743,6 +3071,140 @@
       "required": false,
       "description": "Convenience size within the heading family.",
       "default": "md"
+    }
+  ],
+  "CodeProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Surface emphasis.",
+      "default": "soft"
+    }
+  ],
+  "BlockquoteProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    }
+  ],
+  "UserProps": [
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Semantic color.",
+      "default": "accent"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "required": false,
+      "description": "Component proportions.",
+      "default": "md"
+    },
+    {
+      "name": "radius",
+      "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
+      "required": false,
+      "description": "Inherits the nearest Theme.",
+      "default": "—"
+    },
+    {
+      "name": "as",
+      "type": "E | undefined",
+      "required": false,
+      "description": "Override the semantic element, e.g. a title heading level.",
+      "default": "—"
+    },
+    {
+      "name": "name",
+      "type": "ReactNode",
+      "required": true,
+      "description": "The person's visible name.",
+      "default": "—"
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "description": "A secondary line, such as a role or handle.",
+      "default": "—"
+    },
+    {
+      "name": "src",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Avatar image URL.",
+      "default": "—"
+    },
+    {
+      "name": "fallback",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Avatar fallback while the image loads or when it fails.",
+      "default": "initials from a string name"
+    },
+    {
+      "name": "avatarVariant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | undefined",
+      "required": false,
+      "description": "Avatar surface emphasis.",
+      "default": "soft"
+    }
+  ],
+  "VisuallyHiddenOwnProps": [
+    {
+      "name": "focusable",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Reveal the content while it, or something inside it, has keyboard focus (skip links).",
+      "default": "false"
     }
   ],
   "FeedbackProviderProps": [

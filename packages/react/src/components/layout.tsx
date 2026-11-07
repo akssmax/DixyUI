@@ -1,7 +1,9 @@
 import {
   createElement,
   type ComponentPropsWithRef,
+  type CSSProperties,
   type ElementType,
+  type ReactElement,
 } from "react";
 import type { ContainerSize, SpacingSize } from "@dixy-ui/tokens";
 import type { Material, ShapePreset } from "@dixy-ui/tokens";
@@ -124,4 +126,46 @@ export function Inline<E extends LayoutElement = "div">({
     "data-align": align,
     "data-wrap": wrap,
   });
+}
+
+export interface GridOwnProps {
+  /** Fixed number of equal columns. Ignored when minColumnWidth is set. @default 2 */
+  columns?: number;
+  /** Fit as many columns as this minimum width allows, e.g. "12rem". Never overflows a narrow parent. */
+  minColumnWidth?: string;
+  /** Space between rows and columns. @default md */
+  gap?: SpacingSize<"stack">;
+  /** Block-axis alignment of items within their row. @default stretch */
+  align?: "start" | "center" | "end" | "stretch";
+}
+
+export type GridProps<E extends LayoutElement = "div"> = GridOwnProps & {
+  as?: E;
+} & Omit<ComponentPropsWithRef<E>, keyof GridOwnProps | "as">;
+
+/** Two-dimensional layout: equal columns, or responsive auto-fit columns. */
+export function Grid<E extends LayoutElement = "div">({
+  as,
+  columns = 2,
+  minColumnWidth,
+  gap = "md",
+  align = "stretch",
+  className,
+  style,
+  ...props
+}: GridProps<E>): ReactElement {
+  const count =
+    Number.isInteger(columns) && columns > 0 ? Math.min(columns, 12) : 2;
+  return createElement(as ?? "div", {
+    ...props,
+    className: ["dixy-grid", className].filter(Boolean).join(" "),
+    "data-gap": gap,
+    "data-align": align,
+    "data-fit": minColumnWidth ? "" : undefined,
+    style: {
+      "--dixy-grid-columns": count,
+      ...(minColumnWidth ? { "--dixy-grid-min": minColumnWidth } : {}),
+      ...(style as CSSProperties | undefined),
+    } as CSSProperties,
+  } as Record<string, unknown>);
 }

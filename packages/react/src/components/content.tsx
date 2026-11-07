@@ -121,3 +121,21 @@ export interface EmptyProps extends NativePartProps<
 > {}
 export interface ItemProps extends NativePartProps<"div", "size"> {}
 export interface TableProps extends NativePartProps<"table", "size"> {}
+
+const DataListFrame = /* @__PURE__ */ nativePart("dl", "dixy-data-list", [
+  "size",
+] as const);
+export interface DataListProps extends NativePartProps<"dl", "size"> {
+  /** Label beside its value, or stacked above it. @default horizontal */
+  orientation?: "horizontal" | "vertical";
+}
+function DataListRoot({ orientation = "horizontal", ...props }: DataListProps) {
+  return <DataListFrame {...props} data-orientation={orientation} />;
+}
+/** Key–value pairs on a native description list: dt names, dd values. */
+export const DataList = /* @__PURE__ */ (() => ({
+  Root: DataListRoot,
+  Item: /* @__PURE__ */ nativePart("div", "dixy-data-list-item", [] as const),
+  Label: /* @__PURE__ */ nativePart("dt", "dixy-data-list-label", [] as const),
+  Value: /* @__PURE__ */ nativePart("dd", "dixy-data-list-value", [] as const),
+}))();
