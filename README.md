@@ -1,36 +1,24 @@
 # Dixy UI
 
-Expressive React components on Base UI, with a TanStack Start documentation workspace. This is a local alpha and a design engineering learning project. The package name is provisional; nothing is published to npm yet.
+Expressive, accessible React components built on [Base UI](https://base-ui.com), with semantic design tokens and optional theme skins.
 
-Dixy is the brand; Dixy UI is the React component library. The logo is a rounded, smiling D. Its facial details are transparent, and the in-app mark inherits the current theme color. Download the [violet SVG](./apps/docs/public/brand/dixy-mark.svg) or [monochrome SVG](./apps/docs/public/brand/dixy-mark-mono.svg). The same geometry is used in the documentation and favicon.
+> **Public beta.** APIs may still change between `0.x` beta releases. Every change is listed in each package's CHANGELOG. See [Known issues](#known-issues).
 
-## Start
+Dixy is the brand; Dixy UI is the React component library. The logo is a rounded, smiling D: [violet SVG](./apps/docs/public/brand/dixy-mark.svg) · [monochrome SVG](./apps/docs/public/brand/dixy-mark-mono.svg).
 
-Use Node 24+ and pnpm 12.4.2.
+## Install
 
 ```sh
-pnpm install
-pnpm dev
+pnpm add @dixy-ui/react@beta
+# optional: extra visual skins
+pnpm add @dixy-ui/themes@beta
 ```
 
-Open http://127.0.0.1:3000. The development command builds the React package once, then watches JavaScript/CSS, declarations, generated API metadata, and the documentation app together.
+Peer dependencies: `react` and `react-dom` 19. `motion` 14 is optional and only needed for `@dixy-ui/react/motion`.
 
-## Workspace
+## Use
 
-```text
-apps/docs                 TanStack Start routes, MDX, typed demos and playgrounds
-packages/react            @dixy-ui/react components, theme, component aliases and CSS
-packages/tokens           @dixy-ui/tokens framework-independent foundations
-packages/typescript-config Shared strict TypeScript configuration
-fixtures/consumer         Independent packed React consumer
-fixtures/tokens-consumer  Independent token consumer without React or Tailwind
-scripts                   API generation and package validation
-docs                      Learning notes and implementation evidence
-```
-
-The docs import the **built public package**, never a source alias. React and React DOM are peers and stay external to the library build. Base UI is a runtime dependency and also remains external. Spacing, sizing and layout foundations are exported from @dixy-ui/tokens. React’s stylesheet includes them; standalone consumers can import @dixy-ui/tokens/spacing.css directly.
-
-## The public API
+Import the stylesheet once at your application root, then wrap your app in `Theme`:
 
 ```tsx
 import "@dixy-ui/react/styles.css";
@@ -50,48 +38,37 @@ export function App() {
 }
 ```
 
-Initial exports: Theme, Button, IconButton, Text, Heading, Field, TextField, Dialog, Container, Stack and Inline. Theme supports compact, default and comfortable spacing density. Composition follows Base UI's `render` model. Styled actions use size, variant, and semantic color props; stateful primitive props and refs are forwarded.
+No Tailwind build is required. Styles live in CSS cascade layers, so your own styles override library defaults. Fonts belong to your application; Dixy supplies font stacks and overridable tokens.
 
-Fonts belong to the application. The docs bundle Inter, Space Grotesk and JetBrains Mono locally; the component library supplies font stacks and overridable tokens. There is no Tailwind build requirement for consumers.
+## Packages
 
-## Commands
+| Package           | What it is                                                                                   |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `@dixy-ui/react`  | 80+ components on Base UI and React Aria, the `Theme` provider and the stylesheet            |
+| `@dixy-ui/tokens` | Framework-independent colour, typography, sizing, spacing and motion tokens (plain CSS + TS) |
+| `@dixy-ui/themes` | Optional 2D skins (paper, glass, terminal, festive…) for the same components                 |
 
-| Command                               | Purpose                                                                                             |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `pnpm dev`                            | Run package and documentation watchers                                                              |
-| `pnpm tokens:generate`                | Generate foundation CSS from canonical token contracts                                              |
-| `pnpm tokens:check`                   | Detect stale generated foundation CSS                                                               |
-| `pnpm docs:generate`                  | Generate API metadata from local TypeScript interfaces                                              |
-| `pnpm docs:check`                     | Detect stale metadata                                                                               |
-| `pnpm examples:check`                 | Typecheck all generated playground configurations, including theme wrappers                         |
-| `pnpm typecheck`                      | Check library, routes and complete example modules                                                  |
-| `pnpm test`                           | Run behavioral component tests                                                                      |
-| `pnpm build`                          | Build the library and production documentation                                                      |
-| `pnpm check`                          | Run metadata, type, unit and build checks                                                           |
-| `pnpm package:check`                  | Pack and install the library outside the workspace; verify declarations, SSR, browser build and CSS |
-| `pnpm --filter @dixy-ui/docs preview` | Serve the production documentation at port 3001                                                     |
-| `pnpm format`                         | Format maintained source files                                                                      |
-| `pnpm changeset`                      | Prepare a versioning note when release work begins                                                  |
+## Supported environments
 
-`package:check` uses an isolated temporary directory and the workspace's local pnpm store in offline mode. Run `pnpm install` first. It never publishes anything and removes its temporary consumer afterward.
+- **React** 19, client or server rendering (tested with TanStack Start and Vite SSR).
+- **Browsers:** Chrome/Edge 117+, Safari 16.2+, Firefox 121+. The styles use `oklch()`, `color-mix()`, `:has()`, container queries and subgrid. Some decorative glass blurs need Safari 18+ and degrade to a solid surface before that.
+- **Accessibility target:** WCAG 2.2 AA. Components use Base UI and React Aria behaviour, and unit tests run axe. Manual screen-reader, forced-colours and zoom testing is still in progress; see Known issues.
 
-## Documentation architecture
+## Known issues
 
-Navigation and component metadata live in `apps/docs/src/registry/components.ts`. Typed examples live in `apps/docs/src/demos`; preview modules are lazy imports, and copyable code is loaded from the same source files. Playground controls replace the examples' typed default values. Reset remounts the example and clears its interaction output.
+- Screen readers (VoiceOver, NVDA), Windows high-contrast mode, touch devices and 200%/400% zoom have not yet been tested systematically.
+- Right-to-left layouts are only partly verified.
+- Component and prop names may still change before 1.0; renames will be listed in the changelog.
 
-The API generator reads local interface members and JSDoc. Native and upstream props are explicitly documented as forwarded, rather than presenting an exhaustive table. Source disclosures load implementation text on demand. Highlighting loads when a code block approaches the viewport, with selected grammars and a bounded cache.
+Report problems on [GitHub issues](https://github.com/akssmax/DixyUI/issues).
 
-To add a component: implement and export it, add a typed example, register its controls and guidance, include its source in API generation, and add meaningful interaction coverage. Update the checklist with evidence.
+## Contributing
 
-## Learning and validation
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for local setup, checks, changesets and the sign-off requirement. Security reports: [SECURITY.md](./SECURITY.md).
 
-- [Design engineering checklist](./DESIGN_ENGINEERING_CHECKLIST.md) — shipped implementation and personal mastery are tracked separately.
-- [Learning notes](./docs/LEARNING_NOTES.md) — concepts, source pointers, snippets and exercises.
-- [Build evidence](./docs/BUILD_LOG.md) — commands and browser observations from this implementation.
+## License
 
-WCAG 2.2 AA is the target. Automated checks and Chromium browser evidence do not establish full conformance. VoiceOver/Safari, NVDA, zoom, touch and high-contrast reviews remain explicit release work.
-
-Checkbox, Switch, Tabs, Tooltip, broader compatibility and a public release are later milestones. The package remains private until its name, licensing, compatibility and publishing setup are intentionally finalized.
+[MIT](./LICENSE) © Akshay Saini
 
 ## Color foundations
 

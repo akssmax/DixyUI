@@ -6,23 +6,21 @@ import { CodeBlock } from "../src/components/code-block";
 
 <p className="page-deck">A package, a theme, and room to make it yours.</p>
 
-Dixy is an early, local alpha. The package name is provisional and has not been published to npm. Use the workspace package while we build and validate it.
+Dixy is in public beta. APIs may still change between `0.x` releases; every change is listed in each package's changelog.
 
-## Run this monorepo
-
-Use Node 24 or newer and the pnpm version recorded in the root package.json.
+## Install
 
 <CodeBlock
   language="shellscript"
   filename="terminal"
-  code={"pnpm install\npnpm dev"}
+  code={
+    "pnpm add @dixy-ui/react@beta\n# optional: extra visual skins\npnpm add @dixy-ui/themes@beta"
+  }
 />
 
-The root development command builds the React package first, then watches its output alongside the TanStack Start documentation app.
+`react` and `react-dom` 19 are peer dependencies. `motion` 14 is optional and only needed for `@dixy-ui/react/motion`.
 
 ## Import through the public API
-
-The documentation app declares `@dixy-ui/react` as a `workspace:*` dependency. It imports the same JavaScript, types, and stylesheet that a future consumer will receive.
 
 <CodeBlock
   code={
@@ -46,8 +44,18 @@ Your application layout root should use `isolation: isolate`. Keep `body` positi
   code={"body { position: relative; }\n.app-root { isolation: isolate; }"}
 />
 
-## What is supported today
+## Supported environments
 
-Theme, Button, IconButton, Text, Heading, Field, TextField, and Dialog form the first slice. React 19 is the initial peer dependency target. More components and broader compatibility follow after the initial contracts are validated.
+- **React** 19, with client or server rendering.
+- **Browsers:** Chrome/Edge 117+, Safari 16.2+, Firefox 121+. Dixy's styles use `oklch()`, `color-mix()`, `:has()`, container queries and subgrid. Some decorative glass blurs need Safari 18+ and fall back to a solid surface before that.
+- **Accessibility:** WCAG 2.2 AA is the target. Base UI and React Aria provide the behaviour, and automated axe checks run in the test suite. Manual screen-reader, high-contrast and zoom testing is still in progress.
 
-The current scope is modern evergreen browsers. Accessibility is a development target, with manual validation tracked separately from automated checks.
+## Contributing to Dixy
+
+To work on Dixy itself, clone the repository and use Node 24+ with the pnpm version in the root `package.json`:
+
+<CodeBlock
+  language="shellscript"
+  filename="terminal"
+  code={"pnpm install\npnpm dev"}
+/>

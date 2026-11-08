@@ -1,13 +1,28 @@
 {
   "name": "@dixy-ui/tokens",
-  "version": "0.1.0-alpha.0",
-  "private": true,
+  "version": "0.0.0",
   "description": "Framework-independent Dixy color, typography, sizing and spacing contracts.",
+  "license": "MIT",
+  "author": "Akshay Saini",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akssmax/DixyUI.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/akssmax/DixyUI#readme",
+  "bugs": {
+    "url": "https://github.com/akssmax/DixyUI/issues"
+  },
   "type": "module",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "sideEffects": [
     "**/*.css"
   ],

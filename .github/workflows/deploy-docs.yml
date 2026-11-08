@@ -1,0 +1,48 @@
+name: Deploy docs
+# Builds the docs app and deploys it to Cloudflare Workers.
+# Needs repository secrets CLOUDFLARE_API_TOKEN (Workers Scripts: Edit) and
+# CLOUDFLARE_ACCOUNT_ID. Until they exist, the deploy steps are skipped.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+  deployments: write
+concurrency:
+  group: deploy-docs-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      HAS_CLOUDFLARE: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Builds tokens, react and themes, then the docs Worker (turbo orders it).
+      - run: pnpm build
+      - name: Deploy to production
+        if: env.HAS_CLOUDFLARE == 'true' && github.event_name != 'pull_request'
+        working-directory: apps/docs
+        run: pnpm exec wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # Pull requests from this repository get a preview URL; production is untouched.
+      - name: Upload preview version
+        if: env.HAS_CLOUDFLARE == 'true' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        working-directory: apps/docs
+        run: pnpm exec wrangler versions upload --preview-alias "pr-${{ github.event.number }}"
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: Cloudflare not connected
+        if: env.HAS_CLOUDFLARE != 'true'
+        run: echo "::notice::Docs built. Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID secrets to deploy."

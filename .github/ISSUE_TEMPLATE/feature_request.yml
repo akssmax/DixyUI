@@ -1,0 +1,15 @@
+name: Feature or component request
+description: Suggest a component, prop or token.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to build?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API or behaviour
+      description: Links to similar components in other libraries are welcome.

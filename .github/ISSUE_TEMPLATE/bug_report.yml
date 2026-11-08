@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in a Dixy package does not work as documented.
+labels: [bug]
+body:
+  - type: input
+    id: package
+    attributes:
+      label: Package and version
+      placeholder: "@dixy-ui/react 0.1.0-beta.0"
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component
+      placeholder: Select, Dialog, Navbar…
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: A StackBlitz/CodeSandbox link or a short code sample.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, OS and React version
+      placeholder: Safari 18.2, macOS 15, React 19.3
+  - type: checkboxes
+    id: a11y
+    attributes:
+      label: Accessibility
+      options:
+        - label: This affects keyboard, screen-reader, zoom or high-contrast use.

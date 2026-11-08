@@ -799,3 +799,20 @@ Components that shadcn/ui, HeroUI or Radix (Primitives + Themes) ship and Dixy d
 - [ ] Forced colours, screen readers (VoiceOver/NVDA), touch, and 200%/400% zoom for all ten components.
 - [ ] Each material finish and skin looked at visually on Snippet, PasswordField and Navbar.
 - [ ] Personally explain why Navbar uses a container query rather than a media query, and why Image resets its state during render instead of in an effect.
+
+## Public beta readiness — 2026-11-08
+
+Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
+
+- [x] MIT license and package metadata on all published packages.
+- [x] Docs build and run on Cloudflare Workers (`workerd` locally; dry-run upload 1.6 MiB gzipped).
+- [x] Deploy-docs and release workflows, safe to merge before any accounts are connected.
+- [x] Changesets beta pre-release mode; dry run produces `0.1.0-beta.0`.
+- [x] User-facing README, supported browsers, beta labels, CONTRIBUTING (DCO), SECURITY, code of conduct, issue/PR templates.
+- [x] Tree-shaking check with size budgets in `package:check`; fixed `Field`/`Dialog` retaining Base UI code (Button-only bundle 128.8 → 17.1 KiB).
+- [ ] Connect Cloudflare (API token + account ID secrets) and confirm the first production deploy and a PR preview.
+- [x] Create the `dixy-ui` npm organisation and the `NPM_TOKEN` secret (scoped to `@dixy-ui`, expires 2026-12-08).
+- [ ] API naming pass and Experimental labels.
+- [ ] Beta accessibility bar: contrast script, keyboard, forced colours and zoom passes, Known issues page.
+- [x] Remove `private` from the three packages and add `publishConfig` (public, provenance).
+- [ ] Publish `0.1.0-beta.0`, smoke-test from npm, then switch to trusted publishing and delete the token.

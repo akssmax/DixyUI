@@ -632,7 +632,7 @@ function Landing() {
         <main id="landing-main" tabIndex={-1}>
           <section className="landing-hero" aria-labelledby="hero-heading">
             <Badge variant="soft" className="landing-pill">
-              0.1 alpha · Built on Base UI
+              0.1 beta · Built on Base UI
             </Badge>
             <Heading as="h1" id="hero-heading" className="landing-display">
               Components with <em>character.</em>
