@@ -109,7 +109,7 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const installCommand = "pnpm add @dixy-ui/react @dixy-ui/themes";
+const installCommand = "pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta";
 
 const original = {
   id: "none",
@@ -632,7 +632,7 @@ function Landing() {
         <main id="landing-main" tabIndex={-1}>
           <section className="landing-hero" aria-labelledby="hero-heading">
             <Badge variant="soft" className="landing-pill">
-              0.1 alpha · Built on Base UI
+              0.1 beta · Built on Base UI
             </Badge>
             <Heading as="h1" id="hero-heading" className="landing-display">
               Components with <em>character.</em>
@@ -657,7 +657,7 @@ function Landing() {
             </div>
             <InstallCommand />
             <Text size="sm" tone="muted">
-              Provisional package names. Not yet published to npm.
+              Public beta. APIs may change before 1.0.
             </Text>
           </section>
 

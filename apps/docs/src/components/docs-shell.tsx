@@ -85,7 +85,7 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
         >
           dixy<span>UI</span>
         </Link>
-        <span className="version-label">0.1 alpha</span>
+        <span className="version-label">0.1 beta</span>
       </div>
       <nav aria-label="Documentation">
         {navigation.map((group) => (

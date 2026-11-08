@@ -1371,3 +1371,23 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - In-app browser, :3002: the Navbar collapses at a 622px bar with `md` and expands with `sm`; the menu opens, current page is highlighted. On a 375px phone width there is no horizontal overflow, and the preview is correct in light and dark. PasswordField: Tab reaches the toggle, Space shows the password, focus stays on the toggle, and the Field label resolves. Image: the broken src falls back and reports `loaded`.
   - Fixed during verification: three registry `token` values duplicated fixed rows in the docs token table (React duplicate-key warning).
 - Not tested: forced colours, screen readers, touch devices, 200%/400% zoom, each material finish and skin visually, Snippet copy in a real browser clipboard (unit-tested with a mock only), and RTL.
+
+### 2026-11-08 — Beta readiness: MIT, Cloudflare Workers, release pipeline, tree shaking
+
+- Decisions (user): MIT license; docs on Cloudflare. A future Pro version will be a separate, commercially licensed package.
+- Repository:
+  - `LICENSE` (MIT) at the root and in each published package; metadata fields on all three packages.
+  - Cloudflare: `@cloudflare/vite-plugin` and `wrangler` (exact pins) in `apps/docs`; `wrangler.jsonc` with the TanStack Start server entry; `deploy` and `cf-typegen` scripts. `pnpm-workspace.yaml` allows the `esbuild` and `workerd` build scripts, because pnpm 12 otherwise fails `--frozen-lockfile` installs.
+  - Workflows: `deploy-docs.yml` (production on `main`, preview aliases for PRs, skipped without secrets) and `release.yml` (all checks, then changesets with provenance; private packages are never published).
+  - Changesets: `pre enter beta`, `privatePackages.version: true`, package versions reset to `0.0.0`, and two changesets (first beta; `Field`/`Dialog` tree shaking).
+  - Docs and README say beta. The README is now user-facing; maintainer content moved to `CONTRIBUTING.md`. Added `SECURITY.md`, `CODE_OF_CONDUCT.md`, issue forms and a PR template.
+  - `scripts/check-tree-shaking.mjs` runs in `package:check` (before `verify-package`, so CI's `--online` flag still reaches that script).
+- Library fix: `Field` and `Dialog` were plain objects that read `Primitive.*` properties at module scope. Bundlers keep property reads that might have side effects, so every consumer kept Base UI's dialog and field code. Both now use the `/* @__PURE__ */ (() => ({…}))()` pattern the other compound components already used. Button alone went from 128.8 to 17.1 KiB minified; Navbar + Snippet + DataList from 147.3 to 44.1 KiB.
+- Verified:
+  - `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm package:check --online` and Prettier pass.
+  - Docs `vite build` produces a Worker; `wrangler deploy --dry-run` reports 9213 KiB / 1605 KiB gzipped.
+  - In the in-app browser, `vite preview` on `workerd` server-renders the landing page and the Navbar page. Fetching the same page without and with the `dixy-appearance=dark` cookie returns light and dark HTML respectively. `vite dev` on `workerd` renders the Snippet page without console errors.
+  - Dry-run `changeset version` produced `0.1.0-beta.0` for all three packages, and was then reverted.
+  - The tree-shaking check detects a real leak: a DatePicker import includes `react-aria`, `react-stately` and `@internationalized/date`.
+- Not tested: an actual Cloudflare deploy and PR preview (no account connected), an actual npm publish, trusted publishing via OIDC with `pnpm publish`, and the release workflow end to end on GitHub.
+- Accounts (same day): the user created the `dixy-ui` npm organisation and a granular token (read and write to `@dixy-ui` only, no org access, 30-day expiry) saved as the `NPM_TOKEN` GitHub secret. A first token was pasted into chat and was replaced; it must be revoked on npm. Then the three packages dropped `"private": true` and gained `publishConfig: { access: "public", provenance: true }`, so merging to `main` will start the release flow.
