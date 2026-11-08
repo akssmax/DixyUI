@@ -1,5 +1,11 @@
 # @dixy-ui/tokens
 
+## 0.1.0-beta.2
+
+### Patch Changes
+
+- 1bf2941: Published from GitHub Actions through npm Trusted Publishing, with provenance.
+
 ## 0.1.0-beta.1
 
 ### Patch Changes

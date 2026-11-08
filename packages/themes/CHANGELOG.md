@@ -1,5 +1,13 @@
 # @dixy-ui/themes
 
+## 0.1.0-beta.2
+
+### Patch Changes
+
+- 1bf2941: Published from GitHub Actions through npm Trusted Publishing, with provenance.
+- Updated dependencies [1bf2941]
+  - @dixy-ui/tokens@0.1.0-beta.2
+
 ## 0.1.0-beta.1
 
 ### Patch Changes
