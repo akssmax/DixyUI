@@ -1391,3 +1391,10 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The tree-shaking check detects a real leak: a DatePicker import includes `react-aria`, `react-stately` and `@internationalized/date`.
 - Not tested: an actual Cloudflare deploy and PR preview (no account connected), an actual npm publish, trusted publishing via OIDC with `pnpm publish`, and the release workflow end to end on GitHub.
 - Accounts (same day): the user created the `dixy-ui` npm organisation and a granular token (read and write to `@dixy-ui` only, no org access, 30-day expiry) saved as the `NPM_TOKEN` GitHub secret. A first token was pasted into chat and was replaced; it must be revoked on npm. Then the three packages dropped `"private": true` and gained `publishConfig: { access: "public", provenance: true }`, so merging to `main` will start the release flow.
+
+### 2026-11-08 — First beta published; package READMEs, provenance, hero size
+
+- `0.1.0-beta.0` of `@dixy-ui/react`, `@dixy-ui/tokens` and `@dixy-ui/themes` is on npm (`beta` and `latest` tags). The first publish failed because `changesets/action@v1` reads Changesets CLI 3's `.changeset/pre/` as an old-format changeset; moved to `changesets/action@v2.1.2`. A fresh registry install server-renders a Retro OS themed `Button`, and `@dixy-ui/tokens` resolves to `0.1.0-beta.0` (no `workspace:` leak).
+- Provenance was not attached: pnpm 12 reads `PNPM_CONFIG_PROVENANCE`, not `NPM_CONFIG_PROVENANCE`. The release workflow now sets the pnpm variable. Verified only on the next publish.
+- Package READMEs (shown on npm) now describe the public beta, with install, quick start and docs links. The themes README no longer claims eleven entries.
+- Landing hero: seven starters (Retro OS, Y2K Titanium, Brutalist Concrete, Orbital HUD, Freighter, Riso Zine, Swiss Poster) use very wide or uppercased display faces. Five of them wrapped "Components with character." to three oversized lines. They now use `clamp(30px, 5.6vw, 58px)`. Measured in the in-app browser: all 32 starters plus Original Dixy fit in two lines at 1280px and 390px.
