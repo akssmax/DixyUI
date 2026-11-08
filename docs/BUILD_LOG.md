@@ -1348,3 +1348,26 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - In-app browser: Candy Clay in light (selected toggle paint equals the knob's white-to-pink gradient) and dark; Winamp Signal (dark). Clicking Monthly moves the thumb.
   - `pnpm check` and `pnpm package:check` passed.
 - Not tested: other skins' light themes one by one, forced colours, keyboard focus ring on the new thumb, and mobile.
+
+### 2026-11-07 — Components from the shadcn / HeroUI / Radix gap list
+
+- Why: a comparison with shadcn/ui, HeroUI and Radix found a few components that Dixy lacked. All of them are now added, except Spacer (gaps already cover it) and Portal/Slot (Base UI and `useRender` already cover them).
+- Library (`@dixy-ui/react`), all styled only with `--dixy-*` tokens in `additions.css`. Theme accent, neutral, radius, density, material, skin and appearance therefore apply without per-theme CSS:
+  - `Grid` (layout.tsx): `columns` (clamped 1–12) or `minColumnWidth` auto-fit, with `gap` on the stack scale. It has an explicit `ReactElement` return type, because the inferred one broke the packed `.d.ts` (caught by `package:check`).
+  - `VisuallyHidden` (visually-hidden.tsx): exports the existing `.dixy-visually-hidden` class as a component, plus `focusable`.
+  - `Code`, `Blockquote` (typography.tsx): built on `nativePart`, so they get `data-dixy-visual`, which the component colour aliases need. Code sizes in `em` to follow the surrounding text.
+  - `Snippet` (snippet.tsx): IconButton copy, `role=status` announcements, a failure path, a timeout reset and cleanup on unmount.
+  - `PasswordField` (password-field.tsx): wraps TextField (a Base UI Input), so `Field.Label` still labels it. The toggle has a constant name and `aria-pressed`, and focus stays on it. The focus ring moves to the group via `:has()`.
+  - `DataList` (content.tsx): `dl` > `div` > `dt` + `dd`, aligned with subgrid.
+  - `User` (user.tsx): composes Avatar; `aria-hidden` avatar; initials.
+  - `Image` (image.tsx): status during render (no effect race), a ref check for images that finished before hydration, one fallback.
+  - `Navbar` (navbar.tsx): `header` built on Base UI Collapsible. Content and Menu each wrap a `nav` (only one is displayed at a time). Collapse uses a named container query. Links close the menu.
+  - Shared decorative glyphs (copy, check, eye, menu, close) live in `utilities/inline-icons.tsx`. No icon-pack dependency.
+- Docs: 10 registry entries with controls, composition trees, keyboard tables and lessons; 10 demos whose defaults match the controls; `api.json` regenerated with `pnpm docs:generate`. The theme gallery picks them up through the registry.
+- Verified:
+  - `pnpm check` passes (109 library tests, including 10 new tests with axe).
+  - `pnpm package:check` (the verify script with `--online`, because this worktree's offline store lacked one tarball) passes.
+  - `pnpm examples:check` typechecks all 1580 generated examples.
+  - In-app browser, :3002: the Navbar collapses at a 622px bar with `md` and expands with `sm`; the menu opens, current page is highlighted. On a 375px phone width there is no horizontal overflow, and the preview is correct in light and dark. PasswordField: Tab reaches the toggle, Space shows the password, focus stays on the toggle, and the Field label resolves. Image: the broken src falls back and reports `loaded`.
+  - Fixed during verification: three registry `token` values duplicated fixed rows in the docs token table (React duplicate-key warning).
+- Not tested: forced colours, screen readers, touch devices, 200%/400% zoom, each material finish and skin visually, Snippet copy in a real browser clipboard (unit-tested with a mock only), and RTL.

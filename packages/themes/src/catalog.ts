@@ -299,7 +299,7 @@ export const skinCatalog = [
       relief: 1,
       effects: "static",
     },
-    rendererSymbol: "OceanOrnament",
+    rendererSymbol: null,
   },
   {
     id: "dixy/candy-clay",
@@ -342,7 +342,7 @@ export const skinCatalog = [
       relief: 1,
       effects: "static",
     },
-    rendererSymbol: "ClayOrnament",
+    rendererSymbol: null,
   },
   {
     id: "dixy/art-deco",

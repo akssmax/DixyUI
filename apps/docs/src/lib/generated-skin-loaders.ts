@@ -86,8 +86,6 @@ export const ornamentRenderers: Record<
   "dixy/tactile-atelier": lazy(
     () => import("@dixy-ui/themes/tactile-atelier/react"),
   ),
-  "dixy/ocean-depths": lazy(() => import("@dixy-ui/themes/ocean-depths/react")),
-  "dixy/candy-clay": lazy(() => import("@dixy-ui/themes/candy-clay/react")),
   "dixy/art-deco": lazy(() => import("@dixy-ui/themes/art-deco/react")),
   "dixy/y2k-titanium": lazy(() => import("@dixy-ui/themes/y2k-titanium/react")),
   "dixy/material-light": lazy(
