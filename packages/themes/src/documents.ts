@@ -52,7 +52,7 @@ const starterChrome: Record<string, Partial<ThemeChrome>> = {
   "dixy/living-forest": { corners: "round" },
   "dixy/prism-glass": { well: "glass" },
   "dixy/ocean-depths": { well: "glass", corners: "round" },
-  "dixy/candy-clay": { edge: "pill", well: "sunken", corners: "round" },
+  "dixy/candy-clay": { edge: "line", well: "sunken", corners: "round" },
   "dixy/y2k-titanium": { edge: "line", well: "tinted", corners: "notched" },
   "dixy/material-light": { well: "sunken" },
   "dixy/blueprint": {
@@ -822,14 +822,15 @@ export const themeDocuments = [
         },
       },
       frame: {
-        id: "coral",
+        // Plain card: the material carries the look (as in the HTML redesign).
+        id: "none",
         version: 1,
         parameters: {
-          width: 1,
-          paddingTop: 48,
-          paddingInline: 40,
-          paddingBottom: 40,
-          inset: 10,
+          width: 0,
+          paddingTop: 26,
+          paddingInline: 24,
+          paddingBottom: 24,
+          inset: 0,
           cornerScale: 1,
           cornerVariation: 0,
         },
@@ -877,14 +878,15 @@ export const themeDocuments = [
         },
       },
       frame: {
-        id: "cushion",
+        // Plain card: the material carries the look (as in the HTML redesign).
+        id: "none",
         version: 1,
         parameters: {
-          width: 1,
-          paddingTop: 36,
-          paddingInline: 32,
-          paddingBottom: 32,
-          inset: 10,
+          width: 0,
+          paddingTop: 28,
+          paddingInline: 26,
+          paddingBottom: 26,
+          inset: 0,
           cornerScale: 1.5,
           cornerVariation: 0.15,
         },

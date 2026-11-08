@@ -108,6 +108,7 @@
     --dixy-organic-b: #87d75f;
     --dixy-organic-c: #ff87d7;
     --dixy-organic-d: #9a9a9a;
+    --dixy-skin-selected: var(--dixy-skin-finish);
     --dixy-color-text-primary: color-mix(
       in srgb,
       var(--dixy-color-base-12) 80%,
@@ -331,6 +332,26 @@
     background-image: var(--dixy-skin-finish);
     box-shadow: var(--dixy-skin-control-relief);
     border: 1px solid var(--dixy-skin-edge);
+  }
+  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised thumb (slider-knob paint in light, the raised finish in dark so its label stays readable). */
+  .dixy-theme[data-dixy-skin="dixy/ansi-panes"]
+    .dixy-toggle-group:is([data-attached], [data-segmented]):not(
+      [data-dixy-material-override]
+    ):not(:where([data-dixy-material-override]) *) {
+    background-color: var(--dixy-color-background-canvas);
+    border: 1px solid var(--dixy-skin-edge);
+    box-shadow: var(--dixy-skin-inset);
+  }
+  :is(.dixy-toggle)[data-dixy-skin="dixy/ansi-panes"]:not(
+      [data-dixy-material-override]
+    ):not(:where([data-dixy-material-override]) *):not(
+      [data-variant="solid"]
+    )[data-pressed]:not([data-disabled]) {
+    background-color: var(--dixy-color-background-surface-raised);
+    background-image: var(--dixy-skin-selected, var(--dixy-skin-thumb));
+    box-shadow: var(--dixy-skin-control-relief);
+    border-color: var(--dixy-skin-edge);
+    color: var(--dixy-color-text-primary);
   }
   :is(
       .dixy-slider-track,
