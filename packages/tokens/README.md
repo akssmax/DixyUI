@@ -1,6 +1,22 @@
-# Dixy tokens
+# @dixy-ui/tokens
 
-Framework-independent typography and spacing. No React, Base UI, router, Tailwind, or browser runtime dependency.
+Framework-independent design tokens for [Dixy UI](https://github.com/akssmax/DixyUI): OKLCH colour palettes, typography, sizing, spacing and motion, as plain CSS custom properties and typed TypeScript helpers. No React, Base UI, Tailwind or browser runtime dependency.
+
+[![npm](https://img.shields.io/npm/v/%40dixy-ui%2Ftokens/beta?label=npm&color=7c3aed)](https://www.npmjs.com/package/@dixy-ui/tokens) [![MIT](https://img.shields.io/badge/license-MIT-7c3aed)](https://github.com/akssmax/DixyUI/blob/main/LICENSE)
+
+> **Public beta.** APIs may change between `0.x` releases. See the [changelog](./CHANGELOG.md) and the [known issues](https://github.com/akssmax/DixyUI#known-issues).
+
+[Documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) · [Components](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button) · [Themes](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
+
+## Install
+
+```sh
+pnpm add @dixy-ui/tokens@beta
+```
+
+`@dixy-ui/react` already includes these tokens. Install this package on its own to use Dixy's tokens without the components. Optional Tailwind v4 bindings are included.
+
+## Spacing
 
 ```css
 @import "@dixy-ui/tokens/spacing.css";

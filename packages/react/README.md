@@ -1,6 +1,22 @@
 # @dixy-ui/react
 
-Dixy's styled React components, built on Base UI. This private local alpha is consumed by the documentation app through its compiled exports.
+Expressive, accessible React components built on [Base UI](https://base-ui.com), with semantic design tokens and a `Theme` provider. Part of [Dixy UI](https://github.com/akssmax/DixyUI).
+
+[![npm](https://img.shields.io/npm/v/%40dixy-ui%2Freact/beta?label=npm&color=7c3aed)](https://www.npmjs.com/package/@dixy-ui/react) [![MIT](https://img.shields.io/badge/license-MIT-7c3aed)](https://github.com/akssmax/DixyUI/blob/main/LICENSE)
+
+> **Public beta.** APIs may change between `0.x` releases. See the [changelog](./CHANGELOG.md) and the [known issues](https://github.com/akssmax/DixyUI#known-issues).
+
+[Documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) · [Components](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button) · [Themes](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
+
+## Install
+
+```sh
+pnpm add @dixy-ui/react@beta
+```
+
+`react` and `react-dom` 19 are peer dependencies. `motion` 14 is optional and only needed for `@dixy-ui/react/motion`.
+
+## Usage
 
 ```tsx
 import "@dixy-ui/react/styles.css";
@@ -23,7 +39,9 @@ Buttons preserve Base UI's render/ref/event contracts. To render navigation as a
 
 Field.Label, TextField, Field.Description and Field.Error share Base UI field context. Dialog exposes compound parts, including its portal, backdrop, viewport, popup, title, description and close action.
 
-See the root README, local docs app, and design engineering checklist for the current scope and validation evidence. This alpha is not a claim of full accessibility conformance or broad framework compatibility.
+The accessibility target is WCAG 2.2 AA; automated axe checks run on every component, and manual screen-reader, forced-colours and zoom testing is still in progress. See the [documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) for every component's API, keyboard behaviour and examples.
+
+## Reference
 
 ## Spacing and density
 

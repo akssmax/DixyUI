@@ -94,9 +94,37 @@
   text-align: center;
 }
 .landing .landing-display {
-  font: 650 clamp(40px, 8vw, 84px) / 1 var(--dixy-font-display);
+  --landing-display-size: clamp(40px, 8vw, 84px);
+  font: 650 var(--landing-display-size) / 1 var(--dixy-font-display);
   letter-spacing: -0.045em;
   text-wrap: balance;
+}
+/* Starters whose display face is very wide (Archivo Black, Orbitron,
+   Silkscreen) or uppercased wrapped the hero to three oversized lines.
+   Measured 2026-11-08 at 1280px and 390px; keep it to two lines. */
+.landing
+  :is(
+    [data-dixy-skin="dixy/retro-os"],
+    [data-dixy-skin="dixy/y2k-titanium"],
+    [data-dixy-skin="dixy/brutalist-concrete"],
+    [data-dixy-skin="dixy/orbital-hud"],
+    [data-dixy-skin="dixy/freighter"],
+    [data-dixy-skin="dixy/riso-zine"],
+    [data-dixy-skin="dixy/swiss-poster"]
+  )
+  .landing-display,
+.landing:is(
+    [data-dixy-skin="dixy/retro-os"],
+    [data-dixy-skin="dixy/y2k-titanium"],
+    [data-dixy-skin="dixy/brutalist-concrete"],
+    [data-dixy-skin="dixy/orbital-hud"],
+    [data-dixy-skin="dixy/freighter"],
+    [data-dixy-skin="dixy/riso-zine"],
+    [data-dixy-skin="dixy/swiss-poster"]
+  )
+  .landing-display {
+  --landing-display-size: clamp(30px, 5.6vw, 58px);
+  letter-spacing: -0.02em;
 }
 .landing-display em {
   font-style: italic;
