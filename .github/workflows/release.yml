@@ -1,8 +1,9 @@
 name: Release
 # On main, changesets either opens a "Version packages" PR or, when that PR
 # has been merged, publishes the changed packages to npm with provenance.
-# Packages marked "private" are never published. Needs an NPM_TOKEN secret
-# (an npm automation or granular token for the dixy-ui organisation).
+# Packages marked "private" are never published. Publishing uses npm
+# Trusted Publishing (OIDC): each @dixy-ui package trusts this repository's
+# release.yml, so no npm token is stored and pnpm attaches provenance.
 on:
   push:
     branches: [main]
@@ -26,22 +27,17 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
-          registry-url: https://registry.npmjs.org
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm check
       - run: pnpm package:check --online
       # v2 is required for Changesets CLI 3: v1 mistakes the CLI 3
       # `.changeset/pre/` folder for an old-format changeset and fails.
-      # v2 does not write .npmrc; setup-node's registry-url above reads
-      # NODE_AUTH_TOKEN instead.
       - uses: changesets/action@v2.1.2
         with:
           version-script: pnpm changeset version
           publish-script: pnpm release
           commit-message: "Version packages"
           pr-title: "Version packages"
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          # pnpm 12 reads PNPM_CONFIG_*, not npm_config_*, for provenance.
-          PNPM_CONFIG_PROVENANCE: "true"
+        # No npm token: id-token: write lets pnpm exchange the job's OIDC
+        # token with npm, which also attaches provenance automatically.
