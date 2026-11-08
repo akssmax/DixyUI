@@ -1398,3 +1398,9 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Provenance was not attached: pnpm 12 reads `PNPM_CONFIG_PROVENANCE`, not `NPM_CONFIG_PROVENANCE`. The release workflow now sets the pnpm variable. Verified only on the next publish.
 - Package READMEs (shown on npm) now describe the public beta, with install, quick start and docs links. The themes README no longer claims eleven entries.
 - Landing hero: seven starters (Retro OS, Y2K Titanium, Brutalist Concrete, Orbital HUD, Freighter, Riso Zine, Swiss Poster) use very wide or uppercased display faces. Five of them wrapped "Components with character." to three oversized lines. They now use `clamp(30px, 5.6vw, 58px)`. Measured in the in-app browser: all 32 starters plus Original Dixy fit in two lines at 1280px and 390px.
+
+### 2026-11-08 — Trusted Publishing
+
+- `0.1.0-beta.1` published with the new READMEs, but still without provenance even with `PNPM_CONFIG_PROVENANCE` set; npm's attestations endpoint returns 404 for all three packages.
+- Each `@dixy-ui` package now has a GitHub Actions trusted publisher on npm (`akssmax/DixyUI`, `release.yml`, `npm publish` allowed). npm marks them "pending validation" until the first OIDC publish, which must happen before 2026-11-10 10:44 UTC.
+- The release workflow no longer uses `NPM_TOKEN` or `registry-url`; `id-token: write` lets pnpm sign in through OIDC and attach provenance. To confirm on the next publish: provenance attached, then delete the `NPM_TOKEN` secret and revoke the token.
