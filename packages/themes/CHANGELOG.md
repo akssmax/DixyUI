@@ -1,5 +1,13 @@
 # @dixy-ui/themes
 
+## 0.1.0-beta.1
+
+### Patch Changes
+
+- 76dd130: Package READMEs now describe the public beta, with install steps, a quick start and documentation links. Releases are published with npm provenance.
+- Updated dependencies [76dd130]
+  - @dixy-ui/tokens@0.1.0-beta.1
+
 ## 0.1.0-beta.0
 
 ### Minor Changes
