@@ -31,13 +31,16 @@ jobs:
       - run: pnpm format:check
       - run: pnpm check
       - run: pnpm package:check --online
-      - uses: changesets/action@v1
+      # v2 is required for Changesets CLI 3: v1 mistakes the CLI 3
+      # `.changeset/pre/` folder for an old-format changeset and fails.
+      # v2 does not write .npmrc; setup-node's registry-url above reads
+      # NODE_AUTH_TOKEN instead.
+      - uses: changesets/action@v2.1.2
         with:
-          version: pnpm changeset version
-          publish: pnpm release
-          commit: "Version packages"
-          title: "Version packages"
+          version-script: pnpm changeset version
+          publish-script: pnpm release
+          commit-message: "Version packages"
+          pr-title: "Version packages"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
