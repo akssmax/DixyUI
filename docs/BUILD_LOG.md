@@ -1703,3 +1703,16 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - `0.1.0-beta.1` published with the new READMEs, but still without provenance even with `PNPM_CONFIG_PROVENANCE` set; npm's attestations endpoint returns 404 for all three packages.
 - Each `@dixy-ui` package now has a GitHub Actions trusted publisher on npm (`akssmax/DixyUI`, `release.yml`, `npm publish` allowed). npm marks them "pending validation" until the first OIDC publish, which must happen before 2026-11-10 10:44 UTC.
 - The release workflow no longer uses `NPM_TOKEN` or `registry-url`; `id-token: write` lets pnpm sign in through OIDC and attach provenance. To confirm on the next publish: provenance attached, then delete the `NPM_TOKEN` secret and revoke the token.
+
+### 2026-11-09 — Shader lab workbench
+
+- What changed: `/lab/shaders` was a small card of controls beside a demo page. It is now a playground workbench.
+  - Top bar: back link, title, Prototype badge, Light/Dark toggle.
+  - Stage (the shader host, sticky on desktop): a Hero / Surfaces / Backdrop scene switcher, so the shader can be judged under content, on surfaces, or on its own; a status HUD (state, fps, canvas size) pinned to the corner.
+  - Inspector: on/off switch; a shader gallery (radio rows: shader, skin, program id) replacing the Select; playback (Pause/Play, Restart, speed 0.25–2× on a stepped Slider); token inputs showing the three tokens behind `uDeep` / `uMid` / `uLight` as live swatches for the current appearance; render stats (canvas, fps, base resolution, adaptive quality, pixel-ratio cap).
+- Runtime: `startShaderBackdrop` takes `speed` and `paused`, and gains `configure()` and `restart()`; changing them never rebuilds the GL program. `running` and `still` statuses now carry `width`, `height` and `quality`. After a resize while idle it re-runs `update()` so the reported size stays current. `ShaderBackdrop` forwards `speed`, `paused` and `restartKey`. The Fernpay example only reads `status.state`, so it is unaffected.
+- Why: a lab should show the cause next to the effect. Token swatches make the token → uniform path visible; the stats make the adaptive-resolution step visible; scenes test readability, which is the real acceptance bar for a backdrop.
+- Verified:
+  - `pnpm check` and Prettier pass.
+  - In-app browser (own server on :3001): Ocean caustics running with live canvas size and 80% adaptive quality; Pause holds the frame and the HUD reads "Paused"; ArrowRight ×2 on the speed thumb goes 1× → 2×; switching to Aurora updates the URL (`?skin=solar-sail`), the radio state and the token swatches; Phosphor Terminal in dark; Neon Night Market at 375px stacks stage over inspector with no horizontal overflow. No console errors.
+- Not tested: reduced-motion (the Pause/Restart/Speed controls disable and a note appears, but OS reduced motion was not toggled), screen readers, Safari/Firefox, touch devices, and 120 Hz frame rate (the in-app pane reported 29 fps and less while backgrounded).

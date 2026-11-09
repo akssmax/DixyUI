@@ -786,6 +786,7 @@ Verification for this pass:
 
 - [x] Opt-in WebGL backdrop on `/lab/shaders` for Ocean Depths and Phosphor Terminal, driven by theme tokens, with reduced-motion still frame, off-screen pause and static fallback. Evidence: docs/BUILD_LOG.md, 2026-11-09.
 - [x] Four more pairings (Neon Night Market, Prism Glass, Diwali Lights, Solar Sail); uncapped display-rate loop with adaptive resolution; every shader ≤0.1 ms/frame on Apple M5. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] `/lab/shaders` rebuilt as a workbench: pinned preview stage with scene switcher and status HUD, inspector with shader gallery, pause/restart/speed, token-input swatches and render stats. Evidence: docs/BUILD_LOG.md, 2026-11-09 ("Shader lab workbench").
 - [ ] Measure real frame rate (120 Hz) and battery cost on a low-end laptop and a phone; test Safari and Firefox.
 - [ ] Decide whether shaders graduate into `@dixy-ui/themes` as an `effects: "shader"` option behind a separate lazy export (needs `pnpm package:check`).
 - [ ] Learning: explain how a fragment shader runs per pixel, why the runtime keeps a single WebGL context, and how token colours reach the GPU as uniforms.

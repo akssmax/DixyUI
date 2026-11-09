@@ -4,9 +4,17 @@ import {
   type ShaderProgramId,
 } from "./shader-programs";
 
+/** What the canvas is drawing at, for diagnostics. */
+export interface ShaderFrameSize {
+  width: number;
+  height: number;
+  /** Adaptive quality, 0.5–1, applied on top of the program's resolution. */
+  quality: number;
+}
+
 export type ShaderStatus =
-  | { state: "running"; fps: number }
-  | { state: "still"; reason: "reduced-motion" | "paused" }
+  | ({ state: "running"; fps: number } & ShaderFrameSize)
+  | ({ state: "still"; reason: "reduced-motion" | "paused" } & ShaderFrameSize)
   | { state: "hidden" }
   | { state: "unsupported" }
   | { state: "lost" };
@@ -14,8 +22,16 @@ export type ShaderStatus =
 export interface ShaderBackdropOptions {
   program: ShaderProgramId;
   appearance: "light" | "dark";
+  /** Time multiplier; 1 is the designed pace. @default 1 */
+  speed?: number;
+  /** Hold the current frame instead of animating. @default false */
+  paused?: boolean;
   onStatus?: (status: ShaderStatus) => void;
 }
+
+export type ShaderBackdropSettings = Partial<
+  Pick<ShaderBackdropOptions, "appearance" | "speed" | "paused">
+>;
 
 const uniformNames = [
   "uRes",
@@ -203,7 +219,7 @@ export function startShaderBackdrop(
     if (last) {
       const delta = now - last;
       // Clamp the step so a stalled frame does not jump the animation.
-      elapsed += Math.min(delta, 100) / 1000;
+      elapsed += (Math.min(delta, 100) / 1000) * (options.speed ?? 1);
       adaptQuality(delta);
     }
     last = now;
@@ -213,11 +229,16 @@ export function startShaderBackdrop(
       report({
         state: "running",
         fps: Math.round((fpsFrames * 1000) / (now - fpsStart)),
+        ...frameSize(),
       });
       fpsFrames = 0;
       fpsStart = now;
     }
     frame = requestAnimationFrame(tick);
+  }
+
+  function frameSize(): ShaderFrameSize {
+    return { width: canvas.width, height: canvas.height, quality };
   }
 
   function stop() {
@@ -232,7 +253,12 @@ export function startShaderBackdrop(
     if (destroyed || !gl || gl.isContextLost()) return;
     if (motionQuery.matches) {
       draw(STILL_TIME);
-      report({ state: "still", reason: "reduced-motion" });
+      report({ state: "still", reason: "reduced-motion", ...frameSize() });
+      return;
+    }
+    if (options.paused) {
+      draw(elapsed);
+      report({ state: "still", reason: "paused", ...frameSize() });
       return;
     }
     if (!visible || document.hidden) {
@@ -254,14 +280,15 @@ export function startShaderBackdrop(
     if (setup()) update();
   }
 
+  const inert = { refresh() {}, configure() {}, restart() {}, destroy() {} };
   try {
     if (!setup()) {
       report({ state: "unsupported" });
-      return { refresh() {}, destroy() {} };
+      return inert;
     }
   } catch {
     report({ state: "unsupported" });
-    return { refresh() {}, destroy() {} };
+    return inert;
   }
 
   readColors();
@@ -276,7 +303,7 @@ export function startShaderBackdrop(
       hostHeight = entry.contentRect.height;
     }
     sizeDirty = true;
-    if (!frame) draw(motionQuery.matches ? STILL_TIME : elapsed);
+    if (!frame) update();
   });
   resizer.observe(host);
   document.addEventListener("visibilitychange", update);
@@ -287,9 +314,21 @@ export function startShaderBackdrop(
 
   return {
     /** Re-read tokens after the skin, accent or appearance changes. */
-    refresh(next?: Partial<Pick<ShaderBackdropOptions, "appearance">>) {
+    refresh(next?: Pick<ShaderBackdropSettings, "appearance">) {
       if (next?.appearance) options.appearance = next.appearance;
       readColors();
+      if (!frame) draw(motionQuery.matches ? STILL_TIME : elapsed);
+    },
+    /** Change playback without rebuilding the GL program. */
+    configure(next: Pick<ShaderBackdropSettings, "speed" | "paused">) {
+      const wasPaused = Boolean(options.paused);
+      if (next.speed !== undefined) options.speed = next.speed;
+      if (next.paused !== undefined) options.paused = next.paused;
+      if (Boolean(options.paused) !== wasPaused) update();
+    },
+    /** Jump back to the first frame. */
+    restart() {
+      elapsed = 0;
       if (!frame) draw(motionQuery.matches ? STILL_TIME : elapsed);
     },
     destroy() {

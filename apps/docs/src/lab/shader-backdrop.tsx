@@ -7,6 +7,12 @@ export interface ShaderBackdropProps {
   appearance: "light" | "dark";
   /** Changes when the skin's tokens change, so colours are re-read. */
   tokenKey: string;
+  /** Time multiplier; 1 is the designed pace. @default 1 */
+  speed?: number;
+  /** Hold the current frame. @default false */
+  paused?: boolean;
+  /** Change this number to jump back to the first frame. */
+  restartKey?: number;
   onStatus?: (status: ShaderStatus) => void;
 }
 
@@ -18,6 +24,9 @@ export function ShaderBackdrop({
   program,
   appearance,
   tokenKey,
+  speed = 1,
+  paused = false,
+  restartKey = 0,
   onStatus,
 }: ShaderBackdropProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -32,6 +41,8 @@ export function ShaderBackdrop({
     controller.current = startShaderBackdrop(element, host, {
       program,
       appearance,
+      speed,
+      paused,
       onStatus: (next) => status.current?.(next),
     });
     return () => {
@@ -49,6 +60,14 @@ export function ShaderBackdrop({
     );
     return () => cancelAnimationFrame(id);
   }, [appearance, tokenKey]);
+
+  useEffect(() => {
+    controller.current?.configure({ speed, paused });
+  }, [speed, paused]);
+
+  useEffect(() => {
+    if (restartKey) controller.current?.restart();
+  }, [restartKey]);
 
   return (
     <canvas ref={canvas} className="shader-lab-canvas" aria-hidden="true" />
