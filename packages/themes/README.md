@@ -1,6 +1,41 @@
-# Dixy 2D skins
+# @dixy-ui/themes
 
-Import one definition and its stylesheet alongside @dixy-ui/react/styles.css. Skins change existing Dixy components. Each skin has an optional, independently imported React renderer; no graphics engine is required.
+32 starter themes for [Dixy UI](https://github.com/akssmax/DixyUI), from paper and glass to terminals and festivals, plus an authoring API for your own. Each theme is a material, a frame, a character and a chrome over the same accessible components.
+
+[![npm](https://img.shields.io/npm/v/%40dixy-ui%2Fthemes/beta?label=npm&color=7c3aed)](https://www.npmjs.com/package/@dixy-ui/themes) [![MIT](https://img.shields.io/badge/license-MIT-7c3aed)](https://github.com/akssmax/DixyUI/blob/main/LICENSE)
+
+> **Public beta.** APIs may change between `0.x` releases. See the [changelog](./CHANGELOG.md) and the [known issues](https://github.com/akssmax/DixyUI#known-issues).
+
+[Documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) · [Components](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button) · [Themes](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
+
+## Install
+
+```sh
+pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta
+```
+
+Requires `@dixy-ui/react`.
+
+## Quick start
+
+Every starter theme has its own entry point, so you only ship the one you use. Spread its settings onto `Theme` and import its stylesheet:
+
+```tsx
+import "@dixy-ui/react/styles.css";
+import "@dixy-ui/themes/retro-os.css";
+import { Theme, Button } from "@dixy-ui/react";
+import { retroOSTheme } from "@dixy-ui/themes/retro-os";
+
+<Theme {...retroOSTheme}>
+  <Button>Save changes</Button>
+</Theme>;
+```
+
+Browse all 32 starters on the [landing page](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) or build your own in the [playground](https://dixy-ui-docs.akshaysaini-design.workers.dev/playground).
+
+## Skins and ornament renderers
+
+Import one definition and its stylesheet alongside `@dixy-ui/react/styles.css`. Skins change existing Dixy components. Each skin has an optional, independently imported React renderer; no graphics engine is required.
 
 ```tsx
 import { Theme, Button } from "@dixy-ui/react";
@@ -19,7 +54,7 @@ import "@dixy-ui/themes/studio-hardware.css";
 </Theme>;
 ```
 
-Eleven independent entries: living-forest, retro-os, winamp-signal, studio-hardware, prism-glass, tactile-atelier, ocean-depths, candy-clay, art-deco, y2k-titanium, material-light. Explicit material overrides use the optional @dixy-ui/react/materials.css pack. Undefined skin inherits, null clears; ThemeScope preserves the skin in popups.
+Every starter has its own entry point and stylesheet (for example `@dixy-ui/themes/retro-os` and `@dixy-ui/themes/retro-os.css`). Explicit material overrides use the optional @dixy-ui/react/materials.css pack. Undefined skin inherits, null clears; ThemeScope preserves the skin in popups.
 
 Use authoring.defineSkin for compatible original definition/CSS pairs. Use a namespaced ID and scope CSS to actual data-dixy-skin parts; keep artwork separate from control semantics. The catalog contains metadata only. No raw CSS, JavaScript or shader is executed from imported playground presets.
 

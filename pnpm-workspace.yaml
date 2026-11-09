@@ -9,6 +9,9 @@ minimumReleaseAge: 1440
 
 allowBuilds:
   "@parcel/watcher": false
+  # Official platform binaries: esbuild for Vite, workerd for Cloudflare's local runtime.
+  esbuild: true
+  workerd: true
 
 # The one-shot Tailwind validator uses the prebuilt watcher; no native build is needed.
 ignoredBuiltDependencies:

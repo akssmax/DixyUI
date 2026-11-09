@@ -1646,4 +1646,491 @@ export const additionComponentRegistry = {
       "React Aria owns Color values, color-space conversion, two-dimensional area input, sliders and editable fields. Area and Slider need Thumb parts; Field supplies an accessible text alternative. Root can be controlled with value/onChange, and Swatch displays the same shared value.",
     token: "--dixy-color-background-surface",
   },
+  grid: {
+    exportName: "Grid",
+    title: "Grid",
+    category: "Layout",
+    description: "Columns that fit the space they are given.",
+    detail:
+      "Grid places children in equal columns, or fits as many columns as minColumnWidth allows. The minimum is clamped with min(…, 100%), so one column never overflows a narrow parent. Gaps use the stack spacing scale and follow Theme density.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["GridOwnProps"],
+    source: "components/layout.tsx",
+    load: () => import("../demos/grid-example"),
+    code: () => import("../demos/grid-example?raw"),
+    composition: {
+      tree: "Grid (div by default; as= for ul/section…)\n├── child\n├── child\n└── child",
+      detail:
+        "Grid places children in equal columns, or fits as many columns as minColumnWidth allows. The minimum is clamped with min(…, 100%), so one column never overflows a narrow parent. Gaps use the stack spacing scale and follow Theme density.",
+    },
+    controls: [
+      {
+        name: "layout",
+        label: "Layout",
+        options: ["responsive", "fixed"],
+        initial: "responsive",
+      },
+      {
+        name: "columns",
+        label: "Fixed columns",
+        options: ["1", "2", "3", "4", "6"],
+        initial: "3",
+      },
+      {
+        name: "gap",
+        label: "Gap",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        initial: "md",
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "Grid changes visual placement only; DOM order remains reading and Tab order. Do not reorder children visually in a way that disagrees with the source order. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "auto-fit with minmax(min(X, 100%), 1fr) gives responsive columns without media queries, and the min() guard is what stops overflow at 320px.",
+    token: "--dixy-spacing-stack-md",
+  },
+  "visually-hidden": {
+    exportName: "VisuallyHidden",
+    title: "Visually Hidden",
+    category: "Content",
+    description: "Heard by assistive tech, unseen on screen.",
+    detail:
+      "VisuallyHidden clips content to a 1px box while keeping it in the accessibility tree. With focusable, it reappears while something inside it has focus: the skip-link pattern.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["VisuallyHiddenOwnProps"],
+    source: "components/visually-hidden.tsx",
+    load: () => import("../demos/visually-hidden-example"),
+    code: () => import("../demos/visually-hidden-example?raw"),
+    composition: {
+      tree: "VisuallyHidden (span by default)\n└── text or a focusable skip link",
+      detail:
+        "VisuallyHidden clips content to a 1px box while keeping it in the accessibility tree. With focusable, it reappears while something inside it has focus: the skip-link pattern.",
+    },
+    controls: [
+      {
+        name: "focusable",
+        label: "Reveal on focus",
+        initial: true,
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "Use for supplementary text and skip links. Do not hide interactive controls without focusable, or keyboard users will land on something invisible. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "display:none and visibility:hidden remove content from the accessibility tree; clipping keeps it there. Choose based on who should perceive it.",
+    token: "--dixy-color-text-primary",
+  },
+  code: {
+    exportName: "Code",
+    title: "Code",
+    category: "Content",
+    description: "Inline code that reads at any size.",
+    detail:
+      "Code is a native code element on a soft, token-driven surface. Its size is relative (em), so it scales with surrounding body text or headings.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["CodeProps"],
+    source: "components/typography.tsx",
+    load: () => import("../demos/code-example"),
+    code: () => import("../demos/code-example?raw"),
+    composition: {
+      tree: "Text\n└── Code (native code)",
+      detail:
+        "Code is a native code element on a soft, token-driven surface. Its size is relative (em), so it scales with surrounding body text or headings.",
+    },
+    controls: [
+      {
+        name: "variant",
+        label: "Treatment",
+        options: ["soft", "outline", "ghost"],
+        initial: "soft",
+      },
+      {
+        name: "color",
+        label: "Color",
+        options: ["accent", "neutral", "danger", "success"],
+        initial: "neutral",
+      },
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "Native code has no special announcement in most screen readers; keep the surrounding sentence meaningful. Tinted colors use the action text tokens for contrast. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Relative units let one component serve many type roles: Code inherits the parent's font size instead of fixing its own.",
+    token: "--dixy-font-mono",
+  },
+  blockquote: {
+    exportName: "Blockquote",
+    title: "Blockquote",
+    category: "Content",
+    description: "Give a quotation its own voice.",
+    detail:
+      "A native blockquote with a semantic leading rule. Put attribution in a figcaption beside it, not inside the quotation.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["BlockquoteProps"],
+    source: "components/typography.tsx",
+    load: () => import("../demos/blockquote-example"),
+    code: () => import("../demos/blockquote-example?raw"),
+    composition: {
+      tree: "figure\n├── Blockquote (native blockquote, optional cite URL)\n└── figcaption / Text — attribution",
+      detail:
+        "A native blockquote with a semantic leading rule. Put attribution in a figcaption beside it, not inside the quotation.",
+    },
+    controls: [
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+      {
+        name: "color",
+        label: "Color",
+        options: ["accent", "neutral", "danger", "success"],
+        initial: "accent",
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "Screen readers can announce blockquote boundaries. The rule colour is decorative; meaning is carried by the element. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Semantic HTML first: the element carries meaning, tokens carry the look.",
+    token: "--dixy-color-background-action-primary",
+  },
+  snippet: {
+    exportName: "Snippet",
+    title: "Snippet",
+    category: "Content",
+    description: "A command, ready to copy.",
+    detail:
+      "Snippet shows code or a command with a copy button. A prompt symbol can lead each line without being copied or announced. The result is announced through a polite status region, and failure is reported, not hidden.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["SnippetProps"],
+    source: "components/snippet.tsx",
+    load: () => import("../demos/snippet-example"),
+    code: () => import("../demos/snippet-example?raw"),
+    composition: {
+      tree: "Snippet (div)\n├── pre > code — lines, symbol aria-hidden\n├── IconButton — copy (aria-label)\n└── span[role=status] — Copied / Copy failed",
+      detail:
+        "Snippet shows code or a command with a copy button. A prompt symbol can lead each line without being copied or announced. The result is announced through a polite status region, and failure is reported, not hidden.",
+    },
+    controls: [
+      {
+        name: "variant",
+        label: "Treatment",
+        options: ["soft", "outline", "solid"],
+        initial: "soft",
+      },
+      {
+        name: "color",
+        label: "Color",
+        options: ["accent", "neutral", "danger", "success"],
+        initial: "neutral",
+      },
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+      {
+        name: "radius",
+        label: "Radius",
+        options: ["none", "sm", "md", "lg", "full"],
+        initial: "md",
+      },
+      {
+        name: "material",
+        label: "Material",
+        options: ["matte", "glossy", "soft", "metal", "paper"],
+        initial: "matte",
+      },
+      {
+        name: "symbol",
+        label: "Prompt symbol",
+        initial: true,
+      },
+      {
+        name: "hideCopyButton",
+        label: "Hide copy",
+        initial: false,
+      },
+    ],
+    keyboard: [
+      ["Tab", "Move focus to the copy button."],
+      ["Enter / Space", "Copy and announce the result."],
+    ],
+    accessibility:
+      "The copy button keeps a constant name; the outcome is announced via role=status. The icon swap is not the only signal. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Async side effects need a failure path and timer cleanup: the copied state resets after timeout and is cleared on unmount.",
+    token: "--dixy-color-background-subtle",
+  },
+  "password-field": {
+    exportName: "PasswordField",
+    title: "Password Field",
+    category: "Inputs",
+    description: "Check what you typed, then hide it again.",
+    detail:
+      "PasswordField is a Base UI Input with a show/hide toggle. Inside Field.Root, Label, Description and Error keep their relationships. Visibility can be controlled with visible/onVisibleChange.",
+    primitive: "",
+    engine: "Base UI + native",
+    api: ["PasswordFieldProps"],
+    source: "components/password-field.tsx",
+    load: () => import("../demos/password-field-example"),
+    code: () => import("../demos/password-field-example?raw"),
+    composition: {
+      tree: "Field.Root\n├── Field.Label\n├── PasswordField (group)\n│   ├── Input (type password ⇄ text)\n│   └── IconButton (aria-pressed)\n└── Field.Description",
+      detail:
+        "PasswordField is a Base UI Input with a show/hide toggle. Inside Field.Root, Label, Description and Error keep their relationships. Visibility can be controlled with visible/onVisibleChange.",
+    },
+    controls: [
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+      {
+        name: "variant",
+        label: "Treatment",
+        options: ["outline", "soft"],
+        initial: "outline",
+      },
+      {
+        name: "radius",
+        label: "Radius",
+        options: ["none", "sm", "md", "lg", "full"],
+        initial: "md",
+      },
+      {
+        name: "material",
+        label: "Material",
+        options: ["matte", "glossy", "soft", "metal", "paper"],
+        initial: "matte",
+      },
+      {
+        name: "disabled",
+        label: "Disabled",
+        initial: false,
+      },
+    ],
+    keyboard: [
+      ["Tab", "Move from the input to the visibility toggle."],
+      [
+        "Space / Enter",
+        "Show or hide the password; focus stays on the toggle.",
+      ],
+    ],
+    accessibility:
+      "The toggle has a constant name, Show password, and aria-pressed reports state, the toggle-button pattern. autocomplete defaults to current-password; use new-password on sign-up forms. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Controlled vs uncontrolled: visible wins when provided; otherwise internal state starts from defaultVisible.",
+    token: "--dixy-interaction-target",
+  },
+  "data-list": {
+    exportName: "DataList",
+    title: "Data List",
+    category: "Content",
+    description: "Labels and values, neatly paired.",
+    detail:
+      "DataList is a native description list. Items use CSS subgrid, so every label column aligns across rows without fixed widths.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["DataListProps"],
+    source: "components/content.tsx",
+    load: () => import("../demos/data-list-example"),
+    code: () => import("../demos/data-list-example?raw"),
+    composition: {
+      tree: "DataList.Root (dl)\n└── DataList.Item (div)\n    ├── DataList.Label (dt)\n    └── DataList.Value (dd)",
+      detail:
+        "DataList is a native description list. Items use CSS subgrid, so every label column aligns across rows without fixed widths.",
+    },
+    controls: [
+      {
+        name: "orientation",
+        label: "Orientation",
+        options: ["horizontal", "vertical"],
+        initial: "horizontal",
+      },
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "dt/dd pairs are announced as terms and definitions. A div wrapping each pair is valid HTML inside dl. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "subgrid lets nested items share their parent's column tracks, which flex cannot do.",
+    token: "--dixy-color-text-secondary",
+  },
+  user: {
+    exportName: "User",
+    title: "User",
+    category: "Content",
+    description: "A face and a name, together.",
+    detail:
+      "User pairs an Avatar with a name and an optional description. Initials are derived from a string name. The avatar is aria-hidden because the visible name already identifies the person.",
+    primitive: "",
+    engine: "Base UI + native",
+    api: ["UserProps"],
+    source: "components/user.tsx",
+    load: () => import("../demos/user-example"),
+    code: () => import("../demos/user-example?raw"),
+    composition: {
+      tree: "User (div)\n├── Avatar.Root (aria-hidden)\n│   ├── Avatar.Image\n│   └── Avatar.Fallback — initials\n└── name + description",
+      detail:
+        "User pairs an Avatar with a name and an optional description. Initials are derived from a string name. The avatar is aria-hidden because the visible name already identifies the person.",
+    },
+    controls: [
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+      {
+        name: "color",
+        label: "Color",
+        options: ["accent", "neutral", "danger", "success"],
+        initial: "accent",
+      },
+      {
+        name: "avatarVariant",
+        label: "Avatar treatment",
+        options: ["solid", "soft", "outline"],
+        initial: "soft",
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "Hiding the decorative avatar avoids announcing initials and then the name. Long names truncate visually; provide a title or tooltip when truncation hides meaning. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Composition over configuration: User reuses Avatar and inherits its size, colour and radius contracts.",
+    token: "--dixy-color-text-secondary",
+  },
+  image: {
+    exportName: "Image",
+    title: "Image",
+    category: "Content",
+    description: "Pictures that load gracefully.",
+    detail:
+      "Image is a native img with lazy loading, a placeholder surface, one fallback source and a data-status of loading, loaded or error. The reveal fade is skipped under reduced motion.",
+    primitive: "",
+    engine: "Native HTML",
+    api: ["ImageProps"],
+    source: "components/image.tsx",
+    load: () => import("../demos/image-example"),
+    code: () => import("../demos/image-example?raw"),
+    composition: {
+      tree: "Image (native img, data-status)",
+      detail:
+        "Image is a native img with lazy loading, a placeholder surface, one fallback source and a data-status of loading, loaded or error. The reveal fade is skipped under reduced motion.",
+    },
+    controls: [
+      {
+        name: "radius",
+        label: "Radius",
+        options: ["none", "sm", "md", "lg", "full"],
+        initial: "md",
+      },
+      {
+        name: "placeholder",
+        label: "Placeholder",
+        initial: true,
+      },
+      {
+        name: "useFallback",
+        label: "Fallback source",
+        initial: true,
+      },
+    ],
+    keyboard: [],
+    accessibility:
+      "alt is required: describe the image, or pass an empty string when it is decorative. Set width and height to prevent layout shift. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Images can finish loading before hydration, so React never sees onLoad; a ref checks img.complete to catch that case.",
+    token: "--dixy-color-background-subtle",
+  },
+  navbar: {
+    exportName: "Navbar",
+    title: "Navbar",
+    category: "Navigation",
+    description: "The top of every page, at every width.",
+    detail:
+      "Navbar is a header landmark with Brand, Content, Actions, a Toggle and a Menu. Below collapseBelow, measured on the bar itself with a container query, Content hides and the Base UI Collapsible menu takes over. Following a link closes the menu.",
+    primitive: "",
+    engine: "Base UI + native",
+    api: [
+      "NavbarProps",
+      "NavbarContentProps",
+      "NavbarLinkProps",
+      "NavbarToggleProps",
+      "NavbarMenuProps",
+    ],
+    source: "components/navbar.tsx",
+    load: () => import("../demos/navbar-example"),
+    code: () => import("../demos/navbar-example?raw"),
+    composition: {
+      tree: "Navbar.Root (header, Collapsible.Root)\n├── Navbar.Brand\n├── Navbar.Content (nav > ul)\n│   └── Navbar.Item (li) > Navbar.Link (aria-current)\n├── Navbar.Actions\n├── Navbar.Toggle (Collapsible.Trigger, aria-expanded)\n└── Navbar.Menu (Collapsible.Panel > nav > ul)",
+      detail:
+        "Navbar is a header landmark with Brand, Content, Actions, a Toggle and a Menu. Below collapseBelow, measured on the bar itself with a container query, Content hides and the Base UI Collapsible menu takes over. Following a link closes the menu.",
+    },
+    controls: [
+      {
+        name: "size",
+        label: "Size",
+        options: ["sm", "md", "lg"],
+        initial: "md",
+      },
+      {
+        name: "variant",
+        label: "Treatment",
+        options: ["outline", "soft", "ghost"],
+        initial: "outline",
+      },
+      {
+        name: "radius",
+        label: "Radius",
+        options: ["none", "sm", "md", "lg", "full"],
+        initial: "md",
+      },
+      {
+        name: "material",
+        label: "Material",
+        options: ["matte", "glossy", "soft", "metal", "paper"],
+        initial: "matte",
+      },
+      {
+        name: "collapseBelow",
+        label: "Collapse below",
+        options: ["sm", "md", "lg", "never"],
+        initial: "md",
+      },
+    ],
+    keyboard: [
+      ["Tab", "Move through links, actions and the menu toggle."],
+      ["Enter / Space", "Open or close the menu (toggle)."],
+      ["Enter", "Follow a link; the menu closes."],
+    ],
+    accessibility:
+      "Only one of Content or Menu is displayed at a time, so a single Main navigation landmark is exposed. The toggle's aria-expanded reports the menu state; the current page uses aria-current. Target WCAG 2.2 AA. Automated axe checks pass in unit tests; screen-reader, forced-colors and contrast verification in real browsers remains pending.",
+    lesson:
+      "Container queries respond to the component's width, not the viewport, so the same Navbar collapses correctly inside a sidebar layout or a narrow preview.",
+    token: "--dixy-color-border-subtle",
+  },
 } as const;

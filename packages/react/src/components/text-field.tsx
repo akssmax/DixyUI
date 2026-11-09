@@ -95,7 +95,8 @@ function FieldError({
   );
 }
 
-export const Field = {
+// Pure wrapper: bundlers may drop the whole object when it is unused.
+export const Field = /* @__PURE__ */ (() => ({
   Root: FieldRoot,
   Label: FieldLabel,
   Description: FieldDescription,
@@ -106,4 +107,4 @@ export const Field = {
     "dixy-input",
   ),
   Item: /* @__PURE__ */ styledPrimitive(PrimitiveField.Item, "dixy-field-item"),
-};
+}))();

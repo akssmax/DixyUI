@@ -1,4 +1,5 @@
 import { createElement, type ComponentProps } from "react";
+import { nativePart, type NativePartProps } from "../utilities/native-part";
 import type { HeadingVariant, TextVariant } from "@dixy-ui/tokens";
 export type { HeadingVariant, TextVariant } from "@dixy-ui/tokens";
 
@@ -62,3 +63,36 @@ export function Heading({
     "data-typography": variant ?? `heading.${size}`,
   });
 }
+
+const CodePart = /* @__PURE__ */ nativePart("code", "dixy-code", [
+  "size",
+  "variant",
+  "color",
+  "radius",
+] as const);
+export interface CodeProps extends Omit<
+  NativePartProps<"code", "size" | "color" | "radius">,
+  "variant"
+> {
+  /** Surface emphasis. @default soft */
+  variant?: "soft" | "outline" | "ghost";
+}
+/** Inline code: a native code element on a token-driven surface. Size follows the surrounding text. */
+export function Code({
+  variant = "soft",
+  color = "neutral",
+  ...props
+}: CodeProps) {
+  return <CodePart {...props} variant={variant} color={color} />;
+}
+
+export interface BlockquoteProps extends NativePartProps<
+  "blockquote",
+  "size" | "color"
+> {}
+/** A native blockquote with a semantic leading rule. Keep attribution outside the quote, e.g. in a figcaption. */
+export const Blockquote = /* @__PURE__ */ nativePart(
+  "blockquote",
+  "dixy-blockquote",
+  ["size", "color"] as const,
+);

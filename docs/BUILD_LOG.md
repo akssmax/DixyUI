@@ -1647,3 +1647,59 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - **Oval swatch ring.** Toggle's 40px minimum control height beat the 36px size, so swatches measured 36×40. Resetting the minimums and adding `aspect-ratio: 1` gives 36×36.
 - **Sideways scroll still possible.** A real trackpad gesture over the CTA scrolled `<main>` by 64px. `docs.css` (loaded globally from the root route) had a bare `main { overflow: auto }` meant for the docs shell. On the landing page it made `main` a scroll container that could reach the hero stage's −64px bleed. `overflow: clip` on the CTA couldn't help, because the scrolling box was its ancestor. Scoped the rule to `.docs-app main`. Verified: right-scroll gestures at three points move nothing (`scrollLeft` 0 on every element). The docs page still scrolls inside its shell (`scrollTop` 400 of 2226). The kitchen sink scrolls normally, with the document width equal to the viewport.
 - Not tested: Safari and Firefox trackpads, and the fit at every viewport width for every starter (checked 1440 for all 22, plus Retro OS by eye).
+
+### 2026-11-07 — Components from the shadcn / HeroUI / Radix gap list
+
+- Why: a comparison with shadcn/ui, HeroUI and Radix found a few components that Dixy lacked. All of them are now added, except Spacer (gaps already cover it) and Portal/Slot (Base UI and `useRender` already cover them).
+- Library (`@dixy-ui/react`), all styled only with `--dixy-*` tokens in `additions.css`. Theme accent, neutral, radius, density, material, skin and appearance therefore apply without per-theme CSS:
+  - `Grid` (layout.tsx): `columns` (clamped 1–12) or `minColumnWidth` auto-fit, with `gap` on the stack scale. It has an explicit `ReactElement` return type, because the inferred one broke the packed `.d.ts` (caught by `package:check`).
+  - `VisuallyHidden` (visually-hidden.tsx): exports the existing `.dixy-visually-hidden` class as a component, plus `focusable`.
+  - `Code`, `Blockquote` (typography.tsx): built on `nativePart`, so they get `data-dixy-visual`, which the component colour aliases need. Code sizes in `em` to follow the surrounding text.
+  - `Snippet` (snippet.tsx): IconButton copy, `role=status` announcements, a failure path, a timeout reset and cleanup on unmount.
+  - `PasswordField` (password-field.tsx): wraps TextField (a Base UI Input), so `Field.Label` still labels it. The toggle has a constant name and `aria-pressed`, and focus stays on it. The focus ring moves to the group via `:has()`.
+  - `DataList` (content.tsx): `dl` > `div` > `dt` + `dd`, aligned with subgrid.
+  - `User` (user.tsx): composes Avatar; `aria-hidden` avatar; initials.
+  - `Image` (image.tsx): status during render (no effect race), a ref check for images that finished before hydration, one fallback.
+  - `Navbar` (navbar.tsx): `header` built on Base UI Collapsible. Content and Menu each wrap a `nav` (only one is displayed at a time). Collapse uses a named container query. Links close the menu.
+  - Shared decorative glyphs (copy, check, eye, menu, close) live in `utilities/inline-icons.tsx`. No icon-pack dependency.
+- Docs: 10 registry entries with controls, composition trees, keyboard tables and lessons; 10 demos whose defaults match the controls; `api.json` regenerated with `pnpm docs:generate`. The theme gallery picks them up through the registry.
+- Verified:
+  - `pnpm check` passes (109 library tests, including 10 new tests with axe).
+  - `pnpm package:check` (the verify script with `--online`, because this worktree's offline store lacked one tarball) passes.
+  - `pnpm examples:check` typechecks all 1580 generated examples.
+  - In-app browser, :3002: the Navbar collapses at a 622px bar with `md` and expands with `sm`; the menu opens, current page is highlighted. On a 375px phone width there is no horizontal overflow, and the preview is correct in light and dark. PasswordField: Tab reaches the toggle, Space shows the password, focus stays on the toggle, and the Field label resolves. Image: the broken src falls back and reports `loaded`.
+  - Fixed during verification: three registry `token` values duplicated fixed rows in the docs token table (React duplicate-key warning).
+- Not tested: forced colours, screen readers, touch devices, 200%/400% zoom, each material finish and skin visually, Snippet copy in a real browser clipboard (unit-tested with a mock only), and RTL.
+
+### 2026-11-08 — Beta readiness: MIT, Cloudflare Workers, release pipeline, tree shaking
+
+- Decisions (user): MIT license; docs on Cloudflare. A future Pro version will be a separate, commercially licensed package.
+- Repository:
+  - `LICENSE` (MIT) at the root and in each published package; metadata fields on all three packages.
+  - Cloudflare: `@cloudflare/vite-plugin` and `wrangler` (exact pins) in `apps/docs`; `wrangler.jsonc` with the TanStack Start server entry; `deploy` and `cf-typegen` scripts. `pnpm-workspace.yaml` allows the `esbuild` and `workerd` build scripts, because pnpm 12 otherwise fails `--frozen-lockfile` installs.
+  - Workflows: `deploy-docs.yml` (production on `main`, preview aliases for PRs, skipped without secrets) and `release.yml` (all checks, then changesets with provenance; private packages are never published).
+  - Changesets: `pre enter beta`, `privatePackages.version: true`, package versions reset to `0.0.0`, and two changesets (first beta; `Field`/`Dialog` tree shaking).
+  - Docs and README say beta. The README is now user-facing; maintainer content moved to `CONTRIBUTING.md`. Added `SECURITY.md`, `CODE_OF_CONDUCT.md`, issue forms and a PR template.
+  - `scripts/check-tree-shaking.mjs` runs in `package:check` (before `verify-package`, so CI's `--online` flag still reaches that script).
+- Library fix: `Field` and `Dialog` were plain objects that read `Primitive.*` properties at module scope. Bundlers keep property reads that might have side effects, so every consumer kept Base UI's dialog and field code. Both now use the `/* @__PURE__ */ (() => ({…}))()` pattern the other compound components already used. Button alone went from 128.8 to 17.1 KiB minified; Navbar + Snippet + DataList from 147.3 to 44.1 KiB.
+- Verified:
+  - `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm package:check --online` and Prettier pass.
+  - Docs `vite build` produces a Worker; `wrangler deploy --dry-run` reports 9213 KiB / 1605 KiB gzipped.
+  - In the in-app browser, `vite preview` on `workerd` server-renders the landing page and the Navbar page. Fetching the same page without and with the `dixy-appearance=dark` cookie returns light and dark HTML respectively. `vite dev` on `workerd` renders the Snippet page without console errors.
+  - Dry-run `changeset version` produced `0.1.0-beta.0` for all three packages, and was then reverted.
+  - The tree-shaking check detects a real leak: a DatePicker import includes `react-aria`, `react-stately` and `@internationalized/date`.
+- Not tested: an actual Cloudflare deploy and PR preview (no account connected), an actual npm publish, trusted publishing via OIDC with `pnpm publish`, and the release workflow end to end on GitHub.
+- Accounts (same day): the user created the `dixy-ui` npm organisation and a granular token (read and write to `@dixy-ui` only, no org access, 30-day expiry) saved as the `NPM_TOKEN` GitHub secret. A first token was pasted into chat and was replaced; it must be revoked on npm. Then the three packages dropped `"private": true` and gained `publishConfig: { access: "public", provenance: true }`, so merging to `main` will start the release flow.
+
+### 2026-11-08 — First beta published; package READMEs, provenance, hero size
+
+- `0.1.0-beta.0` of `@dixy-ui/react`, `@dixy-ui/tokens` and `@dixy-ui/themes` is on npm (`beta` and `latest` tags). The first publish failed because `changesets/action@v1` reads Changesets CLI 3's `.changeset/pre/` as an old-format changeset; moved to `changesets/action@v2.1.2`. A fresh registry install server-renders a Retro OS themed `Button`, and `@dixy-ui/tokens` resolves to `0.1.0-beta.0` (no `workspace:` leak).
+- Provenance was not attached: pnpm 12 reads `PNPM_CONFIG_PROVENANCE`, not `NPM_CONFIG_PROVENANCE`. The release workflow now sets the pnpm variable. Verified only on the next publish.
+- Package READMEs (shown on npm) now describe the public beta, with install, quick start and docs links. The themes README no longer claims eleven entries.
+- Landing hero: seven starters (Retro OS, Y2K Titanium, Brutalist Concrete, Orbital HUD, Freighter, Riso Zine, Swiss Poster) use very wide or uppercased display faces. Five of them wrapped "Components with character." to three oversized lines. They now use `clamp(30px, 5.6vw, 58px)`. Measured in the in-app browser: all 32 starters plus Original Dixy fit in two lines at 1280px and 390px.
+
+### 2026-11-08 — Trusted Publishing
+
+- `0.1.0-beta.1` published with the new READMEs, but still without provenance even with `PNPM_CONFIG_PROVENANCE` set; npm's attestations endpoint returns 404 for all three packages.
+- Each `@dixy-ui` package now has a GitHub Actions trusted publisher on npm (`akssmax/DixyUI`, `release.yml`, `npm publish` allowed). npm marks them "pending validation" until the first OIDC publish, which must happen before 2026-11-10 10:44 UTC.
+- The release workflow no longer uses `NPM_TOKEN` or `registry-url`; `id-token: write` lets pnpm sign in through OIDC and attach provenance. To confirm on the next publish: provenance attached, then delete the `NPM_TOKEN` secret and revoke the token.

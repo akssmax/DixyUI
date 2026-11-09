@@ -270,7 +270,7 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
           <span>Component</span>
           <span className="component-state">
             <span />
-            Alpha
+            Beta
           </span>
         </div>
         <header className="page-heading">

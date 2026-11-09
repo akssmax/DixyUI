@@ -1,0 +1,43 @@
+name: Release
+# On main, changesets either opens a "Version packages" PR or, when that PR
+# has been merged, publishes the changed packages to npm with provenance.
+# Packages marked "private" are never published. Publishing uses npm
+# Trusted Publishing (OIDC): each @dixy-ui package trusts this repository's
+# release.yml, so no npm token is stored and pnpm attaches provenance.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+concurrency:
+  group: release
+  cancel-in-progress: false
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm check
+      - run: pnpm package:check --online
+      # v2 is required for Changesets CLI 3: v1 mistakes the CLI 3
+      # `.changeset/pre/` folder for an old-format changeset and fails.
+      - uses: changesets/action@v2.1.2
+        with:
+          version-script: pnpm changeset version
+          publish-script: pnpm release
+          commit-message: "Version packages"
+          pr-title: "Version packages"
+        # No npm token: id-token: write lets pnpm exchange the job's OIDC
+        # token with npm, which also attaches provenance automatically.

@@ -1,13 +1,28 @@
 {
   "name": "@dixy-ui/react",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-beta.2",
   "description": "Expressive, accessible React components built on Base UI.",
+  "license": "MIT",
+  "author": "Akshay Saini",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akssmax/DixyUI.git",
+    "directory": "packages/react"
+  },
+  "homepage": "https://github.com/akssmax/DixyUI#readme",
+  "bugs": {
+    "url": "https://github.com/akssmax/DixyUI/issues"
+  },
   "type": "module",
-  "private": true,
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "sideEffects": [
     "**/*.css"
   ],

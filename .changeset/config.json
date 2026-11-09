@@ -7,5 +7,9 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@dixy-ui/docs", "@dixy-ui/typescript-config"]
+  "ignore": ["@dixy-ui/docs", "@dixy-ui/typescript-config"],
+  "privatePackages": {
+    "version": true,
+    "tag": false
+  }
 }

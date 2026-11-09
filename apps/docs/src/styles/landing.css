@@ -120,11 +120,40 @@
 }
 .landing .landing-display {
   /* Full column width, so a word wider than the column overflows the
-     heading and useFitHeading can measure it and shrink the font. */
+     heading and useFitHeading can measure it and shrink the font. Wide
+     starters also get a smaller size below; the hook is the backstop. */
   justify-self: stretch;
-  font: 650 clamp(44px, 6.4vw, 80px) / 0.98 var(--dixy-font-display);
+  --landing-display-size: clamp(44px, 6.4vw, 80px);
+  font: 650 var(--landing-display-size) / 0.98 var(--dixy-font-display);
   letter-spacing: -0.045em;
   text-wrap: balance;
+}
+/* Starters whose display face is very wide (Archivo Black, Orbitron,
+   Silkscreen) or uppercased wrapped the hero to three oversized lines.
+   Measured 2026-11-08 at 1280px and 390px; keep it to two lines. */
+.landing
+  :is(
+    [data-dixy-skin="dixy/retro-os"],
+    [data-dixy-skin="dixy/y2k-titanium"],
+    [data-dixy-skin="dixy/brutalist-concrete"],
+    [data-dixy-skin="dixy/orbital-hud"],
+    [data-dixy-skin="dixy/freighter"],
+    [data-dixy-skin="dixy/riso-zine"],
+    [data-dixy-skin="dixy/swiss-poster"]
+  )
+  .landing-display,
+.landing:is(
+    [data-dixy-skin="dixy/retro-os"],
+    [data-dixy-skin="dixy/y2k-titanium"],
+    [data-dixy-skin="dixy/brutalist-concrete"],
+    [data-dixy-skin="dixy/orbital-hud"],
+    [data-dixy-skin="dixy/freighter"],
+    [data-dixy-skin="dixy/riso-zine"],
+    [data-dixy-skin="dixy/swiss-poster"]
+  )
+  .landing-display {
+  --landing-display-size: clamp(30px, 5.6vw, 58px);
+  letter-spacing: -0.02em;
 }
 .landing-display em {
   font-style: italic;

@@ -95,7 +95,8 @@ function Description({
   );
 }
 
-export const Dialog = {
+// Pure wrapper: bundlers may drop the whole object when it is unused.
+export const Dialog = /* @__PURE__ */ (() => ({
   Root: Primitive.Root,
   Trigger: Primitive.Trigger,
   Portal,
@@ -107,4 +108,4 @@ export const Dialog = {
   Close: Primitive.Close,
   createHandle: Primitive.createHandle,
   Handle: Primitive.Handle,
-};
+}))();

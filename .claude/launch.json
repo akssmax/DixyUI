@@ -54,6 +54,23 @@
       ],
       "port": 4317,
       "url": "http://127.0.0.1:4317"
+    },
+    {
+      "name": "docs-worker-preview",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "./apps/docs",
+        "exec",
+        "vite",
+        "preview",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3003"
+      ],
+      "port": 3003,
+      "url": "http://127.0.0.1:3003"
     }
   ]
 }
