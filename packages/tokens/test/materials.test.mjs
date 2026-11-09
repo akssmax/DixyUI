@@ -67,9 +67,12 @@ test("primary text on material surfaces retains contrast at the recipe shade ext
         resolveColor(semanticColors[role][mode], mode, "blue", neutral);
       const foreground = luminance(oklchToLinearSrgb(get("text.primary")));
       const surface = oklchToLinearSrgb(get("background.surface.raised"));
+      // 0.16 black covers the darkest multiplied stock band (metal's steel
+      // rgb(218 224 232) scales the surface by about 0.85). 0.32 white covers
+      // dark metal's brightest screened band rgb(58 63 72) plus grain.
       for (const [shade, alpha] of [
-        [0, 0.07],
-        [1, 0.2],
+        [0, 0.16],
+        [1, 0.32],
       ]) {
         const background = luminance(
           surface.map((value) =>
