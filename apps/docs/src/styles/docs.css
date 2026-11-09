@@ -1000,7 +1000,9 @@ svg {
   background: #58977a;
   flex-shrink: 0;
 }
-main {
+/* Scoped to the docs shell: a bare main rule also made the landing page's
+   main a sideways scroll container. */
+.docs-app main {
   flex: 1;
   min-width: 0;
   overflow: auto;
@@ -2975,7 +2977,7 @@ main {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  main {
+  .docs-app main {
     scroll-behavior: auto;
   }
   *,

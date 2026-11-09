@@ -520,9 +520,49 @@ const featuredComponents = [
   "command",
 ];
 
+/**
+ * Starters change the display font, and some (pixel, deco, wide grotesks)
+ * set "COMPONENTS" wider than the copy column. Grid items can't shrink below
+ * their longest word, so the whole column would spill under the demo. This
+ * shrinks the headline only when its longest word doesn't fit, and re-checks
+ * on resize, font load and starter change.
+ */
+function useFitHeading(key: string) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    const heading = ref.current;
+    const column = heading?.parentElement;
+    if (!heading || !column) return;
+    let frame = 0;
+    const fit = () => {
+      heading.style.fontSize = "";
+      const available = column.clientWidth;
+      const needed = Math.max(heading.scrollWidth, heading.offsetWidth);
+      if (available > 0 && needed > available) {
+        const size = parseFloat(getComputedStyle(heading).fontSize);
+        heading.style.fontSize = `${Math.floor((size * available) / needed)}px`;
+      }
+    };
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(fit);
+    };
+    schedule();
+    void document.fonts?.ready.then(schedule);
+    const observer = new ResizeObserver(schedule);
+    observer.observe(column);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [key]);
+  return ref;
+}
+
 function Landing() {
   const { appearance, setAppearance } = useAppAppearance();
   const starter = useStarter();
+  const heading = useFitHeading(`${starter.preset.skin}:${appearance}`);
   // The whole page wears the chosen starter. The header and the hero picker both
   // drive the same state, and light/dark is the site-wide appearance.
   const themeProps = useMemo(
@@ -619,7 +659,12 @@ function Landing() {
             <Badge variant="soft" className="landing-pill">
               0.1 beta · Now on npm
             </Badge>
-            <Heading as="h1" id="hero-heading" className="landing-display">
+            <Heading
+              as="h1"
+              id="hero-heading"
+              className="landing-display"
+              ref={heading}
+            >
               Components with <em>character.</em>
             </Heading>
             <Text size="lg" tone="muted" className="landing-lede">

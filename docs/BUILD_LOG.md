@@ -1613,3 +1613,13 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Left as is, on purpose: OTP slots stay separate boxes (HeroUI-style) rather than shadcn's joined group; Switch keeps its thumb icons; ListBox keeps the text check mark; Toggle stays ghost at rest, as in shadcn.
 - Not tested: dark mode on this pass, keyboard through tags and carousel, screen readers, Safari/Firefox, phone width.
 
+### 2026-11-09 — Landing: wide starter fonts, round swatches, the real sideways-scroll cause
+
+- **Retro OS overlap and clipping.** The pixel display font sets "COMPONENTS" at 574px in a 432px copy column. `.landing-hero-copy` is a grid whose single auto column grew to that min-content width. The whole column, including the starter picker, spilled under the demo, and the fixed 98vh height clipped the taller copy.
+  - The copy grid is now `minmax(0, 1fr)` with `min-inline-size: 0`, and its children cap at 100%.
+  - `useFitHeading` shrinks the h1 only when its widest word doesn't fit. It re-checks on resize, after `document.fonts.ready` and when the starter or appearance changes.
+  - The hero uses `min-block-size` (98svh) instead of a fixed height, so it grows instead of clipping.
+  - Measured across 22 starters at 1440×900: the copy never passes 542px, and the demo starts at 606px. The h1 shrinks only where needed (Retro OS 60px, Y2K Titanium 55px, Riso Zine and Swiss Poster 67px, others 71–80px).
+- **Oval swatch ring.** Toggle's 40px minimum control height beat the 36px size, so swatches measured 36×40. Resetting the minimums and adding `aspect-ratio: 1` gives 36×36.
+- **Sideways scroll still possible.** A real trackpad gesture over the CTA scrolled `<main>` by 64px. `docs.css` (loaded globally from the root route) had a bare `main { overflow: auto }` meant for the docs shell. On the landing page it made `main` a scroll container that could reach the hero stage's −64px bleed. `overflow: clip` on the CTA couldn't help, because the scrolling box was its ancestor. Scoped the rule to `.docs-app main`. Verified: right-scroll gestures at three points move nothing (`scrollLeft` 0 on every element). The docs page still scrolls inside its shell (`scrollTop` 400 of 2226). The kitchen sink scrolls normally, with the document width equal to the viewport.
+- Not tested: Safari and Firefox trackpads, and the fit at every viewport width for every starter (checked 1440 for all 22, plus Retro OS by eye).

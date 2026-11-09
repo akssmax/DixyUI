@@ -100,16 +100,28 @@
   gap: clamp(32px, 5vw, 64px);
   /* With the 60px header, the hero fills 98% of the viewport: the next
      section just peeks in. Tall scenes scroll inside the stage instead. */
-  block-size: max(calc(98svh - 60px), 640px);
+  /* A minimum, not a fixed height: starters with large type can make the
+     copy taller, and the hero grows instead of clipping it. */
+  min-block-size: max(calc(98svh - 60px), 640px);
   padding: clamp(24px, 4vh, 48px) 0 clamp(24px, 4vh, 48px)
     var(--landing-inset);
 }
 .landing-hero-copy {
   display: grid;
+  /* A 0 minimum, so the longest headline word can't widen the column. */
+  grid-template-columns: minmax(0, 1fr);
   justify-items: start;
   gap: 20px;
+  /* Never wider than its column, whatever the starter's fonts. */
+  min-inline-size: 0;
+}
+.landing-hero-copy > * {
+  max-inline-size: 100%;
 }
 .landing .landing-display {
+  /* Full column width, so a word wider than the column overflows the
+     heading and useFitHeading can measure it and shrink the font. */
+  justify-self: stretch;
   font: 650 clamp(44px, 6.4vw, 80px) / 0.98 var(--dixy-font-display);
   letter-spacing: -0.045em;
   text-wrap: balance;
@@ -347,8 +359,14 @@
   gap: 4px;
 }
 .landing .landing-picker-swatch {
+  /* Toggle has a 40px minimum control height; without resetting the
+     minimums the "circle" renders 36 by 40, an oval. */
   inline-size: 36px;
   block-size: 36px;
+  min-inline-size: 36px;
+  min-block-size: 36px;
+  aspect-ratio: 1;
+  flex: none;
   padding: 0;
   border-radius: 50%;
 }
@@ -1210,7 +1228,7 @@
   }
   .landing-hero {
     grid-template-columns: minmax(0, 1fr);
-    block-size: auto;
+    min-block-size: 0;
   }
   .landing-stage-body {
     block-size: min(640px, 80svh);
