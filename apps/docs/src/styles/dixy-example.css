@@ -1,0 +1,583 @@
+/*
+ * Fernpay example app: layout only. Colour, type, radius and surfaces all come
+ * from Dixy components and tokens, so switching skin restyles everything.
+ */
+.fp-app {
+  /* One content column for the top bar and every page. */
+  --fp-max: 1200px;
+  --fp-gutter: clamp(16px, 3vw, 32px);
+  min-height: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+
+/* Contains the sticky top bar's z-index so portalled dialogs, drawers and
+   toasts (which come later in the DOM) always paint above the app. */
+.fp-shell {
+  isolation: isolate;
+  display: grid;
+  --fp-sidebar-width: 248px;
+  grid-template-columns: var(--fp-sidebar-width) minmax(0, 1fr);
+  min-height: 100dvh;
+  transition: grid-template-columns 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+/* Rail: icon-only, labels move into tooltips. */
+.fp-shell[data-sidebar="collapsed"] {
+  --fp-sidebar-width: 72px;
+}
+
+/* Opt-in shader backdrop: fixed behind everything inside the isolated shell.
+   Cards stay opaque, so it only shows in the canvas gaps and the glass top bar. */
+.fp-shader {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.fp-shader canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: fp-shader-fade 600ms ease-out forwards;
+}
+.fp-shader[data-shader="phosphor"] canvas {
+  image-rendering: pixelated;
+}
+@keyframes fp-shader-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+.fp-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dixy-spacing-stack-lg);
+  padding: var(--dixy-spacing-inset-lg);
+  border: 0;
+  border-inline-end: 1px solid var(--dixy-color-border-subtle);
+  overflow: hidden;
+  transition: padding 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+.fp-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dixy-spacing-inline-sm);
+  min-height: 32px;
+}
+.fp-sidebar[data-collapsed] {
+  padding-inline: 12px;
+}
+.fp-sidebar[data-collapsed] .fp-sidebar-header {
+  flex-direction: column;
+  gap: var(--dixy-spacing-stack-sm);
+}
+.fp-sidebar[data-collapsed] .fp-brand-name,
+.fp-sidebar[data-collapsed] .fp-nav-label,
+.fp-sidebar[data-collapsed] .dixy-sidebar-footer {
+  display: none;
+}
+.fp-sidebar[data-collapsed] .fp-nav-item {
+  justify-content: center;
+  padding-inline: 0;
+}
+.fp-nav-label,
+.fp-brand-name {
+  white-space: nowrap;
+}
+.fp-sidebar .dixy-sidebar-nav {
+  flex: 1;
+}
+.fp-sidebar .dixy-sidebar-footer {
+  display: grid;
+  gap: var(--dixy-spacing-stack-xs);
+}
+
+.fp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: var(--dixy-font-title-md);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.fp-brand-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px 7px 7px 2px;
+  background: var(--dixy-color-background-action-primary);
+}
+
+.fp-nav-item {
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.fp-main-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.fp-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-md);
+  min-height: 64px;
+  box-sizing: border-box;
+  padding-block: 12px;
+  padding-inline: max(var(--fp-gutter), calc((100% - var(--fp-max)) / 2));
+  background: color-mix(
+    in oklab,
+    var(--dixy-color-background-canvas) 82%,
+    transparent
+  );
+  backdrop-filter: blur(12px);
+}
+.fp-topbar-end {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-sm);
+}
+.fp-search-trigger {
+  gap: 8px;
+}
+.fp-theme-picker {
+  min-width: 0;
+}
+.fp-theme-picker .dixy-select-trigger {
+  min-width: 10rem;
+}
+.fp-theme-picker .dixy-select-trigger > :first-child {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fp-bell {
+  position: relative;
+}
+.fp-bell-count {
+  position: absolute;
+  top: -2px;
+  inset-inline-end: -2px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  font-size: 11px;
+  line-height: 18px;
+  justify-content: center;
+  pointer-events: none;
+}
+.fp-user {
+  padding-inline: 4px;
+}
+
+.fp-notifications {
+  width: min(340px, calc(100vw - 32px));
+}
+.fp-notification-scroll {
+  max-height: 260px;
+  margin-top: var(--dixy-spacing-stack-sm);
+}
+
+.fp-main {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: calc(var(--fp-max) + 2 * var(--fp-gutter));
+  margin-inline: auto;
+  padding: 8px var(--fp-gutter) var(--fp-gutter);
+  display: grid;
+  align-content: start;
+  gap: var(--dixy-spacing-stack-lg);
+}
+
+/* ---------------------------------------------------------- Molecules
+   PageHeader, SectionHeader, SectionFooter and Actions (example/layout.tsx).
+   Fixed slot heights and one-line descriptions keep the chrome still when
+   views or data change. */
+.fp-page-header,
+.fp-section-header,
+.fp-section-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-md);
+}
+.fp-page-header {
+  min-height: 72px;
+}
+.fp-page-header h1 {
+  margin: 0;
+}
+.fp-header-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.fp-one-line {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--dixy-spacing-inline-sm);
+  min-height: var(--dixy-size-control-sm);
+}
+.fp-section-header {
+  min-height: var(--dixy-size-control-md);
+}
+.fp-section-footer {
+  box-sizing: content-box;
+  min-height: var(--dixy-size-control-md);
+}
+.fp-footer-meta {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--dixy-spacing-inline-sm);
+}
+/* Cards stretch to their row; the footer always sits on the bottom edge. */
+.fp-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.fp-section > .fp-section-footer {
+  margin-block-start: auto;
+  padding-block-start: var(--dixy-spacing-stack-md);
+}
+.fp-stat-header {
+  gap: var(--dixy-spacing-stack-xs);
+}
+
+.fp-chart {
+  min-height: 0;
+}
+.fp-chart .dixy-chart svg,
+.fp-chart-skeleton {
+  display: block;
+  width: 100%;
+  height: clamp(160px, 22vw, 240px);
+}
+/* A full page of rows (8) is reserved, so filtering never pulls the page up. */
+.fp-txn-table {
+  min-height: 33rem;
+}
+.fp-table-empty {
+  display: grid;
+  place-items: center;
+}
+
+/* Overview grid: three columns that collapse on smaller screens. */
+.fp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--dixy-spacing-stack-md);
+  align-items: stretch;
+}
+.fp-span-2 {
+  grid-column: span 2;
+}
+.fp-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--dixy-spacing-stack-md);
+}
+.fp-span-full {
+  grid-column: 1 / -1;
+}
+.fp-figure {
+  font: var(--dixy-font-heading-md);
+  font-variant-numeric: tabular-nums;
+}
+.fp-figure-sm {
+  font: var(--dixy-font-title-lg);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+.fp-figure-xs {
+  font: var(--dixy-font-label-md);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.fp-goal {
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-lg);
+}
+
+.fp-amount {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.fp-amount[data-direction="in"] {
+  color: var(--dixy-color-text-success);
+}
+.fp-num {
+  text-align: end;
+}
+
+/* Transactions */
+.fp-filters {
+  display: grid;
+  grid-template-columns:
+    minmax(12rem, 1.4fr) minmax(10rem, 1fr) minmax(16rem, 1.3fr)
+    auto;
+  gap: var(--dixy-spacing-inline-lg);
+  align-items: end;
+}
+.fp-filter-end {
+  display: flex;
+  justify-content: flex-end;
+}
+.fp-table-wrap {
+  overflow-x: auto;
+}
+/* Tables scroll sideways on narrow screens instead of wrapping every cell. */
+.fp-table-wrap :is(table, [role="grid"]) {
+  min-width: 36rem;
+}
+.fp-table-wrap
+  :is(th, td, [role="columnheader"], [role="rowheader"], [role="gridcell"]) {
+  white-space: nowrap;
+}
+.fp-table-wrap [role="row"][data-href],
+.fp-table-wrap [role="row"] {
+  cursor: default;
+}
+.fp-table-wrap tbody [role="row"] {
+  cursor: pointer;
+}
+
+.fp-drawer {
+  width: min(420px, 100vw);
+}
+.fp-drawer-amount {
+  font: var(--dixy-font-heading-lg);
+}
+
+/* Cards */
+.fp-grid-cards {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+.fp-payment-card {
+  /* Keep the card's own proportions instead of stretching to the row. */
+  align-self: start;
+  aspect-ratio: 1.586;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--dixy-spacing-inset-lg);
+  border-radius: calc(var(--dixy-radius-lg, 16px) * 1.25);
+  color: var(--dixy-color-text-on-action-primary);
+  background:
+    radial-gradient(
+      120% 140% at 100% 0%,
+      var(--dixy-color-brand-7),
+      transparent 60%
+    ),
+    var(--dixy-color-background-action-primary);
+  box-shadow: var(--dixy-shadow-lg, 0 18px 40px rgb(0 0 0 / 0.2));
+  transition:
+    filter 300ms ease,
+    transform 300ms ease;
+}
+.fp-payment-card[data-frozen] {
+  filter: grayscale(1) brightness(0.9);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .fp-payment-card:hover {
+    transform: translateY(-3px) rotate(-0.5deg);
+  }
+}
+.fp-card-brand {
+  font: var(--dixy-font-title-md);
+  font-weight: 700;
+  color: inherit;
+}
+.fp-card-number {
+  font: var(--dixy-font-title-lg);
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+.fp-payment-card .dixy-text {
+  color: inherit;
+}
+
+.fp-switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dixy-spacing-inline-md);
+  cursor: pointer;
+}
+.fp-switch-row > span {
+  display: grid;
+  gap: 2px;
+}
+.fp-check {
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-md);
+}
+
+/* Send money dialog */
+.fp-radio-list {
+  display: grid;
+  gap: var(--dixy-spacing-stack-sm);
+}
+.fp-radio {
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-md);
+  cursor: pointer;
+}
+.fp-radio > span {
+  display: grid;
+}
+.fp-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--dixy-spacing-inline-sm);
+  margin-top: var(--dixy-spacing-stack-sm);
+}
+.fp-error {
+  color: var(--dixy-color-text-danger);
+}
+.fp-label,
+.fp-label-stack {
+  font: var(--dixy-font-label-md);
+}
+.fp-label-stack {
+  display: grid;
+  gap: 8px;
+}
+
+/* Settings */
+.fp-settings {
+  max-width: 720px;
+}
+.fp-settings [role="tabpanel"] > .dixy-card {
+  width: 100%;
+}
+.fp-settings [role="tabpanel"] {
+  padding-top: var(--dixy-spacing-stack-md);
+}
+.fp-form {
+  display: grid;
+  gap: var(--dixy-spacing-stack-md);
+}
+.fp-accordion-body {
+  padding: var(--dixy-spacing-inset-md);
+}
+
+.fp-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.fp-only-mobile {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .fp-grid,
+  .fp-grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fp-span-2 {
+    grid-column: 1 / -1;
+  }
+  .fp-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fp-dates {
+    grid-column: 1 / -1;
+  }
+  .fp-only-wide {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fp-shell,
+  .fp-sidebar {
+    transition: none;
+  }
+  .fp-shader canvas {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 820px) {
+  .fp-shell,
+  .fp-shell[data-sidebar="collapsed"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fp-sidebar {
+    display: none;
+  }
+  .fp-only-mobile {
+    display: inline-flex;
+  }
+  .fp-only-wide {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Metrics become a swipeable row with a peek of the next card. */
+  .fp-stats {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    margin-inline: calc(-1 * var(--fp-gutter));
+    padding: 4px var(--fp-gutter) 12px;
+    scroll-padding-inline: var(--fp-gutter);
+    scrollbar-width: none;
+  }
+  .fp-stats > * {
+    scroll-snap-align: start;
+  }
+  .fp-page-header {
+    min-height: 0;
+  }
+  .fp-grid,
+  .fp-grid-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fp-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fp-filter-end {
+    justify-content: flex-start;
+  }
+  .fp-theme-picker .dixy-select-trigger {
+    min-width: 0;
+    max-width: 9rem;
+  }
+}

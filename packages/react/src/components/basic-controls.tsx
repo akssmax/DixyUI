@@ -1,6 +1,7 @@
 import { ButtonGroupContext } from "../utilities/visual-group-context";
 import type { ComponentProps } from "react";
 import { nativePart, type NativePartProps } from "../utilities/native-part";
+import { Mark } from "../utilities/default-artwork";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { Button } from "./button";
@@ -52,10 +53,30 @@ export const Textarea = /* @__PURE__ */ nativePart(
   "dixy-textarea",
   ["size", "variant", "radius", "material"] as const,
 );
-export const NativeSelect = /* @__PURE__ */ nativePart(
+const NativeSelectControl = /* @__PURE__ */ nativePart(
   "select",
   "dixy-native-select",
+  ["size", "variant", "radius", "material"] as const,
 );
+/**
+ * A native `<select>` with a built-in chevron. Props, `ref` and `className`
+ * reach the `<select>`; the chevron is a decorative sibling in a thin wrapper,
+ * because materials own the select's background and an inline image can't
+ * live there.
+ */
+export function NativeSelect(props: NativeSelectProps) {
+  return (
+    <span
+      className="dixy-native-select-root"
+      data-multiple={props.multiple ? "" : undefined}
+    >
+      <NativeSelectControl {...props} />
+      <span className="dixy-native-select-icon" aria-hidden="true">
+        <Mark kind="chevron" />
+      </span>
+    </span>
+  );
+}
 export const InputGroup = /* @__PURE__ */ (() => ({
   Root: /* @__PURE__ */ nativePart("div", "dixy-input-group", [
     "size",
@@ -80,11 +101,35 @@ export interface PaginationProps extends NativePartProps<
 function PaginationRoot(props: PaginationProps) {
   return <Nav aria-label="Pagination" {...props} />;
 }
+const PaginationLink = /* @__PURE__ */ nativePart(
+  "a",
+  "dixy-pagination-link",
+  [] as const,
+);
+export type PaginationStepProps = NativePartProps<"a", never>;
+/** Previous-page link with a chevron. Children replace the icon; pass `aria-disabled` on the first page. */
+function PaginationPrevious({ children, ...props }: PaginationStepProps) {
+  return (
+    <PaginationLink aria-label="Previous page" {...props} data-step="previous">
+      {children ?? <Mark kind="chevron-left" />}
+    </PaginationLink>
+  );
+}
+/** Next-page link with a chevron. Children replace the icon; pass `aria-disabled` on the last page. */
+function PaginationNext({ children, ...props }: PaginationStepProps) {
+  return (
+    <PaginationLink aria-label="Next page" {...props} data-step="next">
+      {children ?? <Mark kind="chevron-right" />}
+    </PaginationLink>
+  );
+}
 export const Pagination = /* @__PURE__ */ (() => ({
   Root: PaginationRoot,
   List: /* @__PURE__ */ nativePart("ul", "dixy-pagination-list", [] as const),
   Item: /* @__PURE__ */ nativePart("li", "dixy-pagination-item", [] as const),
-  Link: /* @__PURE__ */ nativePart("a", "dixy-pagination-link", [] as const),
+  Link: PaginationLink,
+  Previous: PaginationPrevious,
+  Next: PaginationNext,
   Ellipsis: /* @__PURE__ */ nativePart(
     "span",
     "dixy-pagination-ellipsis",

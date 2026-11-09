@@ -10,16 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DixyExampleRouteImport } from './routes/dixy-example'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibility'
 import { Route as DocsInstallationRouteImport } from './routes/docs.installation'
-import { Route as DocsLearningRouteImport } from './routes/docs.learning'
+import { Route as LabControlsRouteImport } from './routes/lab.controls'
+import { Route as LabKitchenSinkRouteImport } from './routes/lab.kitchen-sink'
+import { Route as LabShadersRouteImport } from './routes/lab.shaders'
 import { Route as DocsComponentsComponentRouteImport } from './routes/docs.components.$component'
 import { Route as DocsFoundationsFoundationRouteImport } from './routes/docs.foundations.$foundation'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DixyExampleRoute = DixyExampleRouteImport.update({
+  id: '/dixy-example',
+  path: '/dixy-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlaygroundRoute = PlaygroundRouteImport.update({
@@ -37,9 +45,19 @@ const DocsInstallationRoute = DocsInstallationRouteImport.update({
   path: '/docs/installation',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DocsLearningRoute = DocsLearningRouteImport.update({
-  id: '/docs/learning',
-  path: '/docs/learning',
+const LabControlsRoute = LabControlsRouteImport.update({
+  id: '/lab/controls',
+  path: '/lab/controls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabKitchenSinkRoute = LabKitchenSinkRouteImport.update({
+  id: '/lab/kitchen-sink',
+  path: '/lab/kitchen-sink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabShadersRoute = LabShadersRouteImport.update({
+  id: '/lab/shaders',
+  path: '/lab/shaders',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsComponentsComponentRoute = DocsComponentsComponentRouteImport.update({
@@ -56,29 +74,38 @@ const DocsFoundationsFoundationRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
-  '/docs/learning': typeof DocsLearningRoute
+  '/lab/controls': typeof LabControlsRoute
+  '/lab/kitchen-sink': typeof LabKitchenSinkRoute
+  '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
-  '/docs/learning': typeof DocsLearningRoute
+  '/lab/controls': typeof LabControlsRoute
+  '/lab/kitchen-sink': typeof LabKitchenSinkRoute
+  '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
-  '/docs/learning': typeof DocsLearningRoute
+  '/lab/controls': typeof LabControlsRoute
+  '/lab/kitchen-sink': typeof LabKitchenSinkRoute
+  '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
 }
@@ -86,38 +113,50 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
     | '/docs/installation'
-    | '/docs/learning'
+    | '/lab/controls'
+    | '/lab/kitchen-sink'
+    | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
     | '/docs/installation'
-    | '/docs/learning'
+    | '/lab/controls'
+    | '/lab/kitchen-sink'
+    | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
   id:
     | '__root__'
     | '/'
+    | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
     | '/docs/installation'
-    | '/docs/learning'
+    | '/lab/controls'
+    | '/lab/kitchen-sink'
+    | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DixyExampleRoute: typeof DixyExampleRoute
   PlaygroundRoute: typeof PlaygroundRoute
   DocsAccessibilityRoute: typeof DocsAccessibilityRoute
   DocsInstallationRoute: typeof DocsInstallationRoute
-  DocsLearningRoute: typeof DocsLearningRoute
+  LabControlsRoute: typeof LabControlsRoute
+  LabKitchenSinkRoute: typeof LabKitchenSinkRoute
+  LabShadersRoute: typeof LabShadersRoute
   DocsComponentsComponentRoute: typeof DocsComponentsComponentRoute
   DocsFoundationsFoundationRoute: typeof DocsFoundationsFoundationRoute
 }
@@ -129,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dixy-example': {
+      id: '/dixy-example'
+      path: '/dixy-example'
+      fullPath: '/dixy-example'
+      preLoaderRoute: typeof DixyExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/playground': {
@@ -152,11 +198,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsInstallationRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/docs/learning': {
-      id: '/docs/learning'
-      path: '/docs/learning'
-      fullPath: '/docs/learning'
-      preLoaderRoute: typeof DocsLearningRouteImport
+    '/lab/controls': {
+      id: '/lab/controls'
+      path: '/lab/controls'
+      fullPath: '/lab/controls'
+      preLoaderRoute: typeof LabControlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab/kitchen-sink': {
+      id: '/lab/kitchen-sink'
+      path: '/lab/kitchen-sink'
+      fullPath: '/lab/kitchen-sink'
+      preLoaderRoute: typeof LabKitchenSinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab/shaders': {
+      id: '/lab/shaders'
+      path: '/lab/shaders'
+      fullPath: '/lab/shaders'
+      preLoaderRoute: typeof LabShadersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs/components/$component': {
@@ -178,10 +238,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DixyExampleRoute: DixyExampleRoute,
   PlaygroundRoute: PlaygroundRoute,
   DocsAccessibilityRoute: DocsAccessibilityRoute,
   DocsInstallationRoute: DocsInstallationRoute,
-  DocsLearningRoute: DocsLearningRoute,
+  LabControlsRoute: LabControlsRoute,
+  LabKitchenSinkRoute: LabKitchenSinkRoute,
+  LabShadersRoute: LabShadersRoute,
   DocsComponentsComponentRoute: DocsComponentsComponentRoute,
   DocsFoundationsFoundationRoute: DocsFoundationsFoundationRoute,
 }

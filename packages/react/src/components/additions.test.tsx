@@ -314,3 +314,35 @@ it("keeps the inline command list logically open for filtered keyboard activatio
     expect(choose).toHaveBeenCalledWith("Settings", expect.anything()),
   );
 });
+it("gives NativeSelect a decorative chevron while ref, className and props stay on the select", () => {
+  const ref = createRef<HTMLSelectElement>();
+  const { rerender } = render(
+    <label>
+      Plan
+      <NativeSelect ref={ref} className="custom" size="sm" defaultValue="team">
+        <option value="personal">Personal</option>
+        <option value="team">Team</option>
+      </NativeSelect>
+    </label>,
+  );
+  const select = screen.getByRole("combobox", { name: "Plan" });
+  expect(ref.current).toBe(select);
+  expect(select).toHaveClass("dixy-native-select", "custom");
+  expect(select).toHaveAttribute("data-size", "sm");
+  expect(select).toHaveValue("team");
+  const root = select.parentElement!;
+  expect(root).toHaveClass("dixy-native-select-root");
+  const icon = root.querySelector(".dixy-native-select-icon");
+  expect(icon).toHaveAttribute("aria-hidden", "true");
+  rerender(
+    <label>
+      Plan
+      <NativeSelect multiple>
+        <option value="personal">Personal</option>
+      </NativeSelect>
+    </label>,
+  );
+  expect(
+    screen.getByRole("listbox", { name: "Plan" }).parentElement,
+  ).toHaveAttribute("data-multiple");
+});

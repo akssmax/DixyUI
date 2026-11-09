@@ -148,6 +148,29 @@
     background-color: var(--dixy-component-subtle);
     color: var(--dixy-component-text);
   }
+  /* Outline carries the color in its edge and label, on a transparent fill. */
+  :where(.dixy-badge, .dixy-chip)[data-variant="outline"] {
+    border-color: var(--dixy-component-border);
+    background-color: transparent;
+    color: var(--dixy-component-text);
+  }
+  :where(.dixy-badge, .dixy-chip)[data-variant="ghost"] {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--dixy-component-text);
+  }
+  /* Neutral outline stays a quiet grey label rather than a tinted one. */
+  :where(.dixy-badge, .dixy-chip)[data-variant="outline"][data-color="neutral"] {
+    border-color: var(--dixy-color-border-default);
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-alert[data-variant="outline"] {
+    border-color: var(--dixy-component-border);
+  }
+  .dixy-alert[data-variant="outline"] > .dixy-alert-title,
+  .dixy-alert[data-variant="soft"] > .dixy-alert-title {
+    color: var(--dixy-component-text);
+  }
   .dixy-kbd {
     font: var(--dixy-font-code-sm);
     box-shadow: 0 2px 0 var(--dixy-color-border-default);
@@ -188,8 +211,24 @@
     > .dixy-button:last-child {
     border-radius: 0 0 var(--dixy-component-radius) var(--dixy-component-radius);
   }
-  .dixy-button-group > .dixy-button:focus-visible {
+  /* Attached buttons share one edge: each overlaps the previous border instead of
+     drawing a second line beside it. The hovered or focused one sits on top so its
+     whole edge shows. */
+  .dixy-button-group[data-attached="true"]:not([data-orientation="vertical"])
+    > .dixy-button
+    + .dixy-button {
+    margin-inline-start: calc(-1 * var(--dixy-button-border-width, 1px));
+  }
+  .dixy-button-group[data-attached="true"][data-orientation="vertical"]
+    > .dixy-button
+    + .dixy-button {
+    margin-block-start: calc(-1 * var(--dixy-button-border-width, 1px));
+  }
+  .dixy-button-group[data-attached="true"] > .dixy-button:hover {
     z-index: 1;
+  }
+  .dixy-button-group > .dixy-button:focus-visible {
+    z-index: 2;
   }
   .dixy-avatar-group {
     display: flex;
@@ -215,7 +254,7 @@
     box-sizing: border-box;
     min-inline-size: 0;
     max-inline-size: 100%;
-    padding: 8px 12px;
+    padding: 0 12px;
     border: var(--dixy-border-default);
     border-radius: var(--dixy-component-radius, var(--dixy-radius-control));
     background-color: var(--dixy-color-background-surface);
@@ -227,6 +266,7 @@
     );
   }
   .dixy-textarea {
+    padding-block: 8px;
     resize: vertical;
     min-block-size: 6rem;
     inline-size: 100%;
@@ -260,7 +300,7 @@
     color: var(--dixy-color-text-secondary);
     font: var(--dixy-font-body-sm);
   }
-  :where(.dixy-link, .dixy-pagination-link) {
+  :where(.dixy-link) {
     color: var(--dixy-color-text-action-primary);
     text-decoration: underline;
     text-underline-offset: 0.2em;
@@ -274,19 +314,55 @@
     padding: 0;
     margin: 0;
   }
-  .dixy-pagination-link {
+  /* Page links are square ghost buttons at the control height; the current
+     page is a filled tile, not a taller pill. */
+  .dixy-pagination-list {
+    gap: var(--dixy-space-050);
+  }
+  :where(.dixy-pagination-link, .dixy-pagination-ellipsis) {
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--dixy-interaction-target);
-    min-block-size: var(--dixy-interaction-target);
-    padding: 8px;
-    border-radius: var(--dixy-radius-control);
+    gap: var(--dixy-spacing-inline-xs);
+    block-size: var(--dixy-component-height, 40px);
+    min-inline-size: var(--dixy-component-height, 40px);
+    padding: 0 var(--dixy-space-050);
+    border: var(--dixy-border-width-1) solid transparent;
+    border-radius: var(--dixy-component-radius, var(--dixy-radius-control));
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-component-font, var(--dixy-font-label-md));
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+  }
+  .dixy-pagination-link {
+    cursor: pointer;
+    transition:
+      background-color var(--dixy-field-motion-feedback, 120ms),
+      color var(--dixy-field-motion-feedback, 120ms);
+  }
+  .dixy-pagination-link:hover:not(
+      [aria-current="page"],
+      [aria-disabled="true"]
+    ) {
+    background-color: var(--dixy-color-background-subtle);
   }
   .dixy-pagination-link[aria-current="page"] {
+    border-color: var(--dixy-color-border-subtle);
     background-color: var(--dixy-color-background-selected);
-    font-weight: 700;
-    text-decoration: none;
+    color: var(--dixy-color-text-selected, var(--dixy-color-text-primary));
+    font-weight: 600;
+  }
+  .dixy-pagination-link[aria-disabled="true"] {
+    color: var(--dixy-color-text-disabled);
+    cursor: default;
+    pointer-events: none;
+  }
+  .dixy-pagination-link[data-step] {
+    padding-inline: var(--dixy-space-100, 8px);
+  }
+  .dixy-pagination-ellipsis {
+    color: var(--dixy-color-text-secondary);
   }
   .dixy-breadcrumbs {
     list-style: none;
@@ -895,11 +971,7 @@
     min-inline-size: var(--dixy-component-height, 40px);
   }
   .dixy-pagination-link {
-    min-block-size: max(
-      var(--dixy-component-height, 40px),
-      var(--dixy-interaction-target)
-    );
-    font: var(--dixy-component-font);
+    min-block-size: var(--dixy-interaction-target);
   }
   .dixy-list-box .dixy-aria-listboxitem {
     font: var(--dixy-component-font);

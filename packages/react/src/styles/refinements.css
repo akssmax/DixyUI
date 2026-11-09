@@ -1,0 +1,375 @@
+/* Base component refinements from the kitchen-sink review (/lab/kitchen-sink).
+   Each block fixes one component that looked wrong at its default controls. */
+@layer dixy.components {
+  /* Accordion: full-width rows, title at the start, chevron at the end, items
+     split by a hairline. The shared trigger reset uses :is(...):not(.dixy-button),
+     so this matches its specificity and comes later. */
+  .dixy-accordion-trigger:not(.dixy-button) {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--dixy-spacing-inline-md);
+    inline-size: 100%;
+    border: 0;
+    background: transparent;
+    text-align: start;
+  }
+
+  /* Breadcrumbs: ancestors are quiet links, the current page is plain text. */
+  .dixy-breadcrumbs .dixy-breadcrumb > .dixy-link {
+    color: var(--dixy-color-text-secondary);
+    text-decoration: none;
+  }
+  .dixy-breadcrumbs .dixy-breadcrumb > .dixy-link:hover {
+    color: var(--dixy-color-text-primary);
+    text-decoration: underline;
+  }
+  .dixy-breadcrumbs .dixy-breadcrumb > .dixy-link[data-current] {
+    color: var(--dixy-color-text-primary);
+    opacity: 1;
+    text-decoration: none;
+    cursor: default;
+  }
+
+  /* Item: content takes the row, actions sit at the end on the same line. */
+  .dixy-item > .dixy-item-content {
+    flex: 1 1 auto;
+  }
+  .dixy-item > .dixy-item-actions {
+    flex: none;
+    margin-block-start: 0;
+    margin-inline-start: auto;
+  }
+
+  /* Meter, Progress, Slider: label and value share the first row, track below. */
+  :is(
+    .dixy-meter-root,
+    .dixy-progress-root,
+    .dixy-slider-root:not([data-orientation="vertical"])
+  ) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--dixy-spacing-inline-md);
+  }
+  :is(
+      .dixy-meter-root,
+      .dixy-progress-root,
+      .dixy-slider-root:not([data-orientation="vertical"])
+    )
+    > * {
+    grid-column: 1 / -1;
+  }
+  :is(
+      .dixy-meter-root,
+      .dixy-progress-root,
+      .dixy-slider-root:not([data-orientation="vertical"])
+    )
+    > :is(.dixy-meter-label, .dixy-progress-label, .dixy-slider-label) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  :is(
+      .dixy-meter-root,
+      .dixy-progress-root,
+      .dixy-slider-root:not([data-orientation="vertical"])
+    )
+    > :is(.dixy-meter-value, .dixy-progress-value, .dixy-slider-value) {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  :is(.dixy-meter-value, .dixy-progress-value, .dixy-slider-value) {
+    font: var(--dixy-font-label-md);
+    font-variant-numeric: tabular-nums;
+    color: var(--dixy-color-text-secondary);
+  }
+
+  /* Skeleton: a fill, not a box, with a slow pulse that stops for reduced motion. */
+  .dixy-skeleton {
+    border: 0;
+    animation: dixy-skeleton-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes dixy-skeleton-pulse {
+    50% {
+      opacity: 0.55;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-skeleton {
+      animation: none;
+    }
+  }
+
+  /* TagGroup: the remove button is a borderless icon inside the tag, not a second box. */
+  .dixy-aria-tag > div {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-space-050, 4px);
+  }
+  .dixy-aria-tag[data-allows-removing] {
+    padding-inline-end: var(--dixy-space-050, 4px);
+  }
+  .dixy-aria-tag .dixy-aria-button[slot="remove"] {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--dixy-interaction-target);
+    block-size: var(--dixy-interaction-target);
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--dixy-radius-full);
+    background: transparent;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-aria-tag .dixy-aria-button[slot="remove"]:is(
+      [data-hovered],
+      [data-pressed]
+    ) {
+    background: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+
+  /* Checkbox inside a label: one gap between box and text, and a description
+     below lines up with the label text rather than the box. */
+  .dixy-label:has(> .dixy-checkbox-root) {
+    --dixy-choice-label-gap: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-choice-label-gap);
+  }
+  .dixy-field:has(> .dixy-label > .dixy-checkbox-root)
+    > :is(.dixy-description, .dixy-error) {
+    padding-inline-start: calc(
+      max(var(--dixy-choice-size), var(--dixy-interaction-target)) + 8px
+    );
+  }
+
+  /* NativeSelect: the select and its chevron share one grid cell, so the wrapper adds
+     no box of its own. It stretches like the select did in a column layout and
+     shrinks to the select inline. The browser arrow is replaced, not doubled. */
+  .dixy-native-select-root {
+    display: inline-grid;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    vertical-align: middle;
+  }
+  .dixy-native-select-root > * {
+    grid-area: 1 / 1;
+  }
+  .dixy-native-select-root > .dixy-native-select {
+    appearance: none;
+    inline-size: 100%;
+    padding-inline-end: calc(12px + 16px + 8px);
+  }
+  .dixy-native-select-icon {
+    display: inline-flex;
+    align-self: center;
+    justify-self: end;
+    margin-inline-end: 12px;
+    color: var(--dixy-color-text-secondary);
+    pointer-events: none;
+  }
+  .dixy-native-select-root:has(> .dixy-native-select:disabled)
+    > .dixy-native-select-icon {
+    color: var(--dixy-color-text-disabled);
+  }
+  /* A list box (multiple) shows its options, so it has no chevron. */
+  .dixy-native-select-root[data-multiple] > .dixy-native-select {
+    padding-inline-end: 12px;
+  }
+  .dixy-native-select-root[data-multiple] > .dixy-native-select-icon {
+    display: none;
+  }
+
+  /* ColorField: label above the input, like every other field. */
+  .dixy-color-field {
+    display: grid;
+    gap: var(--dixy-form-field-gap, 8px);
+  }
+
+  /* NavigationMenu links match the triggers beside them instead of reading as body links. */
+  .dixy-navigation-menu-link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: max(
+      var(--dixy-size-control-sm),
+      var(--dixy-interaction-target)
+    );
+    padding: var(--dixy-spacing-inset-sm);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-label-md);
+    text-decoration: none;
+  }
+
+  /* ---- Second pass, compared with shadcn/ui ---- */
+
+  /* Table and DataTable: 40px header, 8px cells, hairline rows, no rule under
+     the last row, a quiet hover, row headers at medium weight, caption below. */
+  :is(.dixy-table, .dixy-data-table) {
+    caption-side: bottom;
+  }
+  .dixy-table-caption {
+    padding-block: var(--dixy-space-150, 12px) 0;
+    font: var(--dixy-font-body-sm);
+  }
+  :is(.dixy-table-head, .dixy-table-cell, .dixy-aria-column, .dixy-aria-cell) {
+    padding: var(--dixy-space-100, 8px);
+    border-block-end-color: var(--dixy-color-border-subtle);
+    vertical-align: middle;
+  }
+  :is(.dixy-table-header .dixy-table-head, .dixy-aria-column) {
+    block-size: 40px;
+    padding-block: 0;
+    font: var(--dixy-font-label-md);
+    color: var(--dixy-color-text-secondary);
+    white-space: nowrap;
+  }
+  .dixy-table-body .dixy-table-head,
+  .dixy-aria-cell[role="rowheader"] {
+    font-weight: 500;
+  }
+  .dixy-table-body > .dixy-table-row:last-child > *,
+  .dixy-aria-tablebody > .dixy-aria-row:last-child > * {
+    border-block-end: 0;
+  }
+  .dixy-table-body > .dixy-table-row,
+  .dixy-aria-tablebody > .dixy-aria-row {
+    transition: background-color var(--dixy-motion-transition-feedback, 120ms);
+  }
+  .dixy-table-body > .dixy-table-row:hover,
+  .dixy-aria-tablebody > .dixy-aria-row[data-hovered] {
+    background-color: color-mix(
+      in oklab,
+      var(--dixy-color-background-subtle) 60%,
+      transparent
+    );
+  }
+  .dixy-aria-column[aria-sort] {
+    color: var(--dixy-color-text-primary);
+  }
+
+  /* TagGroup: compact tags (24/28/32 at sm/md/lg) with a small remove icon,
+     close to a badge rather than a button. */
+  .dixy-tag-group {
+    --dixy-tag-height: 28px;
+    --dixy-tag-remove: 20px;
+  }
+  .dixy-tag-group[data-size="sm"] {
+    --dixy-tag-height: 24px;
+    --dixy-tag-remove: 16px;
+  }
+  .dixy-tag-group[data-size="lg"] {
+    --dixy-tag-height: 32px;
+  }
+  .dixy-tag-group .dixy-aria-taglist {
+    gap: var(--dixy-space-100, 8px);
+  }
+  .dixy-tag-group .dixy-aria-tag[class] {
+    box-sizing: border-box;
+    block-size: var(--dixy-tag-height);
+    min-block-size: 0;
+    padding: 0 10px;
+    border-color: var(--dixy-color-border-subtle);
+    background: var(--dixy-color-background-subtle);
+    font: var(--dixy-font-label-sm);
+  }
+  .dixy-tag-group[data-size="lg"] .dixy-aria-tag[class] {
+    font: var(--dixy-font-label-md);
+  }
+  .dixy-tag-group .dixy-aria-tag[class][data-allows-removing] {
+    padding-inline-end: 4px;
+  }
+  .dixy-tag-group .dixy-aria-tag[data-selected] {
+    border-color: var(--dixy-component-border);
+    background: var(--dixy-component-subtle);
+    color: var(--dixy-component-text);
+  }
+  .dixy-tag-group .dixy-aria-tag[data-focus-visible] {
+    outline: 2px solid var(--dixy-color-border-focus);
+    outline-offset: 2px;
+  }
+  .dixy-tag-group .dixy-aria-tag .dixy-aria-button[slot="remove"] {
+    inline-size: var(--dixy-tag-remove);
+    block-size: var(--dixy-tag-remove);
+  }
+  .dixy-tag-group .dixy-aria-tag .dixy-aria-button[slot="remove"] svg {
+    inline-size: 12px;
+    block-size: 12px;
+  }
+
+  /* Kbd: a small muted key cap, no border or drop shadow. */
+  .dixy-kbd[class] {
+    block-size: 20px;
+    min-inline-size: 20px;
+    padding: 0 4px;
+    border: 0;
+    border-radius: var(--dixy-radius-4);
+    background: var(--dixy-color-background-subtle);
+    box-shadow: none;
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-label-sm);
+  }
+  .dixy-kbd[data-size="sm"] {
+    block-size: 18px;
+    min-inline-size: 18px;
+  }
+  .dixy-kbd[data-size="lg"] {
+    block-size: 24px;
+    min-inline-size: 24px;
+    font: var(--dixy-font-label-md);
+  }
+
+  /* ScrollArea: a slim, rounded thumb in the border colour that darkens on use. */
+  .dixy-scroll-area-root[data-dixy-visual] {
+    --dixy-scrollbar-size: 10px;
+  }
+  .dixy-scroll-area-root[data-size="sm"] {
+    --dixy-scrollbar-size: 8px;
+  }
+  .dixy-scroll-area-root[data-size="lg"] {
+    --dixy-scrollbar-size: 12px;
+  }
+  .dixy-scroll-area-scrollbar {
+    box-sizing: border-box;
+    padding: 1px;
+    border-radius: var(--dixy-radius-full);
+  }
+  .dixy-scroll-area-thumb {
+    border-radius: var(--dixy-radius-full);
+    background: var(--dixy-color-border-default);
+  }
+
+  /* Empty: a dashed outline, so it reads as a placeholder, not a card. */
+  .dixy-empty[data-variant="outline"] {
+    border-style: dashed;
+    border-color: var(--dixy-color-border-default);
+    background: transparent;
+  }
+
+  /* AvatarGroup count: same shape as the avatars, quiet fill, no border. */
+  .dixy-avatar-group > .dixy-avatar-count {
+    box-sizing: border-box;
+    inline-size: var(--dixy-component-height, 40px);
+    block-size: var(--dixy-component-height, 40px);
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding: 0;
+    border-color: transparent;
+    border-radius: var(--dixy-component-radius);
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-label-sm);
+  }
+
+  /* Carousel controls default to square icon buttons. */
+  .dixy-carousel-control[data-icon-only] {
+    inline-size: var(--dixy-component-height, 40px);
+    padding: 0;
+  }
+
+  /* Item: a hairline between items in a list, none after the last one. */
+  .dixy-item {
+    border-block-end-color: var(--dixy-color-border-subtle);
+  }
+  .dixy-item:last-child {
+    border-block-end: 0;
+  }
+}

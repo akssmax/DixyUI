@@ -782,6 +782,37 @@ Verification for this pass:
 - [ ] Check segmented in forced colours, with a screen reader, vertically oriented, and under each material finish.
 - [ ] Personally explain why the segmented thumb rule is scoped through the list (cascade order versus materials.css in the same layer), before claiming mastery.
 
+## Shader backdrops (prototype) — 2026-11-09
+
+- [x] Opt-in WebGL backdrop on `/lab/shaders` for Ocean Depths and Phosphor Terminal, driven by theme tokens, with reduced-motion still frame, off-screen pause and static fallback. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Four more pairings (Neon Night Market, Prism Glass, Diwali Lights, Solar Sail); uncapped display-rate loop with adaptive resolution; every shader ≤0.1 ms/frame on Apple M5. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Measure real frame rate (120 Hz) and battery cost on a low-end laptop and a phone; test Safari and Firefox.
+- [ ] Decide whether shaders graduate into `@dixy-ui/themes` as an `effects: "shader"` option behind a separate lazy export (needs `pnpm package:check`).
+- [ ] Learning: explain how a fragment shader runs per pixel, why the runtime keeps a single WebGL context, and how token colours reach the GPU as uniforms.
+
+## Example app — Fernpay (/dixy-example), 2026-11-09
+
+- [x] Mock fintech app built only from Dixy components (59 used), with live skin switching across all starters. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Keyboard-only and screen-reader pass through the whole app; dark appearance on every view; Safari/Firefox.
+- [ ] Library follow-ups found while building: line/area `Chart`, `AvatarGroup` clipping at `sm`, a z-index scale for app chrome vs overlays.
+- [ ] Learning: explain why `isolation: isolate` fixed the top bar painting over the dialog backdrop.
+- [x] Layout molecules (PageHeader, SectionHeader, SectionFooter, StatCard) on every view; no shift between views or filter states; no horizontal overflow from 375 to 1600px. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Learning: explain how fixed slot heights and reserved space prevent layout shift, and why a molecule owns those rules rather than each view.
+
+## Base control alignment — 2026-11-09
+
+- [x] Every field-like control measures 32/40/48 at sm/md/lg across the default theme and 30 skins, checked on `/lab/controls`. Evidence: docs/COMPONENT_AUDIT.md, docs/BUILD_LOG.md 2026-11-09.
+- [x] Built-in SVG icons replace consumer text glyphs in the date, calendar, number, search and tag parts.
+- [ ] Coarse-pointer hit-area extension for 32px controls; Accordion indicator part.
+- [x] Pagination: square tiles at control height, Previous/Next parts with icons. `/lab/kitchen-sink` renders all 76 registry demos for review. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Review the kitchen sink (user) and list remaining component fixes.
+- [x] Semantic colors: `warning` and `info` join accent/neutral/danger/success on the shared `color` prop (Badge, Chip, Alert, Card and other family components), mapped to the existing status tokens. Outline and ghost Badge/Chip and outline Alert now use the color. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Kitchen-sink pass: Accordion rows, Breadcrumbs current page, Item actions, Meter/Progress/Slider value row, Skeleton, TagGroup remove, checkbox description, ColorField label, NavigationMenu link, attached ButtonGroup seams, disabled outline buttons. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] NativeSelect chevron: a thin wrapper holds the select and a decorative chevron in one grid cell; ref, className and props stay on the select. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Second kitchen-sink pass against shadcn source: Table/DataTable, TagGroup, Kbd, ScrollArea, Empty, AvatarGroup count, Carousel icon controls, Item separators. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Learning: explain why `:is(a, b):not(c)` outranked the Accordion's own `.trigger` rule, and how to read specificity of `:is()`.
+- [ ] Learning: explain why a framed group must own the height and border (and its parts stretch) rather than each part declaring the control height.
+
 ## Library gap fill (shadcn / HeroUI / Radix comparison) — 2026-11-07
 
 Components that shadcn/ui, HeroUI or Radix (Primitives + Themes) ship and Dixy did not. Spacer was skipped (Stack and Grid gaps cover it); Portal and Slot are not needed (Base UI portals and `useRender`/`mergeProps`).

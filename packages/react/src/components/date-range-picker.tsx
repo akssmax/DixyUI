@@ -4,6 +4,7 @@ import type { VisualProps } from "../utilities/native-part";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { styledPrimitive } from "../utilities/styled-primitive";
+import { defaultArtwork } from "../utilities/default-artwork";
 import { AriaPopover } from "../utilities/aria-popover";
 export interface DateRangePickerRootProps<T extends DateValue>
   extends
@@ -42,7 +43,12 @@ export const DateRangePicker = /* @__PURE__ */ (() => ({
   ),
   Label: /* @__PURE__ */ styledPrimitive(Primitive.Label, "dixy-aria-label"),
   Group: /* @__PURE__ */ styledPrimitive(Primitive.Group, "dixy-aria-group"),
-  Button: /* @__PURE__ */ styledPrimitive(Primitive.Button, "dixy-aria-button"),
+  Button: /* @__PURE__ */ defaultArtwork(
+    Primitive.Button,
+    "dixy-aria-button",
+    "calendar",
+    false,
+  ),
   Description: /* @__PURE__ */ styledPrimitive(
     Primitive.Text,
     "dixy-aria-text",

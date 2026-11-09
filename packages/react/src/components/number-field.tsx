@@ -4,6 +4,7 @@ import type { Material, RadiusPreset } from "@dixy-ui/tokens";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { styledPrimitive } from "../utilities/styled-primitive";
+import { defaultArtwork } from "../utilities/default-artwork";
 
 export interface NumberFieldRootProps extends Omit<
   ComponentProps<typeof Primitive.Root>,
@@ -47,13 +48,17 @@ export const NumberField = /* @__PURE__ */ (() => ({
     Primitive.Group,
     "dixy-number-field-group",
   ),
-  Increment: /* @__PURE__ */ styledPrimitive(
+  Increment: /* @__PURE__ */ defaultArtwork(
     Primitive.Increment,
     "dixy-number-field-increment",
+    "plus",
+    false,
   ),
-  Decrement: /* @__PURE__ */ styledPrimitive(
+  Decrement: /* @__PURE__ */ defaultArtwork(
     Primitive.Decrement,
     "dixy-number-field-decrement",
+    "minus",
+    false,
   ),
   Input: /* @__PURE__ */ styledPrimitive(
     Primitive.Input,

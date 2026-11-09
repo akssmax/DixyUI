@@ -42,6 +42,7 @@ import { CodeBlock } from "./code-block";
 import { configureExample } from "../lib/example-source";
 import { PrimitiveApi } from "./primitive-api";
 import { usePreviewTheme } from "./app-appearance-provider";
+import { previewThemeProps, useDocsTheme } from "./use-docs-theme";
 import type { PreviewThemeSettings } from "../lib/preview-theme";
 
 const sourceFiles = import.meta.glob(
@@ -152,6 +153,8 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
     motion,
     dir: direction,
   } = settings;
+  const { skinProps } = useDocsTheme();
+  const previewTheme = previewThemeProps(settings, appearance, skinProps);
   const [state, setState] = useState(() => initialState(entry.controls));
   const [revision, setRevision] = useState(0);
   const [tab, setTab] = useState<"preview" | "code">("preview");
@@ -299,9 +302,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
         <section id="playground" className="doc-section playground-section">
           <div className="section-heading">
             <h2>Make it yours</h2>
-            <span className="section-caption">
-              A real component. Your decisions.
-            </span>
           </div>
           <Tabs.Root
             className="playground docs-playground"
@@ -364,16 +364,7 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
             <div className="playground-body">
               <div className="playground-stage">
                 <Tabs.Panel value="preview" className="preview-panel">
-                  <Theme
-                    appearance={appearance}
-                    accentColor={accentColor}
-                    neutralColor={neutralColor}
-                    radius={radius}
-                    density={density}
-                    motion={motion}
-                    dir={direction}
-                    className="preview-theme"
-                  >
+                  <Theme {...previewTheme} className="preview-theme">
                     <span
                       className="preview-corner top-left"
                       aria-hidden="true"
@@ -391,9 +382,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
                         <Preview {...state} />
                       </Suspense>
                     </PreviewBoundary>
-                    <span className="preview-caption">
-                      {appearance} / {accentColor}
-                    </span>
                   </Theme>
                 </Tabs.Panel>
                 <Tabs.Panel value="code" className="playground-code">
@@ -559,17 +547,11 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
                     defaults.
                   </p>
                 </DocsDisclosure>
-                <span className="prop-panel-note" role="status">
-                  {event || "Small changes. Different character."}
+                {/* Announces prop changes to screen readers; nothing to show sighted users. */}
+                <span className="sr-only" role="status">
+                  {event}
                 </span>
               </div>
-            </div>
-            <div className="playground-footer">
-              <span>
-                <span className="status-dot" />
-                Live from @dixy-ui/react
-              </span>
-              <span>Try it. Tab through it. Make it yours.</span>
             </div>
           </Tabs.Root>
         </section>
@@ -870,10 +852,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
             <div className="token-reference">
               A token to follow<code>{entry.token}</code>
             </div>
-            <Link to="/docs/learning">
-              Explore the learning notes
-              <ArrowRight size={14} />
-            </Link>
           </div>
         </section>
         <section id="source" className="doc-section">

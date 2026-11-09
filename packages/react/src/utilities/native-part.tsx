@@ -5,14 +5,14 @@ import {
 } from "react";
 import type { Material, RadiusPreset } from "@dixy-ui/tokens";
 import { SkinOrnament, type SkinOrnamentProps } from "../theme/theme";
-import { useComponentVisuals } from "./component-visuals";
+import { useComponentVisuals, type VisualColor } from "./component-visuals";
 export interface VisualProps {
   /** Component proportions. @default md */
   size?: "sm" | "md" | "lg";
   /** Surface emphasis. @default outline */
   variant?: "solid" | "soft" | "outline" | "ghost";
   /** Semantic color. @default accent */
-  color?: "accent" | "neutral" | "danger" | "success";
+  color?: VisualColor;
   /** Inherits the nearest Theme. */
   radius?: RadiusPreset;
   /** Optional static finish; import materials.css. Inherits Theme. */

@@ -105,6 +105,7 @@ import { PreviewVoiceContext, previewVoice } from "./theme-preview-voice";
 import "../styles/theme-playground.css";
 import "../styles/theme-skins.css";
 import "../styles/theme-inspector.css";
+import { useAppAppearance } from "./app-appearance-provider";
 import { prepareSkin } from "../lib/theme-skin-catalogue";
 const PlayerScene = lazy(() => import("./theme-player-scene"));
 const StateScene = lazy(() => import("./theme-state-scene"));
@@ -322,6 +323,7 @@ export function ThemePlayground({
   panel: string;
   onPanelChange: (panel: string) => void;
 }) {
+  const { setDocsTheme } = useAppAppearance();
   const [skinLoading, setSkinLoading] = useState(false);
   const [skinError, setSkinError] = useState("");
   const request = useRef(0);
@@ -393,6 +395,8 @@ export function ThemePlayground({
   }
   function selectSkin(id: string) {
     const next = drafts.current.get(id) ?? skinThemePreset(id);
+    // The starter you pick here becomes the docs theme too.
+    setDocsTheme({ skin: id });
     onChange({
       ...next,
       dir: preset.dir,

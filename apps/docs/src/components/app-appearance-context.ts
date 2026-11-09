@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import type { AppAppearance } from "../lib/app-appearance";
 import type { PreviewThemeSettings } from "../lib/preview-theme";
+import type { DocsThemeSettings } from "../lib/docs-theme";
 
 /*
  * The context object lives alone, with type-only imports, so Vite never
@@ -15,4 +16,6 @@ export const AppAppearanceContext = createContext<{
   previewTheme: PreviewThemeSettings;
   setPreviewTheme: (patch: Partial<PreviewThemeSettings>) => void;
   resetPreviewTheme: () => void;
+  docsTheme: DocsThemeSettings;
+  setDocsTheme: (patch: Partial<DocsThemeSettings>) => void;
 } | null>(null);

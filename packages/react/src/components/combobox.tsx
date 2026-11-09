@@ -161,9 +161,11 @@ export const Combobox = /* @__PURE__ */ (() => ({
     "dixy-combobox-chips",
   ),
   Chip: /* @__PURE__ */ styledPrimitive(Primitive.Chip, "dixy-combobox-chip"),
-  ChipRemove: /* @__PURE__ */ styledPrimitive(
+  ChipRemove: /* @__PURE__ */ defaultArtwork(
     Primitive.ChipRemove,
     "dixy-combobox-chip-remove",
+    "close",
+    false,
   ),
   Row: /* @__PURE__ */ styledPrimitive(Primitive.Row, "dixy-combobox-row"),
   Empty: /* @__PURE__ */ styledPrimitive(

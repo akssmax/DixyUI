@@ -1,3 +1,4 @@
+import { Mark } from "../utilities/default-artwork";
 import {
   createContext,
   useContext,
@@ -130,6 +131,10 @@ function Control({
   return (
     <Button
       {...props}
+      className={["dixy-carousel-control", props.className]
+        .filter(Boolean)
+        .join(" ")}
+      data-icon-only={children === undefined ? "" : undefined}
       size={props.size ?? c.size}
       disabled={props.disabled || disabled}
       aria-controls={c.id}
@@ -155,7 +160,7 @@ function Control({
         }
       }}
     >
-      {children ?? (step < 0 ? "Previous" : "Next")}
+      {children ?? <Mark kind={step < 0 ? "chevron-left" : "chevron-right"} />}
     </Button>
   );
 }

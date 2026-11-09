@@ -1324,6 +1324,20 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` and `pnpm package:check` pass.
 - Not tested: forced colours and screen readers in a real browser; segmented with `orientation="vertical"` (no vertical-specific styles were written); each material finish visually.
 
+### 2026-11-07 — Lunar New Year removed as a starter (32 starters)
+
+- Decision (user): keep 32 starters, so Lunar New Year is removed (31 skins + Original Dixy).
+- Removed:
+  - Its record in `packages/themes/src/starters-launch.ts`.
+  - The generated `src/skins/lunar-new-year.ts` and `generated/lunar-new-year.css`.
+  - The `./lunar-new-year` and `./lunar-new-year.css` package exports.
+  - Its entries in `scripts/verify-package.mjs` and the SSR consumer fixture.
+- Regenerated with `pnpm skins:generate`: `catalog.ts` and `generated-skin-loaders.ts`, no hand edits.
+- Kept on purpose: the **papercut** frame recipe and its ornament renderer (`src/lunar/ornament.tsx`, export `./lunar-new-year/react`). Any theme can still pick that frame in the playground. `organic-paint-launch.ts` is untouched because another session owns it; its paper-cut painting serves the frame.
+- Landing copy now counts the gallery (`starters.length`, Original included) instead of `skinCatalog.length`, so it says 32, matching the playground.
+- Breaking for consumers of the alpha package: `@dixy-ui/themes/lunar-new-year` and its CSS no longer exist.
+- Verified: `pnpm check` and `pnpm package:check` pass. Playground and landing server HTML both say 32. `/?starter=lunar-new-year` falls back to Original Dixy.
+
 ### 2026-11-07 — Ocean Depths and Candy Clay use plain cards, as in the HTML redesign
 
 - Request: the user preferred the frame borders from the HTML mockup for these two starters. Everything else in both themes stays as it was.
@@ -1348,6 +1362,291 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - In-app browser: Candy Clay in light (selected toggle paint equals the knob's white-to-pink gradient) and dark; Winamp Signal (dark). Clicking Monthly moves the thumb.
   - `pnpm check` and `pnpm package:check` passed.
 - Not tested: other skins' light themes one by one, forced colours, keyboard focus ring on the new thumb, and mobile.
+
+### 2026-11-09 — Shader lab: opt-in WebGL backdrops for Ocean Depths and Phosphor Terminal (prototype)
+
+- Why: to try "fun" motion beyond CSS before committing to shaders across themes. A theme must still look finished without the shader; the shader only adds to it.
+- Change (docs-only prototype, no package or public export change):
+  - New route `/lab/shaders` (`apps/docs/src/routes/lab.shaders.tsx`), full-width like `/` and `/playground` (`__root.tsx`). `?skin=ocean-depths|phosphor-terminal` picks the skin; the skin CSS is inlined on the server like the landing page.
+  - `apps/docs/src/lab/shader-programs.ts`: two original GLSL ES 1.0 fragment shaders. Ocean uses domain-warped noise ridges for caustics plus slanted god rays, rendered at half resolution. Phosphor draws scanlines, grain, a rolling refresh band, a sparse field of blinking 3×5 glyphs and a vignette. It has no full-screen flicker, so nothing flashes.
+  - `apps/docs/src/lab/shader-runtime.ts`: one WebGL context per page, colours read from theme tokens (any CSS colour resolved via a 1×1 2D canvas), 30 fps cap, DPR capped at 1.5, pause when off screen or tab hidden, one still frame under `prefers-reduced-motion`, context-loss handling, "unsupported" fallback to the static backdrop.
+  - Opt-in switch, off by default, remembered per viewer in `localStorage` (wrapped in try/catch). The canvas is `aria-hidden` with no pointer events.
+- Decision: cleanup frees GL objects instead of calling `WEBGL_lose_context`. React dev remounts onto the same canvas, and a deliberately lost context never came back (seen as "Graphics context lost" on first try).
+- Verified:
+  - In-app browser (:3001): Ocean light and dark, Phosphor dark. Opt-in persists across reload. Reduced-motion path checked by stubbing `matchMedia`: status reads "Still frame" and the canvas does not change.
+  - At 375px wide, no horizontal scroll.
+  - GPU cost on Apple M5: caustics 0.22 ms/frame (1080×675), phosphor 0.11 ms/frame (2160×1350).
+  - `pnpm check` passed; Prettier clean on new files.
+- Not tested: real fps (the pane was hidden, so rAF was throttled to 1–25 fps), low-end or mobile GPUs, Safari/Firefox, real OS reduced-motion emulation, reduced transparency, forced colours, Phosphor in light appearance, keyboard pass over the lab controls, WebGL-unsupported fallback in a real browser.
+
+### 2026-11-09 — Shader lab: four more backdrops, display-rate rendering
+
+- New pairings on `/lab/shaders` (skin picker is now a Dixy `Select`): Neon Night Market rain with neon glows and a wet-street reflection, Prism Glass thin-film iridescence, Diwali Lights lamp bokeh in three depths, Solar Sail aurora curtains with twinkling stars. All are original GLSL and read theme tokens.
+- Performance (asked for 120 fps on ProMotion Macs):
+  - Removed the 30 fps cap. The loop draws on every `requestAnimationFrame`, so it runs at the display refresh rate; animation stays time-based.
+  - Host size comes from `ResizeObserver` (no `clientWidth` reads per frame). Size, colour and appearance uniforms upload only when they change; each frame sends `uTime` and one draw call.
+  - `preserveDrawingBuffer: false`, so the browser can swap buffers instead of copying.
+  - Adaptive quality: if frames average more than 1.35× the best observed interval over 45 frames, resolution steps down by 0.8×, to a floor of 0.5×. It never steps back up, so it cannot oscillate.
+  - `highp` floats where available. `mediump` is fp16 on Apple GPUs, so `uTime` lost precision within minutes and the animation would start to step.
+  - Domain-warp inputs use a 3-octave `fbm3`.
+- Measured GPU cost per frame (Apple M5, 1512×982 CSS viewport at DPR 2 capped to 1.5): caustics 0.097 ms, phosphor 0.076, aurora 0.069, neon rain 0.045, iridescence 0.029, bokeh 0.022. The budget at 120 Hz is 8.3 ms.
+- Not tested: live 120 fps reading. The in-app browser pane was hidden, which pauses `requestAnimationFrame`. Also untested: low-end GPUs, Safari and Firefox.
+
+### 2026-11-09 — /dixy-example: Fernpay, a mock fintech app built only from Dixy UI
+
+- Why: one realistic product screen that uses most of the library together and can switch skin live, so the theming story is visible on something that isn't a component demo.
+- Files: `apps/docs/src/example/{data.ts,fernpay-app.tsx,views.tsx,send-money.tsx}`, `routes/dixy-example.tsx`, `styles/dixy-example.css` (layout only; all colour comes from tokens). Full width like `/` (`__root.tsx`).
+- Views: Overview (alert, stat cards, cash-flow chart, savings goal, accounts, budgets, recent activity), Transactions (search, category, date range, direction, sortable paginated table, details drawer), Cards (payment card, freeze, controls, limit, cancel confirmation), Settings (tabs: profile form, notification switches, help accordion). Send money: payee, amount, account and speed, then a six-digit code, then a toast. ⌘K command palette, notifications popover, account menu, and a theme select across all 32 starters plus Original (`?skin=`).
+- Dixy components used (59): Accordion, Alert, AlertDialog, Avatar, AvatarGroup, Badge, Breadcrumbs, Button, Card, Chart, Checkbox, Chip, Combobox, Command (dialog), DataTable, DateRangePicker, RangeCalendar, Dialog, Drawer, Empty, Field, Fieldset, Form, Heading, Icon, IconButton, Inline, Item, Kbd, Link, Menu, Meter, NumberField, OTPField, Pagination, Popover, ProgressCircle, Radio, RadioGroup, ScrollArea, SearchField, Select, Separator, Sidebar (+ Sidebar.Mobile), Skeleton, Slider, Stack, Switch, Table, Tabs, TagGroup, Text, Textarea, TextField, Theme, Toast, Toggle, ToggleGroup, Tooltip. Lucide supplies glyphs only, rendered through Dixy `Icon`.
+- Fixes found while building:
+  - The sticky top bar (`z-index: 2`) painted above Dixy's dialog backdrop (`z-index: auto`). `.fp-shell { isolation: isolate }` contains it.
+  - "Spent ▼29.5%" read as danger; `Delta` takes `lowerIsBetter`.
+- False lead, recorded: the details drawer looked as if it opened and closed at once. Instrumenting showed it stays open (`data-open`, `onOpenChange` never fired). The hidden pane pauses animation frames, so screenshots were stale paints. A speculative outside-press guard was removed again.
+- Library feedback:
+  - `Chart` only draws bars; a finance app wants a line or area chart for balances.
+  - Small `AvatarGroup` initials get clipped by the overlap.
+  - Dixy has no theme-aware z-index scale for app chrome versus overlays.
+- Verified:
+  - In-app browser (:3001): all four views in Original Dixy; Phosphor Terminal, Candy Clay, Ocean Depths and Neon Night Market skins.
+  - Row → drawer → Escape closes. Full send flow ends with the toast in the DOM. The combobox selects a payee.
+  - 375px wide: no horizontal scroll, sidebar becomes a drawer trigger.
+  - `pnpm check` passed.
+- Not tested: dark appearance on every view, screen reader pass, keyboard-only pass through the whole app, Safari/Firefox, ⌘K shortcut with real keys, live animations (pane hidden).
+
+### 2026-11-09 — Fernpay sidebar collapses to an icon rail
+
+- Change (`apps/docs/src/example/fernpay-app.tsx`, `styles/dixy-example.css`):
+  - A Dixy `IconButton` in the sidebar header (and ⌘B / Ctrl+B) toggles between the 248px panel and a 72px icon rail.
+  - In the rail, the brand name, nav labels and footer hide. Each nav `Button` keeps its label as `aria-label` and gets a right-side `Tooltip`.
+  - The toggle has `aria-expanded` and `aria-controls="fp-sidebar"`, plus a tooltip showing the shortcut in a `Kbd`.
+  - State is remembered per viewer in `localStorage` (wrapped in try/catch).
+  - The width animates through `grid-template-columns`, with no transition under `prefers-reduced-motion`. Below 820px the existing mobile drawer is unchanged.
+- Verified:
+  - In-app browser, Prism Glass: rail is 72px and the toggle's name and `aria-expanded` flip. Nav buttons are named.
+  - Collapsed state survives reload. ⌘B toggles and stores the change. Hovering a rail icon shows its label tooltip on the right.
+- Not tested: the width animation itself (pane hidden, so frames are paused), keyboard focus order in the rail with a screen reader, and the first-paint flash for a stored collapsed state. It reads storage after hydration, so it renders expanded for one frame.
+
+### 2026-11-09 — Base controls: one height, built-in icons, no double frames
+
+- Request: base components used text glyphs for icons, had extra wrapper boxes and mismatched heights. Compare with shadcn/ui and HeroUI and fix, on branch `fix/base-components`. Full audit: `docs/COMPONENT_AUDIT.md`.
+- Measured on a new regression page, `/lab/controls`. Before the fix, md heights ranged from 40 to 58px. After it, every field-like control is exactly 32/40/48. This holds in the default theme and all 30 starter skins, checked by loading each `?skin=` in an iframe.
+- Library:
+  - `alignment.css`: a framed group owns the height and border, and its parts stretch inside it. Toggle tracks and tab lists own the height, and their items stretch.
+  - Default SVG icons on DatePicker/DateRangePicker.Button, Calendar/RangeCalendar.Button (picked by `slot`), NumberField steppers, SearchField.Clear, TagGroup.Remove and Combobox.ChipRemove.
+  - New `SearchField.Group`.
+  - IconButton follows the control height.
+  - A calendar inside a popover has no frame of its own.
+- NumberField (user report: "too much width"): the group is now `inline-flex` and sized to its content (138px at md). Focus draws one ring, on the group.
+- Docs: `docs.css` had a global `input:not(.dixy-input):focus-visible` rule that put a second ring, offset by 4px, on every Dixy input except TextField. It now skips any `dixy-*` element.
+- Demos, Fernpay and the theme workspace scene no longer pass glyph children. Fernpay's filter toggles moved from sm to md so the filter row is one height.
+- Verified:
+  - `pnpm check` and `pnpm package:check` pass. API metadata was regenerated with `pnpm docs:generate`.
+  - In the in-app browser: heights at three sizes × 31 themes; date-range popover has a single frame and chevrons; search clear hides while empty and has an accessible name; focus rings on all five grouped fields.
+- Not tested: dark appearance on the harness, Safari/Firefox, screen readers, coarse-pointer target size.
+
+### 2026-11-09 — Fernpay: layout molecules, no layout shift, responsive polish
+
+- Request: the example app wasn't fully responsive and its layout shifted. Use one consistent header, footer and action-area template, treated as molecules, built from Dixy components.
+- `apps/docs/src/example/layout.tsx` adds four molecules, all made of Dixy `Card`, `Heading` and `Text`:
+  - `PageHeader`: title, a one-line description and `Actions`; fixed 72px.
+  - `SectionHeader`: card title and description, with optional `Actions`.
+  - `SectionFooter`: meta text on the left, `Actions` on the right; always one md control tall and pinned to the card's bottom.
+  - `StatCard`: the trend sits in the footer, not a nested content box. Candy Clay's inset Card.Content was what made the stat cards look double-framed.
+  - Every view uses them. The Settings panels and the Help accordion are now cards with a header and footer, and Save lives in the footer (`form="fp-profile"`).
+- Layout shift:
+  - The top bar and the page share one centred column (`--fp-max` 1200px, `--fp-gutter`). The page's left edge matches the top bar at every width.
+  - The Transactions summary moved from a loose line into the filter card's footer, with a "Clear filters" action that is always present.
+  - The table card stays mounted, with the empty state inside it. Pagination always renders.
+  - The table area reserves a full page of rows (33rem), so filtering doesn't move the page.
+- Responsive:
+  - The chart is a fixed height, `clamp(160px, 22vw, 240px)`, instead of scaling with width.
+  - Overview rows always fill: Budgets spans two columns.
+  - Under 640px, metrics become a swipe row with a peek of the next card, and tables scroll sideways inside their card instead of wrapping each cell.
+  - The payment card keeps its aspect ratio instead of stretching over its neighbour.
+  - The Settings cards fill their panel.
+- Verified in the in-app browser:
+  - Page header 72px (62px on phones) and content aligned with the top bar, across 4 views × 5 widths (1600/1280/1024/768/375), with zero horizontal overflow.
+  - Overview rows full at 1440, 1024 and 375.
+  - All footers 56px, and the same distance from their card's bottom edge.
+  - Transactions card positions and heights unchanged through full, filtered and empty states (default, Studio Hardware; Swiss Poster led to the 33rem reserve).
+  - Cards view in dark appearance.
+  - `pnpm check` passes.
+- Not tested: dark appearance on every view and skin; Safari/Firefox; touch scrolling of the metrics row on a real phone; screen reader.
+
+### 2026-11-09 — Pagination fixed; /lab/kitchen-sink for reviewing every component
+
+- Request: fix Pagination (links were underlined and the current page was a tall pill), and add a kitchen-sink page so the user can spot which components still need fixes.
+- Pagination (library):
+  - Page links and the ellipsis are square ghost tiles at `--dixy-component-height`, with no underline and tabular numbers.
+  - The current page is a filled `selected` tile. Hover uses the subtle background, and `aria-disabled` gives the disabled colour with no pointer events.
+  - New `Pagination.Previous` and `Pagination.Next` parts draw chevron icons, label themselves "Previous page"/"Next page", and accept children to replace the icon.
+  - The demo and Fernpay use them.
+- `/lab/kitchen-sink`:
+  - Renders every component in the registry (76) at its default controls, grouped by category, with a sticky category index, a filter box and `?skin=`.
+  - New components appear automatically. Each tile has its own error boundary and a link to its docs page.
+  - Demos render client-only, so SSR doesn't stream 76 lazy chunks.
+- Docs: the unlayered `a { color: inherit }` in `docs.css` overrode every library colour on Dixy links; it was why the disabled Previous looked enabled. It now skips `dixy-*` elements.
+- Verified:
+  - All 76 tiles load with no crashes and no tile overflowing.
+  - Fernpay pagination: all links 40×40, no underline; disabled is grey and current is accent.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested: kitchen sink in each skin and in dark mode (that review is the user's); pagination with many pages (no automatic ellipsis logic, by design).
+
+### 2026-11-09 — Docs follow the chosen theme; icon rail and Learning page removed
+
+- Request: keep the left sidebar, make the applied theme style the documentation itself (not only previews), adopt the header theme menu from the HTML mock (`mockups/docs-shell.html`), and remove "Learning the system".
+- Docs theme setting:
+  - New `dixy-docs-theme` cookie (`lib/docs-theme.ts`): `{ skin, scope }`, where scope is "Whole docs" or "Previews only". Unknown skin ids fall back to Original Dixy.
+  - The root loader inlines the skin stylesheet on the server (same pattern as the landing `?starter=`), so a themed reader gets no flash of the default theme. The client still runs `prepareSkin` and drops the duplicate style.
+  - Choosing a starter on the landing page or in the theme playground also sets the docs theme.
+- Shell:
+  - Removed the icon rail. The brand, sidebar toggle and breadcrumbs sit in the top bar, together with search, a theme menu (Popover + ToggleGroup: theme, appearance, scope) and an appearance button.
+  - The sidebar gains a page filter, group counts, components grouped by registry category, and a theme card that opens the menu.
+  - The frame paints `--dixy-skin-ground`/`--dixy-skin-canvas`. Selected states mix from `--dixy-accent`, because skins don't override `--dixy-color-background-selected`; it stayed lavender under Ocean Depths.
+- Previews: `previewThemeProps` uses the skin as the base, and only preview settings changed from their defaults override it. The default purple accent no longer paints over a skin's accent.
+- Removed `/docs/learning` and `content/learning.mdx`. The landing CTA now reads "Read the docs" (→ Installation), the component-page design note lost its link, and the Navigation Menu demo links to Accessibility instead.
+- Verified in the in-app browser (own dev server, :3002):
+  - Ocean Depths light chosen through the menu: frame, sidebar, preview and serif headings all switch, and the cookie is saved.
+  - Server HTML carries `data-dixy-skin` and the inlined skin style.
+  - After a reload, Retro OS dark renders across the whole page.
+  - "Previews only" leaves the shell on Original Dixy (`data-dixy-skin="none"`) and skins the preview.
+  - At 375px, Candy Clay renders and the phone navigation dialog opens with the filter and 92 links. No console errors.
+- Not tested: keyboard-only pass through the theme menu, reduced motion, screen reader, every one of the 31 skins on every page, Safari/Firefox. Foundation-page previews still pass explicit settings and don't take on the skin. Bundle cost: the docs shell now imports the theme-playground helpers, so every docs page loads skin definitions.
+
+### 2026-11-09 — Fernpay: opt-in shader backdrops, toggled in Settings
+
+- Request: bring the lab shaders into the fintech demo and make them toggleable in Settings.
+- `lab/shader-pairings.ts` now holds the six reviewed skin→shader pairings, shared by `/lab/shaders` and Fernpay; the lab's copy was removed.
+- `example/effects.tsx`:
+  - `EffectsProvider`/`useEffects` hold the preference: off by default, kept in browser storage as `fernpay-shader`, and safe when storage throws.
+  - They also give the current skin's pairing and the runtime state.
+  - Only state changes are stored, not fps, so the app doesn't re-render every second.
+- Shell: a fixed `.fp-shader` layer at `z-index: -1` inside the isolated `.fp-shell`. Cards stay opaque, so the shader shows only in the canvas gaps and behind the frosted top bar. It unmounts when WebGL is unsupported.
+- Settings: a new **Appearance** tab built with SectionHeader and SectionFooter.
+  - An "Animated background" switch with the shader's name and a live status line ("Running", "Still frame (reduced motion)", "Paused while hidden", "WebGL isn't available").
+  - On a skin without a shader, the switch is disabled and buttons offer the six themes that have one.
+- Reduced motion: the runtime already draws a still frame; the fade-in animation is now off too.
+- Verified in a hidden frame: Ocean Depths runs caustics and Solar Sail runs aurora, both "Running". Living Forest shows a disabled switch and six suggestions with no canvas. `pnpm check` passes.
+- Not tested: visual tuning of each shader behind the app chrome (the user was driving the pane); real 120 Hz; Safari/Firefox.
+
+### 2026-11-09 — Homepage hero: split layout, no browser frame
+
+- Request: drop the browser-window frame around the homepage demo. Two hero versions were mocked in `mockups/hero-versions.html`; the user chose **A · Split**. **B · Stage** stays in that file as an alternative: centred copy, a dock across the app's top edge, and an app that fades into the page.
+- `LandingWindow` is now a frameless stage. The traffic lights, window bar and border are gone; the scene switch is a segmented `Tabs` above the app; a caption sits below.
+  - On wide screens the stage is the hero's right column. It runs past the viewport by 64px, so the app reads as cropped rather than framed. `.landing` already clips horizontal overflow.
+- The floating `ThemeDock` became `StarterPicker`, in the hero's copy column under the install command:
+  - Five quick swatch toggles (Original, Studio Hardware, Ocean Depths, Retro OS, Candy Clay) and a select with all 32 starters.
+  - A light/dark segmented control, shuffle, and a Customise link to the playground.
+  - Picking a starter still updates `?starter=` and, since the docs-theme change, the docs theme.
+- Below 960px the hero stacks: copy, then the stage. Below 640px the stage stops running past the edge, and the picker's second row tightens so Customise stays on the same line.
+- Verified in the in-app browser (own dev server, :3002):
+  - 1440px: copy on the left; the mail scene starts at 616px and runs past the right edge.
+  - Studio Hardware via its swatch restyles the whole hero.
+  - 850px stacks with no horizontal scroll.
+  - 375px in dark: picker rows fit (Customise on the same line), no horizontal scroll.
+  - No console errors after a fresh load.
+- Not tested: keyboard order through the picker and tabs, reduced motion, Dashboard/Music/Blocks scenes inside the bled stage, every starter, Safari/Firefox.
+
+### 2026-11-09 — Badge semantic colors and a kitchen-sink pass over base components
+
+- Request: decide whether Badge needs semantic variants, fix it, and improve other base components.
+- **Colors.** Badge already took `color`, but only `solid` and `soft` used it; the default `outline` hard-coded grey. And there was no warning or info.
+  - New `VisualColor` type (exported) adds `warning` and `info`. `families.css` maps them to the existing status tokens (`background-warning-bold`, `background-warning`, `text-warning`, `text-on-warning`, `border-warning`, and the `information` set), because there's no action ramp for them.
+  - New `--dixy-component-border`: the color at 45% for accent/neutral/danger/success, the status border token for warning/info.
+  - Outline and ghost Badge/Chip use the color's border and text; neutral outline stays a quiet grey. Outline Alert gets a tinted edge, and outline/soft Alert titles take the color.
+  - Button, Link, Avatar, Tabs, Switch and the other components with their own per-color CSS keep the four colors. Their demos now type `color` from the component, not `VisualProps`.
+  - The Badge demo shows all six colors in the chosen treatment (its Color control was replaced by that row; Treatment gained ghost). Card, Alert and Chip controls list warning and info. Fernpay's Pending badges now use soft warning, and its category chips are neutral.
+- **ButtonGroup attached.** Each button kept its own border, so seams were 2px. Buttons after the first now overlap the previous border by its width; hovered and focused buttons sit on top. Disabled outline/ghost buttons keep a transparent fill instead of turning grey. The demo's status line now updates on Save/Share.
+- **Kitchen-sink pass** (`styles/refinements.css`, imported last):
+  - Accordion: items were bordered, centred buttons. The shared trigger reset is `:is(…):not(.dixy-button)`, and `:is()` takes its highest argument's specificity, so it outranked `.dixy-accordion-trigger`. Triggers are now full-width rows with the chevron at the end and hairlines between items.
+  - Breadcrumbs: ancestors are secondary-colour links (underline on hover); the current page is plain primary text, not a faded link.
+  - Item: actions sat next to the title with a stray top margin; content now fills the row and actions sit at the end.
+  - Meter, Progress, Slider: new `Value` parts with classes (`dixy-*-value`). Label and value share the first row, value right-aligned in tabular numbers, track below. Vertical sliders are left as they were.
+  - Skeleton: no border, a slow pulse that stops under reduced motion.
+  - TagGroup: the remove button is a borderless 24px icon inside the tag instead of a second bordered box.
+  - Checkbox in a label: the library sets the box-to-text gap (8px), and a field description lines up with the label text (measured: both at 541.8px).
+  - ColorField: label above the input. NavigationMenu links: label font and padding like the triggers, no underline.
+  - Demos: Select shows "Personal" rather than the raw value (via `items`); ListBox labels are capitalised; Textarea and NativeSelect use the Dixy label style; Alert Dialog's "Delete project" trigger is a danger button.
+- Tried and reverted: a custom NativeSelect chevron as a background image. The material system resets `background-image: none !important`, so it vanished; doing it properly needs a wrapper element.
+- Verified in the in-app browser on `/lab/kitchen-sink`: each fixed tile at default controls; badges in outline/soft/solid in light and dark; Fernpay transactions show amber Pending and neutral chips. `pnpm check` (99 tests) and `pnpm package:check` pass; API metadata regenerated.
+- Not tested: keyboard pass through the changed Accordion and TagGroup, screen readers, every skin with the new colors (skins don't override the status tokens, so they inherit the defaults), Safari/Firefox, mobile widths for the kitchen sink.
+
+
+### 2026-11-09 — Landing: 98vh hero, accessibility, built-with, CTA and footer; npm beta
+
+- Request: make the hero 98vh, showcase accessibility and the demo products, and give the landing a modern CTA and footer. Mocked first in `mockups/landing-sections.html`, then implemented in `components/landing-sections.tsx` and `styles/landing.css`.
+- **Hero:** `block-size: max(calc(98svh - 60px), 640px)`. The demo stage is a flex column whose body scrolls with a fade mask. `Tabs.Root` sets `align-items: start`, which squeezed the Dashboard panel to 26px; the stage now stretches and only the tab list is `flex-start`. At ≤960px the hero is auto height and the demo is capped at 640px.
+- **Accessibility section:** four short claims plus a lab built from Dixy Field, Checkbox, Button, ToggleGroup and Kbd. A side inspector shows keys pressed (hidden from screen readers to avoid noise), the focused control's role, name and state, and the text-to-surface contrast. The contrast is measured live from the current starter: colours are read back through a 1px canvas so `oklch()` and `color-mix()` values work. The toggles simulate reduced motion, higher contrast and larger text inside the lab only. The status message uses `role="status"`. The copy says "Target: WCAG 2.2 AA", not a conformance claim.
+- **Built with Dixy:** Fernpay (opens in the current starter via `?skin=`), Shader lab, Postbox (the hero mail app), Kitchen sink and the Theme playground. Each card is a single link (stretched `::after`) inside an `h3`, with the focus ring drawn on the card through `:has(:focus-visible)`. Hover lift and shader drift run only with `prefers-reduced-motion: no-preference`.
+- **CTA:** a dark panel lit by the starter's accent, with a terminal card holding the install command (copy button with a status announcement) and a starter swatch row. It replaces the old centred final card.
+- **Footer:** brand, npm package link, Product/Learn/Demos/Project columns, a status line, a light/dark ToggleGroup and a large faded wordmark.
+- The Bento lost its accessibility card (now its own section). Its three remaining cards share one row.
+- **npm beta:** the packages are published (`npm view` shows `latest` 0.1.0-beta.0 and `beta` 0.1.0-beta.2). The install command is now `pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta`. The hero badge says "0.1 beta · Now on npm". The installation page and README no longer say the package is unpublished. The workspace `package.json` versions (alpha, private) were not changed here.
+- Verified in the in-app browser: 1440, 1200, 850 and 375px wide; Original Dixy (light) and Ocean Depths (light and dark); no horizontal scroll at 375px. Keyboard: Tab through the lab, Space on a checkbox, and the inspector updates the checked state. Contrast readouts: 15.5:1 (Original light), 15.4:1 (Ocean light), 16.0:1 (Ocean dark). No console errors. `tsc --noEmit` and `pnpm check` pass.
+- Not tested: screen readers, Safari and Firefox (`zoom` on the larger-text toggle needs a recent Firefox), forced colours, every starter, real copy-to-clipboard permission failures.
+- **Follow-up fixes (same day):**
+  - Regression: removing the old final card and footer CSS cut everything between two comments, which also deleted the starter picker, demo stage and gallery rules, so the hero picker rendered unstyled. Restored them from HEAD, with the 98vh stage version.
+  - The starter gallery below the hero is gone, since the hero picker (swatches plus a full Select) already covers all 32 starters. A numbers strip replaces it, then the Built with Dixy showcase. Header "Themes" became "Showcase" (`#showcase`), and the hero's second button is "See it in real apps".
+  - Horizontal scroll in the CTA: its glow layer sits at `inset: -30%`. `overflow: hidden` clips the glow, but the box can still be scrolled sideways (446px of content in a 343px box on a phone). The CTA, showcase cards, lab, terminal and footer now use `overflow: clip`. The hero stage body sets `overflow-x: hidden`, because `overflow-y: auto` alone also makes the x axis scrollable. Checked: forcing `scrollLeft = 200` on the CTA stays 0 at 1440, 1024 and 768px, and the document width equals the viewport at 1440, 1024, 768 and 375px. The only remaining x-scroller is the "Ship it" code block, which is meant to scroll and can be focused.
+- **Containers and spacing (same day):**
+  - The header contents, every section, the numbers strip and the footer now use Dixy's `Container` (size `xl`, 80rem, gutter `--dixy-layout-gutter`: 16, 24 or 32px depending on screen width). The header bar stays full width, with its contents contained.
+  - `.dixy-container` lives in a cascade layer, so the unlayered landing classes would have overridden it. Their own `max-inline-size` and side padding were removed, so `Container` alone controls width and gutters.
+  - The hero copy uses the same edge: `max(0px, (100% - container) / 2) + gutter`, with `%` instead of `100vw` so the scrollbar doesn't shift it.
+  - Vertical rhythm uses the section tokens: `--dixy-spacing-section-xl` (96px) between sections on wide screens, `-lg` (64px) at ≤960px, `-sm` (32px) above the numbers strip. Section heads have 16px between lines and `clamp(32px, 4vw, 48px)` above their content.
+  - Measured at 1440px: the brand, hero copy, numbers strip, section headings, CTA and footer all start at x = 112.
+  - Hero Blocks scene: the stage body has `overflow-x: hidden`, so the wide Blocks layout can't be scrolled sideways inside it. Checked: `scrollLeft` stays 0 for the stage and the page at 1024, 768 and 375px, and the document width equals the viewport.
+
+### 2026-11-09 — NativeSelect chevron; quieter docs playground
+
+- **NativeSelect.** A background-image chevron can't work: materials set the select's `background-image`, and reduced effects reset it with `!important`. NativeSelect is now a small component:
+  - A `span.dixy-native-select-root` (inline-grid) holds the `<select>` and a decorative `Mark kind="chevron"` in the same grid cell, so the wrapper adds no box of its own.
+  - Props, `ref` and `className` still reach the `<select>`. The browser arrow is removed (`appearance: none`), with 36px of end padding for the icon.
+  - `multiple` hides the chevron; disabled greys it. The icon ignores pointer events, so clicks open the picker.
+  - New test: the ref and props land on the select, the icon is `aria-hidden`, and `multiple` marks the root.
+  - Verified on the docs page (Ocean Depths skin): heights stay 32/40/48 at sm/md/lg, the chevron is centred with a 12px inset at every size, a click on the chevron hits the select, glossy keeps its gradient, and dark mode reads well.
+- **Docs playground.** Removed the filler text: the "A real component. Your decisions." caption, the "Small changes. Different character." note, the "light / skin" stage label and the footer ("Live from @dixy-ui/react", "Try it. Tab through it. Make it yours."). The status line that announces prop changes stays as a visually hidden live region. Dead CSS for the footer and caption was removed.
+- `pnpm check` (100 tests) and `pnpm package:check` pass.
+- Not tested: NativeSelect with a screen reader, Safari/Firefox (`appearance: none` on select), and a right-to-left layout for the icon inset.
+
+### 2026-11-09 — Color page palette explorer swatches render again
+
+- Symptom: on `/docs/foundations/color`, the "Twelve stops" explorer showed family buttons with no gradient and a stop strip of thin grey bars.
+- Cause: layout, not color. Every swatch already resolved its color (e.g. `var(--dixy-color-neutral-1)` computed to `oklch(0.99 0 0)`). The swatches are empty `<span>`s inside Dixy `Button`, which is an `inline-flex` row with centered items, so each span sat beside its label and shrank to 0–2px. The docs CSS was written for block-flow buttons.
+- Fix (`apps/docs/src/styles/docs.css`): `.color-family-choices > button` and `.color-stop` get `inline-size: 100%`, `flex-direction: column`, `align-items: stretch` and `justify-content: flex-start`; `.color-stop` also gets `block-size: auto`. The rules are unlayered, so they override the library's `@layer dixy.components` button layout only here.
+- Verified in the in-app browser: Neutrals (11), Colors (28) and overlays (2) have no swatch narrower than 8px; stop tiles are about 48px wide on desktop. The light and dark ramps fill; overlay tiles show the checker and alpha layer. Picking a family or stop updates the readout (`--dixy-color-slate-5 oklch(0.887 0.014499 260)`, dark `--dixy-color-neutral-5 oklch(0.32 0 0)`). At 375px the ramp uses 6 columns with no horizontal overflow. `pnpm check` passes.
+- Not tested: keyboard focus ring appearance on the stretched buttons, reduced motion (no motion changed), screen readers, Safari/Firefox, skins other than Ocean Depths.
+
+### 2026-11-09 — Kitchen sink, second pass against shadcn/ui
+
+- Request: TagGroup, Table and other kitchen-sink components still looked off; compare with shadcn first, then fix what we can.
+- Compared against shadcn v4 sources (`apps/v4/registry/new-york-v4/ui/*.tsx`, read with curl): table, badge, kbd, avatar, skeleton, empty, item, scroll-area, carousel, and others. All changes are in `styles/refinements.css` plus the Carousel defaults.
+
+| Component | Before | shadcn | Now |
+| --- | --- | --- | --- |
+| Table, DataTable | Strong rules, 16px cells, bold headers and row headers, caption above, rule under last row | 40px head, 8px cells, `border-b` rows, hover tint, last row clear, caption below, muted | Same: 40px head in secondary label type, 8px cells, subtle hairlines, hover tint, last row clear, caption below; row headers medium weight |
+| TagGroup | 42px button-like tags | (no TagGroup; Badge is a compact pill) | 24/28/32px tags in label-sm, subtle fill, 20px remove icon; selected uses the color |
+| Kbd | Bordered with a drop shadow | `h-5`, muted fill, no border | 20px, muted fill, no border or shadow |
+| ScrollArea | 12px dark-grey rounded-square thumb | 10px track, `p-px`, `bg-border` round thumb | 10px track, 1px inset, round thumb in border colour (darkens on use, as before) |
+| Empty | Solid border | `border-dashed` | Dashed |
+| AvatarGroup count | Bordered pill | Same size as avatars, muted | Same size and radius as avatars, no border |
+| Carousel | "Previous"/"Next" text buttons | 32px round arrow buttons | Square chevron icon buttons at control height, still labelled "Previous slide"/"Next slide"; passing children keeps text |
+| Item | Dark rule, also under the last item | Separators between items only | Subtle hairline, none after the last item |
+
+- Verified in the in-app browser by measurement: Table head 40px, last-row border 0, caption bottom; DataTable head 40px; tag 28px with a 20×20 remove; Kbd 20px with no shadow; scrollbar 10px; Empty dashed; count 40×40 at the avatars' 8px radius; carousel controls 40×40 with their labels. Screenshots of Table, TagGroup, Carousel, Empty, Kbd. `pnpm check` (100 tests) and `pnpm package:check` pass.
+- Left as is, on purpose: OTP slots stay separate boxes (HeroUI-style) rather than shadcn's joined group; Switch keeps its thumb icons; ListBox keeps the text check mark; Toggle stays ghost at rest, as in shadcn.
+- Not tested: dark mode on this pass, keyboard through tags and carousel, screen readers, Safari/Firefox, phone width.
+
+
+### 2026-11-09 — Landing: wide starter fonts, round swatches, the real sideways-scroll cause
+
+- **Retro OS overlap and clipping.** The pixel display font sets "COMPONENTS" at 574px in a 432px copy column. `.landing-hero-copy` is a grid whose single auto column grew to that min-content width. The whole column, including the starter picker, spilled under the demo, and the fixed 98vh height clipped the taller copy.
+  - The copy grid is now `minmax(0, 1fr)` with `min-inline-size: 0`, and its children cap at 100%.
+  - `useFitHeading` shrinks the h1 only when its widest word doesn't fit. It re-checks on resize, after `document.fonts.ready` and when the starter or appearance changes.
+  - The hero uses `min-block-size` (98svh) instead of a fixed height, so it grows instead of clipping.
+  - Measured across 22 starters at 1440×900: the copy never passes 542px, and the demo starts at 606px. The h1 shrinks only where needed (Retro OS 60px, Y2K Titanium 55px, Riso Zine and Swiss Poster 67px, others 71–80px).
+- **Oval swatch ring.** Toggle's 40px minimum control height beat the 36px size, so swatches measured 36×40. Resetting the minimums and adding `aspect-ratio: 1` gives 36×36.
+- **Sideways scroll still possible.** A real trackpad gesture over the CTA scrolled `<main>` by 64px. `docs.css` (loaded globally from the root route) had a bare `main { overflow: auto }` meant for the docs shell. On the landing page it made `main` a scroll container that could reach the hero stage's −64px bleed. `overflow: clip` on the CTA couldn't help, because the scrolling box was its ancestor. Scoped the rule to `.docs-app main`. Verified: right-scroll gestures at three points move nothing (`scrollLeft` 0 on every element). The docs page still scrolls inside its shell (`scrollTop` 400 of 2226). The kitchen sink scrolls normally, with the document width equal to the viewport.
+- Not tested: Safari and Firefox trackpads, and the fit at every viewport width for every starter (checked 1440 for all 22, plus Retro OS by eye).
 
 ### 2026-11-07 — Components from the shadcn / HeroUI / Radix gap list
 

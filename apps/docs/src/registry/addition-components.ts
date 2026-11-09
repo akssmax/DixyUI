@@ -158,7 +158,7 @@ export const additionComponentRegistry = {
       {
         name: "color",
         label: "Color",
-        options: ["accent", "neutral", "danger", "success"],
+        options: ["accent", "neutral", "danger", "success", "warning", "info"],
         initial: "accent",
       },
       {
@@ -215,7 +215,7 @@ export const additionComponentRegistry = {
       {
         name: "color",
         label: "Color",
-        options: ["accent", "neutral", "danger", "success"],
+        options: ["accent", "neutral", "danger", "success", "warning", "info"],
         initial: "accent",
       },
       {
@@ -266,14 +266,8 @@ export const additionComponentRegistry = {
       {
         name: "variant",
         label: "Treatment",
-        options: ["outline", "soft", "solid"],
+        options: ["outline", "soft", "solid", "ghost"],
         initial: "outline",
-      },
-      {
-        name: "color",
-        label: "Color",
-        options: ["accent", "neutral", "danger", "success"],
-        initial: "accent",
       },
       {
         name: "radius",
@@ -329,7 +323,7 @@ export const additionComponentRegistry = {
       {
         name: "color",
         label: "Color",
-        options: ["accent", "neutral", "danger", "success"],
+        options: ["accent", "neutral", "danger", "success", "warning", "info"],
         initial: "accent",
       },
       {

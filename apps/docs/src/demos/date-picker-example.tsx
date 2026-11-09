@@ -24,19 +24,15 @@ export default function DatePickerExample({
           <DatePicker.Input>
             {(segment) => <DatePicker.Segment segment={segment} />}
           </DatePicker.Input>
-          <DatePicker.Button aria-label="Open calendar">▦</DatePicker.Button>
+          <DatePicker.Button aria-label="Open calendar" />
         </DatePicker.Group>
         <DatePicker.Error />
         <DatePicker.Popover aria-label="Choose appointment date">
           <Calendar.Root {...visual} aria-label="Choose a date">
             <Inline>
-              <Calendar.Button slot="previous" aria-label="Previous month">
-                ‹
-              </Calendar.Button>
+              <Calendar.Button slot="previous" aria-label="Previous month" />
               <Calendar.Heading />
-              <Calendar.Button slot="next" aria-label="Next month">
-                ›
-              </Calendar.Button>
+              <Calendar.Button slot="next" aria-label="Next month" />
             </Inline>
             <Calendar.Grid>
               <Calendar.GridHeader>

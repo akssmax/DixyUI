@@ -1,45 +1,64 @@
-import { Kbd } from "@dixy-ui/react";
+import {
+  Button,
+  Dialog,
+  Kbd,
+  Popover,
+  TextField,
+  Theme,
+  Toggle,
+  ToggleGroup,
+} from "@dixy-ui/react";
 import { DocsDisclosure } from "./docs-controls";
-import { TextField, Button } from "@dixy-ui/react";
 import {
   createContext,
   useContext,
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import {
-  ArrowLeft,
   ArrowUpRight,
-  BookOpen,
-  Boxes,
+  ChevronDown,
   ChevronRight,
   Command,
-  Layers,
   Moon,
   PanelLeft,
-  Palette,
   Search,
   Sun,
   X,
 } from "lucide-react";
-import { Dialog, Theme } from "@dixy-ui/react";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
 import { componentRegistry } from "../registry/components";
 import { DixyMark } from "./dixy-mark";
 import { useAppAppearance } from "./app-appearance-provider";
+import { useDocsTheme } from "./use-docs-theme";
 
 const AppearanceContext = createContext<"light" | "dark">("light");
 export const useDocsAppearance = () => useContext(AppearanceContext);
 
-export const navigation = [
+interface NavItem {
+  label: string;
+  path: string;
+  category?: string;
+}
+
+const componentItems: NavItem[] = Object.entries(componentRegistry).map(
+  ([slug, entry]) => ({
+    label: entry.title,
+    path: `/docs/components/${slug}`,
+    category: entry.category,
+  }),
+);
+
+export const navigation: { title: string; items: NavItem[] }[] = [
   {
     title: "Start here",
     items: [
       { label: "Introduction", path: "/" },
       { label: "Installation", path: "/docs/installation" },
-      { label: "Learning the system", path: "/docs/learning" },
     ],
   },
   {
@@ -59,36 +78,100 @@ export const navigation = [
       { label: "Motion", path: "/docs/foundations/motion" },
     ],
   },
-  {
-    title: "Components",
-    items: Object.entries(componentRegistry).map(([slug, entry]) => ({
-      label: entry.title,
-      path: `/docs/components/${slug}`,
-    })),
-  },
+  { title: "Components", items: componentItems },
   {
     title: "Resources",
-    items: [{ label: "Accessibility", path: "/docs/accessibility" }],
+    items: [
+      { label: "Accessibility", path: "/docs/accessibility" },
+      { label: "Theme playground", path: "/playground" },
+    ],
   },
 ];
 
-function Navigation({ onNavigate }: { onNavigate?: () => void }) {
+const original = {
+  id: "none",
+  name: "Original Dixy",
+  description: "Warm and expressive. The default.",
+  swatches: ["#7043ce", "#c9b8f0", "#fcfaf7"],
+} as const;
+const docsThemes = [original, ...skinCatalog];
+const themeName = (id: string) =>
+  docsThemes.find((theme) => theme.id === id)?.name ?? original.name;
+
+function swatchStyle(swatches: readonly string[]) {
+  return {
+    "--swatch-a": swatches[0],
+    "--swatch-b": swatches[1],
+    "--swatch-c": swatches[2],
+  } as CSSProperties;
+}
+function Swatch({ id }: { id: string }) {
+  const theme = docsThemes.find((item) => item.id === id) ?? original;
+  return (
+    <span
+      className="theme-swatch"
+      aria-hidden="true"
+      style={swatchStyle(theme.swatches)}
+    >
+      <i />
+      <i />
+      <i />
+    </span>
+  );
+}
+
+function NavLinks({
+  items,
+  pathname,
+  onNavigate,
+}: {
+  items: NavItem[];
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  return items.map((item) => (
+    <Link
+      key={item.path}
+      to={item.path}
+      onClick={onNavigate}
+      className={`nav-link ${pathname === item.path ? "is-active" : ""}`}
+      aria-current={pathname === item.path ? "page" : undefined}
+    >
+      <span>{item.label}</span>
+    </Link>
+  ));
+}
+
+function Navigation({
+  onNavigate,
+  onOpenTheme,
+}: {
+  onNavigate?: () => void;
+  onOpenTheme?: () => void;
+}) {
   const pathname = useLocation({ select: (location) => location.pathname });
+  const { docsTheme } = useAppAppearance();
+  const [query, setQuery] = useState("");
+  const match = (item: NavItem) =>
+    item.label.toLowerCase().includes(query.trim().toLowerCase());
+  const groups = navigation
+    .map((group) => ({ ...group, visible: group.items.filter(match) }))
+    .filter((group) => group.visible.length > 0);
   return (
     <>
-      <div className="sidebar-heading">
-        <Link
-          to="/"
-          onClick={onNavigate}
-          className="wordmark"
-          aria-label="Dixy UI home"
-        >
-          dixy<span>UI</span>
-        </Link>
-        <span className="version-label">0.1 beta</span>
-      </div>
-      <nav aria-label="Documentation">
-        {navigation.map((group) => (
+      <label className="nav-filter">
+        <Search size={14} aria-hidden="true" />
+        <input
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Filter pages"
+          aria-label="Filter pages"
+          aria-controls="docs-nav-list"
+        />
+      </label>
+      <nav aria-label="Documentation" id="docs-nav-list">
+        {groups.map((group) => (
           <DocsDisclosure
             key={group.title}
             defaultOpen
@@ -96,35 +179,54 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
             summary={
               <>
                 {group.title}
+                <span className="nav-count">{group.items.length}</span>
                 <ChevronRight size={12} />
               </>
             }
           >
             <div>
-              {group.items.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={onNavigate}
-                  className={`nav-link ${pathname === item.path ? "is-active" : ""}`}
-                  aria-current={pathname === item.path ? "page" : undefined}
-                >
-                  <span>{item.label}</span>
-                  {group.title === "Components" && <span className="nav-dot" />}
-                </Link>
-              ))}
+              {group.title === "Components" ? (
+                [...new Set(group.visible.map((item) => item.category))].map(
+                  (category) => (
+                    <div key={category} className="nav-subgroup">
+                      <span className="nav-subheading">{category}</span>
+                      <NavLinks
+                        items={group.visible.filter(
+                          (item) => item.category === category,
+                        )}
+                        pathname={pathname}
+                        onNavigate={onNavigate}
+                      />
+                    </div>
+                  ),
+                )
+              ) : (
+                <NavLinks
+                  items={group.visible}
+                  pathname={pathname}
+                  onNavigate={onNavigate}
+                />
+              )}
             </div>
           </DocsDisclosure>
         ))}
+        {groups.length === 0 && (
+          <p className="nav-empty" role="status">
+            No pages match “{query}”.
+          </p>
+        )}
       </nav>
-      <Link to="/docs/learning" onClick={onNavigate} className="sidebar-note">
-        <div>
-          <BookOpen size={15} />
-          <span>Built to be understood.</span>
-        </div>
-        <p>Learn the thinking behind the details.</p>
-        <ArrowUpRight size={15} />
-      </Link>
+      {onOpenTheme && (
+        <button type="button" className="nav-theme-card" onClick={onOpenTheme}>
+          <Swatch id={docsTheme.skin} />
+          <span>
+            <strong>{themeName(docsTheme.skin)}</strong>
+            {docsTheme.scope === "all"
+              ? "Applied to docs and previews"
+              : "Applied to previews only"}
+          </span>
+        </button>
+      )}
       <a
         className="base-credit"
         href="https://base-ui.com/react/overview/quick-start"
@@ -136,6 +238,95 @@ function Navigation({ onNavigate }: { onNavigate?: () => void }) {
         <ArrowUpRight size={12} />
       </a>
     </>
+  );
+}
+
+function ThemeMenu({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) {
+  const { appearance, setAppearance } = useAppAppearance();
+  const { docsTheme, setDocsTheme, error } = useDocsTheme();
+  return (
+    <Popover.Root open={open} onOpenChange={setOpen}>
+      <Popover.Trigger
+        className="theme-trigger"
+        aria-label={`Docs theme: ${themeName(docsTheme.skin)}`}
+      >
+        <Swatch id={docsTheme.skin} />
+        <span className="theme-trigger-name">
+          {themeName(docsTheme.skin)}
+        </span>
+        <ChevronDown size={13} aria-hidden="true" />
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner side="bottom" align="end" sideOffset={8}>
+          <Popover.Popup className="theme-menu">
+            <Popover.Title className="theme-menu-label">Theme</Popover.Title>
+            <ToggleGroup
+              className="theme-menu-list"
+              aria-label="Docs theme"
+              value={[docsTheme.skin]}
+              onValueChange={(value) =>
+                value[0] && setDocsTheme({ skin: value[0] })
+              }
+            >
+              {docsThemes.map((theme) => (
+                <Toggle
+                  key={theme.id}
+                  value={theme.id}
+                  variant="ghost"
+                  color="neutral"
+                  className="theme-menu-option"
+                >
+                  <Swatch id={theme.id} />
+                  <span>
+                    {theme.name}
+                    <small>{theme.description}</small>
+                  </span>
+                </Toggle>
+              ))}
+            </ToggleGroup>
+            {error && (
+              <p className="theme-menu-error" role="alert">
+                {error}
+              </p>
+            )}
+            <span className="theme-menu-label">Appearance</span>
+            <ToggleGroup
+              segmented
+              aria-label="Appearance"
+              value={[appearance]}
+              onValueChange={(value) =>
+                value[0] && setAppearance(value[0] as "light" | "dark")
+              }
+            >
+              <Toggle value="light">Light</Toggle>
+              <Toggle value="dark">Dark</Toggle>
+            </ToggleGroup>
+            <span className="theme-menu-label">Apply to</span>
+            <ToggleGroup
+              segmented
+              aria-label="Apply theme to"
+              value={[docsTheme.scope]}
+              onValueChange={(value) =>
+                value[0] &&
+                setDocsTheme({ scope: value[0] as "all" | "previews" })
+              }
+            >
+              <Toggle value="all">Whole docs</Toggle>
+              <Toggle value="previews">Previews only</Toggle>
+            </ToggleGroup>
+            <Popover.Description className="theme-menu-note">
+              Remembered on this device, so pages open in your theme.
+            </Popover.Description>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }
 
@@ -260,10 +451,12 @@ function DocSearch({
 
 export function DocsShell({ children }: { children: ReactNode }) {
   const { appearance, setAppearance } = useAppAppearance();
+  const { shellProps } = useDocsTheme();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobile, setMobile] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [themeOpen, setThemeOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
   const sidebarRef = useRef<HTMLElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -273,12 +466,6 @@ export function DocsShell({ children }: { children: ReactNode }) {
       group.items.map((item) => ({ ...item, group: group.title })),
     )
     .find((item) => item.path === pathname);
-  const category =
-    current?.group === "Foundations"
-      ? "foundations"
-      : current?.group === "Components"
-        ? "components"
-        : "overview";
   useEffect(() => {
     const media = matchMedia("(max-width: 760px)");
     const update = () => {
@@ -314,73 +501,21 @@ export function DocsShell({ children }: { children: ReactNode }) {
   return (
     <AppearanceContext.Provider value={appearance}>
       <Theme
-        appearance={appearance}
-        accentColor="purple"
+        {...shellProps}
         className="docs-app"
         data-sidebar={sidebarOpen ? "open" : "closed"}
       >
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>
-        <aside className="icon-rail" aria-label="Sections">
-          <Link to="/" className="brand-mark" aria-label="Dixy UI home">
-            <DixyMark size={30} />
-          </Link>
-          <div className="rail-links">
-            <Link
-              to="/"
-              aria-label="Overview"
-              className={category === "overview" ? "selected" : ""}
-              aria-current={category === "overview" ? "location" : undefined}
-            >
-              <BookOpen size={20} />
-            </Link>
-            <Link
-              to="/docs/components/$component"
-              params={{ component: "button" }}
-              aria-label="Components"
-              className={category === "components" ? "selected" : ""}
-              aria-current={category === "components" ? "location" : undefined}
-            >
-              <Boxes size={20} />
-            </Link>
-            <Link
-              to="/docs/foundations/$foundation"
-              params={{ foundation: "color" }}
-              aria-label="Foundations"
-              className={category === "foundations" ? "selected" : ""}
-              aria-current={category === "foundations" ? "location" : undefined}
-            >
-              <Palette size={20} />
-            </Link>
-          </div>
-          <div className="rail-bottom">
-            <span className="rail-line" />
-            <Button
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} theme`}
-              title="Toggle appearance"
-              onClick={() =>
-                setAppearance(appearance === "light" ? "dark" : "light")
-              }
-            >
-              {appearance === "light" ? <Moon size={19} /> : <Sun size={19} />}
-            </Button>
-            <span className="rail-monogram" aria-hidden="true">
-              d.
-            </span>
-          </div>
-        </aside>
         <header className="topbar">
           <div className="toolbar-leading">
-            <Link
-              to="/"
-              className="chrome-button"
-              aria-label="Back to overview"
-            >
-              <ArrowLeft size={16} />
+            <Link to="/" className="topbar-brand" aria-label="Dixy UI home">
+              <DixyMark size={26} />
+              <span className="wordmark">
+                dixy<span>UI</span>
+              </span>
+              <span className="version-label">0.1 beta</span>
             </Link>
             <Button
               variant="ghost"
@@ -404,29 +539,41 @@ export function DocsShell({ children }: { children: ReactNode }) {
             <span className="toolbar-divider" />
           </div>
           <div className="breadcrumbs">
-            <span>Documentation</span>
+            <span>{current?.group ?? "Documentation"}</span>
             <ChevronRight size={12} />
             <span className="breadcrumb-current">
               {current?.label ?? "Page"}
             </span>
           </div>
-          <Button
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            className="search-trigger"
-            aria-label="Search documentation"
-            onClick={() => setSearchOpen(true)}
-          >
-            <Search size={14} />
-            <span>Search documentation</span>
-            <Kbd>
-              <Command size={10} />K
-            </Kbd>
-          </Button>
-          <span className="header-built">
-            <Layers size={13} /> Made with care
-          </span>
+          <div className="topbar-tools">
+            <Button
+              variant="ghost"
+              color="neutral"
+              size="sm"
+              className="search-trigger"
+              aria-label="Search documentation"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search size={14} />
+              <span>Search documentation</span>
+              <Kbd>
+                <Command size={10} />K
+              </Kbd>
+            </Button>
+            <ThemeMenu open={themeOpen} setOpen={setThemeOpen} />
+            <Button
+              variant="ghost"
+              color="neutral"
+              size="sm"
+              className="chrome-button appearance-button"
+              aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} appearance`}
+              onClick={() =>
+                setAppearance(appearance === "light" ? "dark" : "light")
+              }
+            >
+              {appearance === "light" ? <Moon size={16} /> : <Sun size={16} />}
+            </Button>
+          </div>
         </header>
         <div className="workspace">
           <aside
@@ -437,7 +584,7 @@ export function DocsShell({ children }: { children: ReactNode }) {
             aria-hidden={mobile || !sidebarOpen}
           >
             <div className="sidebar-inner">
-              <Navigation />
+              <Navigation onOpenTheme={() => setThemeOpen(true)} />
             </div>
           </aside>
           <main id="main-content" ref={mainRef} tabIndex={-1}>

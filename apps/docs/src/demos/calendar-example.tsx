@@ -18,13 +18,9 @@ export default function CalendarExample({
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
       <Calendar.Root {...visual} aria-label="Choose a date">
         <Inline>
-          <Calendar.Button slot="previous" aria-label="Previous month">
-            ‹
-          </Calendar.Button>
+          <Calendar.Button slot="previous" aria-label="Previous month" />
           <Calendar.Heading />
-          <Calendar.Button slot="next" aria-label="Next month">
-            ›
-          </Calendar.Button>
+          <Calendar.Button slot="next" aria-label="Next month" />
         </Inline>
         <Calendar.Grid>
           <Calendar.GridHeader>

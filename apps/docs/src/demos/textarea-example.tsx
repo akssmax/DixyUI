@@ -11,8 +11,8 @@ export default function TextareaExample({
   const visual = { size, variant, radius, material };
   return (
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
-      <label style={{ display: "grid", gap: 8 }}>
-        Project notes
+      <label className="dixy-field">
+        <span className="dixy-label">Project notes</span>
         <Textarea
           {...visual}
           name="notes"

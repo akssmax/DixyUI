@@ -266,7 +266,6 @@ try {
     ["freighter", "FreighterOrnament", "freighter-ornament", "freighterTheme"],
     ["solar-sail", "SailOrnament", "sail-ornament", "solarSailTheme"],
     ["diwali-lights", "DiwaliOrnament", "diwali-ornament", "diwaliLightsTheme"],
-    ["lunar-new-year", "LunarOrnament", "lunar-ornament", "lunarNewYearTheme"],
     ["papel-picado", "PicadoOrnament", "picado-ornament", "papelPicadoTheme"],
     ["holi-colours", "HoliOrnament", "holi-ornament", "holiColoursTheme"],
     ["yule-knit", "YuleOrnament", "yule-ornament", "yuleKnitTheme"],

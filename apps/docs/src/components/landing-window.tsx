@@ -5,7 +5,7 @@ import { LandingShowcase } from "./landing-showcase";
 import "../styles/theme-skins.css";
 
 /*
- * The landing page's centrepiece: one app window that switches between real
+ * The landing page's centrepiece: one live app that switches between real
  * product scenes. The scenes are the playground's own, imported unchanged, so
  * the landing and the playground always show the same compositions.
  */
@@ -46,50 +46,52 @@ function ClientScene({ children }: { children: ReactNode }) {
   );
 }
 
-export function LandingWindow({ dock }: { dock: ReactNode }) {
+/*
+ * Frameless stage: no browser chrome around the scenes. The app sits on the
+ * page itself and, on wide screens, runs off the right edge of the viewport.
+ */
+export function LandingWindow() {
   return (
-    <section className="landing-window-section" aria-label="Live product demo">
-      <Tabs.Root defaultValue="mail" className="landing-window">
-        <div className="landing-window-bar">
-          <span className="landing-window-lights" aria-hidden="true">
-            <i />
-            <i />
-            <i />
-          </span>
-          <Tabs.List aria-label="Demo app" className="landing-window-tabs">
-            {scenes.map(({ value, label, icon: Icon }) => (
-              <Tabs.Tab key={value} value={value}>
-                <Icon size={15} aria-hidden="true" />
-                {label}
-              </Tabs.Tab>
-            ))}
-            <Tabs.Indicator />
-          </Tabs.List>
-        </div>
-        <div className="landing-window-body">
-          {/* One boundary per panel: a boundary around all panels would
-              re-suspend the list and break Base UI's panel registration. */}
-          <Tabs.Panel value="mail">
-            <ClientScene>
-              <EmailScene />
-            </ClientScene>
-          </Tabs.Panel>
-          <Tabs.Panel value="dashboard">
-            <ClientScene>
-              <DashboardScene />
-            </ClientScene>
-          </Tabs.Panel>
-          <Tabs.Panel value="music">
-            <ClientScene>
-              <PlayerScene />
-            </ClientScene>
-          </Tabs.Panel>
-          <Tabs.Panel value="blocks">
-            <LandingShowcase />
-          </Tabs.Panel>
-        </div>
-      </Tabs.Root>
-      <div className="landing-dock-rail">{dock}</div>
-    </section>
+    <Tabs.Root
+      defaultValue="mail"
+      variant="segmented"
+      size="sm"
+      className="landing-stage"
+    >
+      <Tabs.List aria-label="Demo app" className="landing-stage-tabs">
+        {scenes.map(({ value, label, icon: Icon }) => (
+          <Tabs.Tab key={value} value={value}>
+            <Icon size={14} aria-hidden="true" />
+            {label}
+          </Tabs.Tab>
+        ))}
+        <Tabs.Indicator />
+      </Tabs.List>
+      <div className="landing-stage-body">
+        {/* One boundary per panel: a boundary around all panels would
+            re-suspend the list and break Base UI's panel registration. */}
+        <Tabs.Panel value="mail">
+          <ClientScene>
+            <EmailScene />
+          </ClientScene>
+        </Tabs.Panel>
+        <Tabs.Panel value="dashboard">
+          <ClientScene>
+            <DashboardScene />
+          </ClientScene>
+        </Tabs.Panel>
+        <Tabs.Panel value="music">
+          <ClientScene>
+            <PlayerScene />
+          </ClientScene>
+        </Tabs.Panel>
+        <Tabs.Panel value="blocks">
+          <LandingShowcase />
+        </Tabs.Panel>
+      </div>
+      <Text size="sm" tone="muted" className="landing-stage-caption">
+        Real Dixy components. Change the starter to restyle them.
+      </Text>
+    </Tabs.Root>
   );
 }

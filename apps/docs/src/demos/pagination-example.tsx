@@ -15,6 +15,16 @@ export default function PaginationExample({
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
       <Pagination.Root {...visual}>
         <Pagination.List>
+          <Pagination.Item>
+            <Pagination.Previous
+              href="#previous"
+              aria-disabled={current === 1 || undefined}
+              onClick={(event) => {
+                event.preventDefault();
+                setCurrent((page) => Math.max(1, page - 1));
+              }}
+            />
+          </Pagination.Item>
           {[1, 2, 3].map((page) => (
             <Pagination.Item key={page}>
               <Pagination.Link
@@ -30,6 +40,16 @@ export default function PaginationExample({
               </Pagination.Link>
             </Pagination.Item>
           ))}
+          <Pagination.Item>
+            <Pagination.Next
+              href="#next"
+              aria-disabled={current === 3 || undefined}
+              onClick={(event) => {
+                event.preventDefault();
+                setCurrent((page) => Math.min(3, page + 1));
+              }}
+            />
+          </Pagination.Item>
         </Pagination.List>
         <Text role="status">Page {current} of 3</Text>
       </Pagination.Root>
