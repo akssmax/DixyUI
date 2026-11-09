@@ -79,11 +79,18 @@ function generate() {
           type = member.type.getText(member.getSourceFile());
         for (const parameter of node.typeParameters ?? []) {
           if (parameter.constraint) {
-            const constraint = checker.typeToString(
+            let constraint = checker.typeToString(
               checker.getTypeFromTypeNode(parameter.constraint),
               parameter,
               ts.TypeFormatFlags.InTypeAlias,
             );
+            // Same rule for constraints: an expansion such as ElementType's
+            // embeds an absolute path, which differs per checkout and failed
+            // CI. Keep the source spelling instead.
+            if (constraint.includes('import("'))
+              constraint = parameter.constraint.getText(
+                parameter.getSourceFile(),
+              );
             type = type.replace(
               new RegExp(`\\b${parameter.name.text}\\b`, "g"),
               constraint,

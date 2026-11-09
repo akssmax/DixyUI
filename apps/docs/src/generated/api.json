@@ -3636,7 +3636,7 @@
   "ShimmerOwnProps": [
     {
       "name": "as",
-      "type": "\"symbol\" | \"object\" | \"dialog\" | \"div\" | \"a\" | \"abbr\" | \"address\" | \"area\" | \"article\" | \"aside\" | \"audio\" | \"b\" | \"base\" | \"bdi\" | \"bdo\" | \"big\" | \"blockquote\" | \"body\" | \"br\" | \"button\" | ... 158 more ... | import(\"/Users/akshaysainistarbase/Design-System/.claude/worktrees/dixy-ui-ai-app-showcase-ffddd1/node_modul... | undefined",
+      "type": "ElementType | undefined",
       "required": false,
       "description": "The element to render.",
       "default": "span"
