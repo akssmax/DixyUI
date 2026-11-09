@@ -27,27 +27,12 @@ import {
   loadSkinCSS,
 } from "../lib/theme-skin-catalogue";
 import { ShaderBackdrop } from "../lab/shader-backdrop";
-import type { ShaderProgramId } from "../lab/shader-programs";
+import { shaderPairings } from "../lab/shader-pairings";
 import type { ShaderStatus } from "../lab/shader-runtime";
 import "../styles/shader-lab.css";
 
 /** Prototype pairings. A skin gets a shader only after it is reviewed here. */
-const labSkins = [
-  { slug: "ocean-depths", program: "caustics", label: "Ocean caustics" },
-  { slug: "phosphor-terminal", program: "phosphor", label: "Phosphor CRT" },
-  { slug: "neon-night-market", program: "neonRain", label: "Neon rain" },
-  {
-    slug: "prism-glass",
-    program: "iridescence",
-    label: "Thin-film iridescence",
-  },
-  { slug: "diwali-lights", program: "bokeh", label: "Lamp bokeh" },
-  { slug: "solar-sail", program: "aurora", label: "Aurora and stars" },
-] as const satisfies readonly {
-  slug: string;
-  program: ShaderProgramId;
-  label: string;
-}[];
+const labSkins = shaderPairings;
 type LabSlug = (typeof labSkins)[number]["slug"];
 
 const optInKey = "dixy-lab-shader";

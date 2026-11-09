@@ -26,6 +26,31 @@
   --fp-sidebar-width: 72px;
 }
 
+/* Opt-in shader backdrop: fixed behind everything inside the isolated shell.
+   Cards stay opaque, so it only shows in the canvas gaps and the glass top bar. */
+.fp-shader {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.fp-shader canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: fp-shader-fade 600ms ease-out forwards;
+}
+.fp-shader[data-shader="phosphor"] canvas {
+  image-rendering: pixelated;
+}
+@keyframes fp-shader-fade {
+  to {
+    opacity: 1;
+  }
+}
+
 .fp-sidebar {
   position: sticky;
   top: 0;
@@ -498,6 +523,10 @@
   .fp-shell,
   .fp-sidebar {
     transition: none;
+  }
+  .fp-shader canvas {
+    animation: none;
+    opacity: 1;
   }
 }
 

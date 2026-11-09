@@ -1498,3 +1498,19 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - "Previews only" leaves the shell on Original Dixy (`data-dixy-skin="none"`) and skins the preview.
   - At 375px, Candy Clay renders and the phone navigation dialog opens with the filter and 92 links. No console errors.
 - Not tested: keyboard-only pass through the theme menu, reduced motion, screen reader, every one of the 31 skins on every page, Safari/Firefox. Foundation-page previews still pass explicit settings and don't take on the skin. Bundle cost: the docs shell now imports the theme-playground helpers, so every docs page loads skin definitions.
+
+### 2026-11-09 — Fernpay: opt-in shader backdrops, toggled in Settings
+
+- Request: bring the lab shaders into the fintech demo and make them toggleable in Settings.
+- `lab/shader-pairings.ts` now holds the six reviewed skin→shader pairings, shared by `/lab/shaders` and Fernpay; the lab's copy was removed.
+- `example/effects.tsx`:
+  - `EffectsProvider`/`useEffects` hold the preference: off by default, kept in browser storage as `fernpay-shader`, and safe when storage throws.
+  - They also give the current skin's pairing and the runtime state.
+  - Only state changes are stored, not fps, so the app doesn't re-render every second.
+- Shell: a fixed `.fp-shader` layer at `z-index: -1` inside the isolated `.fp-shell`. Cards stay opaque, so the shader shows only in the canvas gaps and behind the frosted top bar. It unmounts when WebGL is unsupported.
+- Settings: a new **Appearance** tab built with SectionHeader and SectionFooter.
+  - An "Animated background" switch with the shader's name and a live status line ("Running", "Still frame (reduced motion)", "Paused while hidden", "WebGL isn't available").
+  - On a skin without a shader, the switch is disabled and buttons offer the six themes that have one.
+- Reduced motion: the runtime already draws a still frame; the fade-in animation is now off too.
+- Verified in a hidden frame: Ocean Depths runs caustics and Solar Sail runs aurora, both "Running". Living Forest shows a disabled switch and six suggestions with no canvas. `pnpm check` passes.
+- Not tested: visual tuning of each shader behind the app chrome (the user was driving the pane); real 120 Hz; Safari/Firefox.

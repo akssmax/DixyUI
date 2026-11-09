@@ -53,6 +53,8 @@ import {
   ToggleGroup,
 } from "@dixy-ui/react";
 import { SectionFooter, SectionHeader, StatCard } from "./layout";
+import { useEffects, type EffectState } from "./effects";
+import { shaderPairings } from "../lab/shader-pairings";
 import {
   accounts,
   budgets,
@@ -967,12 +969,83 @@ export function CardsView() {
 
 /* ---------------------------------------------------------------- Settings */
 
+const effectStateLabel: Record<EffectState, string> = {
+  off: "Off",
+  starting: "Starting…",
+  running: "Running",
+  still: "Still frame (reduced motion)",
+  hidden: "Paused while hidden",
+  unsupported: "WebGL isn’t available on this device",
+  lost: "Paused by the browser",
+};
+
+function AppearanceSettings() {
+  const { enabled, setEnabled, pairing, state, onSkin } = useEffects();
+  return (
+    <Card.Root className="fp-section">
+      <SectionHeader
+        title="Appearance"
+        description="Visual extras. Fernpay looks finished without them."
+      />
+      <Card.Content>
+        <Stack gap="md">
+          <label className="fp-switch-row">
+            <span>
+              <Text as="span">Animated background</Text>
+              <Text as="span" size="sm" tone="muted">
+                {pairing
+                  ? `${pairing.label} · WebGL, pauses when hidden or with reduced motion`
+                  : "This theme has no animated background yet."}
+              </Text>
+            </span>
+            <Switch.Root
+              checked={enabled && Boolean(pairing)}
+              disabled={!pairing}
+              onCheckedChange={setEnabled}
+            >
+              <Switch.Thumb />
+            </Switch.Root>
+          </label>
+          {!pairing ? (
+            <Stack gap="sm">
+              <Text size="sm" tone="muted">
+                Try a theme that has one:
+              </Text>
+              <Inline gap="sm" wrap>
+                {shaderPairings.map((item) => (
+                  <Button
+                    key={item.slug}
+                    size="sm"
+                    variant="outline"
+                    color="neutral"
+                    onClick={() => onSkin(item.slug)}
+                  >
+                    {item.label}
+                  </Button>
+                ))}
+              </Inline>
+            </Stack>
+          ) : null}
+        </Stack>
+      </Card.Content>
+      <SectionFooter
+        meta={
+          <Text as="span" size="sm" tone="muted" role="status">
+            Status: {pairing ? effectStateLabel[state] : "Unavailable"}
+          </Text>
+        }
+      />
+    </Card.Root>
+  );
+}
+
 export function SettingsView() {
   const toast = Toast.useToastManager();
   return (
     <Tabs.Root defaultValue="profile" className="fp-settings">
       <Tabs.List aria-label="Settings sections">
         <Tabs.Tab value="profile">Profile</Tabs.Tab>
+        <Tabs.Tab value="appearance">Appearance</Tabs.Tab>
         <Tabs.Tab value="notifications">Notifications</Tabs.Tab>
         <Tabs.Tab value="help">Help</Tabs.Tab>
         <Tabs.Indicator />
@@ -1023,6 +1096,9 @@ export function SettingsView() {
             }
           />
         </Card.Root>
+      </Tabs.Panel>
+      <Tabs.Panel value="appearance">
+        <AppearanceSettings />
       </Tabs.Panel>
       <Tabs.Panel value="notifications">
         <Card.Root className="fp-section">

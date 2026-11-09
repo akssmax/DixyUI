@@ -40,6 +40,8 @@ import {
 } from "@dixy-ui/react";
 import { notifications, user } from "./data";
 import { PageHeader } from "./layout";
+import { EffectsProvider, useEffects } from "./effects";
+import { ShaderBackdrop } from "../lab/shader-backdrop";
 import { SendMoneyDialog } from "./send-money";
 import {
   CardsView,
@@ -95,7 +97,9 @@ export function FernpayApp(props: FernpayAppProps) {
   return (
     <Toast.Provider>
       <Tooltip.Provider delay={400}>
-        <Shell {...props} />
+        <EffectsProvider skin={props.skin} onSkin={props.onSkin}>
+          <Shell {...props} />
+        </EffectsProvider>
         <Toasts />
       </Tooltip.Provider>
     </Toast.Provider>
@@ -267,6 +271,7 @@ function Shell(props: FernpayAppProps) {
       className="fp-shell"
       data-sidebar={collapsed ? "collapsed" : "expanded"}
     >
+      <Backdrop appearance={props.appearance} skin={props.skin} />
       <Sidebar.Content
         id="fp-sidebar"
         className="fp-sidebar"
@@ -452,6 +457,29 @@ function ViewSwitch({
     default:
       return <OverviewView onOpenTransactions={() => onView("transactions")} />;
   }
+}
+
+/** Opt-in WebGL backdrop behind the app, for skins with a reviewed shader. */
+function Backdrop({
+  appearance,
+  skin,
+}: {
+  appearance: "light" | "dark";
+  skin: string;
+}) {
+  const { enabled, pairing, state, setState } = useEffects();
+  if (!enabled || !pairing || state === "unsupported") return null;
+  return (
+    <div className="fp-shader" data-shader={pairing.program} aria-hidden="true">
+      <ShaderBackdrop
+        key={pairing.program}
+        program={pairing.program}
+        appearance={appearance}
+        tokenKey={skin}
+        onStatus={(status) => setState(status.state)}
+      />
+    </div>
+  );
 }
 
 function ThemePicker({ skin, skins, onSkin }: FernpayAppProps) {
