@@ -268,11 +268,6 @@
       "types": "./dist/diwali/ornament.d.ts",
       "import": "./dist/diwali/ornament.js"
     },
-    "./lunar-new-year": {
-      "types": "./dist/skins/lunar-new-year.d.ts",
-      "import": "./dist/skins/lunar-new-year.js"
-    },
-    "./lunar-new-year.css": "./dist/lunar-new-year.css",
     "./lunar-new-year/react": {
       "types": "./dist/lunar/ornament.d.ts",
       "import": "./dist/lunar/ornament.js"

@@ -29,7 +29,6 @@ import { orbitalHud } from "@dixy-ui/themes/orbital-hud";
 import { freighter } from "@dixy-ui/themes/freighter";
 import { solarSail } from "@dixy-ui/themes/solar-sail";
 import { diwaliLights } from "@dixy-ui/themes/diwali-lights";
-import { lunarNewYear } from "@dixy-ui/themes/lunar-new-year";
 import { papelPicado } from "@dixy-ui/themes/papel-picado";
 import { holiColours } from "@dixy-ui/themes/holi-colours";
 import { yuleKnit } from "@dixy-ui/themes/yule-knit";
@@ -62,7 +61,6 @@ export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/freighter": freighter,
   "dixy/solar-sail": solarSail,
   "dixy/diwali-lights": diwaliLights,
-  "dixy/lunar-new-year": lunarNewYear,
   "dixy/papel-picado": papelPicado,
   "dixy/holi-colours": holiColours,
   "dixy/yule-knit": yuleKnit,
@@ -86,8 +84,6 @@ export const ornamentRenderers: Record<
   "dixy/tactile-atelier": lazy(
     () => import("@dixy-ui/themes/tactile-atelier/react"),
   ),
-  "dixy/ocean-depths": lazy(() => import("@dixy-ui/themes/ocean-depths/react")),
-  "dixy/candy-clay": lazy(() => import("@dixy-ui/themes/candy-clay/react")),
   "dixy/art-deco": lazy(() => import("@dixy-ui/themes/art-deco/react")),
   "dixy/y2k-titanium": lazy(() => import("@dixy-ui/themes/y2k-titanium/react")),
   "dixy/material-light": lazy(
@@ -119,9 +115,6 @@ export const ornamentRenderers: Record<
   "dixy/solar-sail": lazy(() => import("@dixy-ui/themes/solar-sail/react")),
   "dixy/diwali-lights": lazy(
     () => import("@dixy-ui/themes/diwali-lights/react"),
-  ),
-  "dixy/lunar-new-year": lazy(
-    () => import("@dixy-ui/themes/lunar-new-year/react"),
   ),
   "dixy/papel-picado": lazy(() => import("@dixy-ui/themes/papel-picado/react")),
   "dixy/holi-colours": lazy(() => import("@dixy-ui/themes/holi-colours/react")),
@@ -205,8 +198,6 @@ export const skinCSSLoaders: Readonly<
   "dixy/solar-sail": () => import("@dixy-ui/themes/solar-sail.css?inline"),
   "dixy/diwali-lights": () =>
     import("@dixy-ui/themes/diwali-lights.css?inline"),
-  "dixy/lunar-new-year": () =>
-    import("@dixy-ui/themes/lunar-new-year.css?inline"),
   "dixy/papel-picado": () => import("@dixy-ui/themes/papel-picado.css?inline"),
   "dixy/holi-colours": () => import("@dixy-ui/themes/holi-colours.css?inline"),
   "dixy/yule-knit": () => import("@dixy-ui/themes/yule-knit.css?inline"),

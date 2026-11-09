@@ -1324,6 +1324,20 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` and `pnpm package:check` pass.
 - Not tested: forced colours and screen readers in a real browser; segmented with `orientation="vertical"` (no vertical-specific styles were written); each material finish visually.
 
+### 2026-11-07 — Lunar New Year removed as a starter (32 starters)
+
+- Decision (user): keep 32 starters, so Lunar New Year is removed (31 skins + Original Dixy).
+- Removed:
+  - Its record in `packages/themes/src/starters-launch.ts`.
+  - The generated `src/skins/lunar-new-year.ts` and `generated/lunar-new-year.css`.
+  - The `./lunar-new-year` and `./lunar-new-year.css` package exports.
+  - Its entries in `scripts/verify-package.mjs` and the SSR consumer fixture.
+- Regenerated with `pnpm skins:generate`: `catalog.ts` and `generated-skin-loaders.ts`, no hand edits.
+- Kept on purpose: the **papercut** frame recipe and its ornament renderer (`src/lunar/ornament.tsx`, export `./lunar-new-year/react`). Any theme can still pick that frame in the playground. `organic-paint-launch.ts` is untouched because another session owns it; its paper-cut painting serves the frame.
+- Landing copy now counts the gallery (`starters.length`, Original included) instead of `skinCatalog.length`, so it says 32, matching the playground.
+- Breaking for consumers of the alpha package: `@dixy-ui/themes/lunar-new-year` and its CSS no longer exist.
+- Verified: `pnpm check` and `pnpm package:check` pass. Playground and landing server HTML both say 32. `/?starter=lunar-new-year` falls back to Original Dixy.
+
 ### 2026-11-07 — Ocean Depths and Candy Clay use plain cards, as in the HTML redesign
 
 - Request: the user preferred the frame borders from the HTML mockup for these two starters. Everything else in both themes stays as it was.
@@ -1557,6 +1571,7 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Verified in the in-app browser on `/lab/kitchen-sink`: each fixed tile at default controls; badges in outline/soft/solid in light and dark; Fernpay transactions show amber Pending and neutral chips. `pnpm check` (99 tests) and `pnpm package:check` pass; API metadata regenerated.
 - Not tested: keyboard pass through the changed Accordion and TagGroup, screen readers, every skin with the new colors (skins don't override the status tokens, so they inherit the defaults), Safari/Firefox, mobile widths for the kitchen sink.
 
+
 ### 2026-11-09 — Landing: 98vh hero, accessibility, built-with, CTA and footer; npm beta
 
 - Request: make the hero 98vh, showcase accessibility and the demo products, and give the landing a modern CTA and footer. Mocked first in `mockups/landing-sections.html`, then implemented in `components/landing-sections.tsx` and `styles/landing.css`.
@@ -1593,6 +1608,14 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - `pnpm check` (100 tests) and `pnpm package:check` pass.
 - Not tested: NativeSelect with a screen reader, Safari/Firefox (`appearance: none` on select), and a right-to-left layout for the icon inset.
 
+### 2026-11-09 — Color page palette explorer swatches render again
+
+- Symptom: on `/docs/foundations/color`, the "Twelve stops" explorer showed family buttons with no gradient and a stop strip of thin grey bars.
+- Cause: layout, not color. Every swatch already resolved its color (e.g. `var(--dixy-color-neutral-1)` computed to `oklch(0.99 0 0)`). The swatches are empty `<span>`s inside Dixy `Button`, which is an `inline-flex` row with centered items, so each span sat beside its label and shrank to 0–2px. The docs CSS was written for block-flow buttons.
+- Fix (`apps/docs/src/styles/docs.css`): `.color-family-choices > button` and `.color-stop` get `inline-size: 100%`, `flex-direction: column`, `align-items: stretch` and `justify-content: flex-start`; `.color-stop` also gets `block-size: auto`. The rules are unlayered, so they override the library's `@layer dixy.components` button layout only here.
+- Verified in the in-app browser: Neutrals (11), Colors (28) and overlays (2) have no swatch narrower than 8px; stop tiles are about 48px wide on desktop. The light and dark ramps fill; overlay tiles show the checker and alpha layer. Picking a family or stop updates the readout (`--dixy-color-slate-5 oklch(0.887 0.014499 260)`, dark `--dixy-color-neutral-5 oklch(0.32 0 0)`). At 375px the ramp uses 6 columns with no horizontal overflow. `pnpm check` passes.
+- Not tested: keyboard focus ring appearance on the stretched buttons, reduced motion (no motion changed), screen readers, Safari/Firefox, skins other than Ocean Depths.
+
 ### 2026-11-09 — Kitchen sink, second pass against shadcn/ui
 
 - Request: TagGroup, Table and other kitchen-sink components still looked off; compare with shadcn first, then fix what we can.
@@ -1612,6 +1635,7 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Verified in the in-app browser by measurement: Table head 40px, last-row border 0, caption bottom; DataTable head 40px; tag 28px with a 20×20 remove; Kbd 20px with no shadow; scrollbar 10px; Empty dashed; count 40×40 at the avatars' 8px radius; carousel controls 40×40 with their labels. Screenshots of Table, TagGroup, Carousel, Empty, Kbd. `pnpm check` (100 tests) and `pnpm package:check` pass.
 - Left as is, on purpose: OTP slots stay separate boxes (HeroUI-style) rather than shadcn's joined group; Switch keeps its thumb icons; ListBox keeps the text check mark; Toggle stays ghost at rest, as in shadcn.
 - Not tested: dark mode on this pass, keyboard through tags and carousel, screen readers, Safari/Firefox, phone width.
+
 
 ### 2026-11-09 — Landing: wide starter fonts, round swatches, the real sideways-scroll cause
 
