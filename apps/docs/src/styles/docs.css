@@ -251,7 +251,7 @@ input:not([class*="dixy-"]):focus-visible {
   outline: 2px solid var(--dixy-color-border-focus);
   outline-offset: 4px;
 }
-a {
+a:not([class*="dixy-"]) {
   color: inherit;
 }
 .theme-foundation-link {

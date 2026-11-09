@@ -1458,3 +1458,22 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Cards view in dark appearance.
   - `pnpm check` passes.
 - Not tested: dark appearance on every view and skin; Safari/Firefox; touch scrolling of the metrics row on a real phone; screen reader.
+
+### 2026-11-09 — Pagination fixed; /lab/kitchen-sink for reviewing every component
+
+- Request: fix Pagination (links were underlined and the current page was a tall pill), and add a kitchen-sink page so the user can spot which components still need fixes.
+- Pagination (library):
+  - Page links and the ellipsis are square ghost tiles at `--dixy-component-height`, with no underline and tabular numbers.
+  - The current page is a filled `selected` tile. Hover uses the subtle background, and `aria-disabled` gives the disabled colour with no pointer events.
+  - New `Pagination.Previous` and `Pagination.Next` parts draw chevron icons, label themselves "Previous page"/"Next page", and accept children to replace the icon.
+  - The demo and Fernpay use them.
+- `/lab/kitchen-sink`:
+  - Renders every component in the registry (76) at its default controls, grouped by category, with a sticky category index, a filter box and `?skin=`.
+  - New components appear automatically. Each tile has its own error boundary and a link to its docs page.
+  - Demos render client-only, so SSR doesn't stream 76 lazy chunks.
+- Docs: the unlayered `a { color: inherit }` in `docs.css` overrode every library colour on Dixy links; it was why the disabled Previous looked enabled. It now skips `dixy-*` elements.
+- Verified:
+  - All 76 tiles load with no crashes and no tile overflowing.
+  - Fernpay pagination: all links 40×40, no underline; disabled is grey and current is accent.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested: kitchen sink in each skin and in dark mode (that review is the user's); pagination with many pages (no automatic ellipsis logic, by design).

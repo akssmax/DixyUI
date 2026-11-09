@@ -1,6 +1,7 @@
 import { ButtonGroupContext } from "../utilities/visual-group-context";
 import type { ComponentProps } from "react";
 import { nativePart, type NativePartProps } from "../utilities/native-part";
+import { Mark } from "../utilities/default-artwork";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { Button } from "./button";
@@ -80,11 +81,35 @@ export interface PaginationProps extends NativePartProps<
 function PaginationRoot(props: PaginationProps) {
   return <Nav aria-label="Pagination" {...props} />;
 }
+const PaginationLink = /* @__PURE__ */ nativePart(
+  "a",
+  "dixy-pagination-link",
+  [] as const,
+);
+export type PaginationStepProps = NativePartProps<"a", never>;
+/** Previous-page link with a chevron. Children replace the icon; pass `aria-disabled` on the first page. */
+function PaginationPrevious({ children, ...props }: PaginationStepProps) {
+  return (
+    <PaginationLink aria-label="Previous page" {...props} data-step="previous">
+      {children ?? <Mark kind="chevron-left" />}
+    </PaginationLink>
+  );
+}
+/** Next-page link with a chevron. Children replace the icon; pass `aria-disabled` on the last page. */
+function PaginationNext({ children, ...props }: PaginationStepProps) {
+  return (
+    <PaginationLink aria-label="Next page" {...props} data-step="next">
+      {children ?? <Mark kind="chevron-right" />}
+    </PaginationLink>
+  );
+}
 export const Pagination = /* @__PURE__ */ (() => ({
   Root: PaginationRoot,
   List: /* @__PURE__ */ nativePart("ul", "dixy-pagination-list", [] as const),
   Item: /* @__PURE__ */ nativePart("li", "dixy-pagination-item", [] as const),
-  Link: /* @__PURE__ */ nativePart("a", "dixy-pagination-link", [] as const),
+  Link: PaginationLink,
+  Previous: PaginationPrevious,
+  Next: PaginationNext,
   Ellipsis: /* @__PURE__ */ nativePart(
     "span",
     "dixy-pagination-ellipsis",

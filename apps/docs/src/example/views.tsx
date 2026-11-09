@@ -623,6 +623,16 @@ export function TransactionsView() {
           actions={
             <Pagination.Root aria-label="Transaction pages">
               <Pagination.List>
+                <Pagination.Item>
+                  <Pagination.Previous
+                    href="#previous"
+                    aria-disabled={current === 1 || undefined}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setPage(Math.max(1, current - 1));
+                    }}
+                  />
+                </Pagination.Item>
                 {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
                   <Pagination.Item key={n}>
                     <Pagination.Link
@@ -638,6 +648,16 @@ export function TransactionsView() {
                     </Pagination.Link>
                   </Pagination.Item>
                 ))}
+                <Pagination.Item>
+                  <Pagination.Next
+                    href="#next"
+                    aria-disabled={current === pages || undefined}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setPage(Math.min(pages, current + 1));
+                    }}
+                  />
+                </Pagination.Item>
               </Pagination.List>
             </Pagination.Root>
           }

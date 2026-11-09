@@ -55,20 +55,20 @@
   }
   /* The frame shows focus for the part inside it. */
   :is(
-      .dixy-aria-group,
-      .dixy-input-group,
-      .dixy-number-field-group,
-      .dixy-combobox-input-group,
-      .dixy-autocomplete-input-group
-    ):has(
-      > :is(
-          .dixy-aria-input,
-          .dixy-input,
-          .dixy-number-field-input,
-          .dixy-combobox-input,
-          .dixy-autocomplete-input
-        ):focus-visible
-    ) {
+    .dixy-aria-group,
+    .dixy-input-group,
+    .dixy-number-field-group,
+    .dixy-combobox-input-group,
+    .dixy-autocomplete-input-group
+  ):has(
+    > :is(
+        .dixy-aria-input,
+        .dixy-input,
+        .dixy-number-field-input,
+        .dixy-combobox-input,
+        .dixy-autocomplete-input
+      ):focus-visible
+  ) {
     outline: 2px solid var(--dixy-color-border-focus);
     outline-offset: 2px;
   }

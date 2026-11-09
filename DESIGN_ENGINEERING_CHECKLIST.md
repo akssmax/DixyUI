@@ -804,4 +804,6 @@ Verification for this pass:
 - [x] Every field-like control measures 32/40/48 at sm/md/lg across the default theme and 30 skins, checked on `/lab/controls`. Evidence: docs/COMPONENT_AUDIT.md, docs/BUILD_LOG.md 2026-11-09.
 - [x] Built-in SVG icons replace consumer text glyphs in the date, calendar, number, search and tag parts.
 - [ ] Coarse-pointer hit-area extension for 32px controls; Accordion indicator part.
+- [x] Pagination: square tiles at control height, Previous/Next parts with icons. `/lab/kitchen-sink` renders all 76 registry demos for review. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Review the kitchen sink (user) and list remaining component fixes.
 - [ ] Learning: explain why a framed group must own the height and border (and its parts stretch) rather than each part declaring the control height.

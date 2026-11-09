@@ -16,6 +16,7 @@ import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibili
 import { Route as DocsInstallationRouteImport } from './routes/docs.installation'
 import { Route as DocsLearningRouteImport } from './routes/docs.learning'
 import { Route as LabControlsRouteImport } from './routes/lab.controls'
+import { Route as LabKitchenSinkRouteImport } from './routes/lab.kitchen-sink'
 import { Route as LabShadersRouteImport } from './routes/lab.shaders'
 import { Route as DocsComponentsComponentRouteImport } from './routes/docs.components.$component'
 import { Route as DocsFoundationsFoundationRouteImport } from './routes/docs.foundations.$foundation'
@@ -55,6 +56,11 @@ const LabControlsRoute = LabControlsRouteImport.update({
   path: '/lab/controls',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabKitchenSinkRoute = LabKitchenSinkRouteImport.update({
+  id: '/lab/kitchen-sink',
+  path: '/lab/kitchen-sink',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LabShadersRoute = LabShadersRouteImport.update({
   id: '/lab/shaders',
   path: '/lab/shaders',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/docs/installation': typeof DocsInstallationRoute
   '/docs/learning': typeof DocsLearningRoute
   '/lab/controls': typeof LabControlsRoute
+  '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByTo {
   '/docs/installation': typeof DocsInstallationRoute
   '/docs/learning': typeof DocsLearningRoute
   '/lab/controls': typeof LabControlsRoute
+  '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
@@ -105,6 +113,7 @@ export interface FileRoutesById {
   '/docs/installation': typeof DocsInstallationRoute
   '/docs/learning': typeof DocsLearningRoute
   '/lab/controls': typeof LabControlsRoute
+  '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
@@ -119,6 +128,7 @@ export interface FileRouteTypes {
     | '/docs/installation'
     | '/docs/learning'
     | '/lab/controls'
+    | '/lab/kitchen-sink'
     | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
@@ -131,6 +141,7 @@ export interface FileRouteTypes {
     | '/docs/installation'
     | '/docs/learning'
     | '/lab/controls'
+    | '/lab/kitchen-sink'
     | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
@@ -143,6 +154,7 @@ export interface FileRouteTypes {
     | '/docs/installation'
     | '/docs/learning'
     | '/lab/controls'
+    | '/lab/kitchen-sink'
     | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
@@ -156,6 +168,7 @@ export interface RootRouteChildren {
   DocsInstallationRoute: typeof DocsInstallationRoute
   DocsLearningRoute: typeof DocsLearningRoute
   LabControlsRoute: typeof LabControlsRoute
+  LabKitchenSinkRoute: typeof LabKitchenSinkRoute
   LabShadersRoute: typeof LabShadersRoute
   DocsComponentsComponentRoute: typeof DocsComponentsComponentRoute
   DocsFoundationsFoundationRoute: typeof DocsFoundationsFoundationRoute
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LabControlsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lab/kitchen-sink': {
+      id: '/lab/kitchen-sink'
+      path: '/lab/kitchen-sink'
+      fullPath: '/lab/kitchen-sink'
+      preLoaderRoute: typeof LabKitchenSinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lab/shaders': {
       id: '/lab/shaders'
       path: '/lab/shaders'
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   DocsInstallationRoute: DocsInstallationRoute,
   DocsLearningRoute: DocsLearningRoute,
   LabControlsRoute: LabControlsRoute,
+  LabKitchenSinkRoute: LabKitchenSinkRoute,
   LabShadersRoute: LabShadersRoute,
   DocsComponentsComponentRoute: DocsComponentsComponentRoute,
   DocsFoundationsFoundationRoute: DocsFoundationsFoundationRoute,

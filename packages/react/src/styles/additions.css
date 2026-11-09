@@ -261,7 +261,7 @@
     color: var(--dixy-color-text-secondary);
     font: var(--dixy-font-body-sm);
   }
-  :where(.dixy-link, .dixy-pagination-link) {
+  :where(.dixy-link) {
     color: var(--dixy-color-text-action-primary);
     text-decoration: underline;
     text-underline-offset: 0.2em;
@@ -275,19 +275,55 @@
     padding: 0;
     margin: 0;
   }
-  .dixy-pagination-link {
+  /* Page links are square ghost buttons at the control height; the current
+     page is a filled tile, not a taller pill. */
+  .dixy-pagination-list {
+    gap: var(--dixy-space-050);
+  }
+  :where(.dixy-pagination-link, .dixy-pagination-ellipsis) {
+    box-sizing: border-box;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-inline-size: var(--dixy-interaction-target);
-    min-block-size: var(--dixy-interaction-target);
-    padding: 8px;
-    border-radius: var(--dixy-radius-control);
+    gap: var(--dixy-spacing-inline-xs);
+    block-size: var(--dixy-component-height, 40px);
+    min-inline-size: var(--dixy-component-height, 40px);
+    padding: 0 var(--dixy-space-050);
+    border: var(--dixy-border-width-1) solid transparent;
+    border-radius: var(--dixy-component-radius, var(--dixy-radius-control));
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-component-font, var(--dixy-font-label-md));
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+  }
+  .dixy-pagination-link {
+    cursor: pointer;
+    transition:
+      background-color var(--dixy-field-motion-feedback, 120ms),
+      color var(--dixy-field-motion-feedback, 120ms);
+  }
+  .dixy-pagination-link:hover:not(
+      [aria-current="page"],
+      [aria-disabled="true"]
+    ) {
+    background-color: var(--dixy-color-background-subtle);
   }
   .dixy-pagination-link[aria-current="page"] {
+    border-color: var(--dixy-color-border-subtle);
     background-color: var(--dixy-color-background-selected);
-    font-weight: 700;
-    text-decoration: none;
+    color: var(--dixy-color-text-selected, var(--dixy-color-text-primary));
+    font-weight: 600;
+  }
+  .dixy-pagination-link[aria-disabled="true"] {
+    color: var(--dixy-color-text-disabled);
+    cursor: default;
+    pointer-events: none;
+  }
+  .dixy-pagination-link[data-step] {
+    padding-inline: var(--dixy-space-100, 8px);
+  }
+  .dixy-pagination-ellipsis {
+    color: var(--dixy-color-text-secondary);
   }
   .dixy-breadcrumbs {
     list-style: none;
@@ -896,11 +932,7 @@
     min-inline-size: var(--dixy-component-height, 40px);
   }
   .dixy-pagination-link {
-    min-block-size: max(
-      var(--dixy-component-height, 40px),
-      var(--dixy-interaction-target)
-    );
-    font: var(--dixy-component-font);
+    min-block-size: var(--dixy-interaction-target);
   }
   .dixy-list-box .dixy-aria-listboxitem {
     font: var(--dixy-component-font);
