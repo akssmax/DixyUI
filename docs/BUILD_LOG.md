@@ -1727,3 +1727,27 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The exit easing of all six component families resolves to `cubic-bezier(0.23, 1, 0.32, 1)`. An open Menu popup with `data-ending-style` computes `opacity, transform` at 0.12s with the new curve.
   - Inside `[data-motion="reduced"]` the exit still resolves to 0ms.
 - Not tested: watching the close animation visually (the pane was hidden, so animation frames didn't run), OS-level reduced-motion emulation, Safari/Firefox and touch.
+
+### 2026-11-09 — Reduced motion keeps short fades
+
+- What changed: reduced motion used to set every duration to 0ms. Now it removes movement but keeps opacity and colour changes as short fades.
+  - New tokens `--dixy-motion-effects-duration-{instant,fast,normal,deliberate,slow}`. Normally they equal `--dixy-motion-duration-*` (so a skin's speed scaling still applies). Under `[data-motion="reduced"]` and `prefers-reduced-motion: reduce` they become `min(duration, 200ms)`: 0, 120, 200, 200, 200ms. `--dixy-motion-duration-*` and `--dixy-motion-spatial-factor` still go to 0, so anything that moves stays immediate.
+  - The generator also emits `--dixy-motion-transition-{role}-effects` and, for each component phase, `--dixy-{component}-motion-{phase}-effects` and `-effects-duration`.
+  - Library CSS: 56 `opacity`/`color`/`background`/`border-color` transitions now use the effects variants. `transform`, sizes, `rotate` and height reveals are unchanged. The drawer exit's `transition-duration` is now an (opacity, transform) pair.
+  - JS helpers: `tweenTransition(role, reduced, kind = "spatial")` gains a `kind` argument; `springTransition(…, "effects", …, true)` now returns a short tween instead of 0. New exports: `motionEffectsDuration`, `reducedEffectsDuration`, `reducedEffectsMaxDuration`. Existing calls keep their old results, except effects springs under reduction.
+  - Docs: the Motion demo fades without travel under reduction. Motion foundation and component-motion copy describe the new policy.
+- Why: the Emil Kowalski review (and WCAG 2.3.3) treats reduced motion as "no movement", not "no feedback". A popup that snaps in and out gives no cue about where it came from or that it went away. A short fade does, without anything travelling. Effects follow the normal durations instead of fixed values so skins that slow motion (Holi, Neon Night Market, Studio Hardware) keep opacity and transform in step.
+- Verified:
+  - `pnpm check` passes (110 React tests; token tests extended to cover effects fades in JS and in both reduced CSS blocks) and `pnpm package:check` passes.
+  - In the in-app browser (own dev server, computed styles), reduced mode gives:
+    - menu exit, drawer exit: `opacity 0.12s, transform 0s`
+    - popover, dialog, toast: `0.2s, 0s`
+    - button: colours 0.12s, transform 0s
+    - switch thumb: transform 0s, colours 0.12s
+    - tabs indicator: all 0s
+  - System mode is unchanged. A theme scope with `--dixy-motion-duration-normal: 408ms` gives a popover `0.408s, 0.408s`.
+- Not tested:
+  - watching the fades, or clicking through the Motion demo (the pane was hidden with a 0×0 viewport, so animation frames don't run)
+  - OS-level reduced-motion emulation (covered only by the generated-CSS test)
+  - Safari/Firefox, touch, screen readers
+- Left as is: skin CSS in `packages/themes` and docs-app CSS that time opacity with `--dixy-motion-duration-*` still snap under reduction. That's safe, but they could adopt the effects tokens later.

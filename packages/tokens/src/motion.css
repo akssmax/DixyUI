@@ -19,16 +19,47 @@
   [data-motion] {
     --dixy-motion-transition-feedback: var(--dixy-motion-duration-fast)
       var(--dixy-motion-easing-standard);
+    --dixy-motion-transition-feedback-effects: var(
+        --dixy-motion-effects-duration-fast
+      )
+      var(--dixy-motion-easing-standard);
     --dixy-motion-transition-enter: var(--dixy-motion-duration-normal)
+      var(--dixy-motion-easing-enter);
+    --dixy-motion-transition-enter-effects: var(
+        --dixy-motion-effects-duration-normal
+      )
       var(--dixy-motion-easing-enter);
     --dixy-motion-transition-exit: var(--dixy-motion-duration-fast)
       var(--dixy-motion-easing-exit);
+    --dixy-motion-transition-exit-effects: var(
+        --dixy-motion-effects-duration-fast
+      )
+      var(--dixy-motion-easing-exit);
     --dixy-motion-transition-navigation: var(--dixy-motion-duration-deliberate)
+      var(--dixy-motion-easing-standard);
+    --dixy-motion-transition-navigation-effects: var(
+        --dixy-motion-effects-duration-deliberate
+      )
       var(--dixy-motion-easing-standard);
     --dixy-motion-transition-reveal: var(--dixy-motion-duration-deliberate)
       var(--dixy-motion-easing-enter);
+    --dixy-motion-transition-reveal-effects: var(
+        --dixy-motion-effects-duration-deliberate
+      )
+      var(--dixy-motion-easing-enter);
     --dixy-motion-transition-page: var(--dixy-motion-duration-slow)
       var(--dixy-motion-easing-standard);
+    --dixy-motion-transition-page-effects: var(
+        --dixy-motion-effects-duration-slow
+      )
+      var(--dixy-motion-easing-standard);
+    --dixy-motion-effects-duration-instant: var(--dixy-motion-duration-instant);
+    --dixy-motion-effects-duration-fast: var(--dixy-motion-duration-fast);
+    --dixy-motion-effects-duration-normal: var(--dixy-motion-duration-normal);
+    --dixy-motion-effects-duration-deliberate: var(
+      --dixy-motion-duration-deliberate
+    );
+    --dixy-motion-effects-duration-slow: var(--dixy-motion-duration-slow);
     --dixy-duration-fast: var(--dixy-motion-duration-fast);
     --dixy-duration-normal: var(--dixy-motion-duration-normal);
     --dixy-ease: var(--dixy-motion-easing-standard);
@@ -40,6 +71,11 @@
     --dixy-motion-duration-normal: 0ms;
     --dixy-motion-duration-deliberate: 0ms;
     --dixy-motion-duration-slow: 0ms;
+    --dixy-motion-effects-duration-instant: 0ms;
+    --dixy-motion-effects-duration-fast: 120ms;
+    --dixy-motion-effects-duration-normal: 200ms;
+    --dixy-motion-effects-duration-deliberate: 200ms;
+    --dixy-motion-effects-duration-slow: 200ms;
     --dixy-motion-spatial-factor: 0;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -51,6 +87,11 @@
       --dixy-motion-duration-normal: 0ms;
       --dixy-motion-duration-deliberate: 0ms;
       --dixy-motion-duration-slow: 0ms;
+      --dixy-motion-effects-duration-instant: 0ms;
+      --dixy-motion-effects-duration-fast: 120ms;
+      --dixy-motion-effects-duration-normal: 200ms;
+      --dixy-motion-effects-duration-deliberate: 200ms;
+      --dixy-motion-effects-duration-slow: 200ms;
       --dixy-motion-spatial-factor: 0;
     }
   }

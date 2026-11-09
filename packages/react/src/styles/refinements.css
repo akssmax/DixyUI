@@ -233,7 +233,7 @@
   }
   .dixy-table-body > .dixy-table-row,
   .dixy-aria-tablebody > .dixy-aria-row {
-    transition: background-color var(--dixy-motion-transition-feedback, 120ms);
+    transition: background-color var(--dixy-motion-transition-feedback-effects, 120ms);
   }
   .dixy-table-body > .dixy-table-row:hover,
   .dixy-aria-tablebody > .dixy-aria-row[data-hovered] {

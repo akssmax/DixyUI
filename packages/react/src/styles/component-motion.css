@@ -2,29 +2,29 @@
 @layer dixy.components {
   .dixy-switch-root::before {
     transition:
-      background-color var(--dixy-switch-motion-feedback),
-      border-color var(--dixy-switch-motion-feedback);
+      background-color var(--dixy-switch-motion-feedback-effects),
+      border-color var(--dixy-switch-motion-feedback-effects);
   }
   .dixy-switch-thumb {
     transition:
       transform var(--dixy-switch-motion-thumb),
-      background-color var(--dixy-switch-motion-feedback),
-      color var(--dixy-switch-motion-feedback);
+      background-color var(--dixy-switch-motion-feedback-effects),
+      color var(--dixy-switch-motion-feedback-effects);
   }
   .dixy-switch-icon {
-    transition: opacity var(--dixy-switch-motion-feedback);
+    transition: opacity var(--dixy-switch-motion-feedback-effects);
   }
   .dixy-checkbox-root::before {
     transition:
-      background-color var(--dixy-checkbox-motion-feedback),
-      border-color var(--dixy-checkbox-motion-feedback);
+      background-color var(--dixy-checkbox-motion-feedback-effects),
+      border-color var(--dixy-checkbox-motion-feedback-effects);
   }
   .dixy-checkbox-indicator {
     opacity: 1;
     transform: scale(1);
     transform-origin: center;
     transition:
-      opacity var(--dixy-checkbox-motion-indicator),
+      opacity var(--dixy-checkbox-motion-indicator-effects),
       transform var(--dixy-checkbox-motion-indicator);
   }
   .dixy-checkbox-indicator:is(
@@ -39,14 +39,14 @@
     transform-box: view-box;
     transform-origin: center;
     transition:
-      opacity var(--dixy-checkbox-motion-indicator),
+      opacity var(--dixy-checkbox-motion-indicator-effects),
       transform var(--dixy-checkbox-motion-indicator);
   }
   .dixy-button {
     transition:
-      background-color var(--dixy-button-motion-feedback),
-      color var(--dixy-button-motion-feedback),
-      border-color var(--dixy-button-motion-feedback),
+      background-color var(--dixy-button-motion-feedback-effects),
+      color var(--dixy-button-motion-feedback-effects),
+      border-color var(--dixy-button-motion-feedback-effects),
       transform var(--dixy-button-motion-feedback);
   }
   .dixy-button:active:not([data-disabled]) {
@@ -63,11 +63,11 @@
   }
   :is(.dixy-dialog-popup, .dixy-alert-dialog-popup) {
     transition:
-      opacity var(--dixy-dialog-motion-enter),
+      opacity var(--dixy-dialog-motion-enter-effects),
       transform var(--dixy-dialog-motion-enter);
   }
   :is(.dixy-dialog-backdrop, .dixy-alert-dialog-backdrop) {
-    transition: opacity var(--dixy-dialog-motion-enter);
+    transition: opacity var(--dixy-dialog-motion-enter-effects);
   }
   :is(.dixy-dialog-popup, .dixy-alert-dialog-popup):is(
     [data-starting-style],
@@ -79,15 +79,15 @@
   }
   :is(.dixy-dialog-popup, .dixy-alert-dialog-popup)[data-ending-style] {
     transition:
-      opacity var(--dixy-dialog-motion-exit),
+      opacity var(--dixy-dialog-motion-exit-effects),
       transform var(--dixy-dialog-motion-exit);
   }
   :is(.dixy-dialog-backdrop, .dixy-alert-dialog-backdrop)[data-ending-style] {
-    transition: opacity var(--dixy-dialog-motion-exit);
+    transition: opacity var(--dixy-dialog-motion-exit-effects);
   }
   :is(.dixy-menu-popup, .dixy-context-menu-popup, .dixy-navigation-menu-popup) {
     transition:
-      opacity var(--dixy-menu-motion-enter),
+      opacity var(--dixy-menu-motion-enter-effects),
       transform var(--dixy-menu-motion-enter);
   }
   :is(
@@ -104,7 +104,7 @@
     .dixy-navigation-menu-popup
   )[data-ending-style] {
     transition:
-      opacity var(--dixy-menu-motion-exit),
+      opacity var(--dixy-menu-motion-exit-effects),
       transform var(--dixy-menu-motion-exit);
   }
   :is(
@@ -122,14 +122,14 @@
     .dixy-navigation-menu-link
   ) {
     transition:
-      background-color var(--dixy-menu-motion-feedback),
-      color var(--dixy-menu-motion-feedback);
+      background-color var(--dixy-menu-motion-feedback-effects),
+      color var(--dixy-menu-motion-feedback-effects);
   }
   .dixy-tabs-tab:not(.dixy-button) {
     transition:
-      background-color var(--dixy-tabs-motion-feedback),
-      color var(--dixy-tabs-motion-feedback),
-      border-color var(--dixy-tabs-motion-feedback);
+      background-color var(--dixy-tabs-motion-feedback-effects),
+      color var(--dixy-tabs-motion-feedback-effects),
+      border-color var(--dixy-tabs-motion-feedback-effects);
   }
   .dixy-tabs-indicator {
     transition:
@@ -147,7 +147,7 @@
       )
     );
     transition:
-      opacity var(--dixy-drawer-motion-enter),
+      opacity var(--dixy-drawer-motion-enter-effects),
       transform var(--dixy-drawer-motion-enter);
   }
   .dixy-drawer-popup:is([data-starting-style], [data-ending-style]) {
@@ -185,16 +185,23 @@
   }
   .dixy-drawer-backdrop {
     opacity: calc(1 - var(--drawer-swipe-progress, 0));
-    transition: opacity var(--dixy-drawer-motion-enter);
+    transition: opacity var(--dixy-drawer-motion-enter-effects);
   }
   .dixy-drawer-backdrop:is([data-starting-style], [data-ending-style]) {
     opacity: 0;
   }
   :is(.dixy-drawer-popup, .dixy-drawer-backdrop)[data-ending-style] {
     transition-timing-function: var(--dixy-drawer-motion-exit-easing);
-    transition-duration: calc(
-      var(--dixy-drawer-motion-exit-duration) * var(--drawer-swipe-strength, 1)
-    );
+    /* Matches the opacity, transform order above; the backdrop uses only the first. */
+    transition-duration:
+      calc(
+        var(--dixy-drawer-motion-exit-effects-duration) *
+          var(--drawer-swipe-strength, 1)
+      ),
+      calc(
+        var(--dixy-drawer-motion-exit-duration) *
+          var(--drawer-swipe-strength, 1)
+      );
   }
   /* Follow direct manipulation immediately; do not add interpolation lag. */
   :is(.dixy-drawer-popup, .dixy-drawer-backdrop)[data-swiping] {
@@ -213,12 +220,12 @@
 @layer dixy.components {
   .dixy-radio-root::before {
     transition:
-      background-color var(--dixy-radio-motion-feedback),
-      border-color var(--dixy-radio-motion-feedback);
+      background-color var(--dixy-radio-motion-feedback-effects),
+      border-color var(--dixy-radio-motion-feedback-effects);
   }
   .dixy-radio-indicator {
     transition:
-      opacity var(--dixy-radio-motion-indicator),
+      opacity var(--dixy-radio-motion-indicator-effects),
       transform var(--dixy-radio-motion-indicator);
     opacity: 1;
     transform: scale(1);
@@ -233,9 +240,9 @@
   }
   .dixy-toggle:not(.dixy-button) {
     transition:
-      background-color var(--dixy-toggle-motion-feedback),
-      color var(--dixy-toggle-motion-feedback),
-      border-color var(--dixy-toggle-motion-feedback);
+      background-color var(--dixy-toggle-motion-feedback-effects),
+      color var(--dixy-toggle-motion-feedback-effects),
+      border-color var(--dixy-toggle-motion-feedback-effects);
   }
   :is(
     .dixy-input,
@@ -246,9 +253,9 @@
     .dixy-otp-field-input
   ):not(.dixy-button) {
     transition:
-      background-color var(--dixy-field-motion-feedback),
-      border-color var(--dixy-field-motion-feedback),
-      color var(--dixy-field-motion-feedback);
+      background-color var(--dixy-field-motion-feedback-effects),
+      border-color var(--dixy-field-motion-feedback-effects),
+      color var(--dixy-field-motion-feedback-effects);
   }
   :is(
     .dixy-select-popup,
@@ -259,7 +266,7 @@
     .dixy-tooltip-popup
   ) {
     transition:
-      opacity var(--dixy-floating-motion-enter),
+      opacity var(--dixy-floating-motion-enter-effects),
       transform var(--dixy-floating-motion-enter);
   }
   :is(
@@ -282,18 +289,18 @@
     .dixy-tooltip-popup
   )[data-ending-style] {
     transition:
-      opacity var(--dixy-floating-motion-exit),
+      opacity var(--dixy-floating-motion-exit-effects),
       transform var(--dixy-floating-motion-exit);
   }
   .dixy-tooltip-popup[data-instant] {
     transition: none;
   }
   .dixy-avatar-fallback {
-    transition: opacity var(--dixy-avatar-motion-enter);
+    transition: opacity var(--dixy-avatar-motion-enter-effects);
   }
   .dixy-toast-root {
     transition:
-      opacity var(--dixy-toast-motion-enter),
+      opacity var(--dixy-toast-motion-enter-effects),
       transform var(--dixy-toast-motion-enter);
   }
   .dixy-toast-root:is([data-starting-style], [data-ending-style]) {
@@ -304,14 +311,14 @@
   }
   .dixy-toast-root[data-ending-style] {
     transition:
-      opacity var(--dixy-toast-motion-exit),
+      opacity var(--dixy-toast-motion-exit-effects),
       transform var(--dixy-toast-motion-exit);
   }
   .dixy-scroll-area-thumb {
-    transition: background-color var(--dixy-scrollArea-motion-feedback);
+    transition: background-color var(--dixy-scrollArea-motion-feedback-effects);
   }
   .dixy-slider-thumb::before {
-    transition: background-color var(--dixy-range-motion-feedback);
+    transition: background-color var(--dixy-range-motion-feedback-effects);
   }
   /* Direct slider/scroll manipulation has no interpolated positional lag. */
 }

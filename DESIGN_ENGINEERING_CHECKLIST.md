@@ -298,6 +298,7 @@ No additional component-library dependency is needed: Base UI is already install
 - [x] Codex in-app browser: normal/reduced previews, spring/effects behavior, stagger, keyboard, RTL, desktop/320/390px, light/dark and a production smoke test.
 - [ ] Actual OS reduced-motion media emulation, clipboard byte equivalence, manual screen-reader/forced-colors/zoom/touch and durable visual regression review.
 - [x] 2026-11-09: exit easing changed from ease-in to ease-out (`0.23, 1, 0.32, 1`) for all presence exits; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Close animation not reviewed visually.
+- [x] 2026-11-09: reduced motion keeps effects fades (opacity/colour, 200ms or less) through `--dixy-motion-effects-duration-*` while movement stays 0ms; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Fades not watched; OS media emulation not run.
 
 Personal motion learning remains separate:
 

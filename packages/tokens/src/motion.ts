@@ -1,4 +1,4 @@
-/** Reference timings in milliseconds. CSS resolves these to zero for reduced motion. */
+/** Reference timings in milliseconds. CSS resolves these to zero for reduced motion; see motionEffectsDuration for fades. */
 export const motionDurations = {
   instant: 0,
   fast: 120,
@@ -7,6 +7,15 @@ export const motionDurations = {
   slow: 400,
 } as const;
 export type MotionDuration = keyof typeof motionDurations;
+
+/**
+ * Reduced motion removes movement, not feedback. Effects (opacity and colour) keep a
+ * short fade, capped here, so state changes stay legible without anything travelling.
+ */
+export const reducedEffectsMaxDuration = 200;
+export function reducedEffectsDuration(token: MotionDuration) {
+  return Math.min(motionDurations[token], reducedEffectsMaxDuration);
+}
 
 /** Progress cadence is a functional loop, separate from finite UI transitions. */
 export const motionLoops = { progress: 700 } as const;
@@ -71,6 +80,13 @@ export const motionSprings = {
 >;
 export type MotionScheme = keyof typeof motionSprings;
 
+/** Tween timing an effects spring falls back to under reduced motion. */
+const effectsTiming = {
+  fast: "fast",
+  default: "normal",
+  slow: "deliberate",
+} as const satisfies Record<MotionSpeed, MotionDuration>;
+
 /** Convert damping ratio to Motion's damping coefficient: c = 2ζ√(km). */
 export function springTransition(
   scheme: MotionScheme = "standard",
@@ -78,7 +94,14 @@ export function springTransition(
   speed: MotionSpeed = "default",
   reducedMotion = false,
 ) {
-  if (reducedMotion) return { type: "tween" as const, duration: 0 };
+  if (reducedMotion)
+    return {
+      type: "tween" as const,
+      duration:
+        kind === "effects"
+          ? reducedEffectsDuration(effectsTiming[speed]) / 1000
+          : 0,
+    };
   const { stiffness, dampingRatio, mass } = motionSprings[scheme][kind][speed];
   return {
     type: "spring" as const,
@@ -90,12 +113,24 @@ export function springTransition(
   };
 }
 
-/** Motion consumes seconds and mutable tuples; definitions stay framework independent. */
-export function tweenTransition(role: MotionTransition, reducedMotion = false) {
+/**
+ * Motion consumes seconds and mutable tuples; definitions stay framework independent.
+ * Pass kind "effects" for opacity/colour so reduction keeps a short fade.
+ */
+export function tweenTransition(
+  role: MotionTransition,
+  reducedMotion = false,
+  kind: MotionKind = "spatial",
+) {
   const recipe = motionTransitions[role];
+  const ms = !reducedMotion
+    ? motionDurations[recipe.duration]
+    : kind === "effects"
+      ? reducedEffectsDuration(recipe.duration)
+      : 0;
   return {
     type: "tween" as const,
-    duration: reducedMotion ? 0 : motionDurations[recipe.duration] / 1000,
+    duration: ms / 1000,
     ease: [...motionEasings[recipe.easing]] as [number, number, number, number],
   };
 }
@@ -104,6 +139,12 @@ export function motionDuration<T extends MotionDuration>(
   token: T,
 ): `var(--dixy-motion-duration-${T})` {
   return `var(--dixy-motion-duration-${token})`;
+}
+/** Opacity/colour timing: equals the duration, but keeps a short fade under reduction. */
+export function motionEffectsDuration<T extends MotionDuration>(
+  token: T,
+): `var(--dixy-motion-effects-duration-${T})` {
+  return `var(--dixy-motion-effects-duration-${token})`;
 }
 export function motionEasing<T extends MotionEasing>(
   token: T,
