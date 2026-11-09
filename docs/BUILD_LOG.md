@@ -1514,3 +1514,21 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Reduced motion: the runtime already draws a still frame; the fade-in animation is now off too.
 - Verified in a hidden frame: Ocean Depths runs caustics and Solar Sail runs aurora, both "Running". Living Forest shows a disabled switch and six suggestions with no canvas. `pnpm check` passes.
 - Not tested: visual tuning of each shader behind the app chrome (the user was driving the pane); real 120 Hz; Safari/Firefox.
+
+### 2026-11-09 — Homepage hero: split layout, no browser frame
+
+- Request: drop the browser-window frame around the homepage demo. Two hero versions were mocked in `mockups/hero-versions.html`; the user chose **A · Split**. **B · Stage** stays in that file as an alternative: centred copy, a dock across the app's top edge, and an app that fades into the page.
+- `LandingWindow` is now a frameless stage. The traffic lights, window bar and border are gone; the scene switch is a segmented `Tabs` above the app; a caption sits below.
+  - On wide screens the stage is the hero's right column. It runs past the viewport by 64px, so the app reads as cropped rather than framed. `.landing` already clips horizontal overflow.
+- The floating `ThemeDock` became `StarterPicker`, in the hero's copy column under the install command:
+  - Five quick swatch toggles (Original, Studio Hardware, Ocean Depths, Retro OS, Candy Clay) and a select with all 32 starters.
+  - A light/dark segmented control, shuffle, and a Customise link to the playground.
+  - Picking a starter still updates `?starter=` and, since the docs-theme change, the docs theme.
+- Below 960px the hero stacks: copy, then the stage. Below 640px the stage stops running past the edge, and the picker's second row tightens so Customise stays on the same line.
+- Verified in the in-app browser (own dev server, :3002):
+  - 1440px: copy on the left; the mail scene starts at 616px and runs past the right edge.
+  - Studio Hardware via its swatch restyles the whole hero.
+  - 850px stacks with no horizontal scroll.
+  - 375px in dark: picker rows fit (Customise on the same line), no horizontal scroll.
+  - No console errors after a fresh load.
+- Not tested: keyboard order through the picker and tabs, reduced motion, Dashboard/Music/Blocks scenes inside the bled stage, every starter, Safari/Firefox.

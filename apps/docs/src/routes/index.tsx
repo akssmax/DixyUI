@@ -258,8 +258,20 @@ interface StudioProps {
   onAppearance: (appearance: Appearance) => void;
 }
 
-/** Floating toolbar over the app window: the quickest way to restyle the page. */
-function ThemeDock({
+/** A few one-click starters; the full list sits behind the select beside them. */
+const quickStarterIds = [
+  "none",
+  "dixy/studio-hardware",
+  "dixy/ocean-depths",
+  "dixy/retro-os",
+  "dixy/candy-clay",
+];
+const quickStarters = quickStarterIds
+  .map((id) => starters.find((s) => s.id === id))
+  .filter((s) => s !== undefined);
+
+/** Lives in the hero's copy column: the quickest way to restyle the page. */
+function StarterPicker({
   preset,
   pending,
   error,
@@ -274,78 +286,118 @@ function ThemeDock({
     onSelect(others[Math.floor(Math.random() * others.length)]!.id);
   }
   return (
-    <div className="landing-dock" role="toolbar" aria-label="Theme">
-      <span
-        className="landing-dock-swatch"
-        style={swatchStyle(active.swatches)}
-        aria-hidden="true"
-      />
-      <Select.Root
-        value={current}
-        items={starterItems}
-        onValueChange={(value) => value && onSelect(String(value))}
-      >
-        <Select.Trigger size="sm" aria-label="Starter theme">
-          <Select.Value />
-          <Select.Icon />
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Positioner sideOffset={8}>
-            <Select.Popup size="sm">
-              <Select.List>
-                {starters.map((s) => (
-                  <Select.Item key={s.id} value={s.id}>
-                    <span
-                      className="landing-dock-swatch is-small"
-                      style={swatchStyle(s.swatches)}
-                      aria-hidden="true"
-                    />
-                    <Select.ItemText>{s.name}</Select.ItemText>
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                ))}
-              </Select.List>
-            </Select.Popup>
-          </Select.Positioner>
-        </Select.Portal>
-      </Select.Root>
-      <IconButton
-        size="sm"
-        variant="ghost"
-        color="neutral"
-        aria-label="Shuffle starter theme"
-        onClick={shuffle}
-      >
-        <Shuffle size={15} />
-      </IconButton>
-      <Separator orientation="vertical" className="landing-dock-rule" />
-      <ToggleGroup
-        aria-label="Appearance"
-        attached
-        value={[appearance]}
-        onValueChange={(value) =>
-          value[0] && onAppearance(value[0] as Appearance)
-        }
-      >
-        <Toggle value="light" size="sm" variant="soft" color="neutral">
-          <Sun size={14} aria-hidden="true" />
-          <span className="landing-dock-label">Light</span>
-        </Toggle>
-        <Toggle value="dark" size="sm" variant="soft" color="neutral">
-          <Moon size={14} aria-hidden="true" />
-          <span className="landing-dock-label">Dark</span>
-        </Toggle>
-      </ToggleGroup>
-      <ButtonLink
-        to="/playground"
-        search={{ theme: serializeThemePreset({ ...preset, appearance }) }}
-        size="sm"
-        className="landing-dock-cta"
-      >
-        Customise <ArrowUpRight size={14} />
-      </ButtonLink>
+    <div className="landing-picker" role="group" aria-labelledby="picker-heading">
+      <div className="landing-picker-head">
+        <Text as="span" id="picker-heading" className="landing-picker-title">
+          Try a starter
+        </Text>
+        <Text as="span" size="sm" tone="muted">
+          {active.name}
+        </Text>
+      </div>
+      <div className="landing-picker-row">
+        <ToggleGroup
+          aria-label="Quick starters"
+          className="landing-picker-swatches"
+          value={quickStarterIds.includes(current) ? [current] : []}
+          onValueChange={(value) => value[0] && onSelect(value[0])}
+        >
+          {quickStarters.map((s) => (
+            <Toggle
+              key={s.id}
+              value={s.id}
+              aria-label={s.name}
+              title={s.name}
+              variant="ghost"
+              color="neutral"
+              className="landing-picker-swatch"
+            >
+              <span
+                className="landing-dock-swatch"
+                style={swatchStyle(s.swatches)}
+                aria-hidden="true"
+              />
+            </Toggle>
+          ))}
+        </ToggleGroup>
+        <Select.Root
+          value={current}
+          items={starterItems}
+          onValueChange={(value) => value && onSelect(String(value))}
+        >
+          <Select.Trigger
+            size="sm"
+            aria-label="All starter themes"
+            className="landing-picker-select"
+          >
+            <Select.Value />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner sideOffset={8}>
+              <Select.Popup size="sm">
+                <Select.List>
+                  {starters.map((s) => (
+                    <Select.Item key={s.id} value={s.id}>
+                      <span
+                        className="landing-dock-swatch is-small"
+                        style={swatchStyle(s.swatches)}
+                        aria-hidden="true"
+                      />
+                      <Select.ItemText>{s.name}</Select.ItemText>
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </div>
+      <div className="landing-picker-row">
+        <ToggleGroup
+          aria-label="Appearance"
+          segmented
+          value={[appearance]}
+          onValueChange={(value) =>
+            value[0] && onAppearance(value[0] as Appearance)
+          }
+        >
+          <Toggle value="light" size="sm">
+            <Sun size={14} aria-hidden="true" />
+            Light
+          </Toggle>
+          <Toggle value="dark" size="sm">
+            <Moon size={14} aria-hidden="true" />
+            Dark
+          </Toggle>
+        </ToggleGroup>
+        <IconButton
+          size="sm"
+          variant="ghost"
+          color="neutral"
+          aria-label="Shuffle starter theme"
+          onClick={shuffle}
+        >
+          <Shuffle size={15} />
+        </IconButton>
+        <ButtonLink
+          to="/playground"
+          search={{ theme: serializeThemePreset({ ...preset, appearance }) }}
+          size="sm"
+          variant="ghost"
+          className="landing-picker-cta"
+        >
+          Customise <ArrowUpRight size={14} />
+        </ButtonLink>
+      </div>
+      {error && (
+        <Text size="sm" className="landing-picker-error" role="alert">
+          {error}
+        </Text>
+      )}
       <span className="sr-only" role="status">
-        {pending ? "Loading theme…" : error || `${active.name} applied.`}
+        {pending ? "Loading theme…" : `${active.name} applied.`}
       </span>
     </div>
   );
@@ -634,6 +686,7 @@ function Landing() {
 
         <main id="landing-main" tabIndex={-1}>
           <section className="landing-hero" aria-labelledby="hero-heading">
+            <div className="landing-hero-copy">
             <Badge variant="soft" className="landing-pill">
               0.1 alpha · Built on Base UI
             </Badge>
@@ -662,9 +715,11 @@ function Landing() {
             <Text size="sm" tone="muted">
               Provisional package names. Not yet published to npm.
             </Text>
+            <StarterPicker {...studio} />
+            </div>
+            <LandingWindow />
           </section>
 
-          <LandingWindow dock={<ThemeDock {...studio} />} />
 
           <StarterGallery {...studio} />
 
