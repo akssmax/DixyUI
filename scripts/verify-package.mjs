@@ -64,6 +64,10 @@ try {
     !css.includes("dixy-backdrop-pilot"),
     "Core CSS must not load the backdrop pilot",
   );
+  assert.ok(
+    !css.includes("dixy-prompt-input"),
+    "Core CSS must not load the optional AI styles",
+  );
   assert.match(css, /--dixy-size-icon-2xl/);
   for (const selector of [
     "dixy-checkbox-root",

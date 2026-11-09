@@ -13,6 +13,11 @@ const sources = [
     .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
     .map((name) => `components/${name}`),
   "feedback.tsx",
+  // The optional @dixy-ui/react/ai entry.
+  ...fs
+    .readdirSync(path.join(root, "packages/react/src/ai"))
+    .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
+    .map((name) => `ai/${name}`),
 ];
 const configPath = path.join(root, "packages/react/tsconfig.json");
 function generate() {

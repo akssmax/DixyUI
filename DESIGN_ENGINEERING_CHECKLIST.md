@@ -847,3 +847,24 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Beta accessibility bar: contrast script, keyboard, forced colours and zoom passes, Known issues page.
 - [x] Remove `private` from the three packages and add `publishConfig` (public, provenance).
 - [ ] Publish `0.1.0-beta.0`, smoke-test from npm, then switch to trusted publishing and delete the token.
+
+## AI parts and Wren example — 2026-11-09
+
+The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base UI + tokens). Evidence: docs/BUILD_LOG.md, 2026-11-09.
+
+- [x] Optional `@dixy-ui/react/ai` entry and `ai.css`; core JS and CSS unchanged, guarded by the tree-shaking and package checks.
+- [x] Conversation: stick-to-bottom that yields to the reader, a keyboard-scrollable log, status announced once per change.
+- [x] Response: GFM markdown through Dixy parts, streaming repair of partial markdown, memoized finished blocks.
+- [x] PromptInput: Enter/Shift+Enter/IME rules, autosize, one Send↔Stop button that keeps focus.
+- [x] Message, Reasoning, Tool, Sources, Suggestions, CodeBlock, Shimmer, Loader; reduced-motion handling.
+- [x] Wren example (`/ai-example`) on a scripted, AI SDK-shaped mock stream; landing showcase card.
+- [x] Docs component pages, playgrounds and generated API for the AI parts (AI category, 10 pages, gallery coverage test).
+- [x] Wren: starter-skin picker, collapsible icon-rail sidebar with chat search, centred empty state.
+- [ ] Shared `Sidebar` rail mode in the library (Fernpay and Wren each hand-build one).
+- [ ] Screen reader pass (VoiceOver/NVDA) on streaming announcements; OS reduced motion; touch scrolling; forced colours; zoom; RTL.
+- [ ] Packed consumer test importing `@dixy-ui/react/ai` with its markdown peers.
+- [ ] Learning: explain why the log is not a live region and what Root announces instead.
+- [ ] Learning: explain why streaming pins with an instant scroll, and why wheel/touch/key intent releases the pin before scroll events do.
+- [ ] Learning: explain why Send/Stop is one button and why empty input uses `focusableWhenDisabled`.
+- [ ] Learning: explain what `completeMarkdown` repairs and why only the last block is re-parsed.
+- [ ] Learning: explain why the sidebar toggle and composer must stay the same DOM element across layout changes.

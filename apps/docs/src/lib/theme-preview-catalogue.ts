@@ -18,7 +18,9 @@ export const themePreviewEntries: readonly ThemePreviewEntry[] = [
     category: entry.category,
     description: entry.description,
     coveredExports:
-      "exportName" in entry
+      "exportNames" in entry
+        ? entry.exportNames
+        : "exportName" in entry
         ? [entry.exportName]
         : slug === "typography"
           ? ["Heading", "Text"]

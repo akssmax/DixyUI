@@ -1,5 +1,6 @@
 import { additionComponentRegistry } from "./addition-components.ts";
 import { baseComponentRegistry } from "./base-components.ts";
+import { aiComponentRegistry } from "./ai-components.ts";
 export type Control = {
   name: string;
   label: string;
@@ -11,6 +12,7 @@ export type DemoState = Record<string, string | boolean>;
 export const componentRegistry = {
   ...baseComponentRegistry,
   ...additionComponentRegistry,
+  ...aiComponentRegistry,
   button: {
     title: "Button",
     category: "Actions",

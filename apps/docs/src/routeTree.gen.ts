@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AiExampleRouteImport } from './routes/ai-example'
 import { Route as DixyExampleRouteImport } from './routes/dixy-example'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibility'
@@ -23,6 +24,11 @@ import { Route as DocsFoundationsFoundationRouteImport } from './routes/docs.fou
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AiExampleRoute = AiExampleRouteImport.update({
+  id: '/ai-example',
+  path: '/ai-example',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DixyExampleRoute = DixyExampleRouteImport.update({
@@ -74,6 +80,7 @@ const DocsFoundationsFoundationRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ai-example': typeof AiExampleRoute
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ai-example': typeof AiExampleRoute
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
@@ -99,6 +107,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ai-example': typeof AiExampleRoute
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/ai-example'
     | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/ai-example'
     | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/ai-example'
     | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AiExampleRoute: typeof AiExampleRoute
   DixyExampleRoute: typeof DixyExampleRoute
   PlaygroundRoute: typeof PlaygroundRoute
   DocsAccessibilityRoute: typeof DocsAccessibilityRoute
@@ -168,6 +181,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-example': {
+      id: '/ai-example'
+      path: '/ai-example'
+      fullPath: '/ai-example'
+      preLoaderRoute: typeof AiExampleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dixy-example': {
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AiExampleRoute: AiExampleRoute,
   DixyExampleRoute: DixyExampleRoute,
   PlaygroundRoute: PlaygroundRoute,
   DocsAccessibilityRoute: DocsAccessibilityRoute,

@@ -747,6 +747,20 @@
 .landing-show-tall {
   min-block-size: 420px;
 }
+/* A full row: chat art on the left, details on the right. */
+.landing-show-wide {
+  grid-column: span 6;
+  grid-template-rows: none;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  min-block-size: 320px;
+}
+.landing-show-wide > .landing-show-art {
+  border-block-end: 0;
+  border-inline-end: 1px solid var(--dixy-color-border-subtle);
+}
+.landing-show-wide > .landing-show-foot {
+  align-items: end;
+}
 .landing-show-art {
   position: relative;
   overflow: clip;
@@ -943,6 +957,97 @@
   display: block;
   color: var(--dixy-color-text-primary);
   font-size: 12.5px;
+}
+.landing-wren {
+  position: absolute;
+  inset: 20px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 18px 0;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-block-end: 0;
+  border-radius: var(--dixy-radius-lg, 14px) var(--dixy-radius-lg, 14px) 0 0;
+  background: var(--dixy-color-background-surface);
+  font-size: 12px;
+  color: var(--dixy-color-text-secondary);
+}
+.landing-wren-user {
+  align-self: flex-end;
+  padding: 6px 10px;
+  border-radius: 12px 12px 4px 12px;
+  background: var(--dixy-color-background-action-primary-subtle);
+  color: var(--dixy-color-text-primary);
+}
+.landing-wren-reply {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding-inline-start: 26px;
+}
+/* Wren's mark, as drawn in the app. */
+.landing-wren-reply::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+  background: linear-gradient(
+    135deg,
+    var(--dixy-color-background-action-primary) 0 55%,
+    var(--dixy-color-background-action-primary-subtle) 55% 100%
+  );
+}
+.landing-wren-chip {
+  font-weight: 500;
+}
+.landing-wren-tool {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-inline-size: 280px;
+  padding: 6px 10px;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: 8px;
+  color: var(--dixy-color-text-primary);
+}
+.landing-wren-tool b {
+  font-family: var(--dixy-font-mono);
+  font-weight: 500;
+}
+.landing-wren-tool i {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--dixy-color-background-action-success-subtle);
+  color: var(--dixy-color-text-action-success);
+  font-style: normal;
+  font-size: 10.5px;
+}
+.landing-wren-line {
+  block-size: 7px;
+  border-radius: 4px;
+  background: var(--dixy-color-background-subtle);
+}
+.landing-wren-line-short {
+  inline-size: 60%;
+}
+.landing-wren-composer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-start: auto;
+  margin-block-end: 16px;
+  padding: 8px 8px 8px 12px;
+  border: 1px solid var(--dixy-color-border-default);
+  border-radius: 14px;
+}
+.landing-wren-composer i {
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: 50%;
+  background: var(--dixy-color-background-action-primary);
 }
 .landing-sink {
   position: absolute;
@@ -1297,12 +1402,22 @@
   }
   .landing-show,
   .landing-show-big,
-  .landing-show-tall {
+  .landing-show-tall,
+  .landing-show-wide {
     grid-column: span 2;
     min-block-size: 320px;
   }
   .landing-show-big {
     min-block-size: 380px;
+  }
+  .landing-show-wide {
+    grid-template-columns: none;
+    grid-template-rows: minmax(250px, 1fr) auto;
+    min-block-size: 0;
+  }
+  .landing-show-wide > .landing-show-art {
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--dixy-color-border-subtle);
   }
   .landing-footer-top {
     grid-template-columns: repeat(2, minmax(0, 1fr));
