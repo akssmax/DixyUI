@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Landing Sections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<style>
+/* MOCK ONLY. Tokens mirror Original Dixy; switch light/dark with the pill. */
+:root {
+  --font: "Inter", system-ui, sans-serif;
+  --display: "Space Grotesk", "Inter", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --canvas: #fcfaf7; --surface: #ffffff; --sunken: #f4f1ed; --muted: #efebe6;
+  --text: #1c1b1a; --text-2: #5f5b57; --text-3: #8f8a85;
+  --line: #ebe6e0; --line-strong: #d8d1c9;
+  --accent: #7043ce; --accent-2: #9b74ec; --accent-soft: #efe8fb; --on-accent: #fff;
+  --success: #1f8a5b; --success-soft: #e3f4ec;
+  --r: 18px; --r-sm: 10px;
+  --shadow: 0 1px 2px rgb(0 0 0 / .04), 0 20px 50px -24px rgb(50 30 90 / .22);
+  --gutter: clamp(16px, 4vw, 48px); --max: 1200px;
+  color-scheme: light;
+}
+[data-appearance="dark"] {
+  color-scheme: dark;
+  --canvas: #111014; --surface: #18171c; --sunken: #141317; --muted: #232129;
+  --text: #f2f0f5; --text-2: #aaa6b2; --text-3: #77737e;
+  --line: #2a2930; --line-strong: #3b3942;
+  --accent: #a98bf2; --accent-2: #7d5bd6; --accent-soft: #2a2140; --on-accent: #160d2b;
+  --success: #5fd39f; --success-soft: #11291f;
+  --shadow: 0 20px 50px -24px rgb(0 0 0 / .7);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font: 15px/1.6 var(--font); color: var(--text); background: var(--canvas); -webkit-font-smoothing: antialiased; overflow-x: clip; transition: background-color .3s, color .3s; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+.mock-bar { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; gap: 4px; padding: 4px; border-radius: 999px; background: #111; box-shadow: 0 10px 30px rgb(0 0 0 / .3); }
+.mock-bar button { border: 0; background: transparent; color: #aaa; padding: 8px 14px; border-radius: 999px; font: 500 13px Inter, sans-serif; }
+.mock-bar button[aria-pressed="true"] { background: #fff; color: #111; }
+
+.section { max-width: var(--max); margin: 0 auto; padding: clamp(64px, 9vw, 120px) var(--gutter) 0; }
+.kicker { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
+.title { margin: 12px 0 0; font: 650 clamp(34px, 4.6vw, 56px)/1.02 var(--display); letter-spacing: -.04em; text-wrap: balance; }
+.title em { font-style: italic; color: var(--accent); }
+.sub { margin: 16px 0 0; max-width: 34rem; color: var(--text-2); font-size: 17px; text-wrap: pretty; }
+.head-row { display: flex; align-items: end; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); font-weight: 600; font-size: 14.5px; white-space: nowrap; }
+.btn.primary { background: var(--accent); border-color: transparent; color: var(--on-accent); }
+.btn.sm { height: 34px; padding: 0 12px; font-size: 13px; border-radius: 9px; }
+.link { font-weight: 600; font-size: 14px; color: var(--accent); display: inline-flex; gap: 6px; align-items: center; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); }
+
+/* ======================= 1. ACCESSIBILITY ======================= */
+.a11y { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: clamp(32px, 5vw, 72px); align-items: center; margin-top: 48px; }
+.pillars { display: grid; gap: 4px; }
+.pillar { display: grid; grid-template-columns: 40px 1fr; gap: 14px; padding: 16px 0; border-top: 1px solid var(--line); }
+.pillar:first-child { border-top: 0; }
+.pillar i { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-style: normal; font-weight: 700; font-size: 15px; }
+.pillar strong { display: block; font-size: 15.5px; }
+.pillar span { color: var(--text-2); font-size: 14px; }
+.honest { margin-top: 16px; font-size: 13px; color: var(--text-3); }
+
+.lab { padding: 0; overflow: hidden; }
+.lab-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--sunken); flex-wrap: wrap; }
+.lab-bar strong { font-size: 13.5px; }
+.prefs { display: flex; gap: 6px; flex-wrap: wrap; }
+.pref { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); font-size: 12.5px; }
+.pref[aria-pressed="true"] { background: var(--text); color: var(--canvas); border-color: var(--text); }
+.lab-body { display: grid; grid-template-columns: 1fr 200px; }
+.form { padding: 24px; display: grid; gap: 14px; transition: font-size .2s; }
+.lab[data-large] .form { font-size: 17px; }
+.form label { display: grid; gap: 6px; font-size: .9em; font-weight: 600; }
+.form input[type="email"] { height: 42px; border: 1px solid var(--line-strong); border-radius: var(--r-sm); background: var(--surface); padding: 0 12px; font: inherit; font-weight: 400; color: var(--text); }
+.lab[data-contrast] .form input[type="email"], .lab[data-contrast] .check .box { border-width: 2px; border-color: var(--text); }
+.form .check { display: flex; position: relative; align-items: center; gap: 10px; font-size: .9em; }
+.check input { position: absolute; opacity: 0; }
+.check .box { width: 20px; height: 20px; border: 1.5px solid var(--line-strong); border-radius: 6px; display: grid; place-items: center; background: var(--surface); }
+.check input:checked + .box { background: var(--accent); border-color: var(--accent); }
+.check input:checked + .box::after { content: "✓"; color: var(--on-accent); font-size: 13px; font-weight: 700; }
+.check input:focus-visible + .box { outline: 2px solid var(--accent); outline-offset: 3px; }
+.form .btn { justify-self: start; }
+.form .btn:active { transform: scale(.97); transition: transform .1s; }
+.lab[data-reduced] .form .btn:active { transform: none; }
+.announce { font-size: 12.5px; color: var(--success); min-height: 1.4em; }
+.inspector { border-left: 1px solid var(--line); background: var(--sunken); padding: 16px; display: grid; align-content: start; gap: 12px; font-size: 12.5px; }
+.inspector h4 { margin: 0; font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.keys { display: flex; flex-wrap: wrap; gap: 4px; min-height: 28px; }
+.keys kbd { font: 500 11.5px var(--mono); padding: 3px 7px; border: 1px solid var(--line-strong); border-bottom-width: 2px; border-radius: 6px; background: var(--surface); animation: pop .2s ease-out; }
+@keyframes pop { from { transform: translateY(4px); opacity: 0; } }
+.focus-name { font: 500 12px var(--mono); padding: 8px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); word-break: break-word; }
+.ratio { display: flex; align-items: center; justify-content: space-between; }
+.ratio b { font: 600 13px var(--mono); }
+.ok { display: inline-flex; padding: 2px 8px; border-radius: 999px; background: var(--success-soft); color: var(--success); font-weight: 600; font-size: 11.5px; }
+
+/* ======================= 2. BUILT WITH DIXY ======================= */
+.showcase { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 40px; }
+.show { position: relative; overflow: hidden; display: grid; grid-template-rows: 1fr auto; min-height: 340px; transition: transform .2s, box-shadow .2s; }
+.show:hover { transform: translateY(-3px); }
+.show.big { grid-column: span 4; min-height: 420px; }
+.show.tall { grid-column: span 2; }
+.show.third { grid-column: span 2; min-height: 300px; }
+.show .art { position: relative; overflow: hidden; background: var(--sunken); border-bottom: 1px solid var(--line); }
+.show footer { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 18px 20px; }
+.show footer strong { display: block; font-size: 17px; font-family: var(--display); letter-spacing: -.02em; }
+.show footer span { color: var(--text-2); font-size: 13.5px; }
+.tagrow { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.tag { font: 500 11px var(--mono); padding: 2px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); }
+.arrow { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line-strong); transition: background .2s, color .2s; }
+.show:hover .arrow { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+
+/* Fernpay mini UI */
+.fp { position: absolute; inset: 22px -40px -40px 22px; display: grid; grid-template-columns: 150px 1fr; border-radius: 14px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+.fp nav { background: var(--muted); padding: 14px 10px; display: grid; align-content: start; gap: 4px; font-size: 12px; }
+.fp nav b { font-family: var(--display); font-size: 15px; margin: 0 0 10px 6px; }
+.fp nav span { padding: 6px 8px; border-radius: 7px; color: var(--text-2); }
+.fp nav span.on { background: var(--surface); color: var(--text); font-weight: 600; }
+.fp main { padding: 18px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 12px; align-content: start; }
+.fp .tile { border: 1px solid var(--line); border-radius: 12px; padding: 12px; font-size: 11.5px; color: var(--text-2); }
+.fp .tile strong { display: block; font: 600 22px var(--display); color: var(--text); letter-spacing: -.02em; }
+.fp .chart { grid-column: span 2; height: 110px; display: flex; align-items: end; gap: 6px; padding: 12px; }
+.fp .chart i { flex: 1; border-radius: 4px 4px 0 0; background: var(--accent-soft); }
+.fp .chart i:nth-child(3n) { background: var(--accent); }
+.fp .bar { height: 6px; border-radius: 6px; background: var(--muted); margin-top: 8px; overflow: hidden; }
+.fp .bar::before { content: ""; display: block; height: 100%; width: 64%; background: var(--accent); }
+/* Shader */
+.shader { position: absolute; inset: 0; background: radial-gradient(60% 80% at 20% 30%, #ff7ab6 0, transparent 60%), radial-gradient(50% 70% at 80% 20%, #6c7bff 0, transparent 60%), radial-gradient(60% 70% at 60% 90%, #34d1bf 0, transparent 60%), #1b1430; filter: saturate(1.2); animation: drift 12s ease-in-out infinite alternate; background-size: 140% 140%; }
+@keyframes drift { to { background-position: 100% 60%; } }
+.shader-chip { position: absolute; left: 16px; bottom: 16px; padding: 8px 12px; border-radius: 12px; background: rgb(255 255 255 / .14); backdrop-filter: blur(10px); color: #fff; font: 500 12px var(--mono); border: 1px solid rgb(255 255 255 / .2); }
+/* Postbox */
+.mailmini { position: absolute; inset: 20px -20px -20px 20px; display: grid; gap: 8px; align-content: start; padding: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.mailmini div { border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; font-size: 11.5px; color: var(--text-2); }
+.mailmini div b { display: block; color: var(--text); font-size: 12.5px; }
+.mailmini div:first-child { background: var(--muted); }
+/* Kitchen sink */
+.sink { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 16px; align-content: center; }
+.sink span { height: 42px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; font: 500 10.5px var(--mono); color: var(--text-3); }
+.sink span:nth-child(5n+2) { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+.sink span:nth-child(7n+4) { background: var(--accent-soft); color: var(--accent); }
+/* Playground */
+.swirl { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 22px; align-content: center; }
+.swirl i { aspect-ratio: 1; border-radius: 50%; background: conic-gradient(var(--a) 0 50%, var(--b) 0 75%, var(--c) 0); box-shadow: inset 0 0 0 1px rgb(0 0 0 / .08); transition: transform .3s; }
+.show:hover .swirl i:nth-child(odd) { transform: rotate(90deg) scale(1.05); }
+
+/* ======================= 3. CTA ======================= */
+.cta { position: relative; overflow: hidden; isolation: isolate; margin-top: 0; border-radius: 28px; padding: clamp(40px, 7vw, 88px) clamp(24px, 6vw, 80px); background: #150f24; color: #f5f1ff; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.cta::before { content: ""; position: absolute; inset: -30%; z-index: -1; background: radial-gradient(35% 45% at 25% 30%, color-mix(in srgb, var(--accent) 80%, transparent), transparent 70%), radial-gradient(30% 40% at 85% 70%, #ff8a5c99, transparent 70%), radial-gradient(30% 40% at 60% 0%, #34d1bf66, transparent 70%); filter: blur(30px); }
+.cta::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(rgb(255 255 255 / .05) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / .05) 1px, transparent 1px); background-size: 40px 40px; mask-image: radial-gradient(70% 80% at 30% 40%, #000, transparent); }
+.cta .kicker { color: rgb(255 255 255 / .6); }
+.cta .title { color: #fff; font-size: clamp(38px, 5.4vw, 68px); }
+.cta .title em { color: #cbb6ff; }
+.cta p { color: rgb(255 255 255 / .72); font-size: 17px; margin: 16px 0 28px; max-width: 32rem; }
+.cta .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.cta .btn.primary { background: #fff; color: #150f24; }
+.cta .btn.ghost { background: rgb(255 255 255 / .08); border-color: rgb(255 255 255 / .2); color: #fff; }
+.cta-term { font: 13px/1.8 var(--mono); padding: 18px 20px; border-radius: 16px; background: rgb(0 0 0 / .35); border: 1px solid rgb(255 255 255 / .12); backdrop-filter: blur(10px); color: rgb(255 255 255 / .85); box-shadow: 0 30px 60px -20px rgb(0 0 0 / .6); }
+.cta-term .dim { color: rgb(255 255 255 / .45); }
+.cta-term .ok2 { color: #6ee7b7; }
+.cta-term .acc { color: #cbb6ff; }
+.cta-stack { display: grid; gap: 12px; }
+.cta-swatches { display: flex; gap: 8px; align-items: center; color: rgb(255 255 255 / .6); font-size: 12.5px; }
+.cta-swatches i { width: 22px; height: 22px; border-radius: 50%; background: conic-gradient(var(--a) 0 50%, var(--b) 0 75%, var(--c) 0); box-shadow: 0 0 0 2px #150f24, 0 0 0 3px rgb(255 255 255 / .2); margin-left: -6px; }
+.cta-swatches i:first-child { margin-left: 0; }
+
+/* ======================= 4. FOOTER ======================= */
+.footer { margin-top: clamp(64px, 9vw, 120px); border-top: 1px solid var(--line); background: var(--sunken); overflow: hidden; }
+.footer-inner { max-width: var(--max); margin: 0 auto; padding: 56px var(--gutter) 0; }
+.f-top { display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(4, minmax(0, 1fr)); gap: 32px; }
+.brand { display: flex; align-items: center; gap: 8px; font: 700 22px/1 var(--display); letter-spacing: -.04em; }
+.brand i { width: 26px; height: 26px; border-radius: 8px; background: var(--text); display: grid; place-items: center; }
+.brand i::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--canvas); }
+.f-about p { margin: 14px 0 18px; color: var(--text-2); font-size: 14px; max-width: 18rem; }
+.news { display: flex; gap: 6px; max-width: 20rem; }
+.news input { flex: 1; min-width: 0; height: 38px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface); padding: 0 12px; font: inherit; font-size: 13.5px; color: var(--text); }
+.f-col h4 { margin: 0 0 14px; font: 500 11.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-3); }
+.f-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 14px; }
+.f-col a { color: var(--text-2); display: inline-flex; gap: 6px; align-items: center; }
+.f-col a:hover { color: var(--text); }
+.f-col .new { font: 500 10px var(--mono); padding: 1px 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.f-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-top: 48px; padding: 18px 0; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-3); }
+.f-bottom .status { display: inline-flex; align-items: center; gap: 8px; }
+.f-bottom .status b { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px var(--success-soft); }
+.f-mode { display: inline-flex; padding: 3px; gap: 2px; border-radius: 999px; background: var(--muted); }
+.f-mode button { border: 0; background: transparent; height: 28px; padding: 0 12px; border-radius: 999px; font-size: 12.5px; color: var(--text-2); }
+.f-mode button[aria-pressed="true"] { background: var(--surface); color: var(--text); box-shadow: 0 1px 2px rgb(0 0 0 / .1); }
+.wordmark { font: 700 clamp(120px, 26vw, 360px)/.75 var(--display); letter-spacing: -.07em; text-align: center; margin: 12px 0 -0.08em; background: linear-gradient(180deg, var(--line-strong), transparent 85%); -webkit-background-clip: text; background-clip: text; color: transparent; user-select: none; }
+
+/* Responsive */
+@media (max-width: 960px) {
+  .a11y, .cta { grid-template-columns: 1fr; }
+  .showcase { grid-template-columns: repeat(2, 1fr); }
+  .show.big, .show.tall, .show.third { grid-column: span 2; }
+  .f-top { grid-template-columns: repeat(2, 1fr); }
+  .f-about { grid-column: span 2; }
+}
+@media (max-width: 640px) {
+  .lab-body { grid-template-columns: 1fr; }
+  .inspector { border-left: 0; border-top: 1px solid var(--line); }
+  .show { min-height: 300px; }
+  .show.big { min-height: 360px; }
+  .fp { grid-template-columns: 1fr; inset: 16px -60px -40px 16px; }
+  .fp nav { display: none; }
+  .cta { border-radius: 20px; }
+}
+</style>
+</head>
+<body data-appearance="light">
+<div class="mock-bar" role="group" aria-label="Mock appearance">
+  <button aria-pressed="true" data-mode="light">Light</button>
+  <button aria-pressed="false" data-mode="dark">Dark</button>
+</div>
+
+<!-- ======================= 1. ACCESSIBILITY ======================= -->
+<section class="section" aria-labelledby="a11y-h">
+  <div class="head-row">
+    <div>
+      <span class="kicker">Accessibility</span>
+      <h2 class="title" id="a11y-h">Character on the surface.<br /><em>Access underneath.</em></h2>
+    </div>
+    <a class="link" href="#">Read the accessibility notes →</a>
+  </div>
+  <div class="a11y">
+    <div>
+      <div class="pillars">
+        <div class="pillar"><i>⇥</i><div><strong>Keyboard on every component</strong><span>Focus order, arrow keys, Escape and typeahead come from Base UI. Themes only change paint.</span></div></div>
+        <div class="pillar"><i>◎</i><div><strong>Focus you can always see</strong><span>A focus ring that never relies on shadow alone, in all 32 starters.</span></div></div>
+        <div class="pillar"><i>Aa</i><div><strong>Contrast checked per theme</strong><span>Text and controls are tested against their real surfaces, in light and dark.</span></div></div>
+        <div class="pillar"><i>≈</i><div><strong>Respects your settings</strong><span>Reduced motion, larger text, right-to-left and forced colours.</span></div></div>
+      </div>
+      <p class="honest">Target: WCAG 2.2 AA. Automated checks cover selected behaviour; manual screen-reader review is part of each release.</p>
+    </div>
+
+    <div class="card lab" id="lab">
+      <div class="lab-bar">
+        <strong>Try it with your keyboard</strong>
+        <div class="prefs" role="group" aria-label="Simulated preferences">
+          <button class="pref" aria-pressed="false" data-pref="reduced">Reduce motion</button>
+          <button class="pref" aria-pressed="false" data-pref="contrast">More contrast</button>
+          <button class="pref" aria-pressed="false" data-pref="large">Larger text</button>
+        </div>
+      </div>
+      <div class="lab-body">
+        <form class="form" onsubmit="return false">
+          <label>Email<input type="email" placeholder="you@studio.com" aria-describedby="hint" /></label>
+          <small id="hint" style="color:var(--text-3);margin-top:-8px">We only send release notes.</small>
+          <label class="check"><input type="checkbox" checked /><span class="box"></span><span>Weekly digest</span></label>
+          <label class="check"><input type="checkbox" /><span class="box"></span><span>Theme drops</span></label>
+          <button class="btn primary" id="subscribe">Subscribe</button>
+          <div class="announce" role="status" id="announce"></div>
+        </form>
+        <aside class="inspector" aria-label="Live inspector">
+          <h4>Keys pressed</h4>
+          <div class="keys" id="keys"><span style="color:var(--text-3)">Press Tab…</span></div>
+          <h4>Focused</h4>
+          <div class="focus-name" id="focused">nothing yet</div>
+          <h4>Text contrast</h4>
+          <div class="ratio"><b id="ratio">15.8 : 1</b><span class="ok">AA</span></div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 2. BUILT WITH DIXY ======================= -->
+<section class="section" aria-labelledby="built-h">
+  <div class="head-row">
+    <div>
+      <span class="kicker">Built with Dixy</span>
+      <h2 class="title" id="built-h">Real products, <em>not just buttons.</em></h2>
+      <p class="sub">Complete apps made only from Dixy's public components. Open one, then switch its starter.</p>
+    </div>
+  </div>
+  <div class="showcase">
+    <a class="card show big" href="#">
+      <div class="art">
+        <div class="fp" aria-hidden="true">
+          <nav><b>fernpay</b><span class="on">Overview</span><span>Activity</span><span>Cards</span><span>Budgets</span><span>Settings</span></nav>
+          <main>
+            <div class="tile">Balance<strong>£12,480.20</strong><div class="bar"></div></div>
+            <div class="tile">Saved this month<strong>£840</strong></div>
+            <div class="tile chart"><i style="height:40%"></i><i style="height:62%"></i><i style="height:48%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:70%"></i><i style="height:35%"></i><i style="height:90%"></i><i style="height:60%"></i><i style="height:76%"></i></div>
+          </main>
+        </div>
+      </div>
+      <footer><div><strong>Fernpay</strong><span>A personal finance app: cash flow, cards, budgets and settings.</span><div class="tagrow"><span class="tag">Table</span><span class="tag">Chart</span><span class="tag">Dialog</span><span class="tag">32 starters</span></div></div><span class="arrow">↗</span></footer>
+    </a>
+    <a class="card show tall" href="#">
+      <div class="art"><div class="shader" aria-hidden="true"></div><span class="shader-chip">fragment · 60fps</span></div>
+      <footer><div><strong>Shader lab</strong><span>Live backdrops paired with each starter.</span></div><span class="arrow">↗</span></footer>
+    </a>
+    <a class="card show third" href="#">
+      <div class="art"><div class="mailmini" aria-hidden="true"><div><b>Maya Chen</b>A little inspiration…</div><div><b>Alex Rivera</b>Friday's design session</div><div><b>Jamie Park</b>The playlist you asked for</div></div></div>
+      <footer><div><strong>Postbox</strong><span>The mail app from the hero.</span></div><span class="arrow">↗</span></footer>
+    </a>
+    <a class="card show third" href="#">
+      <div class="art"><div class="sink" aria-hidden="true"><span>Button</span><span>Switch</span><span>Tabs</span><span>Slider</span><span>Select</span><span>Toast</span><span>Menu</span><span>Chip</span><span>Badge</span><span>Table</span><span>Dialog</span><span>Card</span></div></div>
+      <footer><div><strong>Kitchen sink</strong><span>All 76 components on one page.</span></div><span class="arrow">↗</span></footer>
+    </a>
+    <a class="card show third" href="#">
+      <div class="art"><div class="swirl" aria-hidden="true">
+        <i style="--a:#7043ce;--b:#c9b8f0;--c:#fcfaf7"></i><i style="--a:#a34e1c;--b:#d9cfc2;--c:#f2efea"></i><i style="--a:#0e7c86;--b:#9ccbc9;--c:#e3f3f1"></i><i style="--a:#000080;--b:#c0c0c0;--c:#008080"></i>
+        <i style="--a:#e2457c;--b:#ffd0df;--c:#fdf0f4"></i><i style="--a:#244c34;--b:#9eaf7b;--c:#eee8d5"></i><i style="--a:#e3120b;--b:#0a0a0a;--c:#f4f1ea"></i><i style="--a:#1d4ed8;--b:#93c5fd;--c:#eef4ff"></i>
+      </div></div>
+      <footer><div><strong>Theme playground</strong><span>Mix a starter, export the code.</span></div><span class="arrow">↗</span></footer>
+    </a>
+  </div>
+</section>
+
+<!-- ======================= 3. CTA ======================= -->
+<section class="section" aria-labelledby="cta-h">
+  <div class="cta">
+    <div>
+      <span class="kicker">Start building</span>
+      <h2 class="title" id="cta-h">Make one that <em>feels like you.</em></h2>
+      <p>Install two packages, pick a starter, and change the material, the frame and the type until it's yours.</p>
+      <div class="btns">
+        <a class="btn primary" href="#">Get started →</a>
+        <a class="btn ghost" href="#">Open the playground ↗</a>
+      </div>
+    </div>
+    <div class="cta-stack">
+      <div class="cta-term" aria-label="Install example">
+        <div><span class="dim">$</span> pnpm add @dixy-ui/react @dixy-ui/themes</div>
+        <div class="ok2">✓ 2 packages added</div>
+        <div class="dim" style="margin-top:8px">// app.tsx</div>
+        <div><span class="acc">import</span> { Theme } <span class="acc">from</span> "@dixy-ui/react"</div>
+        <div>&lt;Theme skin={oceanDepths}&gt;…&lt;/Theme&gt;</div>
+      </div>
+      <div class="cta-swatches">
+        <i style="--a:#7043ce;--b:#c9b8f0;--c:#fcfaf7"></i><i style="--a:#a34e1c;--b:#d9cfc2;--c:#f2efea"></i><i style="--a:#0e7c86;--b:#9ccbc9;--c:#e3f3f1"></i><i style="--a:#e2457c;--b:#ffd0df;--c:#fdf0f4"></i><i style="--a:#000080;--b:#c0c0c0;--c:#008080"></i>
+        <span>32 starters · one API</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= 4. FOOTER ======================= -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="f-top">
+      <div class="f-about">
+        <span class="brand"><i></i>dixy</span>
+        <p>Accessible React components with character. Built on Base UI, styled with plain CSS.</p>
+        <form class="news" onsubmit="return false"><input type="email" placeholder="Release notes by email" aria-label="Email for release notes" /><button class="btn sm primary">Subscribe</button></form>
+      </div>
+      <nav class="f-col" aria-label="Product"><h4>Product</h4><ul><li><a href="#">Docs</a></li><li><a href="#">Components</a></li><li><a href="#">Themes</a></li><li><a href="#">Playground</a></li></ul></nav>
+      <nav class="f-col" aria-label="Learn"><h4>Learn</h4><ul><li><a href="#">Installation</a></li><li><a href="#">Theming</a></li><li><a href="#">Accessibility</a></li><li><a href="#">Changelog</a></li></ul></nav>
+      <nav class="f-col" aria-label="Demos"><h4>Demos</h4><ul><li><a href="#">Fernpay <span class="new">new</span></a></li><li><a href="#">Shader lab</a></li><li><a href="#">Kitchen sink</a></li></ul></nav>
+      <nav class="f-col" aria-label="Project"><h4>Project</h4><ul><li><a href="#">GitHub ↗</a></li><li><a href="#">Base UI ↗</a></li><li><a href="#">License</a></li></ul></nav>
+    </div>
+    <div class="f-bottom">
+      <span class="status"><b></b>0.1 alpha · Not yet on npm</span>
+      <span>© 2026 Dixy UI · Built in the open</span>
+      <div class="f-mode" role="group" aria-label="Appearance"><button aria-pressed="true" data-mode="light">Light</button><button aria-pressed="false" data-mode="dark">Dark</button></div>
+    </div>
+  </div>
+  <div class="wordmark" aria-hidden="true">dixy</div>
+</footer>
+
+<script>
+const setMode = (m) => {
+  document.body.dataset.appearance = m;
+  document.querySelectorAll("[data-mode]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.mode === m));
+  document.getElementById("ratio").textContent = m === "dark" ? "14.9 : 1" : "15.8 : 1";
+};
+document.querySelectorAll("[data-mode]").forEach((b) => b.addEventListener("click", () => setMode(b.dataset.mode)));
+
+// Accessibility lab: show keys pressed and the focused element's accessible name.
+const lab = document.getElementById("lab"), keys = document.getElementById("keys"), focused = document.getElementById("focused");
+const names = { Tab: "Tab", " ": "Space", Enter: "Enter", Escape: "Esc", ArrowLeft: "←", ArrowRight: "→", ArrowUp: "↑", ArrowDown: "↓", Shift: "⇧" };
+let first = true;
+lab.addEventListener("keydown", (e) => {
+  if (!names[e.key]) return;
+  if (first) { keys.innerHTML = ""; first = false; }
+  const k = document.createElement("kbd"); k.textContent = names[e.key]; keys.append(k);
+  while (keys.children.length > 8) keys.firstElementChild.remove();
+});
+lab.addEventListener("focusin", (e) => {
+  const el = e.target;
+  const role = el.type === "checkbox" ? "checkbox" : el.tagName === "BUTTON" ? "button" : el.tagName === "INPUT" ? "textbox" : el.tagName.toLowerCase();
+  const label = el.closest("label")?.innerText.trim() || el.textContent.trim() || el.getAttribute("aria-label") || "";
+  const state = el.type === "checkbox" ? (el.checked ? ", checked" : ", not checked") : el.getAttribute("aria-pressed") ? (el.getAttribute("aria-pressed") === "true" ? ", pressed" : ", not pressed") : "";
+  focused.textContent = `${role} "${label.split("\n")[0]}"${state}`;
+});
+document.querySelectorAll(".pref").forEach((b) => b.addEventListener("click", () => {
+  const on = b.getAttribute("aria-pressed") !== "true";
+  b.setAttribute("aria-pressed", on);
+  lab.toggleAttribute("data-" + b.dataset.pref, on);
+}));
+document.getElementById("subscribe").addEventListener("click", () => {
+  document.getElementById("announce").textContent = "✓ Subscribed. Announced to screen readers via role=status.";
+});
+</script>
+</body>
+</html>

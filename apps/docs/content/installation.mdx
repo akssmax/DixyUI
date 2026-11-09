@@ -6,7 +6,17 @@ import { CodeBlock } from "../src/components/code-block";
 
 <p className="page-deck">A package, a theme, and room to make it yours.</p>
 
-Dixy is an early, local alpha. The package name is provisional and has not been published to npm. Use the workspace package while we build and validate it.
+Dixy is in beta on npm. APIs may still change before 1.0, so pin the version you test against.
+
+## Install the beta
+
+<CodeBlock
+  language="shellscript"
+  filename="terminal"
+  code={"pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta"}
+/>
+
+`@dixy-ui/react` holds the components and stylesheet. `@dixy-ui/themes` holds the starter themes; add it only if you use one.
 
 ## Run this monorepo
 
@@ -22,7 +32,7 @@ The root development command builds the React package first, then watches its ou
 
 ## Import through the public API
 
-The documentation app declares `@dixy-ui/react` as a `workspace:*` dependency. It imports the same JavaScript, types, and stylesheet that a future consumer will receive.
+The documentation app declares `@dixy-ui/react` as a `workspace:*` dependency. It imports the same JavaScript, types, and stylesheet that the npm package ships.
 
 <CodeBlock
   code={

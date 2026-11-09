@@ -1,6 +1,6 @@
 # Dixy UI
 
-Expressive React components on Base UI, with a TanStack Start documentation workspace. This is a local alpha and a design engineering learning project. The package name is provisional; nothing is published to npm yet.
+Expressive React components on Base UI, with a TanStack Start documentation workspace. It is a design engineering learning project, now in beta on npm: `pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta`.
 
 Dixy is the brand; Dixy UI is the React component library. The logo is a rounded, smiling D. Its facial details are transparent, and the in-app mark inherits the current theme color. Download the [violet SVG](./apps/docs/public/brand/dixy-mark.svg) or [monochrome SVG](./apps/docs/public/brand/dixy-mark-mono.svg). The same geometry is used in the documentation and favicon.
 
