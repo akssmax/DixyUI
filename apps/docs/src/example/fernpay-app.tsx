@@ -49,6 +49,9 @@ import {
   SettingsView,
   TransactionsView,
 } from "./views";
+import type { FernpayViewId } from "../lib/route-search";
+// Here rather than in the route file, so it ships with the split component.
+import "../styles/dixy-example.css";
 
 export const views = [
   {
@@ -75,8 +78,8 @@ export const views = [
     icon: Settings,
     blurb: "Profile, alerts and help.",
   },
-] as const;
-export type ViewId = (typeof views)[number]["id"];
+] as const satisfies readonly { id: FernpayViewId; [key: string]: unknown }[];
+export type ViewId = FernpayViewId;
 
 export interface SkinOption {
   slug: string;

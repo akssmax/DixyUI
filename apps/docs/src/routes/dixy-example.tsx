@@ -12,8 +12,12 @@ import {
   loadMaterialCSS,
   loadSkinCSS,
 } from "../lib/theme-skin-catalogue";
-import { FernpayApp, views, type ViewId } from "../example/fernpay-app";
-import "../styles/dixy-example.css";
+import { FernpayApp } from "../example/fernpay-app";
+import {
+  fernpayViewIds,
+  isOneOf,
+  type FernpayViewId as ViewId,
+} from "../lib/route-search";
 
 /** "original" is the default Dixy look; every other option is a starter skin. */
 const skinOptions = [
@@ -28,9 +32,10 @@ export const Route = createFileRoute("/dixy-example")({
   validateSearch: (
     search: Record<string, unknown>,
   ): { view?: ViewId; skin?: string } => ({
-    view: views.some((v) => v.id === search.view && v.id !== "overview")
-      ? (search.view as ViewId)
-      : undefined,
+    view:
+      isOneOf(fernpayViewIds, search.view) && search.view !== "overview"
+        ? search.view
+        : undefined,
     skin: skinCatalog.some((skin) => skin.slug === search.skin)
       ? (search.skin as string)
       : undefined,

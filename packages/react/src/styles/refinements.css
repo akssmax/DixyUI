@@ -120,10 +120,8 @@
     background: transparent;
     color: var(--dixy-color-text-secondary);
   }
-  .dixy-aria-tag .dixy-aria-button[slot="remove"]:is(
-      [data-hovered],
-      [data-pressed]
-    ) {
+  .dixy-aria-tag
+    .dixy-aria-button[slot="remove"]:is([data-hovered], [data-pressed]) {
     background: var(--dixy-color-background-subtle);
     color: var(--dixy-color-text-primary);
   }

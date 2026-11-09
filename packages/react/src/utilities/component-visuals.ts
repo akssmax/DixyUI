@@ -3,12 +3,7 @@ import { useThemeSettings } from "../theme/theme";
 
 /** Semantic colors shared by the family styles. warning and info map to the status tokens. */
 export type VisualColor =
-  | "accent"
-  | "neutral"
-  | "danger"
-  | "success"
-  | "warning"
-  | "info";
+  "accent" | "neutral" | "danger" | "success" | "warning" | "info";
 
 type VisualSettings = {
   size?: "sm" | "md" | "lg";

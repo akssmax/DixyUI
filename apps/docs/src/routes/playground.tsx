@@ -1,12 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ThemePlayground } from "../components/theme-playground";
 import {
-  ThemePlayground,
   defaultInspectorTab,
   defaultPreviewScene,
   inspectorTabIds,
+  isOneOf,
   previewSceneIds,
-} from "../components/theme-playground";
+} from "../lib/route-search";
 import {
   defaultThemePreset,
   parseThemePreset,
@@ -26,15 +27,13 @@ export const Route = createFileRoute("/playground")({
   ): { theme?: string; view?: string; panel?: string } => ({
     theme: typeof search.theme === "string" ? search.theme : undefined,
     view:
-      typeof search.view === "string" &&
-      search.view !== defaultPreviewScene &&
-      previewSceneIds.includes(search.view)
+      isOneOf(previewSceneIds, search.view) &&
+      search.view !== defaultPreviewScene
         ? search.view
         : undefined,
     panel:
-      typeof search.panel === "string" &&
-      search.panel !== defaultInspectorTab &&
-      inspectorTabIds.includes(search.panel)
+      isOneOf(inspectorTabIds, search.panel) &&
+      search.panel !== defaultInspectorTab
         ? search.panel
         : undefined,
   }),

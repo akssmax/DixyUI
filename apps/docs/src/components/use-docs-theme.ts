@@ -1,10 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ThemeProps } from "@dixy-ui/react";
 import { useAppAppearance } from "./app-appearance-provider";
-import {
-  playgroundThemeProps,
-  skinThemePreset,
-} from "../lib/theme-playground";
+import { playgroundThemeProps, skinThemePreset } from "../lib/theme-playground";
 import {
   deduplicateSkinStyles,
   prepareSkin,
@@ -14,6 +11,7 @@ import {
   type PreviewThemeSettings,
 } from "../lib/preview-theme";
 import type { AppAppearance } from "../lib/app-appearance";
+import type { DocsThemeSettings } from "../lib/docs-theme";
 
 /**
  * Theme props for the reader's docs theme. `skinProps` is null for Original
@@ -45,11 +43,42 @@ export function useDocsTheme() {
       })
       .catch(() => setError("That theme could not load. Choose it again."));
   }, [skin]);
+  // Load the new starter's stylesheet before committing it. Committing first
+  // rendered the new data-dixy-skin with no matching CSS until the chunk
+  // arrived: a frame (or a round trip) of half-styled docs and layout shift.
+  const request = useRef(0);
+  const selectDocsTheme = useCallback(
+    (patch: Partial<DocsThemeSettings>) => {
+      const generation = ++request.current;
+      const next = patch.skin;
+      if (!next || next === "none") return setDocsTheme(patch);
+      setError("");
+      void (async () => {
+        await prepareSkin(next, null);
+        if (skinThemePreset(next).material !== "inherit")
+          await import("@dixy-ui/react/materials.css");
+      })()
+        .then(() => {
+          if (request.current === generation) setDocsTheme(patch);
+        })
+        .catch(() => {
+          if (request.current === generation)
+            setError("That theme could not load. Choose it again.");
+        });
+    },
+    [setDocsTheme],
+  );
   const shellProps: ThemeProps = (scope === "all" && skinProps) || {
     appearance,
     accentColor: "purple",
   };
-  return { docsTheme, setDocsTheme, skinProps, shellProps, error };
+  return {
+    docsTheme,
+    setDocsTheme: selectDocsTheme,
+    skinProps,
+    shellProps,
+    error,
+  };
 }
 
 const previewKeys = [
