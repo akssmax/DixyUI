@@ -796,6 +796,8 @@ Verification for this pass:
 - [ ] Keyboard-only and screen-reader pass through the whole app; dark appearance on every view; Safari/Firefox.
 - [ ] Library follow-ups found while building: line/area `Chart`, `AvatarGroup` clipping at `sm`, a z-index scale for app chrome vs overlays.
 - [ ] Learning: explain why `isolation: isolate` fixed the top bar painting over the dialog backdrop.
+- [x] Layout molecules (PageHeader, SectionHeader, SectionFooter, StatCard) on every view; no shift between views or filter states; no horizontal overflow from 375 to 1600px. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Learning: explain how fixed slot heights and reserved space prevent layout shift, and why a molecule owns those rules rather than each view.
 
 ## Base control alignment — 2026-11-09
 

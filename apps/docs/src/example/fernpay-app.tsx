@@ -39,6 +39,7 @@ import {
   Item,
 } from "@dixy-ui/react";
 import { notifications, user } from "./data";
+import { PageHeader } from "./layout";
 import { SendMoneyDialog } from "./send-money";
 import {
   CardsView,
@@ -420,15 +421,11 @@ function Shell(props: FernpayAppProps) {
         </header>
 
         <main className="fp-main" id="fp-main">
-          <div className="fp-page-head">
-            <div>
-              <Heading as="h1" variant="heading.md">
-                {meta.label}
-              </Heading>
-              <Text tone="muted">{meta.blurb}</Text>
-            </div>
-            <SendMoneyDialog />
-          </div>
+          <PageHeader
+            title={meta.label}
+            description={meta.blurb}
+            actions={<SendMoneyDialog />}
+          />
           <ViewSwitch view={view} onView={go} />
         </main>
       </div>

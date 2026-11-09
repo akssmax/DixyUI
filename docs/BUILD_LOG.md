@@ -1429,3 +1429,32 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` and `pnpm package:check` pass. API metadata was regenerated with `pnpm docs:generate`.
   - In the in-app browser: heights at three sizes × 31 themes; date-range popover has a single frame and chevrons; search clear hides while empty and has an accessible name; focus rings on all five grouped fields.
 - Not tested: dark appearance on the harness, Safari/Firefox, screen readers, coarse-pointer target size.
+
+### 2026-11-09 — Fernpay: layout molecules, no layout shift, responsive polish
+
+- Request: the example app wasn't fully responsive and its layout shifted. Use one consistent header, footer and action-area template, treated as molecules, built from Dixy components.
+- `apps/docs/src/example/layout.tsx` adds four molecules, all made of Dixy `Card`, `Heading` and `Text`:
+  - `PageHeader`: title, a one-line description and `Actions`; fixed 72px.
+  - `SectionHeader`: card title and description, with optional `Actions`.
+  - `SectionFooter`: meta text on the left, `Actions` on the right; always one md control tall and pinned to the card's bottom.
+  - `StatCard`: the trend sits in the footer, not a nested content box. Candy Clay's inset Card.Content was what made the stat cards look double-framed.
+  - Every view uses them. The Settings panels and the Help accordion are now cards with a header and footer, and Save lives in the footer (`form="fp-profile"`).
+- Layout shift:
+  - The top bar and the page share one centred column (`--fp-max` 1200px, `--fp-gutter`). The page's left edge matches the top bar at every width.
+  - The Transactions summary moved from a loose line into the filter card's footer, with a "Clear filters" action that is always present.
+  - The table card stays mounted, with the empty state inside it. Pagination always renders.
+  - The table area reserves a full page of rows (33rem), so filtering doesn't move the page.
+- Responsive:
+  - The chart is a fixed height, `clamp(160px, 22vw, 240px)`, instead of scaling with width.
+  - Overview rows always fill: Budgets spans two columns.
+  - Under 640px, metrics become a swipe row with a peek of the next card, and tables scroll sideways inside their card instead of wrapping each cell.
+  - The payment card keeps its aspect ratio instead of stretching over its neighbour.
+  - The Settings cards fill their panel.
+- Verified in the in-app browser:
+  - Page header 72px (62px on phones) and content aligned with the top bar, across 4 views × 5 widths (1600/1280/1024/768/375), with zero horizontal overflow.
+  - Overview rows full at 1440, 1024 and 375.
+  - All footers 56px, and the same distance from their card's bottom edge.
+  - Transactions card positions and heights unchanged through full, filtered and empty states (default, Studio Hardware; Swiss Poster led to the 33rem reserve).
+  - Cards view in dark appearance.
+  - `pnpm check` passes.
+- Not tested: dark appearance on every view and skin; Safari/Firefox; touch scrolling of the metrics row on a real phone; screen reader.

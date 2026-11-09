@@ -52,6 +52,7 @@ import {
   Toggle,
   ToggleGroup,
 } from "@dixy-ui/react";
+import { SectionFooter, SectionHeader, StatCard } from "./layout";
 import {
   accounts,
   budgets,
@@ -138,65 +139,49 @@ export function OverviewView({
       </Alert.Root>
 
       <div className="fp-stats fp-span-full">
-        <Card.Root className="fp-stat">
-          <Card.Header>
-            <Card.Description>Net worth</Card.Description>
-            <Card.Title className="fp-figure">
-              {currency.format(netWorth)}
-            </Card.Title>
-          </Card.Header>
-          <Card.Content>
-            <Delta value={2.4} />
-          </Card.Content>
-        </Card.Root>
-        <Card.Root className="fp-stat">
-          <Card.Header>
-            <Card.Description>Spent in November</Card.Description>
-            <Card.Title className="fp-figure">
-              {currency.format(thisMonth.spend)}
-            </Card.Title>
-          </Card.Header>
-          <Card.Content>
-            <Delta value={-29.5} lowerIsBetter />
-          </Card.Content>
-        </Card.Root>
-        <Card.Root className="fp-stat">
-          <Card.Header>
-            <Card.Description>Savings rate</Card.Description>
-            <Card.Title className="fp-figure">{savingsRate}%</Card.Title>
-          </Card.Header>
-          <Card.Content>
-            <Delta value={18.0} suffix="best month this year" />
-          </Card.Content>
-        </Card.Root>
+        <StatCard
+          label="Net worth"
+          value={currency.format(netWorth)}
+          trend={<Delta value={2.4} />}
+        />
+        <StatCard
+          label="Spent in November"
+          value={currency.format(thisMonth.spend)}
+          trend={<Delta value={-29.5} lowerIsBetter />}
+        />
+        <StatCard
+          label="Savings rate"
+          value={`${savingsRate}%`}
+          trend={<Delta value={18.0} suffix="best month this year" />}
+        />
       </div>
 
-      <Card.Root className="fp-span-2">
-        <Card.Header className="fp-card-head">
-          <div>
-            <Card.Title>Cash flow</Card.Title>
-            <Card.Description>Last six months</Card.Description>
-          </div>
-          <ToggleGroup
-            segmented
-            aria-label="Cash flow series"
-            value={[range]}
-            onValueChange={(value) => value[0] && setRange(value[0])}
-          >
-            <Toggle value="spend" size="sm">
-              Spending
-            </Toggle>
-            <Toggle value="income" size="sm">
-              Income
-            </Toggle>
-          </ToggleGroup>
-        </Card.Header>
-        <Card.Content>
+      <Card.Root className="fp-section fp-span-2">
+        <SectionHeader
+          title="Cash flow"
+          description="Last six months"
+          actions={
+            <ToggleGroup
+              segmented
+              aria-label="Cash flow series"
+              value={[range]}
+              onValueChange={(value) => value[0] && setRange(value[0])}
+            >
+              <Toggle value="spend" size="sm">
+                Spending
+              </Toggle>
+              <Toggle value="income" size="sm">
+                Income
+              </Toggle>
+            </ToggleGroup>
+          }
+        />
+        <Card.Content className="fp-chart">
           {refreshing ? (
-            <Stack gap="sm" aria-label="Refreshing cash flow">
-              <Skeleton style={{ height: 180 }} />
-              <Skeleton style={{ width: "60%" }} />
-            </Stack>
+            <Skeleton
+              className="fp-chart-skeleton"
+              aria-label="Refreshing cash flow"
+            />
           ) : (
             <Chart
               color={range === "spend" ? "accent" : "success"}
@@ -212,25 +197,28 @@ export function OverviewView({
             />
           )}
         </Card.Content>
-        <Card.Footer>
-          <Button
-            size="sm"
-            variant="ghost"
-            color="neutral"
-            onClick={refresh}
-            disabled={refreshing}
-          >
-            <Icon render={<RefreshCw />} />{" "}
-            {refreshing ? "Refreshing…" : "Refresh"}
-          </Button>
-        </Card.Footer>
+        <SectionFooter
+          meta={
+            <Text as="span" size="sm" tone="muted">
+              {range === "spend" ? "Spending" : "Income"} · updated just now
+            </Text>
+          }
+          actions={
+            <Button
+              size="sm"
+              variant="ghost"
+              color="neutral"
+              onClick={refresh}
+              disabled={refreshing}
+            >
+              <Icon render={<RefreshCw />} /> Refresh
+            </Button>
+          }
+        />
       </Card.Root>
 
-      <Card.Root>
-        <Card.Header>
-          <Card.Title>{goal.name}</Card.Title>
-          <Card.Description>Shared savings goal</Card.Description>
-        </Card.Header>
+      <Card.Root className="fp-section">
+        <SectionHeader title={goal.name} description="Shared savings goal" />
         <Card.Content className="fp-goal">
           <ProgressCircle
             aria-label={`${goal.name} progress`}
@@ -245,22 +233,30 @@ export function OverviewView({
             </Text>
           </Stack>
         </Card.Content>
-        <Card.Footer>
-          <AvatarGroup.Root size="sm">
-            {["MO", "AM", "JR"].map((initials) => (
-              <Avatar.Root key={initials}>
-                <Avatar.Fallback>{initials}</Avatar.Fallback>
-              </Avatar.Root>
-            ))}
-            <AvatarGroup.Count>+1</AvatarGroup.Count>
-          </AvatarGroup.Root>
-        </Card.Footer>
+        <SectionFooter
+          meta={
+            <AvatarGroup.Root size="sm">
+              {["MO", "AM", "JR"].map((initials) => (
+                <Avatar.Root key={initials}>
+                  <Avatar.Fallback>{initials}</Avatar.Fallback>
+                </Avatar.Root>
+              ))}
+              <AvatarGroup.Count>+1</AvatarGroup.Count>
+            </AvatarGroup.Root>
+          }
+          actions={
+            <Text as="span" size="sm" tone="muted">
+              {Math.round((goal.saved / goal.target) * 100)}% saved
+            </Text>
+          }
+        />
       </Card.Root>
 
-      <Card.Root>
-        <Card.Header>
-          <Card.Title>Accounts</Card.Title>
-        </Card.Header>
+      <Card.Root className="fp-section">
+        <SectionHeader
+          title="Accounts"
+          description={`${accounts.length} linked`}
+        />
         <Card.Content>
           <Stack gap="xs">
             {accounts.map((account) => {
@@ -290,11 +286,8 @@ export function OverviewView({
         </Card.Content>
       </Card.Root>
 
-      <Card.Root>
-        <Card.Header>
-          <Card.Title>Budgets</Card.Title>
-          <Card.Description>November</Card.Description>
-        </Card.Header>
+      <Card.Root className="fp-section fp-span-2">
+        <SectionHeader title="Budgets" description="November" />
         <Card.Content>
           <Stack gap="md">
             {budgets.map((b) => {
@@ -322,22 +315,22 @@ export function OverviewView({
         </Card.Content>
       </Card.Root>
 
-      <Card.Root className="fp-span-full">
-        <Card.Header className="fp-card-head">
-          <div>
-            <Card.Title>Recent activity</Card.Title>
-            <Card.Description>Your last five transactions</Card.Description>
-          </div>
-          <Button
-            size="sm"
-            variant="outline"
-            color="neutral"
-            onClick={onOpenTransactions}
-          >
-            View all
-          </Button>
-        </Card.Header>
-        <Card.Content>
+      <Card.Root className="fp-section fp-span-full">
+        <SectionHeader
+          title="Recent activity"
+          description="Your last five transactions"
+          actions={
+            <Button
+              size="sm"
+              variant="outline"
+              color="neutral"
+              onClick={onOpenTransactions}
+            >
+              View all
+            </Button>
+          }
+        />
+        <Card.Content className="fp-table-wrap">
           <Table.Root size="sm">
             <Table.Header>
               <Table.Row>
@@ -417,6 +410,8 @@ export function TransactionsView() {
   const current = Math.min(page, pages);
   const visible = rows.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
   const total = rows.reduce((sum, t) => sum + t.amount, 0);
+  const filtered =
+    query !== "" || category !== "all" || direction !== "all" || dates !== null;
 
   function clear() {
     setQuery("");
@@ -428,7 +423,7 @@ export function TransactionsView() {
 
   return (
     <Stack gap="lg">
-      <Card.Root>
+      <Card.Root className="fp-section">
         <Card.Content className="fp-filters">
           <SearchField.Root
             value={query}
@@ -536,27 +531,42 @@ export function TransactionsView() {
             </ToggleGroup>
           </div>
         </Card.Content>
+        <SectionFooter
+          meta={
+            <Text as="span" size="sm" role="status">
+              {rows.length} {rows.length === 1 ? "transaction" : "transactions"}{" "}
+              · net <Amount value={total} />
+            </Text>
+          }
+          actions={
+            <Button
+              size="sm"
+              variant="ghost"
+              color="neutral"
+              onClick={clear}
+              disabled={!filtered}
+            >
+              Clear filters
+            </Button>
+          }
+        />
       </Card.Root>
 
-      <Inline gap="md" align="center" wrap className="fp-summary">
-        <Text role="status">
-          {rows.length} transactions · net <Amount value={total} />
-        </Text>
-      </Inline>
-
-      {rows.length === 0 ? (
-        <Empty.Root>
-          <Empty.Title>Nothing matches those filters</Empty.Title>
-          <Empty.Description>
-            Try a wider date range or another category.
-          </Empty.Description>
-          <Empty.Content>
-            <Button onClick={clear}>Clear filters</Button>
-          </Empty.Content>
-        </Empty.Root>
-      ) : (
-        <Card.Root>
-          <Card.Content className="fp-table-wrap">
+      <Card.Root className="fp-section">
+        {rows.length === 0 ? (
+          <Card.Content className="fp-table-wrap fp-txn-table fp-table-empty">
+            <Empty.Root>
+              <Empty.Title>Nothing matches those filters</Empty.Title>
+              <Empty.Description>
+                Try a wider date range or another category.
+              </Empty.Description>
+              <Empty.Content>
+                <Button onClick={clear}>Clear filters</Button>
+              </Empty.Content>
+            </Empty.Root>
+          </Card.Content>
+        ) : (
+          <Card.Content className="fp-table-wrap fp-txn-table">
             <DataTable.Root
               aria-label="Transactions"
               sortDescriptor={sort}
@@ -603,10 +613,14 @@ export function TransactionsView() {
               </DataTable.Body>
             </DataTable.Root>
           </Card.Content>
-          <Card.Footer className="fp-card-foot">
-            <Text size="sm" tone="muted">
-              Select a row for details.
+        )}
+        <SectionFooter
+          meta={
+            <Text as="span" size="sm" tone="muted">
+              Page {current} of {pages} · select a row for details
             </Text>
+          }
+          actions={
             <Pagination.Root aria-label="Transaction pages">
               <Pagination.List>
                 {Array.from({ length: pages }, (_, i) => i + 1).map((n) => (
@@ -626,9 +640,9 @@ export function TransactionsView() {
                 ))}
               </Pagination.List>
             </Pagination.Root>
-          </Card.Footer>
-        </Card.Root>
-      )}
+          }
+        />
+      </Card.Root>
 
       <TransactionDrawer
         transaction={selected}
@@ -788,13 +802,11 @@ export function CardsView() {
         </Inline>
       </div>
 
-      <Card.Root>
-        <Card.Header>
-          <Card.Title>Card controls</Card.Title>
-          <Card.Description>
-            Changes apply instantly in this mock.
-          </Card.Description>
-        </Card.Header>
+      <Card.Root className="fp-section">
+        <SectionHeader
+          title="Card controls"
+          description="Changes apply instantly in this mock."
+        />
         <Card.Content>
           <Stack gap="md">
             <label className="fp-switch-row">
@@ -846,13 +858,11 @@ export function CardsView() {
         </Card.Content>
       </Card.Root>
 
-      <Card.Root>
-        <Card.Header>
-          <Card.Title>Monthly limit</Card.Title>
-          <Card.Description>
-            {currency.format(card.spent)} spent of {currency.format(limit)}
-          </Card.Description>
-        </Card.Header>
+      <Card.Root className="fp-section">
+        <SectionHeader
+          title="Monthly limit"
+          description={`${currency.format(card.spent)} spent of ${currency.format(limit)}`}
+        />
         <Card.Content>
           <Stack gap="md">
             <Slider.Root
@@ -882,47 +892,54 @@ export function CardsView() {
             </Meter.Root>
           </Stack>
         </Card.Content>
-        <Card.Footer>
-          <AlertDialog.Root>
-            <AlertDialog.Trigger
-              render={<Button variant="ghost" color="danger" />}
-            >
-              Cancel this card
-            </AlertDialog.Trigger>
-            <AlertDialog.Portal>
-              <AlertDialog.Backdrop />
-              <AlertDialog.Viewport>
-                <AlertDialog.Popup>
-                  <AlertDialog.Title>
-                    Cancel card ·· {card.last4}?
-                  </AlertDialog.Title>
-                  <AlertDialog.Description>
-                    You’ll get a new number in 3–5 days. Subscriptions on this
-                    card will stop. (Mock: nothing is cancelled.)
-                  </AlertDialog.Description>
-                  <div className="fp-dialog-actions">
-                    <AlertDialog.Close
-                      render={<Button variant="outline" color="neutral" />}
-                    >
-                      Keep card
-                    </AlertDialog.Close>
-                    <AlertDialog.Close
-                      render={<Button color="danger" />}
-                      onClick={() =>
-                        toast.add({
-                          title: "Replacement ordered",
-                          type: "success",
-                        })
-                      }
-                    >
-                      Cancel card
-                    </AlertDialog.Close>
-                  </div>
-                </AlertDialog.Popup>
-              </AlertDialog.Viewport>
-            </AlertDialog.Portal>
-          </AlertDialog.Root>
-        </Card.Footer>
+        <SectionFooter
+          meta={
+            <Text as="span" size="sm" tone="muted">
+              Resets on the 1st
+            </Text>
+          }
+          actions={
+            <AlertDialog.Root>
+              <AlertDialog.Trigger
+                render={<Button size="sm" variant="ghost" color="danger" />}
+              >
+                Cancel this card
+              </AlertDialog.Trigger>
+              <AlertDialog.Portal>
+                <AlertDialog.Backdrop />
+                <AlertDialog.Viewport>
+                  <AlertDialog.Popup>
+                    <AlertDialog.Title>
+                      Cancel card ·· {card.last4}?
+                    </AlertDialog.Title>
+                    <AlertDialog.Description>
+                      You’ll get a new number in 3–5 days. Subscriptions on this
+                      card will stop. (Mock: nothing is cancelled.)
+                    </AlertDialog.Description>
+                    <div className="fp-dialog-actions">
+                      <AlertDialog.Close
+                        render={<Button variant="outline" color="neutral" />}
+                      >
+                        Keep card
+                      </AlertDialog.Close>
+                      <AlertDialog.Close
+                        render={<Button color="danger" />}
+                        onClick={() =>
+                          toast.add({
+                            title: "Replacement ordered",
+                            type: "success",
+                          })
+                        }
+                      >
+                        Cancel card
+                      </AlertDialog.Close>
+                    </div>
+                  </AlertDialog.Popup>
+                </AlertDialog.Viewport>
+              </AlertDialog.Portal>
+            </AlertDialog.Root>
+          }
+        />
       </Card.Root>
     </div>
   );
@@ -941,9 +958,14 @@ export function SettingsView() {
         <Tabs.Indicator />
       </Tabs.List>
       <Tabs.Panel value="profile">
-        <Card.Root>
+        <Card.Root className="fp-section">
+          <SectionHeader
+            title="Profile"
+            description="How you appear on receipts and transfers."
+          />
           <Card.Content>
             <Form
+              id="fp-profile"
               className="fp-form"
               onSubmit={(event) => {
                 event.preventDefault();
@@ -966,15 +988,28 @@ export function SettingsView() {
                   Receipts and statements go here.
                 </Field.Description>
               </Field.Root>
-              <Inline gap="sm">
-                <Button type="submit">Save</Button>
-              </Inline>
             </Form>
           </Card.Content>
+          <SectionFooter
+            meta={
+              <Text as="span" size="sm" tone="muted">
+                Saved to this browser only
+              </Text>
+            }
+            actions={
+              <Button type="submit" form="fp-profile" size="sm">
+                Save
+              </Button>
+            }
+          />
         </Card.Root>
       </Tabs.Panel>
       <Tabs.Panel value="notifications">
-        <Card.Root>
+        <Card.Root className="fp-section">
+          <SectionHeader
+            title="Notifications"
+            description="Choose what Fernpay tells you about."
+          />
           <Card.Content>
             <Stack gap="md">
               {[
@@ -995,45 +1030,53 @@ export function SettingsView() {
         </Card.Root>
       </Tabs.Panel>
       <Tabs.Panel value="help">
-        <Accordion.Root>
-          {[
-            [
-              "Is any of this real?",
-              "No. Fernpay is mock data that shows Dixy components working together.",
-            ],
-            [
-              "Why does the theme change everything?",
-              "Every component reads the same semantic tokens from the nearest Theme, so one skin restyles the whole app.",
-            ],
-            [
-              "Where do I report a lost card?",
-              "In a real app, here. In this one, try Cards → Cancel this card.",
-            ],
-          ].map(([q, a], index) => (
-            <Accordion.Item key={q} value={index}>
-              <Accordion.Header>
-                <Accordion.Trigger>
-                  {q}
-                  <svg
-                    data-dixy-chevron=""
-                    aria-hidden="true"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <path d="m4 6 4 4 4-4" />
-                  </svg>
-                </Accordion.Trigger>
-              </Accordion.Header>
-              <Accordion.Panel>
-                <div className="fp-accordion-body">{a}</div>
-              </Accordion.Panel>
-            </Accordion.Item>
-          ))}
-        </Accordion.Root>
+        <Card.Root className="fp-section">
+          <SectionHeader
+            title="Help"
+            description="Answers to common questions."
+          />
+          <Card.Content>
+            <Accordion.Root>
+              {[
+                [
+                  "Is any of this real?",
+                  "No. Fernpay is mock data that shows Dixy components working together.",
+                ],
+                [
+                  "Why does the theme change everything?",
+                  "Every component reads the same semantic tokens from the nearest Theme, so one skin restyles the whole app.",
+                ],
+                [
+                  "Where do I report a lost card?",
+                  "In a real app, here. In this one, try Cards → Cancel this card.",
+                ],
+              ].map(([q, a], index) => (
+                <Accordion.Item key={q} value={index}>
+                  <Accordion.Header>
+                    <Accordion.Trigger>
+                      {q}
+                      <svg
+                        data-dixy-chevron=""
+                        aria-hidden="true"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      >
+                        <path d="m4 6 4 4 4-4" />
+                      </svg>
+                    </Accordion.Trigger>
+                  </Accordion.Header>
+                  <Accordion.Panel>
+                    <div className="fp-accordion-body">{a}</div>
+                  </Accordion.Panel>
+                </Accordion.Item>
+              ))}
+            </Accordion.Root>
+          </Card.Content>
+        </Card.Root>
       </Tabs.Panel>
     </Tabs.Root>
   );

@@ -3,6 +3,9 @@
  * from Dixy components and tokens, so switching skin restyles everything.
  */
 .fp-app {
+  /* One content column for the top bar and every page. */
+  --fp-max: 1200px;
+  --fp-gutter: clamp(16px, 3vw, 32px);
   min-height: 100dvh;
   background: var(--dixy-color-background-canvas);
   color: var(--dixy-color-text-primary);
@@ -104,7 +107,10 @@
   display: flex;
   align-items: center;
   gap: var(--dixy-spacing-inline-md);
-  padding: 12px clamp(16px, 3vw, 32px);
+  min-height: 64px;
+  box-sizing: border-box;
+  padding-block: 12px;
+  padding-inline: max(var(--fp-gutter), calc((100% - var(--fp-max)) / 2));
   background: color-mix(
     in oklab,
     var(--dixy-color-background-canvas) 82%,
@@ -160,22 +166,95 @@
 }
 
 .fp-main {
-  padding: clamp(16px, 3vw, 32px);
-  padding-top: 8px;
-  display: grid;
-  gap: var(--dixy-spacing-stack-lg);
-  max-width: 1280px;
+  box-sizing: border-box;
   width: 100%;
+  max-width: calc(var(--fp-max) + 2 * var(--fp-gutter));
+  margin-inline: auto;
+  padding: 8px var(--fp-gutter) var(--fp-gutter);
+  display: grid;
+  align-content: start;
+  gap: var(--dixy-spacing-stack-lg);
 }
-.fp-page-head {
+
+/* ---------------------------------------------------------- Molecules
+   PageHeader, SectionHeader, SectionFooter and Actions (example/layout.tsx).
+   Fixed slot heights and one-line descriptions keep the chrome still when
+   views or data change. */
+.fp-page-header,
+.fp-section-header,
+.fp-section-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-md);
+}
+.fp-page-header {
+  min-height: 72px;
+}
+.fp-page-header h1 {
+  margin: 0;
+}
+.fp-header-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.fp-one-line {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.fp-actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: var(--dixy-spacing-stack-md);
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--dixy-spacing-inline-sm);
+  min-height: var(--dixy-size-control-sm);
 }
-.fp-page-head h1 {
-  margin: 0;
+.fp-section-header {
+  min-height: var(--dixy-size-control-md);
+}
+.fp-section-footer {
+  box-sizing: content-box;
+  min-height: var(--dixy-size-control-md);
+}
+.fp-footer-meta {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: var(--dixy-spacing-inline-sm);
+}
+/* Cards stretch to their row; the footer always sits on the bottom edge. */
+.fp-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.fp-section > .fp-section-footer {
+  margin-block-start: auto;
+  padding-block-start: var(--dixy-spacing-stack-md);
+}
+.fp-stat-header {
+  gap: var(--dixy-spacing-stack-xs);
+}
+
+.fp-chart {
+  min-height: 0;
+}
+.fp-chart .dixy-chart svg,
+.fp-chart-skeleton {
+  display: block;
+  width: 100%;
+  height: clamp(160px, 22vw, 240px);
+}
+/* A full page of rows (8) is reserved, so filtering never pulls the page up. */
+.fp-txn-table {
+  min-height: 33rem;
+}
+.fp-table-empty {
+  display: grid;
+  place-items: center;
 }
 
 /* Overview grid: three columns that collapse on smaller screens. */
@@ -183,7 +262,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--dixy-spacing-stack-md);
-  align-items: start;
+  align-items: stretch;
 }
 .fp-span-2 {
   grid-column: span 2;
@@ -196,21 +275,6 @@
 .fp-span-full {
   grid-column: 1 / -1;
 }
-.fp-card-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: start;
-  justify-content: space-between;
-  gap: var(--dixy-spacing-inline-md);
-}
-.fp-card-foot {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--dixy-spacing-inline-md);
-}
-
 .fp-figure {
   font: var(--dixy-font-heading-md);
   font-variant-numeric: tabular-nums;
@@ -258,6 +322,14 @@
 .fp-table-wrap {
   overflow-x: auto;
 }
+/* Tables scroll sideways on narrow screens instead of wrapping every cell. */
+.fp-table-wrap :is(table, [role="grid"]) {
+  min-width: 36rem;
+}
+.fp-table-wrap
+  :is(th, td, [role="columnheader"], [role="rowheader"], [role="gridcell"]) {
+  white-space: nowrap;
+}
 .fp-table-wrap [role="row"][data-href],
 .fp-table-wrap [role="row"] {
   cursor: default;
@@ -278,6 +350,8 @@
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr);
 }
 .fp-payment-card {
+  /* Keep the card's own proportions instead of stretching to the row. */
+  align-self: start;
   aspect-ratio: 1.586;
   display: flex;
   flex-direction: column;
@@ -372,7 +446,10 @@
 
 /* Settings */
 .fp-settings {
-  max-width: 680px;
+  max-width: 720px;
+}
+.fp-settings [role="tabpanel"] > .dixy-card {
+  width: 100%;
 }
 .fp-settings [role="tabpanel"] {
   padding-top: var(--dixy-spacing-stack-md);
@@ -441,12 +518,30 @@
 }
 
 @media (max-width: 640px) {
+  /* Metrics become a swipeable row with a peek of the next card. */
+  .fp-stats {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    margin-inline: calc(-1 * var(--fp-gutter));
+    padding: 4px var(--fp-gutter) 12px;
+    scroll-padding-inline: var(--fp-gutter);
+    scrollbar-width: none;
+  }
+  .fp-stats > * {
+    scroll-snap-align: start;
+  }
+  .fp-page-header {
+    min-height: 0;
+  }
   .fp-grid,
   .fp-grid-cards {
     grid-template-columns: minmax(0, 1fr);
   }
-  .fp-filters,
-  .fp-stats {
+  .fp-filters {
     grid-template-columns: minmax(0, 1fr);
   }
   .fp-filter-end {
