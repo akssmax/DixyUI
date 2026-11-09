@@ -1580,3 +1580,16 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Vertical rhythm uses the section tokens: `--dixy-spacing-section-xl` (96px) between sections on wide screens, `-lg` (64px) at ≤960px, `-sm` (32px) above the numbers strip. Section heads have 16px between lines and `clamp(32px, 4vw, 48px)` above their content.
   - Measured at 1440px: the brand, hero copy, numbers strip, section headings, CTA and footer all start at x = 112.
   - Hero Blocks scene: the stage body has `overflow-x: hidden`, so the wide Blocks layout can't be scrolled sideways inside it. Checked: `scrollLeft` stays 0 for the stage and the page at 1024, 768 and 375px, and the document width equals the viewport.
+
+### 2026-11-09 — NativeSelect chevron; quieter docs playground
+
+- **NativeSelect.** A background-image chevron can't work: materials set the select's `background-image`, and reduced effects reset it with `!important`. NativeSelect is now a small component:
+  - A `span.dixy-native-select-root` (inline-grid) holds the `<select>` and a decorative `Mark kind="chevron"` in the same grid cell, so the wrapper adds no box of its own.
+  - Props, `ref` and `className` still reach the `<select>`. The browser arrow is removed (`appearance: none`), with 36px of end padding for the icon.
+  - `multiple` hides the chevron; disabled greys it. The icon ignores pointer events, so clicks open the picker.
+  - New test: the ref and props land on the select, the icon is `aria-hidden`, and `multiple` marks the root.
+  - Verified on the docs page (Ocean Depths skin): heights stay 32/40/48 at sm/md/lg, the chevron is centred with a 12px inset at every size, a click on the chevron hits the select, glossy keeps its gradient, and dark mode reads well.
+- **Docs playground.** Removed the filler text: the "A real component. Your decisions." caption, the "Small changes. Different character." note, the "light / skin" stage label and the footer ("Live from @dixy-ui/react", "Try it. Tab through it. Make it yours."). The status line that announces prop changes stays as a visually hidden live region. Dead CSS for the footer and caption was removed.
+- `pnpm check` (100 tests) and `pnpm package:check` pass.
+- Not tested: NativeSelect with a screen reader, Safari/Firefox (`appearance: none` on select), and a right-to-left layout for the icon inset.
+

@@ -143,6 +143,43 @@
     );
   }
 
+  /* NativeSelect: the select and its chevron share one grid cell, so the wrapper adds
+     no box of its own. It stretches like the select did in a column layout and
+     shrinks to the select inline. The browser arrow is replaced, not doubled. */
+  .dixy-native-select-root {
+    display: inline-grid;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    vertical-align: middle;
+  }
+  .dixy-native-select-root > * {
+    grid-area: 1 / 1;
+  }
+  .dixy-native-select-root > .dixy-native-select {
+    appearance: none;
+    inline-size: 100%;
+    padding-inline-end: calc(12px + 16px + 8px);
+  }
+  .dixy-native-select-icon {
+    display: inline-flex;
+    align-self: center;
+    justify-self: end;
+    margin-inline-end: 12px;
+    color: var(--dixy-color-text-secondary);
+    pointer-events: none;
+  }
+  .dixy-native-select-root:has(> .dixy-native-select:disabled)
+    > .dixy-native-select-icon {
+    color: var(--dixy-color-text-disabled);
+  }
+  /* A list box (multiple) shows its options, so it has no chevron. */
+  .dixy-native-select-root[data-multiple] > .dixy-native-select {
+    padding-inline-end: 12px;
+  }
+  .dixy-native-select-root[data-multiple] > .dixy-native-select-icon {
+    display: none;
+  }
+
   /* ColorField: label above the input, like every other field. */
   .dixy-color-field {
     display: grid;

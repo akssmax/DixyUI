@@ -53,10 +53,30 @@ export const Textarea = /* @__PURE__ */ nativePart(
   "dixy-textarea",
   ["size", "variant", "radius", "material"] as const,
 );
-export const NativeSelect = /* @__PURE__ */ nativePart(
+const NativeSelectControl = /* @__PURE__ */ nativePart(
   "select",
   "dixy-native-select",
+  ["size", "variant", "radius", "material"] as const,
 );
+/**
+ * A native `<select>` with a built-in chevron. Props, `ref` and `className`
+ * reach the `<select>`; the chevron is a decorative sibling in a thin wrapper,
+ * because materials own the select's background and an inline image can't
+ * live there.
+ */
+export function NativeSelect(props: NativeSelectProps) {
+  return (
+    <span
+      className="dixy-native-select-root"
+      data-multiple={props.multiple ? "" : undefined}
+    >
+      <NativeSelectControl {...props} />
+      <span className="dixy-native-select-icon" aria-hidden="true">
+        <Mark kind="chevron" />
+      </span>
+    </span>
+  );
+}
 export const InputGroup = /* @__PURE__ */ (() => ({
   Root: /* @__PURE__ */ nativePart("div", "dixy-input-group", [
     "size",

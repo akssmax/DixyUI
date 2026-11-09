@@ -64,5 +64,7 @@ All 30 starter skins plus the default theme now measure exactly 32/40/48 on ever
 | Checkbox | Description started under the box, not the text | Indented to the label text |
 | ColorField, NavigationMenu link | Label beside the input; link styled as body text | Label above; link matches triggers |
 
-Still open: NativeSelect's browser chevron (needs a wrapper because materials reset `background-image`), Avatar shape in groups, Toggle and ToggleGroup default treatment (no visible frame at rest).
+NativeSelect now has the same 16px chevron as Select (a wrapper, because materials own the select's background).
+
+Still open: Avatar shape in groups, Toggle and ToggleGroup default treatment (no visible frame at rest).
 

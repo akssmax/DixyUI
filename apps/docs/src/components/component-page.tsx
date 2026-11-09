@@ -153,7 +153,7 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
     motion,
     dir: direction,
   } = settings;
-  const { docsTheme, skinProps } = useDocsTheme();
+  const { skinProps } = useDocsTheme();
   const previewTheme = previewThemeProps(settings, appearance, skinProps);
   const [state, setState] = useState(() => initialState(entry.controls));
   const [revision, setRevision] = useState(0);
@@ -302,9 +302,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
         <section id="playground" className="doc-section playground-section">
           <div className="section-heading">
             <h2>Make it yours</h2>
-            <span className="section-caption">
-              A real component. Your decisions.
-            </span>
           </div>
           <Tabs.Root
             className="playground docs-playground"
@@ -385,12 +382,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
                         <Preview {...state} />
                       </Suspense>
                     </PreviewBoundary>
-                    <span className="preview-caption">
-                      {appearance} /{" "}
-                      {skinProps
-                        ? docsTheme.skin.replace("dixy/", "")
-                        : accentColor}
-                    </span>
                   </Theme>
                 </Tabs.Panel>
                 <Tabs.Panel value="code" className="playground-code">
@@ -556,17 +547,11 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
                     defaults.
                   </p>
                 </DocsDisclosure>
-                <span className="prop-panel-note" role="status">
-                  {event || "Small changes. Different character."}
+                {/* Announces prop changes to screen readers; nothing to show sighted users. */}
+                <span className="sr-only" role="status">
+                  {event}
                 </span>
               </div>
-            </div>
-            <div className="playground-footer">
-              <span>
-                <span className="status-dot" />
-                Live from @dixy-ui/react
-              </span>
-              <span>Try it. Tab through it. Make it yours.</span>
             </div>
           </Tabs.Root>
         </section>
