@@ -1716,3 +1716,14 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` and Prettier pass.
   - In-app browser (own server on :3001): Ocean caustics running with live canvas size and 80% adaptive quality; Pause holds the frame and the HUD reads "Paused"; ArrowRight ×2 on the speed thumb goes 1× → 2×; switching to Aurora updates the URL (`?skin=solar-sail`), the radio state and the token swatches; Phosphor Terminal in dark; Neon Night Market at 375px stacks stage over inspector with no horizontal overflow. No console errors.
 - Not tested: reduced-motion (the Pause/Restart/Speed controls disable and a note appears, but OS reduced motion was not toggled), screen readers, Safari/Firefox, touch devices, and 120 Hz frame rate (the in-app pane reported 29 fps and less while backgrounded).
+
+### 2026-11-09 — Exit easing is now ease-out
+
+- What changed: `motionEasings.exit` in `packages/tokens/src/motion.ts` went from `[0.4, 0, 1, 1]` (an ease-in) to `[0.23, 1, 0.32, 1]` (a strong ease-out). `motion.css` was regenerated with `scripts/generate-motion.mjs`. No component CSS changed: Dialog, AlertDialog, Drawer, Menu, ContextMenu, NavigationMenu, Select, Combobox, Autocomplete, Popover, PreviewCard, Tooltip and Toast all read the token through `--dixy-*-motion-exit-easing`. The token name and exit duration (`fast`, 120ms) stay the same, so the public API is unchanged.
+- Why: from a review of Emil Kowalski's animation rules. An ease-in exit starts slowly, so a closing popup hangs for a moment at full opacity, right when the user expects it to go. An ease-out exit starts fast and feels like the interface is responding. Motion users of `tweenTransition("exit")` get the same curve.
+- Verified:
+  - `pnpm check` passes (110 tests) and `pnpm package:check` passes.
+  - In the in-app browser (own dev server), the Motion foundation page lists the new exit curve.
+  - The exit easing of all six component families resolves to `cubic-bezier(0.23, 1, 0.32, 1)`. An open Menu popup with `data-ending-style` computes `opacity, transform` at 0.12s with the new curve.
+  - Inside `[data-motion="reduced"]` the exit still resolves to 0ms.
+- Not tested: watching the close animation visually (the pane was hidden, so animation frames didn't run), OS-level reduced-motion emulation, Safari/Firefox and touch.

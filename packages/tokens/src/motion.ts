@@ -15,7 +15,8 @@ export const motionEasings = {
   linear: [0, 0, 1, 1],
   standard: [0.2, 0.8, 0.2, 1],
   enter: [0.16, 1, 0.3, 1],
-  exit: [0.4, 0, 1, 1],
+  // Exits also start fast: an ease-in exit lingers at the moment the user is watching.
+  exit: [0.23, 1, 0.32, 1],
 } as const;
 export type MotionEasing = keyof typeof motionEasings;
 

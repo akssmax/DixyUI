@@ -297,6 +297,7 @@ No additional component-library dependency is needed: Base UI is already install
 - [x] Run `pnpm check` and `pnpm package:check`; typecheck 22 Motion configurations within 268 complete examples.
 - [x] Codex in-app browser: normal/reduced previews, spring/effects behavior, stagger, keyboard, RTL, desktop/320/390px, light/dark and a production smoke test.
 - [ ] Actual OS reduced-motion media emulation, clipboard byte equivalence, manual screen-reader/forced-colors/zoom/touch and durable visual regression review.
+- [x] 2026-11-09: exit easing changed from ease-in to ease-out (`0.23, 1, 0.32, 1`) for all presence exits; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Close animation not reviewed visually.
 
 Personal motion learning remains separate:
 
