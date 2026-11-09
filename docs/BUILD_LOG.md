@@ -1795,3 +1795,34 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The rail width transition with OS reduced motion.
   - Screen readers on the toggle and search.
   - The collapsed state is not persisted across reloads, by choice.
+
+### 2026-11-09 — Candy Clay corners on multi-line boxes; hero height no longer follows the scene
+
+- Request: in Candy Clay some elements were "too full" (pill-shaped message cards and an elliptical reply field), and the Dashboard scene stretched the homepage hero, leaving the copy column floating.
+- Radius, cause: `radius="full"` sets `--dixy-radius-control` to 9999px. That is right for one-line controls but turns any taller box using it into an ellipse.
+  - Library: `.dixy-textarea` now uses `min(var(--dixy-radius-control), var(--dixy-radius-card))` (an explicit component `radius` still wins). In none/sm/md/lg the control radius is already the smaller value, so only `full` changes. It caps at 16px, and Candy Clay's ×1.5 corner scale gives 24px.
+  - Skin compiler (`packages/themes/src/compile-css.ts`): the same cap is applied to the textarea before the skin's corner scale. All 31 generated skins are regenerated; only `full` renders differently.
+  - Docs scenes: mail message rows and the dashboard table wrapper used the control radius for card-like boxes; they now use the card radius.
+- Hero, cause: the stage is a grid item whose height came from its content, so the 1,389px Dashboard grew the hero row to 1,541px (Mail: 830px). `contain: size` on `.landing-stage-body` stops the scene sizing the row; the copy and the hero minimum decide it, and the scene scrolls inside.
+- Verified (in-app browser at 1440×900, emulated because the pane was hidden):
+  - The hero is 822px for Mail, Dashboard, Music and Blocks. The Dashboard scrolls inside the stage (670 of 1,389px), with the caption in the first viewport.
+  - At 900px and 375px, the stacked stage keeps its fixed height and there is no horizontal scroll.
+  - Candy Clay: message rows 16px, reply textarea 24px, search field and buttons still pills.
+  - `pnpm check`, `pnpm format:check`, tree-shaking and online package verify pass.
+- Not tested:
+  - Every starter with `radius="full"` beyond Candy Clay.
+  - Other multi-line boxes that may still use the control radius (e.g. app-level cards elsewhere).
+  - Keyboard scrolling of the hero stage.
+  - Safari and Firefox.
+
+### 2026-11-09 — Homepage showcase: Wren replaces Postbox
+
+- Request: remove the Postbox card (the mail app is already the hero) and put Wren in its place, because the full-width Wren row made the bento much longer.
+- Wren is now a standard card in the second row (Wren, Kitchen sink, Theme playground). The full-width `landing-show-wide` variant, its mobile overrides and the Postbox miniature CSS are deleted.
+- The Wren miniature was trimmed to fit a standard card's 206px art area: tighter inset and padding, no placeholder lines (request, thinking chip, tool call and composer remain). Its description is one line.
+- Verified at 1440×900 and 375px (emulated, pane hidden):
+  - The showcase is 736px tall in two rows, as before the Wren row was added.
+  - The miniature does not overflow; the composer has 13px clearance.
+  - No horizontal scroll at 375px.
+  - `pnpm check` and `pnpm format:check` pass.
+- Also checked: Candy Clay, Retro OS, Phosphor Terminal, Swiss Poster and Y2K Titanium all fit with the same 13px clearance. Not tested: the other 27 starters.

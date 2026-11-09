@@ -856,6 +856,14 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Prune inactive skin `<style>` tags on docs theme switches; make skin definitions load lazily.
 - [ ] Learning: explain why a route's `validateSearch` import ends up in the entry chunk, and how bundlers decide chunk boundaries by module rather than by export.
 
+## Radius and hero fixes — 2026-11-09
+
+- [x] Multi-line fields cap at the card radius under `radius="full"` (library textarea and skin compiler); docs scene cards use the card radius. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Homepage hero height no longer follows the active scene (`contain: size` on the stage body).
+- [ ] Audit other multi-line surfaces that use `--dixy-radius-control` under `radius="full"`.
+- [ ] Learning: explain why `min(control, card)` changes only the full radius mode.
+- [ ] Learning: explain how `contain: size` stops a grid item's content from sizing its row.
+
 ## AI parts and Wren example — 2026-11-09
 
 The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base UI + tokens). Evidence: docs/BUILD_LOG.md, 2026-11-09.

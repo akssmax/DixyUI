@@ -422,6 +422,8 @@
   align-items: stretch;
   gap: 14px;
   min-inline-size: 0;
+  /* Fill the row the copy and the hero's minimum height decide. */
+  align-self: stretch;
   block-size: 100%;
   min-block-size: 0;
 }
@@ -439,6 +441,10 @@
   flex: 1;
   min-inline-size: 0;
   min-block-size: 0;
+  /* The scene's height must not size the hero row. Without this the
+     Dashboard (about 1,400px tall) stretched the hero to 1,541px and left
+     the copy floating; now every scene scrolls inside the same height. */
+  contain: size;
   /* Vertical scroll only: overflow-y alone would make x scrollable too. */
   overflow-x: hidden;
   overflow-y: auto;
@@ -748,20 +754,6 @@
 .landing-show-tall {
   min-block-size: 420px;
 }
-/* A full row: chat art on the left, details on the right. */
-.landing-show-wide {
-  grid-column: span 6;
-  grid-template-rows: none;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  min-block-size: 320px;
-}
-.landing-show-wide > .landing-show-art {
-  border-block-end: 0;
-  border-inline-end: 1px solid var(--dixy-color-border-subtle);
-}
-.landing-show-wide > .landing-show-foot {
-  align-items: end;
-}
 .landing-show-art {
   position: relative;
   overflow: clip;
@@ -952,40 +944,13 @@
   color: #fff;
   font: 500 11.5px var(--dixy-font-mono, ui-monospace, monospace);
 }
-/* Mail, kitchen sink and playground miniatures */
-.landing-mail {
-  position: absolute;
-  inset: 20px -20px -20px 20px;
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  padding: 14px;
-  border: 1px solid var(--dixy-color-border-subtle);
-  border-radius: var(--dixy-radius-lg, 14px);
-  background: var(--dixy-color-background-surface);
-  font-size: 11.5px;
-  color: var(--dixy-color-text-secondary);
-}
-.landing-mail > div {
-  padding: 8px 10px;
-  border: 1px solid var(--dixy-color-border-subtle);
-  border-radius: var(--dixy-radius-md, 10px);
-}
-.landing-mail > div[data-on] {
-  background: var(--dixy-color-background-surface-sunken);
-}
-.landing-mail b {
-  display: block;
-  color: var(--dixy-color-text-primary);
-  font-size: 12.5px;
-}
 .landing-wren {
   position: absolute;
-  inset: 20px 24px 0;
+  inset: 16px 20px 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 16px 18px 0;
+  gap: 8px;
+  padding: 12px 14px 0;
   border: 1px solid var(--dixy-color-border-subtle);
   border-block-end: 0;
   border-radius: var(--dixy-radius-lg, 14px) var(--dixy-radius-lg, 14px) 0 0;
@@ -1046,21 +1011,13 @@
   font-style: normal;
   font-size: 10.5px;
 }
-.landing-wren-line {
-  block-size: 7px;
-  border-radius: 4px;
-  background: var(--dixy-color-background-subtle);
-}
-.landing-wren-line-short {
-  inline-size: 60%;
-}
 .landing-wren-composer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-block-start: auto;
-  margin-block-end: 16px;
-  padding: 8px 8px 8px 12px;
+  margin-block-end: 12px;
+  padding: 6px 6px 6px 12px;
   border: 1px solid var(--dixy-color-border-default);
   border-radius: 14px;
 }
@@ -1070,6 +1027,7 @@
   border-radius: 50%;
   background: var(--dixy-color-background-action-primary);
 }
+/* Kitchen sink and playground miniatures */
 .landing-sink {
   position: absolute;
   inset: 0;
@@ -1432,22 +1390,12 @@
   }
   .landing-show,
   .landing-show-big,
-  .landing-show-tall,
-  .landing-show-wide {
+  .landing-show-tall {
     grid-column: span 2;
     min-block-size: 320px;
   }
   .landing-show-big {
     min-block-size: 380px;
-  }
-  .landing-show-wide {
-    grid-template-columns: none;
-    grid-template-rows: minmax(250px, 1fr) auto;
-    min-block-size: 0;
-  }
-  .landing-show-wide > .landing-show-art {
-    border-inline-end: 0;
-    border-block-end: 1px solid var(--dixy-color-border-subtle);
   }
   .landing-footer-top {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -282,6 +282,11 @@
   )[data-dixy-skin="dixy/swiss-poster"] {
     border-radius: calc(var(--dixy-radius-control) * 1);
   }
+  :is(.dixy-textarea)[data-dixy-skin="dixy/swiss-poster"] {
+    border-radius: calc(
+      min(var(--dixy-radius-control), var(--dixy-radius-card)) * 1
+    );
+  }
   :is(
       .dixy-input,
       .dixy-textarea,

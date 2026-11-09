@@ -514,7 +514,7 @@ export function BuiltWithSection({
           </div>
         </li>
 
-        <li className="landing-show landing-show-wide">
+        <li className="landing-show">
           <div className="landing-show-art" aria-hidden="true">
             <div className="landing-wren">
               <span className="landing-wren-user">
@@ -526,9 +526,6 @@ export function BuiltWithSection({
                   <b>get_forecast</b>
                   <i>Completed</i>
                 </span>
-                <span className="landing-wren-line" />
-                <span className="landing-wren-line" />
-                <span className="landing-wren-line landing-wren-line-short" />
               </div>
               <span className="landing-wren-composer">
                 Ask Wren anything
@@ -548,48 +545,7 @@ export function BuiltWithSection({
                 </Link>
               </Heading>
               <Text size="sm" tone="muted">
-                An AI chat app with streaming markdown, reasoning, tool calls
-                and sources. Scripted replies. Opens in {starterName}.
-              </Text>
-              <div className="landing-show-tags">
-                {["Conversation", "PromptInput", "Reasoning", "Tool"].map(
-                  (tag) => (
-                    <Badge key={tag} variant="outline" color="neutral">
-                      {tag}
-                    </Badge>
-                  ),
-                )}
-              </div>
-            </div>
-            <span className="landing-show-arrow" aria-hidden="true">
-              <ArrowUpRight size={16} />
-            </span>
-          </div>
-        </li>
-
-        <li className="landing-show">
-          <div className="landing-show-art" aria-hidden="true">
-            <div className="landing-mail">
-              <div data-on>
-                <b>Maya Chen</b>A little inspiration…
-              </div>
-              <div>
-                <b>Alex Rivera</b>Friday's design session
-              </div>
-              <div>
-                <b>Jamie Park</b>The playlist you asked for
-              </div>
-            </div>
-          </div>
-          <div className="landing-show-foot">
-            <div>
-              <Heading as="h3" size="sm">
-                <a href="#hero-heading" className="landing-show-link">
-                  Postbox
-                </a>
-              </Heading>
-              <Text size="sm" tone="muted">
-                The mail app at the top of this page.
+                An AI chat app built from the Dixy AI parts.
               </Text>
             </div>
             <span className="landing-show-arrow" aria-hidden="true">
