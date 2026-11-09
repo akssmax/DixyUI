@@ -160,7 +160,10 @@
     color: var(--dixy-component-text);
   }
   /* Neutral outline stays a quiet grey label rather than a tinted one. */
-  :where(.dixy-badge, .dixy-chip)[data-variant="outline"][data-color="neutral"] {
+  :where(
+      .dixy-badge,
+      .dixy-chip
+    )[data-variant="outline"][data-color="neutral"] {
     border-color: var(--dixy-color-border-default);
     color: var(--dixy-color-text-secondary);
   }

@@ -113,7 +113,6 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-
 const original = {
   id: "none",
   name: "Original Dixy",
@@ -289,7 +288,11 @@ function StarterPicker({
     onSelect(others[Math.floor(Math.random() * others.length)]!.id);
   }
   return (
-    <div className="landing-picker" role="group" aria-labelledby="picker-heading">
+    <div
+      className="landing-picker"
+      role="group"
+      aria-labelledby="picker-heading"
+    >
       <div className="landing-picker-head">
         <Text as="span" id="picker-heading" className="landing-picker-title">
           Try a starter
@@ -406,7 +409,6 @@ function StarterPicker({
   );
 }
 
-
 function Bento({ preset }: { preset: ThemePreset }) {
   const document = installedThemeDocuments[preset.skin];
   const parts = document
@@ -423,7 +425,11 @@ function Bento({ preset }: { preset: ThemePreset }) {
         ["Heading", preset.headingFont],
       ];
   return (
-    <Container as="section" className="landing-section" aria-labelledby="why-heading">
+    <Container
+      as="section"
+      className="landing-section"
+      aria-labelledby="why-heading"
+    >
       <div className="landing-section-head">
         <Text as="span" className="landing-kicker" tone="muted">
           WHY DIXY
@@ -595,103 +601,103 @@ function Landing() {
         </a>
         <header className="landing-header">
           <Container className="landing-header-inner">
-          <Link to="/" className="landing-brand" aria-label="Dixy UI home">
-            <DixyMark size={24} />
-            <strong>
-              dixy<span>UI</span>
-            </strong>
-          </Link>
-          <nav aria-label="Primary">
-            <ButtonLink
-              to="/docs/installation"
+            <Link to="/" className="landing-brand" aria-label="Dixy UI home">
+              <DixyMark size={24} />
+              <strong>
+                dixy<span>UI</span>
+              </strong>
+            </Link>
+            <nav aria-label="Primary">
+              <ButtonLink
+                to="/docs/installation"
+                variant="ghost"
+                color="neutral"
+                size="sm"
+              >
+                Docs
+              </ButtonLink>
+              <ButtonLink
+                to="/docs/components/$component"
+                params={{ component: "button" }}
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                className="landing-nav-wide"
+              >
+                Components
+              </ButtonLink>
+              <ButtonAnchor
+                href="#showcase"
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                className="landing-nav-wide"
+              >
+                Showcase
+              </ButtonAnchor>
+              <ButtonLink
+                to="/playground"
+                variant="ghost"
+                color="neutral"
+                size="sm"
+              >
+                Playground
+              </ButtonLink>
+            </nav>
+            <IconButton
               variant="ghost"
               color="neutral"
               size="sm"
+              aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} appearance`}
+              onClick={() =>
+                setAppearance(appearance === "light" ? "dark" : "light")
+              }
             >
-              Docs
-            </ButtonLink>
-            <ButtonLink
-              to="/docs/components/$component"
-              params={{ component: "button" }}
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              className="landing-nav-wide"
-            >
-              Components
-            </ButtonLink>
-            <ButtonAnchor
-              href="#showcase"
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              className="landing-nav-wide"
-            >
-              Showcase
-            </ButtonAnchor>
-            <ButtonLink
-              to="/playground"
-              variant="ghost"
-              color="neutral"
-              size="sm"
-            >
-              Playground
-            </ButtonLink>
-          </nav>
-          <IconButton
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} appearance`}
-            onClick={() =>
-              setAppearance(appearance === "light" ? "dark" : "light")
-            }
-          >
-            {appearance === "light" ? <Moon size={17} /> : <Sun size={17} />}
-          </IconButton>
+              {appearance === "light" ? <Moon size={17} /> : <Sun size={17} />}
+            </IconButton>
           </Container>
         </header>
 
         <main id="landing-main" tabIndex={-1}>
           <section className="landing-hero" aria-labelledby="hero-heading">
             <div className="landing-hero-copy">
-            <Badge variant="soft" className="landing-pill">
-              0.1 beta · Now on npm
-            </Badge>
-            <Heading
-              as="h1"
-              id="hero-heading"
-              className="landing-display"
-              ref={heading}
-            >
-              Components with <em>character.</em>
-            </Heading>
-            <Text size="lg" tone="muted" className="landing-lede">
-              Accessible React components with {starters.length} starter themes
-              that change the whole feel of your product. Try one on this page.
-            </Text>
-            <div className="landing-ctas">
-              <ButtonLink to="/docs/installation" size="lg">
-                Get started <ArrowRight size={16} />
-              </ButtonLink>
-              <ButtonAnchor
-                href="#showcase"
-                size="lg"
-                variant="outline"
-                color="neutral"
+              <Badge variant="soft" className="landing-pill">
+                0.1 beta · Now on npm
+              </Badge>
+              <Heading
+                as="h1"
+                id="hero-heading"
+                className="landing-display"
+                ref={heading}
               >
-                See it in real apps
-              </ButtonAnchor>
-            </div>
-            <InstallCommand />
-            <Text size="sm" tone="muted">
-              Beta on npm. APIs may still change before 1.0.
-            </Text>
-            <StarterPicker {...studio} />
+                Components with <em>character.</em>
+              </Heading>
+              <Text size="lg" tone="muted" className="landing-lede">
+                Accessible React components with {starters.length} starter
+                themes that change the whole feel of your product. Try one on
+                this page.
+              </Text>
+              <div className="landing-ctas">
+                <ButtonLink to="/docs/installation" size="lg">
+                  Get started <ArrowRight size={16} />
+                </ButtonLink>
+                <ButtonAnchor
+                  href="#showcase"
+                  size="lg"
+                  variant="outline"
+                  color="neutral"
+                >
+                  See it in real apps
+                </ButtonAnchor>
+              </div>
+              <InstallCommand />
+              <Text size="sm" tone="muted">
+                Beta on npm. APIs may still change before 1.0.
+              </Text>
+              <StarterPicker {...studio} />
             </div>
             <LandingWindow />
           </section>
-
 
           <ProofStrip
             componentCount={componentCount}
@@ -710,10 +716,13 @@ function Landing() {
             themeKey={`${starter.preset.skin}:${appearance}`}
           />
 
-
           <Bento preset={starter.preset} />
 
-          <Container as="section" className="landing-section" aria-labelledby="ship-heading">
+          <Container
+            as="section"
+            className="landing-section"
+            aria-labelledby="ship-heading"
+          >
             <div className="landing-snippet">
               <div>
                 <Text as="span" className="landing-kicker" tone="muted">
@@ -735,7 +744,8 @@ function Landing() {
             </div>
           </Container>
 
-          <Container as="section"
+          <Container
+            as="section"
             className="landing-section"
             aria-labelledby="components-heading"
           >

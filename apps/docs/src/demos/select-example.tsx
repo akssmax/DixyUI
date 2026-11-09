@@ -62,7 +62,9 @@ export default function SelectExample({
                     <Select.Item
                       key={plan.value}
                       value={plan.value}
-                      disabled={plan.value === "enterprise" && disableEnterprise}
+                      disabled={
+                        plan.value === "enterprise" && disableEnterprise
+                      }
                     >
                       <Select.ItemText>{plan.label}</Select.ItemText>
                       <Select.ItemIndicator />

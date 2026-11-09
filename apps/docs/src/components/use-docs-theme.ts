@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ThemeProps } from "@dixy-ui/react";
 import { useAppAppearance } from "./app-appearance-provider";
-import {
-  playgroundThemeProps,
-  skinThemePreset,
-} from "../lib/theme-playground";
+import { playgroundThemeProps, skinThemePreset } from "../lib/theme-playground";
 import {
   deduplicateSkinStyles,
   prepareSkin,

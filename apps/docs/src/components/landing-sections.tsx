@@ -39,7 +39,8 @@ import { ButtonLink } from "./button-link";
 import "../styles/landing.css";
 
 /** Published on npm under the beta dist-tag. */
-export const installCommand = "pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta";
+export const installCommand =
+  "pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta";
 export const npmUrl = "https://www.npmjs.com/package/@dixy-ui/react";
 export const repoUrl = "https://github.com/akssmax/DixyUI";
 
@@ -175,7 +176,11 @@ export function AccessibilitySection({ themeKey }: { themeKey: string }) {
     ratio == null ? "" : ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : "Below AA";
 
   return (
-    <Container as="section" className="landing-section" aria-labelledby="a11y-heading">
+    <Container
+      as="section"
+      className="landing-section"
+      aria-labelledby="a11y-heading"
+    >
       <div className="landing-section-head-row">
         <div>
           <Text as="span" className="landing-kicker" tone="muted">
@@ -185,11 +190,7 @@ export function AccessibilitySection({ themeKey }: { themeKey: string }) {
             Character on the surface. <em>Access underneath.</em>
           </Heading>
         </div>
-        <ButtonLink
-          to="/docs/accessibility"
-          variant="ghost"
-          size="sm"
-        >
+        <ButtonLink to="/docs/accessibility" variant="ghost" size="sm">
           Read the accessibility notes <ArrowRight size={14} />
         </ButtonLink>
       </div>
@@ -226,7 +227,9 @@ export function AccessibilitySection({ themeKey }: { themeKey: string }) {
                     <I size={18} />
                   </span>
                   <div>
-                    <strong className="landing-pillar-title">{title as string}</strong>
+                    <strong className="landing-pillar-title">
+                      {title as string}
+                    </strong>
                     <Text size="sm" tone="muted">
                       {body as string}
                     </Text>
@@ -283,7 +286,9 @@ export function AccessibilitySection({ themeKey }: { themeKey: string }) {
                 className="landing-lab-form"
                 onSubmit={(event) => {
                   event.preventDefault();
-                  setStatus("Saved. This message is announced with role=status.");
+                  setStatus(
+                    "Saved. This message is announced with role=status.",
+                  );
                 }}
               >
                 <Field.Root>
@@ -295,10 +300,7 @@ export function AccessibilitySection({ themeKey }: { themeKey: string }) {
                 </Field.Root>
                 <Field.Root>
                   <Field.Label className="landing-check">
-                    <Checkbox.Root
-                      checked={digest}
-                      onCheckedChange={setDigest}
-                    >
+                    <Checkbox.Root checked={digest} onCheckedChange={setDigest}>
                       <Checkbox.Indicator />
                     </Checkbox.Root>
                     Weekly digest
@@ -380,7 +382,11 @@ export function ProofStrip({
     ["0 KB", "of Tailwind: plain CSS in cascade layers"],
   ] as const;
   return (
-    <Container as="section" className="landing-proof" aria-label="Dixy at a glance">
+    <Container
+      as="section"
+      className="landing-proof"
+      aria-label="Dixy at a glance"
+    >
       <dl>
         {facts.map(([value, label]) => (
           <div key={label}>
@@ -411,7 +417,8 @@ export function BuiltWithSection({
   playgroundSearch: { theme: string };
 }) {
   return (
-    <Container as="section"
+    <Container
+      as="section"
       id="showcase"
       className="landing-section"
       aria-labelledby="built-heading"
@@ -424,8 +431,8 @@ export function BuiltWithSection({
           Real products, <em>not just buttons.</em>
         </Heading>
         <Text tone="muted" size="lg">
-          Complete screens made only from Dixy's public components. They open
-          in the starter you picked.
+          Complete screens made only from Dixy's public components. They open in
+          the starter you picked.
         </Text>
       </div>
 
@@ -641,7 +648,11 @@ export function CtaSection({
 }) {
   const [copied, copy] = useCopy();
   return (
-    <Container as="section" className="landing-section" aria-labelledby="cta-heading">
+    <Container
+      as="section"
+      className="landing-section"
+      aria-labelledby="cta-heading"
+    >
       <div className="landing-cta">
         <div className="landing-cta-copy">
           <Text as="span" className="landing-kicker">
@@ -655,7 +666,11 @@ export function CtaSection({
             frame and the type until it's yours.
           </Text>
           <div className="landing-ctas">
-            <ButtonLink to="/docs/installation" size="lg" className="landing-cta-primary">
+            <ButtonLink
+              to="/docs/installation"
+              size="lg"
+              className="landing-cta-primary"
+            >
               Get started <ArrowRight size={16} />
             </ButtonLink>
             <ButtonLink
@@ -707,7 +722,7 @@ export function CtaSection({
                 <span className="landing-term-dim">// app.tsx</span>
                 {"\n"}
                 <span className="landing-term-acc">import</span>
-                {' { Theme } '}
+                {" { Theme } "}
                 <span className="landing-term-acc">from</span>
                 {' "@dixy-ui/react";'}
               </code>
@@ -842,7 +857,12 @@ export function LandingFooter({
           </nav>
         </div>
         <div className="landing-footer-bottom">
-          <Text as="span" size="sm" tone="muted" className="landing-footer-status">
+          <Text
+            as="span"
+            size="sm"
+            tone="muted"
+            className="landing-footer-status"
+          >
             <i aria-hidden="true" />
             0.1 beta · on npm
           </Text>

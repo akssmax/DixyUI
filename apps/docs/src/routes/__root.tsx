@@ -107,7 +107,9 @@ export const Route = createRootRoute({
             },
           ]
         : []),
-      ...(loaderData?.materialCSS ? [{ children: loaderData.materialCSS }] : []),
+      ...(loaderData?.materialCSS
+        ? [{ children: loaderData.materialCSS }]
+        : []),
     ],
     meta: [
       { charSet: "utf-8" },

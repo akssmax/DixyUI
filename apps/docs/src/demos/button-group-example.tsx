@@ -12,9 +12,9 @@ export default function ButtonGroupExample({
   orientation = "horizontal",
 }: Omit<VisualProps, "color"> &
   Pick<ButtonProps, "color"> & {
-  attached?: boolean;
-  orientation?: "horizontal" | "vertical";
-}) {
+    attached?: boolean;
+    orientation?: "horizontal" | "vertical";
+  }) {
   const [action, setAction] = useState("Choose an action.");
   const visual = { size, variant, color, radius, material };
   return (
