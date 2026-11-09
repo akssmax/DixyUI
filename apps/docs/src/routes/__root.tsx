@@ -23,7 +23,8 @@ function usesDocsShell(pathname: string) {
     pathname === "/" ||
     pathname === "/playground" ||
     pathname.startsWith("/lab/") ||
-    pathname === "/dixy-example"
+    pathname === "/dixy-example" ||
+    pathname === "/ai-example"
   );
 }
 

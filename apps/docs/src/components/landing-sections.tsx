@@ -516,27 +516,36 @@ export function BuiltWithSection({
 
         <li className="landing-show">
           <div className="landing-show-art" aria-hidden="true">
-            <div className="landing-mail">
-              <div data-on>
-                <b>Maya Chen</b>A little inspiration…
+            <div className="landing-wren">
+              <span className="landing-wren-user">
+                Plan a rainy-day weekend in Lisbon
+              </span>
+              <div className="landing-wren-reply">
+                <span className="landing-wren-chip">Thought for 2 seconds</span>
+                <span className="landing-wren-tool">
+                  <b>get_forecast</b>
+                  <i>Completed</i>
+                </span>
               </div>
-              <div>
-                <b>Alex Rivera</b>Friday's design session
-              </div>
-              <div>
-                <b>Jamie Park</b>The playlist you asked for
-              </div>
+              <span className="landing-wren-composer">
+                Ask Wren anything
+                <i />
+              </span>
             </div>
           </div>
           <div className="landing-show-foot">
             <div>
               <Heading as="h3" size="sm">
-                <a href="#hero-heading" className="landing-show-link">
-                  Postbox
-                </a>
+                <Link
+                  to="/ai-example"
+                  search={starterSlug ? { skin: starterSlug } : {}}
+                  className="landing-show-link"
+                >
+                  Wren
+                </Link>
               </Heading>
               <Text size="sm" tone="muted">
-                The mail app at the top of this page.
+                An AI chat app built from the Dixy AI parts.
               </Text>
             </div>
             <span className="landing-show-arrow" aria-hidden="true">
@@ -822,6 +831,14 @@ export function LandingFooter({
               <li>
                 <Link to="/dixy-example">
                   Fernpay{" "}
+                  <Badge size="sm" variant="soft">
+                    new
+                  </Badge>
+                </Link>
+              </li>
+              <li>
+                <Link to="/ai-example">
+                  Wren AI chat{" "}
                   <Badge size="sm" variant="soft">
                     new
                   </Badge>

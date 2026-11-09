@@ -305,6 +305,11 @@
   )[data-dixy-skin="dixy/papel-picado"] {
     border-radius: calc(var(--dixy-radius-control) * 1);
   }
+  :is(.dixy-textarea)[data-dixy-skin="dixy/papel-picado"] {
+    border-radius: calc(
+      min(var(--dixy-radius-control), var(--dixy-radius-card)) * 1
+    );
+  }
   :is(
       .dixy-input,
       .dixy-textarea,

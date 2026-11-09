@@ -422,6 +422,8 @@
   align-items: stretch;
   gap: 14px;
   min-inline-size: 0;
+  /* Fill the row the copy and the hero's minimum height decide. */
+  align-self: stretch;
   block-size: 100%;
   min-block-size: 0;
 }
@@ -439,6 +441,10 @@
   flex: 1;
   min-inline-size: 0;
   min-block-size: 0;
+  /* The scene's height must not size the hero row. Without this the
+     Dashboard (about 1,400px tall) stretched the hero to 1,541px and left
+     the copy floating; now every scene scrolls inside the same height. */
+  contain: size;
   /* Vertical scroll only: overflow-y alone would make x scrollable too. */
   overflow-x: hidden;
   overflow-y: auto;
@@ -938,33 +944,90 @@
   color: #fff;
   font: 500 11.5px var(--dixy-font-mono, ui-monospace, monospace);
 }
-/* Mail, kitchen sink and playground miniatures */
-.landing-mail {
+.landing-wren {
   position: absolute;
-  inset: 20px -20px -20px 20px;
-  display: grid;
-  align-content: start;
+  inset: 16px 20px 0;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  padding: 14px;
+  padding: 12px 14px 0;
   border: 1px solid var(--dixy-color-border-subtle);
-  border-radius: var(--dixy-radius-lg, 14px);
+  border-block-end: 0;
+  border-radius: var(--dixy-radius-lg, 14px) var(--dixy-radius-lg, 14px) 0 0;
   background: var(--dixy-color-background-surface);
-  font-size: 11.5px;
+  font-size: 12px;
   color: var(--dixy-color-text-secondary);
 }
-.landing-mail > div {
-  padding: 8px 10px;
-  border: 1px solid var(--dixy-color-border-subtle);
-  border-radius: var(--dixy-radius-md, 10px);
-}
-.landing-mail > div[data-on] {
-  background: var(--dixy-color-background-surface-sunken);
-}
-.landing-mail b {
-  display: block;
+.landing-wren-user {
+  align-self: flex-end;
+  padding: 6px 10px;
+  border-radius: 12px 12px 4px 12px;
+  background: var(--dixy-color-background-action-primary-subtle);
   color: var(--dixy-color-text-primary);
-  font-size: 12.5px;
 }
+.landing-wren-reply {
+  position: relative;
+  display: grid;
+  gap: 8px;
+  padding-inline-start: 26px;
+}
+/* Wren's mark, as drawn in the app. */
+.landing-wren-reply::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+  background: linear-gradient(
+    135deg,
+    var(--dixy-color-background-action-primary) 0 55%,
+    var(--dixy-color-background-action-primary-subtle) 55% 100%
+  );
+}
+.landing-wren-chip {
+  font-weight: 500;
+}
+.landing-wren-tool {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-inline-size: 280px;
+  padding: 6px 10px;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: 8px;
+  color: var(--dixy-color-text-primary);
+}
+.landing-wren-tool b {
+  font-family: var(--dixy-font-mono);
+  font-weight: 500;
+}
+.landing-wren-tool i {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--dixy-color-background-action-success-subtle);
+  color: var(--dixy-color-text-action-success);
+  font-style: normal;
+  font-size: 10.5px;
+}
+.landing-wren-composer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-block-start: auto;
+  margin-block-end: 12px;
+  padding: 6px 6px 6px 12px;
+  border: 1px solid var(--dixy-color-border-default);
+  border-radius: 14px;
+}
+.landing-wren-composer i {
+  inline-size: 20px;
+  block-size: 20px;
+  border-radius: 50%;
+  background: var(--dixy-color-background-action-primary);
+}
+/* Kitchen sink and playground miniatures */
 .landing-sink {
   position: absolute;
   inset: 0;

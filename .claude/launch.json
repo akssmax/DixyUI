@@ -71,6 +71,23 @@
       ],
       "port": 3003,
       "url": "http://127.0.0.1:3003"
+    },
+    {
+      "name": "docs-ai",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--filter",
+        "./apps/docs",
+        "exec",
+        "vite",
+        "dev",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3005"
+      ],
+      "port": 3005,
+      "url": "http://127.0.0.1:3005"
     }
   ]
 }

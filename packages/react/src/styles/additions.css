@@ -269,6 +269,13 @@
     );
   }
   .dixy-textarea {
+    /* A field that grows past one line is a box, not a pill: under
+     * radius="full" it takes the card radius. Other radius modes are
+     * unchanged, since there the control radius is already the smaller one. */
+    border-radius: var(
+      --dixy-component-radius,
+      min(var(--dixy-radius-control), var(--dixy-radius-card))
+    );
     padding-block: 8px;
     resize: vertical;
     min-block-size: 6rem;

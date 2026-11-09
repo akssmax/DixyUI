@@ -1,0 +1,622 @@
+/*
+ * @dixy-ui/react/ai.css: styles for the AI parts. Load after styles.css; it
+ * uses only Dixy tokens, so Theme, skins and light/dark restyle it.
+ */
+@layer dixy.components {
+  /* Conversation ------------------------------------------------------- */
+  .dixy-conversation {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-md);
+  }
+  .dixy-conversation-content {
+    flex: 1;
+    min-block-size: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-lg);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: var(--dixy-spacing-inset-lg);
+    /* Keeps the newest line in view when the browser anchors scrolling. */
+    overflow-anchor: none;
+  }
+  .dixy-conversation-content:focus-visible {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: calc(var(--dixy-focus-ring-width) * -1);
+  }
+  .dixy-conversation-scroll-button {
+    position: absolute;
+    inset-block-end: var(--dixy-spacing-inset-md);
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    border-radius: var(--dixy-radius-full);
+    background-color: var(--dixy-color-background-surface-raised);
+    box-shadow: var(--dixy-shadow-floating);
+  }
+  .dixy-conversation-empty {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--dixy-spacing-stack-sm);
+    max-inline-size: 36rem;
+    padding: var(--dixy-spacing-inset-xl);
+    text-align: center;
+  }
+  .dixy-conversation-empty-icon {
+    display: inline-grid;
+    place-items: center;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-conversation-empty-icon svg {
+    inline-size: 32px;
+    block-size: 32px;
+  }
+  .dixy-conversation-empty-title {
+    margin: 0;
+    font: var(--dixy-font-title-md);
+  }
+  .dixy-conversation-empty-description {
+    margin: 0;
+    color: var(--dixy-color-text-secondary);
+  }
+
+  /* Message ------------------------------------------------------------ */
+  .dixy-message {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: var(--dixy-spacing-inline-sm) var(--dixy-spacing-inline-md);
+    inline-size: 100%;
+  }
+  .dixy-message:not(:has(> .dixy-message-avatar)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dixy-message[data-from="user"] {
+    grid-template-columns: minmax(0, 1fr) auto;
+    justify-items: end;
+  }
+  .dixy-message[data-from="user"] > .dixy-message-avatar {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .dixy-message > :not(.dixy-message-avatar) {
+    grid-column: 1 / -1;
+  }
+  .dixy-message:has(> .dixy-message-avatar) > :not(.dixy-message-avatar) {
+    grid-column: 2;
+  }
+  .dixy-message[data-from="user"]:has(> .dixy-message-avatar)
+    > :not(.dixy-message-avatar) {
+    grid-column: 1;
+  }
+  .dixy-message-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-sm);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    overflow-wrap: anywhere;
+  }
+  .dixy-message[data-variant="contained"] > .dixy-message-content {
+    max-inline-size: min(80%, 42rem);
+    padding: 10px 14px;
+    border-radius: min(var(--dixy-radius-card), 20px);
+    background-color: var(--dixy-color-background-subtle);
+  }
+  .dixy-message[data-from="user"][data-variant="contained"]
+    > .dixy-message-content {
+    background-color: var(--dixy-color-background-action-primary-subtle);
+    border-end-end-radius: var(--dixy-radius-4);
+  }
+  .dixy-message-avatar {
+    margin-block-start: 2px;
+  }
+  .dixy-message-actions {
+    display: flex;
+    gap: 2px;
+    margin-block-start: calc(var(--dixy-spacing-stack-xs) * -1);
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .dixy-message-action {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-message-action[aria-pressed="true"] {
+    color: var(--dixy-color-text-action-primary);
+  }
+
+  /* Response (markdown) ------------------------------------------------ */
+  .dixy-response {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-md);
+    min-inline-size: 0;
+    font: var(--dixy-font-body-md);
+    line-height: 1.6;
+  }
+  .dixy-response :where(p, ul, ol) {
+    margin: 0;
+  }
+  .dixy-response > * + * {
+    margin-block-start: 0;
+  }
+  .dixy-response :where(ul, ol) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-xs);
+    padding-inline-start: 1.4em;
+  }
+  .dixy-response :where(li > ul, li > ol) {
+    margin-block-start: var(--dixy-spacing-stack-xs);
+  }
+  .dixy-response li::marker {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-response li:has(> input[type="checkbox"]) {
+    list-style: none;
+    margin-inline-start: -1.4em;
+  }
+  .dixy-response input[type="checkbox"] {
+    margin-inline-end: 0.5em;
+    accent-color: var(--dixy-color-background-action-primary);
+  }
+  .dixy-response-heading {
+    margin: var(--dixy-spacing-stack-sm) 0 0;
+    font: var(--dixy-font-title-sm);
+  }
+  .dixy-response-heading[data-level="1"],
+  .dixy-response-heading[data-level="2"] {
+    font: var(--dixy-font-title-md);
+  }
+  .dixy-response > .dixy-response-heading:first-child {
+    margin-block-start: 0;
+  }
+  .dixy-response strong {
+    font-weight: 600;
+  }
+  .dixy-response hr {
+    inline-size: 100%;
+    border: 0;
+    border-block-start: 1px solid var(--dixy-color-border-subtle);
+  }
+  .dixy-response-table {
+    max-inline-size: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--dixy-color-border-subtle);
+    border-radius: min(var(--dixy-radius-card), 12px);
+  }
+  .dixy-response-table:focus-visible {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: var(--dixy-focus-ring-offset);
+  }
+  .dixy-response-table > .dixy-table {
+    inline-size: 100%;
+    border: 0;
+  }
+  /* A blinking caret after the last streamed character. */
+  .dixy-response[data-streaming]
+    > :last-child:not(:is(ul, ol, figure, .dixy-response-table))::after,
+  .dixy-response[data-streaming]
+    > :is(ul, ol):last-child
+    > li:last-child::after {
+    content: "";
+    display: inline-block;
+    inline-size: 0.5em;
+    block-size: 1em;
+    margin-inline-start: 2px;
+    vertical-align: -0.15em;
+    border-radius: 2px;
+    background-color: currentColor;
+    opacity: 0.55;
+    animation: dixy-ai-caret 1s steps(2, start) infinite;
+  }
+  @keyframes dixy-ai-caret {
+    to {
+      visibility: hidden;
+    }
+  }
+
+  /* CodeBlock ---------------------------------------------------------- */
+  .dixy-code-block {
+    margin: 0;
+    min-inline-size: 0;
+    overflow: hidden;
+    border: 1px solid var(--dixy-color-border-subtle);
+    border-radius: min(var(--dixy-radius-card), 12px);
+    background-color: var(
+      --dixy-color-background-surface-sunken,
+      var(--dixy-color-background-subtle)
+    );
+  }
+  .dixy-code-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dixy-spacing-inline-sm);
+    padding: 4px 4px 4px 12px;
+    border-block-end: 1px solid var(--dixy-color-border-subtle);
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-caption);
+  }
+  .dixy-code-block-language {
+    font-family: var(--dixy-font-mono);
+    text-transform: lowercase;
+  }
+  .dixy-code-block-pre {
+    margin: 0;
+    padding: 12px;
+    overflow-x: auto;
+    font: var(--dixy-font-code-sm);
+    line-height: 1.6;
+    tab-size: 2;
+  }
+  .dixy-code-block-pre:focus-visible {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: calc(var(--dixy-focus-ring-width) * -1);
+  }
+
+  /* PromptInput -------------------------------------------------------- */
+  .dixy-prompt-input {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-xs);
+    inline-size: 100%;
+    padding: 8px;
+    border: var(--dixy-border-default);
+    border-radius: min(var(--dixy-radius-card), 24px);
+    background-color: var(--dixy-color-background-surface);
+    cursor: text;
+    transition:
+      border-color var(--dixy-motion-transition-feedback),
+      box-shadow var(--dixy-motion-transition-feedback);
+  }
+  .dixy-prompt-input:has(.dixy-prompt-input-textarea:focus-visible) {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: var(--dixy-focus-ring-offset);
+  }
+  .dixy-prompt-input[data-disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .dixy-prompt-input-textarea {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-block-size: 2.5rem;
+    margin: 0;
+    padding: 6px 8px;
+    border: 0;
+    background: transparent;
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-md);
+    line-height: 1.5;
+    resize: none;
+    outline: none;
+  }
+  .dixy-prompt-input-textarea::placeholder {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-prompt-input-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--dixy-spacing-inline-sm);
+    cursor: default;
+  }
+  .dixy-prompt-input-tools {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-xs);
+    min-inline-size: 0;
+  }
+  .dixy-prompt-input-submit {
+    flex: none;
+    margin-inline-start: auto;
+    border-radius: var(--dixy-radius-full);
+  }
+  .dixy-prompt-input-submit[data-disabled] {
+    opacity: 0.45;
+  }
+
+  /* Suggestions -------------------------------------------------------- */
+  .dixy-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dixy-spacing-inline-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dixy-suggestions-item {
+    display: contents;
+  }
+  /* 1.25em is a pill on one line and a soft card when a long prompt wraps. */
+  .dixy-button.dixy-suggestion[data-size] {
+    border-radius: 1.25em;
+    block-size: auto;
+    height: auto;
+    min-block-size: var(--dixy-size-control-sm, 32px);
+    padding-block: 4px;
+    white-space: normal;
+    text-align: start;
+  }
+
+  /* Disclosure parts: Reasoning, Tool, Sources -------------------------- */
+  :is(.dixy-reasoning-trigger, .dixy-sources-trigger) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-xs);
+    margin: 0;
+    padding: 2px 4px;
+    margin-inline-start: -4px;
+    border: 0;
+    border-radius: var(--dixy-radius-6);
+    background: transparent;
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-label-md);
+    cursor: pointer;
+  }
+  :is(.dixy-reasoning-trigger, .dixy-sources-trigger):hover {
+    color: var(--dixy-color-text-primary);
+  }
+  :is(
+    .dixy-reasoning-trigger,
+    .dixy-sources-trigger,
+    .dixy-tool-header
+  ):focus-visible {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: var(--dixy-focus-ring-offset);
+  }
+  :is(.dixy-reasoning-icon, .dixy-tool-icon, .dixy-source-icon) {
+    display: inline-grid;
+    flex: none;
+    place-items: center;
+  }
+  :is(
+      .dixy-reasoning-icon,
+      .dixy-reasoning-chevron,
+      .dixy-sources-chevron,
+      .dixy-tool-icon,
+      .dixy-tool-chevron,
+      .dixy-source-icon
+    )
+    svg {
+    inline-size: 16px;
+    block-size: 16px;
+  }
+  :is(.dixy-reasoning-chevron, .dixy-sources-chevron, .dixy-tool-chevron) {
+    display: inline-grid;
+    transition: rotate var(--dixy-disclosure-motion-feedback, 150ms ease);
+  }
+  [data-panel-open]
+    > :is(.dixy-reasoning-chevron, .dixy-sources-chevron, .dixy-tool-chevron) {
+    rotate: 180deg;
+  }
+  :is(.dixy-reasoning-content, .dixy-sources-content, .dixy-tool-content) {
+    overflow: hidden;
+    block-size: var(--collapsible-panel-height);
+    transition: height var(--dixy-disclosure-motion-reveal, 200ms ease);
+  }
+  :is(.dixy-reasoning-content, .dixy-sources-content, .dixy-tool-content):is(
+    [data-starting-style],
+    [data-ending-style]
+  ) {
+    block-size: 0;
+  }
+  .dixy-reasoning-content {
+    margin-block-start: var(--dixy-spacing-stack-xs);
+    padding-inline-start: var(--dixy-spacing-inset-md);
+    border-inline-start: 2px solid var(--dixy-color-border-subtle);
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-reasoning-content .dixy-response {
+    font: inherit;
+  }
+
+  .dixy-tool {
+    overflow: hidden;
+    border: 1px solid var(--dixy-color-border-subtle);
+    border-radius: min(var(--dixy-radius-card), 12px);
+    background-color: var(--dixy-color-background-surface);
+  }
+  .dixy-tool-header {
+    display: flex;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-sm);
+    inline-size: 100%;
+    margin: 0;
+    padding: 8px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-label-md);
+    text-align: start;
+    cursor: pointer;
+  }
+  .dixy-tool-header:hover {
+    background-color: var(--dixy-color-background-subtle);
+  }
+  .dixy-tool-icon {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-tool-name {
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--dixy-font-mono);
+    font-size: 0.875em;
+  }
+  .dixy-tool-content {
+    border-block-start: 1px solid var(--dixy-color-border-subtle);
+  }
+  .dixy-tool-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dixy-spacing-stack-xs);
+    padding: 10px 12px;
+  }
+  .dixy-tool-section + .dixy-tool-section {
+    padding-block-start: 0;
+  }
+  .dixy-tool-section-title {
+    margin: 0;
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-caption);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .dixy-tool-code {
+    margin: 0;
+    max-block-size: 16rem;
+    overflow: auto;
+    padding: 8px 10px;
+    border-radius: var(--dixy-radius-8);
+    background-color: var(--dixy-color-background-subtle);
+    font: var(--dixy-font-code-sm);
+  }
+  .dixy-tool-section[data-kind="error"] .dixy-tool-code {
+    background-color: var(--dixy-color-background-action-destructive-subtle);
+    color: var(--dixy-color-text-action-destructive);
+  }
+
+  .dixy-sources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: var(--dixy-spacing-stack-xs) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dixy-source {
+    display: flex;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-sm);
+    padding: 6px 8px;
+    border-radius: var(--dixy-radius-8);
+    color: var(--dixy-color-text-primary);
+    text-decoration: none;
+  }
+  .dixy-source:hover {
+    background-color: var(--dixy-color-background-subtle);
+  }
+  .dixy-source:focus-visible {
+    outline: var(--dixy-focus-ring-width) solid var(--dixy-color-border-focus);
+    outline-offset: var(--dixy-focus-ring-offset);
+  }
+  .dixy-source-icon {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-source-text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+  .dixy-source-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: var(--dixy-font-label-md);
+  }
+  .dixy-source-host {
+    color: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-caption);
+  }
+
+  /* Shimmer and Loader ------------------------------------------------- */
+  .dixy-shimmer {
+    background-image: linear-gradient(
+      90deg,
+      var(--dixy-color-text-secondary) 0%,
+      var(--dixy-color-text-secondary) 40%,
+      var(--dixy-color-text-primary) 50%,
+      var(--dixy-color-text-secondary) 60%,
+      var(--dixy-color-text-secondary) 100%
+    );
+    background-size: 250% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: dixy-ai-shimmer var(--dixy-shimmer-duration, 2s) linear infinite;
+  }
+  @keyframes dixy-ai-shimmer {
+    from {
+      background-position: 100% 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+  .dixy-loader {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    block-size: 1.5em;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-loader-dot {
+    inline-size: 6px;
+    block-size: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
+    animation: dixy-ai-pulse 1.2s ease-in-out infinite;
+  }
+  .dixy-loader-dot:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+  .dixy-loader-dot:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  @keyframes dixy-ai-pulse {
+    0%,
+    80%,
+    100% {
+      opacity: 0.3;
+      scale: 0.8;
+    }
+    40% {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  /* Reduced motion: no sweeps, pulses, blinking or sliding panels. Text
+     stays readable at the secondary color. */
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-shimmer {
+      animation: none;
+      background: none;
+      color: var(--dixy-color-text-secondary);
+    }
+    .dixy-loader-dot,
+    .dixy-response[data-streaming] *::after {
+      animation: none !important;
+    }
+    .dixy-loader-dot {
+      opacity: 0.6;
+    }
+    :is(.dixy-reasoning-content, .dixy-sources-content, .dixy-tool-content),
+    :is(.dixy-reasoning-chevron, .dixy-sources-chevron, .dixy-tool-chevron) {
+      transition: none;
+    }
+  }
+  [data-effects="reduced"] .dixy-shimmer {
+    animation: none;
+    background: none;
+    color: var(--dixy-color-text-secondary);
+  }
+  [data-effects="reduced"]
+    :is(.dixy-loader-dot, .dixy-response[data-streaming] *::after) {
+    animation: none !important;
+  }
+}

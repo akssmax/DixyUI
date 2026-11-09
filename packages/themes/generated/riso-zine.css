@@ -286,6 +286,11 @@
   )[data-dixy-skin="dixy/riso-zine"] {
     border-radius: calc(var(--dixy-radius-control) * 0.6);
   }
+  :is(.dixy-textarea)[data-dixy-skin="dixy/riso-zine"] {
+    border-radius: calc(
+      min(var(--dixy-radius-control), var(--dixy-radius-card)) * 0.6
+    );
+  }
   :is(
       .dixy-input,
       .dixy-textarea,

@@ -3238,5 +3238,534 @@
       "description": "Host integration; omitting it always produces a no-op.",
       "default": "—"
     }
+  ],
+  "CodeBlockProps": [
+    {
+      "name": "code",
+      "type": "string",
+      "required": true,
+      "description": "The source text. Copied verbatim.",
+      "default": "—"
+    },
+    {
+      "name": "language",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Language name shown in the header, e.g. \"tsx\".",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Pre-highlighted markup to show instead of plain text, e.g. from Shiki.\nThe copy action still copies `code`.",
+      "default": "—"
+    },
+    {
+      "name": "copyLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the copy button.",
+      "default": "Copy code"
+    },
+    {
+      "name": "copiedLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Announced after a successful copy.",
+      "default": "Copied"
+    },
+    {
+      "name": "failedLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Announced when the clipboard is unavailable.",
+      "default": "Copy failed"
+    },
+    {
+      "name": "onCopy",
+      "type": "((code: string) => void) | undefined",
+      "required": false,
+      "description": "Called with the code after the clipboard write succeeds.",
+      "default": "—"
+    }
+  ],
+  "ConversationRootProps": [
+    {
+      "name": "status",
+      "type": "ChatStatus | undefined",
+      "required": false,
+      "description": "Request state. Changes are announced politely, once each, so assistive\ntechnology hears \"Responding\" and \"Response complete\" rather than every\nstreamed token.",
+      "default": "—"
+    },
+    {
+      "name": "statusLabels",
+      "type": "ConversationStatusLabels | undefined",
+      "required": false,
+      "description": "Override the announced status messages.",
+      "default": "—"
+    }
+  ],
+  "ConversationContentProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the message log.",
+      "default": "Conversation"
+    }
+  ],
+  "ConversationScrollButtonProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name.",
+      "default": "Scroll to latest message"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "description": "",
+      "default": "—"
+    }
+  ],
+  "ConversationEmptyStateProps": [
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "description": "The headline, e.g. \"What can I help with?\"",
+      "default": "—"
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "description": "A supporting line.",
+      "default": "—"
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Decorative mark above the title.",
+      "default": "—"
+    }
+  ],
+  "MessageRootProps": [
+    {
+      "name": "from",
+      "type": "\"system\" | \"user\" | \"assistant\"",
+      "required": true,
+      "description": "Who wrote it. Sets alignment, the default surface and the accessible name.",
+      "default": "—"
+    },
+    {
+      "name": "variant",
+      "type": "\"flat\" | \"contained\" | undefined",
+      "required": false,
+      "description": "How the body sits. \"contained\" is a bubble; \"flat\" is plain flowing\ntext, the usual choice for long assistant replies.",
+      "default": "contained for user, flat otherwise"
+    },
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the message, read when moving between messages.",
+      "default": "\"You\" for user, \"Assistant\" for assistant, \"System\" for system"
+    }
+  ],
+  "MessageAvatarProps": [
+    {
+      "name": "src",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Image URL.",
+      "default": "—"
+    },
+    {
+      "name": "fallback",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Initials or an icon while the image loads or when it is missing.",
+      "default": "—"
+    }
+  ],
+  "MessageActionsProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the toolbar.",
+      "default": "Message actions"
+    }
+  ],
+  "MessageActionProps": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": true,
+      "description": "The action's name: its accessible name and its tooltip.",
+      "default": "—"
+    },
+    {
+      "name": "tooltip",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Show the label as a tooltip on hover and focus.",
+      "default": "true"
+    },
+    {
+      "name": "aria-pressed",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "The pressed state for toggles such as \"Good response\".",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "ReactElement | ReactNode",
+      "required": true,
+      "description": "",
+      "default": "—"
+    }
+  ],
+  "PromptInputRootProps": [
+    {
+      "name": "value",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Controlled text. Pair with `onValueChange`.",
+      "default": "—"
+    },
+    {
+      "name": "defaultValue",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Initial text when uncontrolled.",
+      "default": "\"\""
+    },
+    {
+      "name": "onValueChange",
+      "type": "((value: string) => void) | undefined",
+      "required": false,
+      "description": "Called on every edit.",
+      "default": "—"
+    },
+    {
+      "name": "onSubmit",
+      "type": "((text: string) => void) | undefined",
+      "required": false,
+      "description": "Called with the trimmed text when the user sends. Uncontrolled inputs\nclear themselves afterwards. Not called for empty text or while busy.",
+      "default": "—"
+    },
+    {
+      "name": "status",
+      "type": "ChatStatus | undefined",
+      "required": false,
+      "description": "Request state. While submitted or streaming, the send button becomes a\nstop button and Enter does not send.",
+      "default": "ready"
+    },
+    {
+      "name": "onStop",
+      "type": "(() => void) | undefined",
+      "required": false,
+      "description": "Called when the user stops a reply in progress.",
+      "default": "—"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Disable typing and sending.",
+      "default": "false"
+    }
+  ],
+  "PromptInputTextareaProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name.",
+      "default": "Message"
+    },
+    {
+      "name": "maxHeight",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Tallest the field grows before it scrolls, in pixels.",
+      "default": "200"
+    }
+  ],
+  "PromptInputSubmitProps": [
+    {
+      "name": "sendLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name while ready.",
+      "default": "Send message"
+    },
+    {
+      "name": "stopLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name while a reply is in progress.",
+      "default": "Stop generating"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode | ((stopping: boolean) => ReactNode)",
+      "required": false,
+      "description": "Replace the icons. Receives whether the button currently stops.",
+      "default": "—"
+    }
+  ],
+  "ReasoningRootProps": [
+    {
+      "name": "streaming",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "The model is still thinking. Opens the panel so the reader can follow,\nthen closes it once when thinking ends.",
+      "default": "false"
+    },
+    {
+      "name": "open",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Controlled open state. Stops the automatic open and close.",
+      "default": "—"
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Initial open state when uncontrolled.",
+      "default": "false"
+    },
+    {
+      "name": "onOpenChange",
+      "type": "((open: boolean) => void) | undefined",
+      "required": false,
+      "description": "Called when the reader opens or closes it.",
+      "default": "—"
+    },
+    {
+      "name": "duration",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Thinking time in seconds. Measured from `streaming` when omitted.",
+      "default": "—"
+    },
+    {
+      "name": "autoClose",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Close automatically when thinking ends. A reader who toggled the panel\nkeeps their choice.",
+      "default": "true"
+    }
+  ],
+  "ReasoningTriggerProps": [
+    {
+      "name": "children",
+      "type": "ReactNode | ((state: { streaming: boolean; duration?: number; }) => ReactNode)",
+      "required": false,
+      "description": "Replace the label. Receives the state the default label uses.",
+      "default": "—"
+    },
+    {
+      "name": "thinkingLabel",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Label while thinking.",
+      "default": "Thinking…"
+    },
+    {
+      "name": "formatDuration",
+      "type": "((seconds: number | undefined) => string) | undefined",
+      "required": false,
+      "description": "Label once done.",
+      "default": "\"Thought for N seconds\""
+    }
+  ],
+  "ResponseProps": [
+    {
+      "name": "children",
+      "type": "string",
+      "required": true,
+      "description": "Markdown from the model, GitHub flavored: tables, task lists,\nstrikethrough and autolinks. Raw HTML is shown as text, never rendered.",
+      "default": "—"
+    },
+    {
+      "name": "streaming",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "The text is still arriving. Unfinished fences, code and bold are closed\nfor display, and the region reports itself busy.",
+      "default": "false"
+    },
+    {
+      "name": "headingOffset",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Levels added to markdown headings so a reply's \"# Title\" sits below the\npage's own headings.",
+      "default": "2 (h1 renders as h3)"
+    },
+    {
+      "name": "components",
+      "type": "Components",
+      "required": false,
+      "description": "Replace how individual elements render; merged over Dixy's mapping.",
+      "default": "—"
+    },
+    {
+      "name": "remarkPlugins",
+      "type": "Options[\"remarkPlugins\"]",
+      "required": false,
+      "description": "Extra remark plugins, run after remark-gfm.",
+      "default": "—"
+    },
+    {
+      "name": "placeholder",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Shown while streaming has started but no text has arrived.",
+      "default": "—"
+    }
+  ],
+  "ShimmerOwnProps": [
+    {
+      "name": "as",
+      "type": "ElementType | undefined",
+      "required": false,
+      "description": "The element to render.",
+      "default": "span"
+    },
+    {
+      "name": "duration",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Sweep duration in seconds. With reduced motion the text is static.",
+      "default": "2"
+    }
+  ],
+  "LoaderProps": [
+    {
+      "name": "label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name.",
+      "default": "Loading"
+    }
+  ],
+  "SourcesTriggerProps": [
+    {
+      "name": "count",
+      "type": "number",
+      "required": true,
+      "description": "How many sources the reply used.",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Replace the label.",
+      "default": "\"Used N sources\""
+    }
+  ],
+  "SourceProps": [
+    {
+      "name": "href",
+      "type": "string",
+      "required": true,
+      "description": "The link target.",
+      "default": "—"
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "description": "The page title. Falls back to the host name.",
+      "default": "—"
+    }
+  ],
+  "SuggestionsRootProps": [
+    {
+      "name": "aria-label",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Accessible name of the list.",
+      "default": "Suggestions"
+    }
+  ],
+  "SuggestionItemProps": [
+    {
+      "name": "suggestion",
+      "type": "string",
+      "required": true,
+      "description": "The prompt this suggestion sends. Also its label unless children are given.",
+      "default": "—"
+    },
+    {
+      "name": "onSelect",
+      "type": "((suggestion: string) => void) | undefined",
+      "required": false,
+      "description": "Called with the suggestion when chosen.",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "ComponentProps<typeof Button>[\"children\"]",
+      "required": false,
+      "description": "",
+      "default": "—"
+    }
+  ],
+  "ToolHeaderProps": [
+    {
+      "name": "name",
+      "type": "ReactNode",
+      "required": true,
+      "description": "The tool's name, e.g. \"get_weather\".",
+      "default": "—"
+    },
+    {
+      "name": "state",
+      "type": "\"input-streaming\" | \"input-available\" | \"approval-requested\" | \"approval-responded\" | \"output-available\" | \"output-error\" | \"output-denied\"",
+      "required": true,
+      "description": "Lifecycle state, using the AI SDK's tool part states.",
+      "default": "—"
+    },
+    {
+      "name": "stateLabels",
+      "type": "Partial<Record<ToolState, string>> | undefined",
+      "required": false,
+      "description": "Override the state badge's text, e.g. for localisation.",
+      "default": "—"
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Replace the leading icon.",
+      "default": "—"
+    }
+  ],
+  "ToolSectionProps": [
+    {
+      "name": "children",
+      "type": "unknown",
+      "required": false,
+      "description": "Shown as formatted JSON unless it is already a string or element.",
+      "default": "—"
+    },
+    {
+      "name": "title",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Section heading.",
+      "default": "—"
+    }
   ]
 }

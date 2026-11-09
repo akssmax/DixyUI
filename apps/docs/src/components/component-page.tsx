@@ -49,6 +49,8 @@ const sourceFiles = import.meta.glob(
   [
     "../../../../packages/react/src/components/*.tsx",
     "!../../../../packages/react/src/components/*.test.tsx",
+    "../../../../packages/react/src/ai/*.tsx",
+    "!../../../../packages/react/src/ai/*.test.tsx",
   ],
   { query: "?raw", import: "default" },
 );

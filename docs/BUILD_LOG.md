@@ -1752,3 +1752,77 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - `0.1.0-beta.1` published with the new READMEs, but still without provenance even with `PNPM_CONFIG_PROVENANCE` set; npm's attestations endpoint returns 404 for all three packages.
 - Each `@dixy-ui` package now has a GitHub Actions trusted publisher on npm (`akssmax/DixyUI`, `release.yml`, `npm publish` allowed). npm marks them "pending validation" until the first OIDC publish, which must happen before 2026-11-10 10:44 UTC.
 - The release workflow no longer uses `NPM_TOKEN` or `registry-url`; `id-token: write` lets pnpm sign in through OIDC and attach provenance. To confirm on the next publish: provenance attached, then delete the `NPM_TOKEN` secret and revoke the token.
+
+### 2026-11-09 — AI parts (`@dixy-ui/react/ai`) and the Wren example app
+
+- Why: the app showcase needed an AI app, and Dixy needed the parts to build one. The anatomy follows Vercel's AI Elements (Apache-2.0), which is itself a shadcn registry. **None of its code is ported**: it is Tailwind + Radix, and Dixy is Base UI + tokens, so each part is composed from Dixy primitives instead.
+- Library: a new optional entry, `@dixy-ui/react/ai`, with its own `ai.css` (emitted like `materials.css`). The core `dixy.js` and `styles.css` are unchanged. `ai.js` imports Button, Tooltip, Toolbar, Badge, Table and Avatar from the shared chunk rather than copying them.
+  - `Conversation` (Root, Content, ScrollButton, EmptyState) plus `useStickToBottom`. The log follows streamed growth with an instant pin (smooth scrolling lags each token and jitters). An upward wheel, touch or key releases the pin immediately, because scroll events alone arrive too late for a small nudge. The log is `role="log"` with `aria-live="off"`, keyboard scrollable; Root announces status changes once each ("Responding", "Response complete") instead of every token. The scroll button moves focus into the log as it unmounts.
+  - `Message` (Root, Avatar, Content, Actions, Action). An `article` named "You"/"Assistant". Actions are a Base UI Toolbar, so a long transcript costs one Tab stop per message.
+  - `Response`: `react-markdown` + `remark-gfm` (optional peers). It maps markdown elements to Dixy Code, Blockquote, Table and CodeBlock, and to a native `a.dixy-link`: the React Aria Link is too heavy for every markdown link. Headings shift down two levels by default. Raw HTML stays text. While streaming, `completeMarkdown` closes open fences, inline code, bold and strikethrough, and turns a half-arrived link into text. `splitMarkdownBlocks` memoizes finished blocks, so each token re-parses only the last one. These are the problems Streamdown solves for AI Elements.
+  - `PromptInput` (Root, Textarea, Footer, Tools, Submit). Enter sends, Shift+Enter adds a line, an IME-confirming Enter (`isComposing`, keyCode 229) never sends, the field autosizes up to `maxHeight`, and typing is allowed while busy. Submit is one button that changes role (Send ↔ Stop), so focus survives the switch. Empty input uses `focusableWhenDisabled` rather than `disabled`, so focus is never dropped to the body.
+  - `Reasoning` opens while streaming and closes once when it ends, unless the reader toggled it. `Tool` shows AI SDK tool states with a Badge (labels overridable). `Sources` puts its links behind "Used N sources", each with "(opens in a new tab)". `Suggestions`, `CodeBlock`, `Shimmer` and `Loader` complete the set. All disclosures use Base UI Collapsible directly.
+  - Reduced motion (media query and `data-effects="reduced"`) stops the shimmer, loader pulse, streaming caret and panel transitions.
+- Docs: `/ai-example`, "Wren", a chat app built only from Dixy parts. A scripted `useMockChat` streams reasoning, tool calls, markdown and sources on timers, in the AI SDK's message-part shape. It has no network and no keys, and runs are deterministic. There are four scenarios (tables and task list; code; comparison with sources; failing tool), plus Deep/Swift models, a Search toggle, stop (button or Esc), regenerate, copy, rating, chat history and a mobile drawer. The landing showcase has a full-width Wren card and a footer link.
+- Verified:
+  - `pnpm check` passes, including 12 new tests in `src/ai/ai.test.tsx`: markdown repair and block splitting; Enter/Shift+Enter/IME; inert-but-focusable Send turning into Stop with focus kept; one status announcement per change; GFM through Dixy parts with HTML left as text; streaming aria-busy; Reasoning auto open and close and the reader's override; Tool states with no alert role; axe with zero violations.
+  - `pnpm package:check`: tree shaking passes with core bundles unchanged (17.0 / 140.1 / 44.1 KiB). It now forbids `react-markdown`, `remark-gfm`, `micromark` and `mdast-util-from-markdown` in core. `verify-package` (run with `--online`, because this worktree's offline store lacked `vite@8.3.4`) passes and now asserts that core CSS has no AI styles.
+  - In-app browser, :3005: every scenario streamed to completion while pinned to the bottom. Reasoning and tool panels open and close; sources expand while still pinned. Keyboard sending works, with the textarea growing to two lines and clearing. Esc mid-stream stops: the button returns to Send, focus stays in the textarea, reasoning stops spinning, and an unfinished tool shows "Cancelled". Light and dark both checked. At 375px there is no horizontal overflow; the drawer traps focus, Esc closes it and focus returns to "Open chats". Setting `data-effects="reduced"` sets the shimmer's animation to `none`.
+  - Fixed during verification: React Markdown v10 renders no wrapper, so the caret selectors were wrong. The Select trigger's `inline-size: 100%` wrapped the composer row. The radiating reasoning icon read as a spinner and became a lightbulb. Tool.Error's `role="alert"` would fire when the reader opened the panel, so it was removed (the badge already reports the error). Long suggestions overflowed the fixed Button height. The mobile landing art was clipped.
+- Cost: the `/ai-example` client chunk is 173 KiB (53 KiB gzipped), mostly `react-markdown` + micromark + GFM. It loads only on that route.
+- Not tested: the OS `prefers-reduced-motion` media query (the pane cannot emulate it; only the `data-effects` path was checked), screen readers (announcement wording and timing are unit-tested only), real touch scrolling against the pin, IME in a real browser (unit-tested), forced colours, 200%/400% zoom, RTL, Safari and Firefox, skins other than Original Dixy, the clipboard in a real browser, and the packed consumer importing `@dixy-ui/react/ai` (the fixture installs no markdown peers). The AI parts have no docs component pages, playgrounds or generated API yet.
+
+### 2026-11-09 — AI docs pages; Wren gets theme controls, a collapsible sidebar and a centred start
+
+- What changed:
+  - Ten docs pages under the new **AI** category (`apps/docs/src/registry/ai-components.ts`): Conversation, Message, Response, Code Block, Prompt Input, Suggestions, Reasoning, Tool, Sources, Shimmer & Loader. Each has a playground demo, controls, composition, keyboard and accessibility notes, and generated API tables (`scripts/generate-api.mjs` now reads `ai/*.tsx`; 139 references).
+  - The theme gallery test imports `@dixy-ui/react/ai`, so every AI export must be covered by a page.
+  - Wren has a starter-skin picker in its top bar (`?skin=` in the URL, same catalogue as Fernpay).
+  - Wren's sidebar collapses to a 60px icon rail, like Fernpay's and ChatGPT's. The one toggle (`aria-expanded`, `aria-controls`) stays in the same place in the DOM, so focus stays on it. In the rail, labels become visually hidden rather than removed, and tooltips appear.
+  - Search chats filters Recents. In the rail it expands the sidebar and focuses the field; Escape closes it and returns focus to the button. Unsent chats are no longer listed.
+  - The empty chat centres the heading, composer and starter list, ChatGPT-style. The composer keeps its place in the tree, so focus survives the first send.
+- Why the rail lives in the app: `Sidebar` is a layout primitive with no collapsed mode. Fernpay and Wren now both build a rail by hand, so a shared `Sidebar` rail mode is a candidate for the library.
+- Fixed during verification:
+  - `pnpm examples:check` expects `demos/<slug>-example.tsx`, so the `ai-` prefix was dropped from the demos.
+  - Prompt Input's starter token duplicated a fixed row in the token table (React duplicate-key warning).
+  - Closing search dropped focus to `<body>`.
+- Verified:
+  - `pnpm check` passes. `pnpm docs:check`, the docs tests (23) and `pnpm examples:check` (1,624 generated examples typechecked) also pass.
+  - In-app browser: all ten AI pages render a preview and their controls without errors.
+  - Wren collapse, expand, search, the first send, light and dark, and the 375px drawer, checked through the DOM and screenshots.
+- Not tested:
+  - Rail tooltips are confirmed in markup only; the screenshot did not capture a hover.
+  - The rail width transition with OS reduced motion.
+  - Screen readers on the toggle and search.
+  - The collapsed state is not persisted across reloads, by choice.
+
+### 2026-11-09 — Candy Clay corners on multi-line boxes; hero height no longer follows the scene
+
+- Request: in Candy Clay some elements were "too full" (pill-shaped message cards and an elliptical reply field), and the Dashboard scene stretched the homepage hero, leaving the copy column floating.
+- Radius, cause: `radius="full"` sets `--dixy-radius-control` to 9999px. That is right for one-line controls but turns any taller box using it into an ellipse.
+  - Library: `.dixy-textarea` now uses `min(var(--dixy-radius-control), var(--dixy-radius-card))` (an explicit component `radius` still wins). In none/sm/md/lg the control radius is already the smaller value, so only `full` changes. It caps at 16px, and Candy Clay's ×1.5 corner scale gives 24px.
+  - Skin compiler (`packages/themes/src/compile-css.ts`): the same cap is applied to the textarea before the skin's corner scale. All 31 generated skins are regenerated; only `full` renders differently.
+  - Docs scenes: mail message rows and the dashboard table wrapper used the control radius for card-like boxes; they now use the card radius.
+- Hero, cause: the stage is a grid item whose height came from its content, so the 1,389px Dashboard grew the hero row to 1,541px (Mail: 830px). `contain: size` on `.landing-stage-body` stops the scene sizing the row; the copy and the hero minimum decide it, and the scene scrolls inside.
+- Verified (in-app browser at 1440×900, emulated because the pane was hidden):
+  - The hero is 822px for Mail, Dashboard, Music and Blocks. The Dashboard scrolls inside the stage (670 of 1,389px), with the caption in the first viewport.
+  - At 900px and 375px, the stacked stage keeps its fixed height and there is no horizontal scroll.
+  - Candy Clay: message rows 16px, reply textarea 24px, search field and buttons still pills.
+  - `pnpm check`, `pnpm format:check`, tree-shaking and online package verify pass.
+- Not tested:
+  - Every starter with `radius="full"` beyond Candy Clay.
+  - Other multi-line boxes that may still use the control radius (e.g. app-level cards elsewhere).
+  - Keyboard scrolling of the hero stage.
+  - Safari and Firefox.
+
+### 2026-11-09 — Homepage showcase: Wren replaces Postbox
+
+- Request: remove the Postbox card (the mail app is already the hero) and put Wren in its place, because the full-width Wren row made the bento much longer.
+- Wren is now a standard card in the second row (Wren, Kitchen sink, Theme playground). The full-width `landing-show-wide` variant, its mobile overrides and the Postbox miniature CSS are deleted.
+- The Wren miniature was trimmed to fit a standard card's 206px art area: tighter inset and padding, no placeholder lines (request, thinking chip, tool call and composer remain). Its description is one line.
+- Verified at 1440×900 and 375px (emulated, pane hidden):
+  - The showcase is 736px tall in two rows, as before the Wren row was added.
+  - The miniature does not overflow; the composer has 13px clearance.
+  - No horizontal scroll at 375px.
+  - `pnpm check` and `pnpm format:check` pass.
+- Also checked: Candy Clay, Retro OS, Phosphor Terminal, Swiss Poster and Y2K Titanium all fit with the same 13px clearance. Not tested: the other 27 starters.

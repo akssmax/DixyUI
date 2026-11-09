@@ -1,0 +1,315 @@
+/*
+ * Wren example app: layout only. The chat parts are styled by
+ * @dixy-ui/react/ai.css, so a skin or appearance change restyles everything.
+ */
+.wren-app {
+  --wren-column: 760px;
+  block-size: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+.wren-shell {
+  --wren-sidebar: 264px;
+  --wren-rail: 60px;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: var(--wren-sidebar) minmax(0, 1fr);
+  block-size: 100dvh;
+  transition: grid-template-columns var(--dixy-motion-duration-normal, 200ms)
+    var(--dixy-motion-easing-standard, ease);
+}
+.wren-shell[data-collapsed] {
+  grid-template-columns: var(--wren-rail) minmax(0, 1fr);
+}
+
+.wren-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dixy-spacing-stack-sm);
+  min-block-size: 0;
+  min-inline-size: 0;
+  padding: var(--dixy-spacing-inset-sm);
+  overflow: hidden;
+  border: 0;
+  border-inline-end: 1px solid var(--dixy-color-border-subtle);
+  background: var(--dixy-color-background-surface);
+}
+.wren-sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-block-size: 40px;
+  padding-inline: 6px 0;
+}
+.wren-sidebar[data-collapsed] .wren-sidebar-header {
+  justify-content: center;
+  padding-inline: 0;
+}
+.wren-sidebar[data-collapsed] .wren-brand {
+  display: none;
+}
+.wren-sidebar-nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-block-size: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.wren-rail-button {
+  inline-size: 100%;
+  justify-content: flex-start;
+  gap: 10px;
+  white-space: nowrap;
+}
+/* In the rail the label leaves the layout but keeps naming the button. */
+.wren-sidebar[data-collapsed] .wren-rail-button {
+  inline-size: auto;
+  justify-content: center;
+  align-self: center;
+  aspect-ratio: 1;
+  padding-inline: 0;
+}
+.wren-sidebar[data-collapsed] .wren-rail-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.wren-search-field {
+  margin-block: 4px;
+}
+.wren-sidebar-footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dixy-spacing-stack-sm);
+  padding: 4px;
+  border-block-start: 1px solid var(--dixy-color-border-subtle);
+  padding-block-start: var(--dixy-spacing-stack-sm);
+}
+.wren-sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-inline: 4px;
+}
+.wren-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-inline-size: 0;
+}
+.wren-sidebar[data-collapsed] .wren-user {
+  justify-content: center;
+}
+.wren-sidebar[data-collapsed] .wren-user-text {
+  display: none;
+}
+.wren-user-text {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.wren-user-name {
+  font: var(--dixy-font-label-md);
+}
+.wren-list-heading {
+  margin: var(--dixy-spacing-stack-md) 10px 4px;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-label-sm);
+}
+.wren-chat-empty {
+  padding-inline: 10px;
+}
+.wren-chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wren-chat-item {
+  inline-size: 100%;
+  justify-content: flex-start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wren-chat-item > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wren-mobile-nav .wren-sidebar-nav {
+  margin-block-start: var(--dixy-spacing-stack-md);
+}
+
+.wren-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: var(--dixy-font-title-sm);
+  letter-spacing: -0.01em;
+}
+/* A small two-tone mark drawn from the accent, so skins recolour it. */
+.wren-brand-mark {
+  display: inline-block;
+  inline-size: 18px;
+  block-size: 18px;
+  border-radius: 60% 40% 55% 45% / 55% 45% 55% 45%;
+  background: linear-gradient(
+    135deg,
+    var(--dixy-color-background-action-primary) 0 55%,
+    var(--dixy-color-background-action-primary-subtle) 55% 100%
+  );
+}
+.wren-brand-mark-lg {
+  inline-size: 40px;
+  block-size: 40px;
+}
+
+.wren-main {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+.wren-topbar {
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-sm);
+  min-block-size: 56px;
+  padding-inline: var(--dixy-spacing-inset-md);
+  border-block-end: 1px solid var(--dixy-color-border-subtle);
+}
+.wren-title {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--dixy-font-label-lg);
+}
+
+.wren-conversation {
+  min-block-size: 0;
+}
+/* One readable column, centred, with the scrollbar at the window edge. */
+.wren-conversation .dixy-conversation-content {
+  padding-block: var(--dixy-spacing-inset-xl);
+  padding-inline: max(
+    var(--dixy-spacing-inset-md),
+    calc((100% - var(--wren-column)) / 2)
+  );
+}
+/* Empty chat: heading, composer and starters sit together in the middle,
+ * then the composer settles at the bottom once the first message is sent.
+ * The composer keeps its place in the tree, so focus survives the switch. */
+.wren-main[data-empty] {
+  grid-template-rows: auto minmax(0, 1fr) auto minmax(0, 1fr);
+}
+.wren-main[data-empty] .wren-conversation .dixy-conversation-content {
+  justify-content: flex-end;
+  padding-block-end: var(--dixy-spacing-stack-lg);
+}
+.wren-welcome {
+  margin: 0 auto;
+  padding-block-end: 0;
+}
+.wren-welcome .dixy-conversation-empty-title {
+  font: var(--dixy-font-title-lg);
+}
+.wren-main[data-empty] .wren-disclaimer {
+  display: none;
+}
+.wren-suggestions {
+  flex-direction: column;
+  align-self: start;
+  gap: 2px;
+  inline-size: min(100% - 2 * var(--dixy-spacing-inset-md), var(--wren-column));
+  margin-inline: auto;
+  padding-block-start: var(--dixy-spacing-stack-md);
+}
+.wren-suggestions .dixy-suggestion {
+  justify-content: flex-start;
+  gap: 12px;
+  inline-size: 100%;
+  color: var(--dixy-color-text-secondary);
+  text-align: start;
+}
+.wren-suggestions .dixy-suggestion:hover {
+  color: var(--dixy-color-text-primary);
+}
+
+.wren-composer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 var(--dixy-spacing-inset-md) var(--dixy-spacing-inset-md);
+}
+.wren-composer > * {
+  inline-size: min(100%, var(--wren-column));
+}
+.wren-model-trigger {
+  inline-size: auto;
+  min-inline-size: 0;
+  border-color: transparent;
+  background: transparent;
+}
+.wren-model-note {
+  margin-inline-start: auto;
+  padding-inline-start: 12px;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+}
+.wren-disclaimer {
+  text-align: center;
+}
+
+.wren-only-mobile {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wren-shell {
+    transition: none;
+  }
+}
+[data-effects="reduced"] .wren-shell {
+  transition: none;
+}
+@media (max-width: 767px) {
+  .wren-shell,
+  .wren-shell[data-collapsed] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wren-sidebar {
+    display: none;
+  }
+  .wren-only-mobile {
+    display: inline-flex;
+  }
+  .wren-title {
+    text-align: center;
+  }
+}
+
+.wren-theme-picker {
+  flex: none;
+}
+.wren-theme-picker .dixy-select-trigger {
+  min-inline-size: 10rem;
+}
+@media (max-width: 767px) {
+  .wren-theme-picker .dixy-select-trigger {
+    min-inline-size: 0;
+    max-inline-size: 9rem;
+  }
+}

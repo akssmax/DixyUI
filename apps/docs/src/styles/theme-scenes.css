@@ -263,7 +263,7 @@
 .theme-mail-message {
   position: relative;
   border: var(--dixy-border-subtle);
-  border-radius: var(--dixy-radius-control);
+  border-radius: var(--dixy-radius-card);
   transition: background-color var(--dixy-motion-duration-fast, 120ms) ease;
 }
 .theme-mail-message:hover {
@@ -679,7 +679,7 @@
 
 .theme-dash-table {
   overflow-x: auto;
-  border-radius: var(--dixy-radius-control);
+  border-radius: var(--dixy-radius-card);
 }
 .theme-dash-table:focus-visible {
   outline: 2px solid var(--dixy-color-border-focus, currentColor);

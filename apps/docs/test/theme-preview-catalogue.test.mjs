@@ -1,11 +1,15 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import * as dixy from "@dixy-ui/react";
+import * as core from "@dixy-ui/react";
+import * as ai from "@dixy-ui/react/ai";
 import { componentRegistry } from "../src/registry/components.ts";
 import {
   filterThemePreviews,
   themePreviewEntries,
 } from "../src/lib/theme-preview-catalogue.ts";
+
+// The optional AI entry is held to the same coverage rule as the core.
+const dixy = { ...core, ...ai };
 
 test("the theme gallery covers every public visual component and every registered family", () => {
   const slugs = themePreviewEntries.map((entry) => entry.slug);

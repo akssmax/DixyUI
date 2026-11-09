@@ -855,3 +855,32 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Measure LCP and INP with the pane visible, on throttled network and CPU, and in Safari and Firefox.
 - [ ] Prune inactive skin `<style>` tags on docs theme switches; make skin definitions load lazily.
 - [ ] Learning: explain why a route's `validateSearch` import ends up in the entry chunk, and how bundlers decide chunk boundaries by module rather than by export.
+
+## Radius and hero fixes — 2026-11-09
+
+- [x] Multi-line fields cap at the card radius under `radius="full"` (library textarea and skin compiler); docs scene cards use the card radius. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Homepage hero height no longer follows the active scene (`contain: size` on the stage body).
+- [ ] Audit other multi-line surfaces that use `--dixy-radius-control` under `radius="full"`.
+- [ ] Learning: explain why `min(control, card)` changes only the full radius mode.
+- [ ] Learning: explain how `contain: size` stops a grid item's content from sizing its row.
+
+## AI parts and Wren example — 2026-11-09
+
+The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base UI + tokens). Evidence: docs/BUILD_LOG.md, 2026-11-09.
+
+- [x] Optional `@dixy-ui/react/ai` entry and `ai.css`; core JS and CSS unchanged, guarded by the tree-shaking and package checks.
+- [x] Conversation: stick-to-bottom that yields to the reader, a keyboard-scrollable log, status announced once per change.
+- [x] Response: GFM markdown through Dixy parts, streaming repair of partial markdown, memoized finished blocks.
+- [x] PromptInput: Enter/Shift+Enter/IME rules, autosize, one Send↔Stop button that keeps focus.
+- [x] Message, Reasoning, Tool, Sources, Suggestions, CodeBlock, Shimmer, Loader; reduced-motion handling.
+- [x] Wren example (`/ai-example`) on a scripted, AI SDK-shaped mock stream; landing showcase card.
+- [x] Docs component pages, playgrounds and generated API for the AI parts (AI category, 10 pages, gallery coverage test).
+- [x] Wren: starter-skin picker, collapsible icon-rail sidebar with chat search, centred empty state.
+- [ ] Shared `Sidebar` rail mode in the library (Fernpay and Wren each hand-build one).
+- [ ] Screen reader pass (VoiceOver/NVDA) on streaming announcements; OS reduced motion; touch scrolling; forced colours; zoom; RTL.
+- [ ] Packed consumer test importing `@dixy-ui/react/ai` with its markdown peers.
+- [ ] Learning: explain why the log is not a live region and what Root announces instead.
+- [ ] Learning: explain why streaming pins with an instant scroll, and why wheel/touch/key intent releases the pin before scroll events do.
+- [ ] Learning: explain why Send/Stop is one button and why empty input uses `focusableWhenDisabled`.
+- [ ] Learning: explain what `completeMarkdown` repairs and why only the last block is re-parsed.
+- [ ] Learning: explain why the sidebar toggle and composer must stay the same DOM element across layout changes.
