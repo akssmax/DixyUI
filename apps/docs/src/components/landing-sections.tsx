@@ -34,6 +34,9 @@ import {
 } from "@dixy-ui/react";
 import { DixyMark } from "./dixy-mark";
 import { ButtonLink } from "./button-link";
+// Imported here, not in routes/index.tsx: a bare import in a route file stays
+// in the unsplit route module, which put the landing CSS on every docs page.
+import "../styles/landing.css";
 
 /** Published on npm under the beta dist-tag. */
 export const installCommand = "pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta";

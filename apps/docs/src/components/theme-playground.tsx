@@ -107,6 +107,7 @@ import "../styles/theme-skins.css";
 import "../styles/theme-inspector.css";
 import { useAppAppearance } from "./app-appearance-provider";
 import { prepareSkin } from "../lib/theme-skin-catalogue";
+import type { InspectorTabId, PreviewSceneId } from "../lib/route-search";
 const PlayerScene = lazy(() => import("./theme-player-scene"));
 const StateScene = lazy(() => import("./theme-state-scene"));
 const EmailScene = lazy(() => import("./theme-email-scene"));
@@ -115,7 +116,7 @@ const CompareScene = lazy(() => import("./theme-compare-scene"));
 
 /* Scenes in the preview tab bar; null draws a quiet divider between groups. */
 const previewScenes: readonly ({
-  value: string;
+  value: PreviewSceneId;
   label: string;
   icon: LucideIcon;
 } | null)[] = [
@@ -132,10 +133,12 @@ const previewScenes: readonly ({
 ];
 
 /** Scene and inspector tab ids the route accepts in the URL. */
-export const previewSceneIds = previewScenes.flatMap((scene) =>
-  scene ? [scene.value] : [],
-);
-export const defaultPreviewScene = "workspace";
+export {
+  defaultInspectorTab,
+  defaultPreviewScene,
+  inspectorTabIds,
+  previewSceneIds,
+} from "../lib/route-search";
 
 /* One question per tab: which theme, how it looks, how it behaves, how to take it. */
 const inspectorTabs = [
@@ -143,11 +146,10 @@ const inspectorTabs = [
   { value: "style", label: "Style", icon: Brush },
   { value: "character", label: "Character", icon: Sparkles },
   { value: "export", label: "Export", icon: Code2 },
-] as const;
-export const inspectorTabIds: readonly string[] = inspectorTabs.map(
-  (tab) => tab.value,
-);
-export const defaultInspectorTab = "theme";
+] as const satisfies readonly {
+  value: InspectorTabId;
+  [key: string]: unknown;
+}[];
 
 const radiusLabels: Record<ThemePreset["radius"], string> = {
   none: "None",

@@ -65,7 +65,6 @@ import {
   prepareSkin,
 } from "../lib/theme-skin-catalogue";
 import { componentRegistry } from "../registry/components";
-import "../styles/landing.css";
 
 /** The URL carries the starter's slug ("living-forest"); the app keys skins by id. */
 function starterIdFromSlug(slug: string | undefined) {
