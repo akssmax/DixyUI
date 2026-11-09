@@ -30,9 +30,44 @@ function RoutedContent() {
 }
 
 export const Route = createRootRoute({
-  loader: () => getAppPreferences(),
+  // The docs theme's stylesheet is inlined on the server, like the landing
+  // page's starter, so a themed reader never sees Original Dixy flash first.
+  loader: async () => {
+    const preferences = await getAppPreferences();
+    const { skin } = preferences.docsTheme;
+    if (skin === "none") return { ...preferences, skinCSS: "", materialCSS: "" };
+    try {
+      const [{ loadSkinCSS, loadMaterialCSS }, { skinThemePreset }] =
+        await Promise.all([
+          import("../lib/theme-skin-catalogue"),
+          import("../lib/theme-playground"),
+        ]);
+      return {
+        ...preferences,
+        skinCSS: await loadSkinCSS(skin),
+        materialCSS:
+          skinThemePreset(skin).material !== "inherit"
+            ? await loadMaterialCSS()
+            : "",
+      };
+    } catch {
+      // The shell retries through prepareSkin on the client.
+      return { ...preferences, skinCSS: "", materialCSS: "" };
+    }
+  },
   staleTime: Infinity,
-  head: () => ({
+  head: ({ loaderData }) => ({
+    styles: [
+      ...(loaderData?.skinCSS
+        ? [
+            {
+              "data-dixy-skin-style": loaderData.docsTheme.skin,
+              children: loaderData.skinCSS,
+            },
+          ]
+        : []),
+      ...(loaderData?.materialCSS ? [{ children: loaderData.materialCSS }] : []),
+    ],
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -67,7 +102,7 @@ export const Route = createRootRoute({
 });
 
 function RootDocument() {
-  const { appearance, previewTheme } = Route.useLoaderData();
+  const { appearance, previewTheme, docsTheme } = Route.useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -77,6 +112,7 @@ function RootDocument() {
         <AppAppearanceProvider
           initialAppearance={appearance}
           initialPreviewTheme={previewTheme}
+          initialDocsTheme={docsTheme}
         >
           <RoutedContent />
         </AppAppearanceProvider>

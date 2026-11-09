@@ -14,7 +14,6 @@ import { Route as DixyExampleRouteImport } from './routes/dixy-example'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibility'
 import { Route as DocsInstallationRouteImport } from './routes/docs.installation'
-import { Route as DocsLearningRouteImport } from './routes/docs.learning'
 import { Route as LabControlsRouteImport } from './routes/lab.controls'
 import { Route as LabKitchenSinkRouteImport } from './routes/lab.kitchen-sink'
 import { Route as LabShadersRouteImport } from './routes/lab.shaders'
@@ -44,11 +43,6 @@ const DocsAccessibilityRoute = DocsAccessibilityRouteImport.update({
 const DocsInstallationRoute = DocsInstallationRouteImport.update({
   id: '/docs/installation',
   path: '/docs/installation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocsLearningRoute = DocsLearningRouteImport.update({
-  id: '/docs/learning',
-  path: '/docs/learning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabControlsRoute = LabControlsRouteImport.update({
@@ -84,7 +78,6 @@ export interface FileRoutesByFullPath {
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
-  '/docs/learning': typeof DocsLearningRoute
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
@@ -97,7 +90,6 @@ export interface FileRoutesByTo {
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
-  '/docs/learning': typeof DocsLearningRoute
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
@@ -111,7 +103,6 @@ export interface FileRoutesById {
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
-  '/docs/learning': typeof DocsLearningRoute
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
@@ -126,7 +117,6 @@ export interface FileRouteTypes {
     | '/playground'
     | '/docs/accessibility'
     | '/docs/installation'
-    | '/docs/learning'
     | '/lab/controls'
     | '/lab/kitchen-sink'
     | '/lab/shaders'
@@ -139,7 +129,6 @@ export interface FileRouteTypes {
     | '/playground'
     | '/docs/accessibility'
     | '/docs/installation'
-    | '/docs/learning'
     | '/lab/controls'
     | '/lab/kitchen-sink'
     | '/lab/shaders'
@@ -152,7 +141,6 @@ export interface FileRouteTypes {
     | '/playground'
     | '/docs/accessibility'
     | '/docs/installation'
-    | '/docs/learning'
     | '/lab/controls'
     | '/lab/kitchen-sink'
     | '/lab/shaders'
@@ -166,7 +154,6 @@ export interface RootRouteChildren {
   PlaygroundRoute: typeof PlaygroundRoute
   DocsAccessibilityRoute: typeof DocsAccessibilityRoute
   DocsInstallationRoute: typeof DocsInstallationRoute
-  DocsLearningRoute: typeof DocsLearningRoute
   LabControlsRoute: typeof LabControlsRoute
   LabKitchenSinkRoute: typeof LabKitchenSinkRoute
   LabShadersRoute: typeof LabShadersRoute
@@ -209,13 +196,6 @@ declare module '@tanstack/react-router' {
       path: '/docs/installation'
       fullPath: '/docs/installation'
       preLoaderRoute: typeof DocsInstallationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/docs/learning': {
-      id: '/docs/learning'
-      path: '/docs/learning'
-      fullPath: '/docs/learning'
-      preLoaderRoute: typeof DocsLearningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lab/controls': {
@@ -262,7 +242,6 @@ const rootRouteChildren: RootRouteChildren = {
   PlaygroundRoute: PlaygroundRoute,
   DocsAccessibilityRoute: DocsAccessibilityRoute,
   DocsInstallationRoute: DocsInstallationRoute,
-  DocsLearningRoute: DocsLearningRoute,
   LabControlsRoute: LabControlsRoute,
   LabKitchenSinkRoute: LabKitchenSinkRoute,
   LabShadersRoute: LabShadersRoute,

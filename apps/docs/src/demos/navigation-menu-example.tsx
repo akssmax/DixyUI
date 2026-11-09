@@ -30,8 +30,8 @@ export default function NavigationMenuExample({
             </NavigationMenu.Content>
           </NavigationMenu.Item>
           <NavigationMenu.Item>
-            <NavigationMenu.Link href="/docs/learning">
-              Learning
+            <NavigationMenu.Link href="/docs/accessibility">
+              Accessibility
             </NavigationMenu.Link>
           </NavigationMenu.Item>
         </NavigationMenu.List>

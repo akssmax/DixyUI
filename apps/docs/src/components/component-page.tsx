@@ -42,6 +42,7 @@ import { CodeBlock } from "./code-block";
 import { configureExample } from "../lib/example-source";
 import { PrimitiveApi } from "./primitive-api";
 import { usePreviewTheme } from "./app-appearance-provider";
+import { previewThemeProps, useDocsTheme } from "./use-docs-theme";
 import type { PreviewThemeSettings } from "../lib/preview-theme";
 
 const sourceFiles = import.meta.glob(
@@ -152,6 +153,8 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
     motion,
     dir: direction,
   } = settings;
+  const { docsTheme, skinProps } = useDocsTheme();
+  const previewTheme = previewThemeProps(settings, appearance, skinProps);
   const [state, setState] = useState(() => initialState(entry.controls));
   const [revision, setRevision] = useState(0);
   const [tab, setTab] = useState<"preview" | "code">("preview");
@@ -364,16 +367,7 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
             <div className="playground-body">
               <div className="playground-stage">
                 <Tabs.Panel value="preview" className="preview-panel">
-                  <Theme
-                    appearance={appearance}
-                    accentColor={accentColor}
-                    neutralColor={neutralColor}
-                    radius={radius}
-                    density={density}
-                    motion={motion}
-                    dir={direction}
-                    className="preview-theme"
-                  >
+                  <Theme {...previewTheme} className="preview-theme">
                     <span
                       className="preview-corner top-left"
                       aria-hidden="true"
@@ -392,7 +386,10 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
                       </Suspense>
                     </PreviewBoundary>
                     <span className="preview-caption">
-                      {appearance} / {accentColor}
+                      {appearance} /{" "}
+                      {skinProps
+                        ? docsTheme.skin.replace("dixy/", "")
+                        : accentColor}
                     </span>
                   </Theme>
                 </Tabs.Panel>
@@ -870,10 +867,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
             <div className="token-reference">
               A token to follow<code>{entry.token}</code>
             </div>
-            <Link to="/docs/learning">
-              Explore the learning notes
-              <ArrowRight size={14} />
-            </Link>
           </div>
         </section>
         <section id="source" className="doc-section">

@@ -1477,3 +1477,24 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Fernpay pagination: all links 40×40, no underline; disabled is grey and current is accent.
   - `pnpm check` and `pnpm package:check` pass.
 - Not tested: kitchen sink in each skin and in dark mode (that review is the user's); pagination with many pages (no automatic ellipsis logic, by design).
+
+### 2026-11-09 — Docs follow the chosen theme; icon rail and Learning page removed
+
+- Request: keep the left sidebar, make the applied theme style the documentation itself (not only previews), adopt the header theme menu from the HTML mock (`mockups/docs-shell.html`), and remove "Learning the system".
+- Docs theme setting:
+  - New `dixy-docs-theme` cookie (`lib/docs-theme.ts`): `{ skin, scope }`, where scope is "Whole docs" or "Previews only". Unknown skin ids fall back to Original Dixy.
+  - The root loader inlines the skin stylesheet on the server (same pattern as the landing `?starter=`), so a themed reader gets no flash of the default theme. The client still runs `prepareSkin` and drops the duplicate style.
+  - Choosing a starter on the landing page or in the theme playground also sets the docs theme.
+- Shell:
+  - Removed the icon rail. The brand, sidebar toggle and breadcrumbs sit in the top bar, together with search, a theme menu (Popover + ToggleGroup: theme, appearance, scope) and an appearance button.
+  - The sidebar gains a page filter, group counts, components grouped by registry category, and a theme card that opens the menu.
+  - The frame paints `--dixy-skin-ground`/`--dixy-skin-canvas`. Selected states mix from `--dixy-accent`, because skins don't override `--dixy-color-background-selected`; it stayed lavender under Ocean Depths.
+- Previews: `previewThemeProps` uses the skin as the base, and only preview settings changed from their defaults override it. The default purple accent no longer paints over a skin's accent.
+- Removed `/docs/learning` and `content/learning.mdx`. The landing CTA now reads "Read the docs" (→ Installation), the component-page design note lost its link, and the Navigation Menu demo links to Accessibility instead.
+- Verified in the in-app browser (own dev server, :3002):
+  - Ocean Depths light chosen through the menu: frame, sidebar, preview and serif headings all switch, and the cookie is saved.
+  - Server HTML carries `data-dixy-skin` and the inlined skin style.
+  - After a reload, Retro OS dark renders across the whole page.
+  - "Previews only" leaves the shell on Original Dixy (`data-dixy-skin="none"`) and skins the preview.
+  - At 375px, Candy Clay renders and the phone navigation dialog opens with the filter and 92 links. No console errors.
+- Not tested: keyboard-only pass through the theme menu, reduced motion, screen reader, every one of the 31 skins on every page, Safari/Firefox. Foundation-page previews still pass explicit settings and don't take on the skin. Bundle cost: the docs shell now imports the theme-playground helpers, so every docs page loads skin definitions.

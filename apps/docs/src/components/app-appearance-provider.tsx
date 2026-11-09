@@ -8,6 +8,11 @@ import {
   updatePreviewTheme,
   type PreviewThemeSettings,
 } from "../lib/preview-theme";
+import {
+  docsThemeCookie,
+  serializeDocsTheme,
+  type DocsThemeSettings,
+} from "../lib/docs-theme";
 
 function saveCookie(name: string, value: string) {
   try {
@@ -21,10 +26,12 @@ function saveCookie(name: string, value: string) {
 export function AppAppearanceProvider({
   initialAppearance,
   initialPreviewTheme,
+  initialDocsTheme,
   children,
 }: {
   initialAppearance: AppAppearance;
   initialPreviewTheme: PreviewThemeSettings;
+  initialDocsTheme: DocsThemeSettings;
   children: ReactNode;
 }) {
   // The server cookie supplies the same initial value for SSR and hydration.
@@ -51,6 +58,15 @@ export function AppAppearanceProvider({
     },
     [previewTheme],
   );
+  const [docsTheme, updateDocsTheme] = useState(initialDocsTheme);
+  const setDocsTheme = useCallback(
+    (patch: Partial<DocsThemeSettings>) => {
+      const next = { ...docsTheme, ...patch };
+      updateDocsTheme(next);
+      saveCookie(docsThemeCookie, serializeDocsTheme(next));
+    },
+    [docsTheme],
+  );
   const resetPreviewTheme = useCallback(() => {
     updateTheme(defaultPreviewTheme);
     saveCookie(previewThemeCookie, serializePreviewTheme(defaultPreviewTheme));
@@ -64,6 +80,8 @@ export function AppAppearanceProvider({
         previewTheme,
         setPreviewTheme,
         resetPreviewTheme,
+        docsTheme,
+        setDocsTheme,
       }}
     >
       {children}

@@ -136,6 +136,7 @@ function useStarter() {
   const [pending, setPending] = useState<string | null>(null);
   const [error, setError] = useState("");
   const request = useRef(0);
+  const { setDocsTheme } = useAppAppearance();
   useEffect(() => {
     // Covers a server load that failed, and removes the duplicate style the
     // route head adds once the client has already injected the same skin.
@@ -148,6 +149,8 @@ function useStarter() {
   function select(id: string) {
     const generation = ++request.current;
     const next = skinThemePreset(id);
+    // The starter you pick on the landing page carries into the docs.
+    setDocsTheme({ skin: id });
     setPending(id);
     setError("");
     void (async () => {
@@ -751,12 +754,12 @@ function Landing() {
                     Open the theme playground <ArrowUpRight size={16} />
                   </ButtonLink>
                   <ButtonLink
-                    to="/docs/learning"
+                    to="/docs/installation"
                     size="lg"
                     variant="outline"
                     color="neutral"
                   >
-                    Learn the system
+                    Read the docs
                   </ButtonLink>
                 </div>
               </Card.Content>
