@@ -1411,3 +1411,21 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - In-app browser, Prism Glass: rail is 72px and the toggle's name and `aria-expanded` flip. Nav buttons are named.
   - Collapsed state survives reload. ⌘B toggles and stores the change. Hovering a rail icon shows its label tooltip on the right.
 - Not tested: the width animation itself (pane hidden, so frames are paused), keyboard focus order in the rail with a screen reader, and the first-paint flash for a stored collapsed state. It reads storage after hydration, so it renders expanded for one frame.
+
+### 2026-11-09 — Base controls: one height, built-in icons, no double frames
+
+- Request: base components used text glyphs for icons, had extra wrapper boxes and mismatched heights. Compare with shadcn/ui and HeroUI and fix, on branch `fix/base-components`. Full audit: `docs/COMPONENT_AUDIT.md`.
+- Measured on a new regression page, `/lab/controls`. Before the fix, md heights ranged from 40 to 58px. After it, every field-like control is exactly 32/40/48. This holds in the default theme and all 30 starter skins, checked by loading each `?skin=` in an iframe.
+- Library:
+  - `alignment.css`: a framed group owns the height and border, and its parts stretch inside it. Toggle tracks and tab lists own the height, and their items stretch.
+  - Default SVG icons on DatePicker/DateRangePicker.Button, Calendar/RangeCalendar.Button (picked by `slot`), NumberField steppers, SearchField.Clear, TagGroup.Remove and Combobox.ChipRemove.
+  - New `SearchField.Group`.
+  - IconButton follows the control height.
+  - A calendar inside a popover has no frame of its own.
+- NumberField (user report: "too much width"): the group is now `inline-flex` and sized to its content (138px at md). Focus draws one ring, on the group.
+- Docs: `docs.css` had a global `input:not(.dixy-input):focus-visible` rule that put a second ring, offset by 4px, on every Dixy input except TextField. It now skips any `dixy-*` element.
+- Demos, Fernpay and the theme workspace scene no longer pass glyph children. Fernpay's filter toggles moved from sm to md so the filter row is one height.
+- Verified:
+  - `pnpm check` and `pnpm package:check` pass. API metadata was regenerated with `pnpm docs:generate`.
+  - In the in-app browser: heights at three sizes × 31 themes; date-range popover has a single frame and chevrons; search clear hides while empty and has an accessible name; focus rings on all five grouped fields.
+- Not tested: dark appearance on the harness, Safari/Firefox, screen readers, coarse-pointer target size.

@@ -435,10 +435,10 @@ export function TransactionsView() {
             onChange={(v) => (setQuery(v), setPage(1))}
           >
             <SearchField.Label>Search</SearchField.Label>
-            <Inline>
+            <SearchField.Group>
               <SearchField.Input placeholder="Merchant…" />
-              <SearchField.Clear aria-label="Clear search">×</SearchField.Clear>
-            </Inline>
+              <SearchField.Clear aria-label="Clear search" />
+            </SearchField.Group>
           </SearchField.Root>
 
           <Field.Root>
@@ -491,9 +491,7 @@ export function TransactionsView() {
               <DateRangePicker.Input slot="end">
                 {(segment) => <DateRangePicker.Segment segment={segment} />}
               </DateRangePicker.Input>
-              <DateRangePicker.Button aria-label="Open calendar">
-                ▦
-              </DateRangePicker.Button>
+              <DateRangePicker.Button aria-label="Open calendar" />
             </DateRangePicker.Group>
             <DateRangePicker.Popover aria-label="Choose a date range">
               <RangeCalendar.Root aria-label="Date range">
@@ -501,13 +499,9 @@ export function TransactionsView() {
                   <RangeCalendar.Button
                     slot="previous"
                     aria-label="Previous month"
-                  >
-                    ‹
-                  </RangeCalendar.Button>
+                  />
                   <RangeCalendar.Heading />
-                  <RangeCalendar.Button slot="next" aria-label="Next month">
-                    ›
-                  </RangeCalendar.Button>
+                  <RangeCalendar.Button slot="next" aria-label="Next month" />
                 </Inline>
                 <RangeCalendar.Grid>
                   <RangeCalendar.GridHeader>
@@ -532,13 +526,11 @@ export function TransactionsView() {
                 value[0] && (setDirection(value[0] as Direction), setPage(1))
               }
             >
-              <Toggle value="all" size="sm">
-                All
-              </Toggle>
-              <Toggle value="in" size="sm">
+              <Toggle value="all">All</Toggle>
+              <Toggle value="in">
                 <Icon render={<ArrowDownLeft />} /> In
               </Toggle>
-              <Toggle value="out" size="sm">
+              <Toggle value="out">
                 <Icon render={<ArrowUpRight />} /> Out
               </Toggle>
             </ToggleGroup>
@@ -714,9 +706,7 @@ function TransactionDrawer({
                           <TagGroup.Remove
                             slot="remove"
                             aria-label={`Remove ${item.id}`}
-                          >
-                            ×
-                          </TagGroup.Remove>
+                          />
                         </TagGroup.Item>
                       )}
                     </TagGroup.List>

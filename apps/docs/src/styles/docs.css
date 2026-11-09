@@ -245,9 +245,9 @@ input {
 }
 button:not([class*="dixy-"]):focus-visible,
 a:not([class*="dixy-"]):focus-visible,
-select:focus-visible,
-summary:focus-visible,
-input:not(.dixy-input):focus-visible {
+select:not([class*="dixy-"]):focus-visible,
+summary:not([class*="dixy-"]):focus-visible,
+input:not([class*="dixy-"]):focus-visible {
   outline: 2px solid var(--dixy-color-border-focus);
   outline-offset: 4px;
 }

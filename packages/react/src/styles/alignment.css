@@ -1,0 +1,313 @@
+/* Control alignment. Every field-like control is exactly --dixy-component-height tall:
+   a framed group owns the border and height, and the parts inside it fill that frame
+   instead of bringing their own border and full height. Checked at /lab/controls. */
+@layer dixy.components {
+  :is(
+    .dixy-aria-group,
+    .dixy-input-group,
+    .dixy-number-field-group,
+    .dixy-combobox-input-group,
+    .dixy-autocomplete-input-group
+  ) {
+    box-sizing: border-box;
+    min-block-size: var(--dixy-component-height, 40px);
+    align-items: center;
+  }
+  :is(
+      .dixy-aria-group,
+      .dixy-input-group,
+      .dixy-number-field-group,
+      .dixy-combobox-input-group,
+      .dixy-autocomplete-input-group
+    )
+    > :is(
+      .dixy-aria-dateinput,
+      .dixy-aria-input,
+      .dixy-input,
+      .dixy-number-field-input,
+      .dixy-combobox-input,
+      .dixy-autocomplete-input
+    )[class] {
+    align-self: stretch;
+    block-size: auto;
+    min-block-size: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    outline: none;
+  }
+  :is(
+      .dixy-aria-group,
+      .dixy-input-group,
+      .dixy-number-field-group,
+      .dixy-combobox-input-group,
+      .dixy-autocomplete-input-group
+    )
+    > :is(
+      .dixy-aria-input,
+      .dixy-input,
+      .dixy-number-field-input,
+      .dixy-combobox-input,
+      .dixy-autocomplete-input
+    )[class]:is(:focus-visible, [data-focus-visible]) {
+    outline: none;
+  }
+  /* The frame shows focus for the part inside it. */
+  :is(
+      .dixy-aria-group,
+      .dixy-input-group,
+      .dixy-number-field-group,
+      .dixy-combobox-input-group,
+      .dixy-autocomplete-input-group
+    ):has(
+      > :is(
+          .dixy-aria-input,
+          .dixy-input,
+          .dixy-number-field-input,
+          .dixy-combobox-input,
+          .dixy-autocomplete-input
+        ):focus-visible
+    ) {
+    outline: 2px solid var(--dixy-color-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Trailing icon buttons (DatePicker, DateRangePicker, SearchField.Clear) sit inside
+     the frame as square ghost buttons rather than a second bordered box. */
+  .dixy-aria-group > .dixy-aria-button {
+    --dixy-group-button: calc(
+      var(--dixy-component-height, 40px) - 2 * var(--dixy-space-050) - 2 *
+        var(--dixy-border-width-1)
+    );
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--dixy-group-button);
+    block-size: var(--dixy-group-button);
+    min-inline-size: 0;
+    min-block-size: 0;
+    margin-inline-end: calc(var(--dixy-space-050) - 12px);
+    padding: 0;
+    border: 0;
+    border-radius: max(
+      2px,
+      calc(
+        var(--dixy-component-radius, var(--dixy-radius-control)) -
+          var(--dixy-space-050)
+      )
+    );
+    background: transparent;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-aria-group > .dixy-aria-button[data-hovered],
+  .dixy-aria-group > .dixy-aria-button[data-pressed] {
+    background: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+
+  /* Combobox and Autocomplete trigger/clear: the same square ghost button. */
+  :is(.dixy-combobox-input-group, .dixy-autocomplete-input-group)
+    > :is(
+      .dixy-combobox-trigger,
+      .dixy-autocomplete-trigger,
+      .dixy-combobox-clear,
+      .dixy-autocomplete-clear
+    ):not(.dixy-button) {
+    --dixy-group-button: calc(
+      var(--dixy-component-height, 40px) - 2 * var(--dixy-space-050) - 2 *
+        var(--dixy-border-width-1)
+    );
+    display: inline-grid;
+    place-items: center;
+    box-sizing: border-box;
+    inline-size: var(--dixy-group-button);
+    block-size: var(--dixy-group-button);
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding: 0;
+    border-radius: max(
+      2px,
+      calc(
+        var(--dixy-component-radius, var(--dixy-radius-control)) -
+          var(--dixy-space-050)
+      )
+    );
+  }
+  :is(.dixy-combobox-input-group, .dixy-autocomplete-input-group)
+    > :is(
+      .dixy-combobox-trigger,
+      .dixy-autocomplete-trigger,
+      .dixy-combobox-clear,
+      .dixy-autocomplete-clear
+    ):not(.dixy-button):hover {
+    background: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+
+  /* SearchField.Group: leading icon, input, clear that hides while empty. */
+  .dixy-search-field-icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-search-field .dixy-aria-group > .dixy-aria-input {
+    flex: 1;
+    inline-size: 100%;
+    min-inline-size: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+  }
+  .dixy-search-field .dixy-aria-input::-webkit-search-cancel-button,
+  .dixy-search-field .dixy-aria-input::-webkit-search-decoration {
+    appearance: none;
+  }
+  .dixy-search-field[data-empty] .dixy-aria-group > .dixy-aria-button {
+    visibility: hidden;
+  }
+
+  /* NumberField: sized to its value, not the container. Set a width on Group to grow it. */
+  .dixy-number-field-group {
+    display: inline-flex;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+  }
+  .dixy-number-field-group > .dixy-number-field-input[class] {
+    flex: 1 1 auto;
+    inline-size: 6ch;
+    min-inline-size: 3ch;
+    padding-inline: 0;
+  }
+  :is(.dixy-number-field-increment, .dixy-number-field-decrement):not(
+    .dixy-button
+  ) {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    align-self: stretch;
+    box-sizing: border-box;
+    inline-size: calc(
+      var(--dixy-component-height) - 2 * var(--dixy-border-width-1)
+    );
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding: 0;
+    color: var(--dixy-color-text-secondary);
+    cursor: pointer;
+  }
+  :is(.dixy-number-field-increment, .dixy-number-field-decrement):not(
+      .dixy-button
+    ):not([data-disabled]):hover {
+    background: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+  .dixy-number-field-decrement:not(.dixy-button) {
+    border-start-start-radius: inherit;
+    border-end-start-radius: inherit;
+  }
+  .dixy-number-field-increment:not(.dixy-button) {
+    border-start-end-radius: inherit;
+    border-end-end-radius: inherit;
+  }
+
+  /* Toggle groups and tab lists: the track is the control height and its items stretch to
+     fill it, so padding and any border a skin adds come out of the items, not on top. */
+  .dixy-toggle-group:is([data-segmented], [data-attached]) {
+    --dixy-track-height: var(--dixy-size-control-md);
+    box-sizing: border-box;
+    min-block-size: var(--dixy-track-height);
+    align-items: stretch;
+  }
+  .dixy-toggle-group:is([data-segmented], [data-attached]):has(
+      > .dixy-toggle[data-size="sm"]
+    ) {
+    --dixy-track-height: var(--dixy-size-control-sm);
+  }
+  .dixy-toggle-group:is([data-segmented], [data-attached]):has(
+      > .dixy-toggle[data-size="lg"]
+    ) {
+    --dixy-track-height: var(--dixy-size-control-lg);
+  }
+  .dixy-toggle-group:is([data-segmented], [data-attached])
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button) {
+    block-size: auto;
+    min-block-size: 0;
+  }
+  /* Attached: one frame, items joined by a hairline instead of nested borders. */
+  .dixy-toggle-group[data-attached] {
+    padding: 0;
+  }
+  .dixy-toggle-group[data-attached]
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button) {
+    border-color: transparent;
+  }
+  .dixy-toggle-group[data-attached]:not([data-orientation="vertical"])
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button)
+    + .dixy-toggle[data-dixy-visual]:not(.dixy-button) {
+    border-inline-start-color: var(--dixy-color-border-default);
+  }
+  .dixy-toggle-group[data-attached][data-orientation="vertical"]
+    > .dixy-toggle[data-dixy-visual]:not(.dixy-button)
+    + .dixy-toggle[data-dixy-visual]:not(.dixy-button) {
+    border-block-start-color: var(--dixy-color-border-default);
+  }
+  .dixy-toggle-group[data-attached] > .dixy-toggle:first-child {
+    border-start-start-radius: calc(
+      var(--dixy-radius-control) - var(--dixy-border-width-1)
+    );
+    border-end-start-radius: calc(
+      var(--dixy-radius-control) - var(--dixy-border-width-1)
+    );
+  }
+  .dixy-toggle-group[data-attached] > .dixy-toggle:last-child {
+    border-start-end-radius: calc(
+      var(--dixy-radius-control) - var(--dixy-border-width-1)
+    );
+    border-end-end-radius: calc(
+      var(--dixy-radius-control) - var(--dixy-border-width-1)
+    );
+  }
+
+  .dixy-tabs-list:not([data-orientation="vertical"]) {
+    box-sizing: border-box;
+    min-block-size: var(--dixy-tabs-height);
+    align-items: stretch;
+  }
+  .dixy-tabs-list:not([data-orientation="vertical"])
+    > .dixy-tabs-tab:not(.dixy-button) {
+    block-size: auto;
+    min-block-size: var(--dixy-interaction-target);
+  }
+  /* Small lists use the thinner track, so tabs keep a 24px target inside 32px. */
+  .dixy-tabs-root[data-size="sm"]
+    > .dixy-tabs-list:not([data-orientation="vertical"]) {
+    padding-block: var(--dixy-space-025);
+  }
+
+  /* A calendar inside a popover uses the popover's frame instead of drawing its own. */
+  .dixy-aria-popover :is(.dixy-calendar, .dixy-range-calendar) {
+    --dixy-calendar-pad: 0px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+  :is(.dixy-calendar, .dixy-range-calendar)
+    .dixy-aria-button:is([slot="previous"], [slot="next"]) {
+    inline-size: calc(var(--dixy-calendar-cell, 40px) - 8px);
+    block-size: calc(var(--dixy-calendar-cell, 40px) - 8px);
+    border-color: transparent;
+    background: transparent;
+    color: var(--dixy-color-text-secondary);
+  }
+  :is(.dixy-calendar, .dixy-range-calendar)
+    .dixy-aria-button:is([slot="previous"], [slot="next"]):is(
+      [data-hovered],
+      [data-pressed]
+    ) {
+    background: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+}

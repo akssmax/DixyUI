@@ -34,13 +34,9 @@ export default function NumberFieldExample({
           <label htmlFor={inputId}>Seats</label>
         </NumberField.ScrubArea>
         <NumberField.Group>
-          <NumberField.Decrement aria-label="Remove a seat">
-            −
-          </NumberField.Decrement>
+          <NumberField.Decrement aria-label="Remove a seat" />
           <NumberField.Input id={inputId} />
-          <NumberField.Increment aria-label="Add a seat">
-            +
-          </NumberField.Increment>
+          <NumberField.Increment aria-label="Add a seat" />
         </NumberField.Group>
       </NumberField.Root>
     </Stack>

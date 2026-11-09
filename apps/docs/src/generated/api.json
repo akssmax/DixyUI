@@ -2266,6 +2266,15 @@
       "default": "—"
     }
   ],
+  "SearchFieldGroupProps": [
+    {
+      "name": "icon",
+      "type": "boolean | ReactNode",
+      "required": false,
+      "description": "Leading search icon. Pass `false` to omit it, or a node to replace it.",
+      "default": "true"
+    }
+  ],
   "SelectTriggerProps": [
     {
       "name": "size",

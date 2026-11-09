@@ -1,4 +1,10 @@
 import * as Primitive from "react-aria-components/SearchField";
+import type { ReactNode } from "react";
+import {
+  Group as AriaGroup,
+  type GroupProps,
+} from "react-aria-components/Group";
+import { defaultArtwork, Mark } from "../utilities/default-artwork";
 
 import type { VisualProps } from "../utilities/native-part";
 import { useComponentVisuals } from "../utilities/component-visuals";
@@ -21,11 +27,58 @@ function Root({ size, radius, className, ...props }: SearchFieldRootProps) {
     />
   );
 }
+export interface SearchFieldGroupProps extends GroupProps {
+  /** Leading search icon. Pass `false` to omit it, or a node to replace it. @default true */
+  icon?: boolean | ReactNode;
+}
+/** The visible field: one bordered box holding the icon, Input and Clear. */
+function Group({
+  icon = true,
+  className,
+  children,
+  ...props
+}: SearchFieldGroupProps) {
+  const leading =
+    icon === false ? null : (
+      <span className="dixy-search-field-icon" aria-hidden="true">
+        {icon === true ? <Mark kind="search" /> : icon}
+      </span>
+    );
+  return (
+    <AriaGroup
+      {...props}
+      className={withClassName(
+        "dixy-aria-group",
+        className as Parameters<typeof withClassName>[1],
+      )}
+    >
+      {typeof children === "function" ? (
+        (state) => (
+          <>
+            {leading}
+            {children(state)}
+          </>
+        )
+      ) : (
+        <>
+          {leading}
+          {children}
+        </>
+      )}
+    </AriaGroup>
+  );
+}
 export const SearchField = /* @__PURE__ */ (() => ({
   Root,
+  Group,
   Input: /* @__PURE__ */ styledPrimitive(Primitive.Input, "dixy-aria-input"),
   Label: /* @__PURE__ */ styledPrimitive(Primitive.Label, "dixy-aria-label"),
-  Clear: /* @__PURE__ */ styledPrimitive(Primitive.Button, "dixy-aria-button"),
+  Clear: /* @__PURE__ */ defaultArtwork(
+    Primitive.Button,
+    "dixy-aria-button",
+    "close",
+    false,
+  ),
   Description: /* @__PURE__ */ styledPrimitive(
     Primitive.Text,
     "dixy-aria-text",

@@ -320,13 +320,9 @@ function Wall() {
                   <RangeCalendar.Button
                     slot="previous"
                     aria-label="Previous month"
-                  >
-                    ‹
-                  </RangeCalendar.Button>
+                  />
                   <RangeCalendar.Heading />
-                  <RangeCalendar.Button slot="next" aria-label="Next month">
-                    ›
-                  </RangeCalendar.Button>
+                  <RangeCalendar.Button slot="next" aria-label="Next month" />
                 </div>
                 <RangeCalendar.Grid>
                   <RangeCalendar.GridHeader>
@@ -361,9 +357,7 @@ function Wall() {
                   {(item) => (
                     <TagGroup.Item id={item.id} textValue={item.id}>
                       {item.id}
-                      <TagGroup.Remove slot="remove" aria-label="Remove">
-                        ×
-                      </TagGroup.Remove>
+                      <TagGroup.Remove slot="remove" aria-label="Remove" />
                     </TagGroup.Item>
                   )}
                 </TagGroup.List>

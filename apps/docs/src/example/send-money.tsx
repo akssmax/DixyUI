@@ -139,13 +139,9 @@ export function SendMoneyDialog({ compact = false }: { compact?: boolean }) {
                         <label htmlFor="send-amount">Amount</label>
                       </NumberField.ScrubArea>
                       <NumberField.Group>
-                        <NumberField.Decrement aria-label="Decrease by £5">
-                          −
-                        </NumberField.Decrement>
+                        <NumberField.Decrement aria-label="Decrease by £5" />
                         <NumberField.Input id="send-amount" />
-                        <NumberField.Increment aria-label="Increase by £5">
-                          +
-                        </NumberField.Increment>
+                        <NumberField.Increment aria-label="Increase by £5" />
                       </NumberField.Group>
                     </NumberField.Root>
 

@@ -7,6 +7,7 @@ import type { VisualProps } from "../utilities/native-part";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { styledPrimitive } from "../utilities/styled-primitive";
+import { defaultArtwork } from "../utilities/default-artwork";
 export interface CalendarRootProps<
   T extends DateValue,
   M extends CalendarSelectionMode = "single",
@@ -66,5 +67,10 @@ export const Calendar = /* @__PURE__ */ (() => ({
     Primitive.Heading,
     "dixy-aria-heading",
   ),
-  Button: /* @__PURE__ */ styledPrimitive(Primitive.Button, "dixy-aria-button"),
+  Button: /* @__PURE__ */ defaultArtwork(
+    Primitive.Button,
+    "dixy-aria-button",
+    (props) => (props.slot === "previous" ? "chevron-left" : "chevron-right"),
+    false,
+  ),
 }))();

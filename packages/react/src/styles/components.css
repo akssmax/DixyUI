@@ -183,14 +183,9 @@
   }
   .dixy-icon-button {
     width: var(--dixy-height-md);
-    min-inline-size: max(
-      var(--dixy-interaction-target),
-      var(--dixy-size-target-comfortable)
-    );
-    min-block-size: max(
-      var(--dixy-interaction-target),
-      var(--dixy-size-target-comfortable)
-    );
+    /* Square at the control height, so it lines up with fields of the same size. */
+    min-inline-size: var(--dixy-interaction-target);
+    min-block-size: var(--dixy-interaction-target);
     padding: 0;
   }
   .dixy-icon-button[data-size="sm"] {

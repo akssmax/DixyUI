@@ -215,7 +215,7 @@
     box-sizing: border-box;
     min-inline-size: 0;
     max-inline-size: 100%;
-    padding: 8px 12px;
+    padding: 0 12px;
     border: var(--dixy-border-default);
     border-radius: var(--dixy-component-radius, var(--dixy-radius-control));
     background-color: var(--dixy-color-background-surface);
@@ -227,6 +227,7 @@
     );
   }
   .dixy-textarea {
+    padding-block: 8px;
     resize: vertical;
     min-block-size: 6rem;
     inline-size: 100%;

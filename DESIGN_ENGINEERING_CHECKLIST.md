@@ -796,3 +796,10 @@ Verification for this pass:
 - [ ] Keyboard-only and screen-reader pass through the whole app; dark appearance on every view; Safari/Firefox.
 - [ ] Library follow-ups found while building: line/area `Chart`, `AvatarGroup` clipping at `sm`, a z-index scale for app chrome vs overlays.
 - [ ] Learning: explain why `isolation: isolate` fixed the top bar painting over the dialog backdrop.
+
+## Base control alignment — 2026-11-09
+
+- [x] Every field-like control measures 32/40/48 at sm/md/lg across the default theme and 30 skins, checked on `/lab/controls`. Evidence: docs/COMPONENT_AUDIT.md, docs/BUILD_LOG.md 2026-11-09.
+- [x] Built-in SVG icons replace consumer text glyphs in the date, calendar, number, search and tag parts.
+- [ ] Coarse-pointer hit-area extension for 32px controls; Accordion indicator part.
+- [ ] Learning: explain why a framed group must own the height and border (and its parts stretch) rather than each part declaring the control height.

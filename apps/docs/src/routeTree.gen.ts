@@ -15,6 +15,7 @@ import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibility'
 import { Route as DocsInstallationRouteImport } from './routes/docs.installation'
 import { Route as DocsLearningRouteImport } from './routes/docs.learning'
+import { Route as LabControlsRouteImport } from './routes/lab.controls'
 import { Route as LabShadersRouteImport } from './routes/lab.shaders'
 import { Route as DocsComponentsComponentRouteImport } from './routes/docs.components.$component'
 import { Route as DocsFoundationsFoundationRouteImport } from './routes/docs.foundations.$foundation'
@@ -49,6 +50,11 @@ const DocsLearningRoute = DocsLearningRouteImport.update({
   path: '/docs/learning',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabControlsRoute = LabControlsRouteImport.update({
+  id: '/lab/controls',
+  path: '/lab/controls',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LabShadersRoute = LabShadersRouteImport.update({
   id: '/lab/shaders',
   path: '/lab/shaders',
@@ -73,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/docs/learning': typeof DocsLearningRoute
+  '/lab/controls': typeof LabControlsRoute
   '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/docs/learning': typeof DocsLearningRoute
+  '/lab/controls': typeof LabControlsRoute
   '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/docs/learning': typeof DocsLearningRoute
+  '/lab/controls': typeof LabControlsRoute
   '/lab/shaders': typeof LabShadersRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/docs/accessibility'
     | '/docs/installation'
     | '/docs/learning'
+    | '/lab/controls'
     | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/docs/accessibility'
     | '/docs/installation'
     | '/docs/learning'
+    | '/lab/controls'
     | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
@@ -131,6 +142,7 @@ export interface FileRouteTypes {
     | '/docs/accessibility'
     | '/docs/installation'
     | '/docs/learning'
+    | '/lab/controls'
     | '/lab/shaders'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
@@ -143,6 +155,7 @@ export interface RootRouteChildren {
   DocsAccessibilityRoute: typeof DocsAccessibilityRoute
   DocsInstallationRoute: typeof DocsInstallationRoute
   DocsLearningRoute: typeof DocsLearningRoute
+  LabControlsRoute: typeof LabControlsRoute
   LabShadersRoute: typeof LabShadersRoute
   DocsComponentsComponentRoute: typeof DocsComponentsComponentRoute
   DocsFoundationsFoundationRoute: typeof DocsFoundationsFoundationRoute
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsLearningRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lab/controls': {
+      id: '/lab/controls'
+      path: '/lab/controls'
+      fullPath: '/lab/controls'
+      preLoaderRoute: typeof LabControlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lab/shaders': {
       id: '/lab/shaders'
       path: '/lab/shaders'
@@ -223,6 +243,7 @@ const rootRouteChildren: RootRouteChildren = {
   DocsAccessibilityRoute: DocsAccessibilityRoute,
   DocsInstallationRoute: DocsInstallationRoute,
   DocsLearningRoute: DocsLearningRoute,
+  LabControlsRoute: LabControlsRoute,
   LabShadersRoute: LabShadersRoute,
   DocsComponentsComponentRoute: DocsComponentsComponentRoute,
   DocsFoundationsFoundationRoute: DocsFoundationsFoundationRoute,
