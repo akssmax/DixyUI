@@ -38,6 +38,7 @@ export const Slider = /* @__PURE__ */ (() => ({
   ...Primitive,
   Root: Root,
   Label: /* @__PURE__ */ styledPrimitive(Primitive.Label, "dixy-slider-label"),
+  Value: /* @__PURE__ */ styledPrimitive(Primitive.Value, "dixy-slider-value"),
   Control: /* @__PURE__ */ styledPrimitive(
     Primitive.Control,
     "dixy-slider-control",

@@ -47,3 +47,22 @@ All 30 starter skins plus the default theme now measure exactly 32/40/48 on ever
 - **Accordion:** the chevron is still an SVG the consumer writes (`data-dixy-chevron`). Base UI has no indicator part for it, so adding one would be a new API.
 - **Touch targets:** IconButton now follows the control height. On coarse pointers, 32px small controls are under the 44px comfortable target. A hit-area extension would fix that without changing the layout.
 - **Standalone `SearchField.Input`** (with no Group) still works and is still a bordered input on its own.
+
+## Second pass — kitchen sink review
+
+| Component | Problem | Fix |
+| --- | --- | --- |
+| Badge, Chip | `outline` (the default) ignored `color`; no warning or info | Outline/ghost use the color; `warning` and `info` added to the shared color set |
+| Alert | Outline ignored `color` | Tinted edge and colored title |
+| ButtonGroup (attached) | Neighbouring borders drew 2px seams; disabled outline filled grey | Borders overlap by one width; disabled keeps its treatment |
+| Accordion | Bordered, centred triggers (outranked by a shared `:is()` reset) | Full-width rows, chevron at the end, hairline separators |
+| Breadcrumbs | Every crumb an accent underlined link; current page a faded link | Quiet links, current page as plain text |
+| Item | Actions next to the title with a top margin | Actions at the end of the row |
+| Meter, Progress, Slider | Label and value stacked | `Value` part; label and value on one row |
+| Skeleton | Bordered boxes, static | Borderless fill, pulse (off for reduced motion) |
+| TagGroup | Remove button was a bordered box inside the tag | Borderless 24px icon button |
+| Checkbox | Description started under the box, not the text | Indented to the label text |
+| ColorField, NavigationMenu link | Label beside the input; link styled as body text | Label above; link matches triggers |
+
+Still open: NativeSelect's browser chevron (needs a wrapper because materials reset `background-image`), Avatar shape in groups, Toggle and ToggleGroup default treatment (no visible frame at rest).
+

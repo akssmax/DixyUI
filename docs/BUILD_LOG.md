@@ -1532,3 +1532,28 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - 375px in dark: picker rows fit (Customise on the same line), no horizontal scroll.
   - No console errors after a fresh load.
 - Not tested: keyboard order through the picker and tabs, reduced motion, Dashboard/Music/Blocks scenes inside the bled stage, every starter, Safari/Firefox.
+
+### 2026-11-09 — Badge semantic colors and a kitchen-sink pass over base components
+
+- Request: decide whether Badge needs semantic variants, fix it, and improve other base components.
+- **Colors.** Badge already took `color`, but only `solid` and `soft` used it; the default `outline` hard-coded grey. And there was no warning or info.
+  - New `VisualColor` type (exported) adds `warning` and `info`. `families.css` maps them to the existing status tokens (`background-warning-bold`, `background-warning`, `text-warning`, `text-on-warning`, `border-warning`, and the `information` set), because there's no action ramp for them.
+  - New `--dixy-component-border`: the color at 45% for accent/neutral/danger/success, the status border token for warning/info.
+  - Outline and ghost Badge/Chip use the color's border and text; neutral outline stays a quiet grey. Outline Alert gets a tinted edge, and outline/soft Alert titles take the color.
+  - Button, Link, Avatar, Tabs, Switch and the other components with their own per-color CSS keep the four colors. Their demos now type `color` from the component, not `VisualProps`.
+  - The Badge demo shows all six colors in the chosen treatment (its Color control was replaced by that row; Treatment gained ghost). Card, Alert and Chip controls list warning and info. Fernpay's Pending badges now use soft warning, and its category chips are neutral.
+- **ButtonGroup attached.** Each button kept its own border, so seams were 2px. Buttons after the first now overlap the previous border by its width; hovered and focused buttons sit on top. Disabled outline/ghost buttons keep a transparent fill instead of turning grey. The demo's status line now updates on Save/Share.
+- **Kitchen-sink pass** (`styles/refinements.css`, imported last):
+  - Accordion: items were bordered, centred buttons. The shared trigger reset is `:is(…):not(.dixy-button)`, and `:is()` takes its highest argument's specificity, so it outranked `.dixy-accordion-trigger`. Triggers are now full-width rows with the chevron at the end and hairlines between items.
+  - Breadcrumbs: ancestors are secondary-colour links (underline on hover); the current page is plain primary text, not a faded link.
+  - Item: actions sat next to the title with a stray top margin; content now fills the row and actions sit at the end.
+  - Meter, Progress, Slider: new `Value` parts with classes (`dixy-*-value`). Label and value share the first row, value right-aligned in tabular numbers, track below. Vertical sliders are left as they were.
+  - Skeleton: no border, a slow pulse that stops under reduced motion.
+  - TagGroup: the remove button is a borderless 24px icon inside the tag instead of a second bordered box.
+  - Checkbox in a label: the library sets the box-to-text gap (8px), and a field description lines up with the label text (measured: both at 541.8px).
+  - ColorField: label above the input. NavigationMenu links: label font and padding like the triggers, no underline.
+  - Demos: Select shows "Personal" rather than the raw value (via `items`); ListBox labels are capitalised; Textarea and NativeSelect use the Dixy label style; Alert Dialog's "Delete project" trigger is a danger button.
+- Tried and reverted: a custom NativeSelect chevron as a background image. The material system resets `background-image: none !important`, so it vanished; doing it properly needs a wrapper element.
+- Verified in the in-app browser on `/lab/kitchen-sink`: each fixed tile at default controls; badges in outline/soft/solid in light and dark; Fernpay transactions show amber Pending and neutral chips. `pnpm check` (99 tests) and `pnpm package:check` pass; API metadata regenerated.
+- Not tested: keyboard pass through the changed Accordion and TagGroup, screen readers, every skin with the new colors (skins don't override the status tokens, so they inherit the defaults), Safari/Firefox, mobile widths for the kitchen sink.
+

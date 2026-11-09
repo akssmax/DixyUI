@@ -806,4 +806,8 @@ Verification for this pass:
 - [ ] Coarse-pointer hit-area extension for 32px controls; Accordion indicator part.
 - [x] Pagination: square tiles at control height, Previous/Next parts with icons. `/lab/kitchen-sink` renders all 76 registry demos for review. Evidence: docs/BUILD_LOG.md, 2026-11-09.
 - [ ] Review the kitchen sink (user) and list remaining component fixes.
+- [x] Semantic colors: `warning` and `info` join accent/neutral/danger/success on the shared `color` prop (Badge, Chip, Alert, Card and other family components), mapped to the existing status tokens. Outline and ghost Badge/Chip and outline Alert now use the color. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Kitchen-sink pass: Accordion rows, Breadcrumbs current page, Item actions, Meter/Progress/Slider value row, Skeleton, TagGroup remove, checkbox description, ColorField label, NavigationMenu link, attached ButtonGroup seams, disabled outline buttons. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] NativeSelect chevron: needs a wrapper or a material-aware approach, because materials reset `background-image`.
+- [ ] Learning: explain why `:is(a, b):not(c)` outranked the Accordion's own `.trigger` rule, and how to read specificity of `:is()`.
 - [ ] Learning: explain why a framed group must own the height and border (and its parts stretch) rather than each part declaring the control height.

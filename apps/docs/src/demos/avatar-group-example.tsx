@@ -1,5 +1,5 @@
 import { Avatar, AvatarGroup, Stack } from "@dixy-ui/react";
-import type { VisualProps } from "@dixy-ui/react";
+import type { AvatarRootProps, VisualProps } from "@dixy-ui/react";
 import "@dixy-ui/react/materials.css";
 export default function AvatarGroupExample({
   size = "md",
@@ -7,7 +7,7 @@ export default function AvatarGroupExample({
   color = "accent",
   radius,
   material,
-}: VisualProps) {
+}: Omit<VisualProps, "color"> & Pick<AvatarRootProps, "color">) {
   const visual = {
     size,
     variant: variant === "ghost" ? ("outline" as const) : variant,

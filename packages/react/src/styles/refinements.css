@@ -1,0 +1,165 @@
+/* Base component refinements from the kitchen-sink review (/lab/kitchen-sink).
+   Each block fixes one component that looked wrong at its default controls. */
+@layer dixy.components {
+  /* Accordion: full-width rows, title at the start, chevron at the end, items
+     split by a hairline. The shared trigger reset uses :is(...):not(.dixy-button),
+     so this matches its specificity and comes later. */
+  .dixy-accordion-trigger:not(.dixy-button) {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--dixy-spacing-inline-md);
+    inline-size: 100%;
+    border: 0;
+    background: transparent;
+    text-align: start;
+  }
+
+  /* Breadcrumbs: ancestors are quiet links, the current page is plain text. */
+  .dixy-breadcrumbs .dixy-breadcrumb > .dixy-link {
+    color: var(--dixy-color-text-secondary);
+    text-decoration: none;
+  }
+  .dixy-breadcrumbs .dixy-breadcrumb > .dixy-link:hover {
+    color: var(--dixy-color-text-primary);
+    text-decoration: underline;
+  }
+  .dixy-breadcrumbs .dixy-breadcrumb > .dixy-link[data-current] {
+    color: var(--dixy-color-text-primary);
+    opacity: 1;
+    text-decoration: none;
+    cursor: default;
+  }
+
+  /* Item: content takes the row, actions sit at the end on the same line. */
+  .dixy-item > .dixy-item-content {
+    flex: 1 1 auto;
+  }
+  .dixy-item > .dixy-item-actions {
+    flex: none;
+    margin-block-start: 0;
+    margin-inline-start: auto;
+  }
+
+  /* Meter, Progress, Slider: label and value share the first row, track below. */
+  :is(
+    .dixy-meter-root,
+    .dixy-progress-root,
+    .dixy-slider-root:not([data-orientation="vertical"])
+  ) {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--dixy-spacing-inline-md);
+  }
+  :is(
+      .dixy-meter-root,
+      .dixy-progress-root,
+      .dixy-slider-root:not([data-orientation="vertical"])
+    )
+    > * {
+    grid-column: 1 / -1;
+  }
+  :is(
+      .dixy-meter-root,
+      .dixy-progress-root,
+      .dixy-slider-root:not([data-orientation="vertical"])
+    )
+    > :is(.dixy-meter-label, .dixy-progress-label, .dixy-slider-label) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  :is(
+      .dixy-meter-root,
+      .dixy-progress-root,
+      .dixy-slider-root:not([data-orientation="vertical"])
+    )
+    > :is(.dixy-meter-value, .dixy-progress-value, .dixy-slider-value) {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  :is(.dixy-meter-value, .dixy-progress-value, .dixy-slider-value) {
+    font: var(--dixy-font-label-md);
+    font-variant-numeric: tabular-nums;
+    color: var(--dixy-color-text-secondary);
+  }
+
+  /* Skeleton: a fill, not a box, with a slow pulse that stops for reduced motion. */
+  .dixy-skeleton {
+    border: 0;
+    animation: dixy-skeleton-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes dixy-skeleton-pulse {
+    50% {
+      opacity: 0.55;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-skeleton {
+      animation: none;
+    }
+  }
+
+  /* TagGroup: the remove button is a borderless icon inside the tag, not a second box. */
+  .dixy-aria-tag > div {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-space-050, 4px);
+  }
+  .dixy-aria-tag[data-allows-removing] {
+    padding-inline-end: var(--dixy-space-050, 4px);
+  }
+  .dixy-aria-tag .dixy-aria-button[slot="remove"] {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--dixy-interaction-target);
+    block-size: var(--dixy-interaction-target);
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--dixy-radius-full);
+    background: transparent;
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-aria-tag .dixy-aria-button[slot="remove"]:is(
+      [data-hovered],
+      [data-pressed]
+    ) {
+    background: var(--dixy-color-background-subtle);
+    color: var(--dixy-color-text-primary);
+  }
+
+  /* Checkbox inside a label: one gap between box and text, and a description
+     below lines up with the label text rather than the box. */
+  .dixy-label:has(> .dixy-checkbox-root) {
+    --dixy-choice-label-gap: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-choice-label-gap);
+  }
+  .dixy-field:has(> .dixy-label > .dixy-checkbox-root)
+    > :is(.dixy-description, .dixy-error) {
+    padding-inline-start: calc(
+      max(var(--dixy-choice-size), var(--dixy-interaction-target)) + 8px
+    );
+  }
+
+  /* ColorField: label above the input, like every other field. */
+  .dixy-color-field {
+    display: grid;
+    gap: var(--dixy-form-field-gap, 8px);
+  }
+
+  /* NavigationMenu links match the triggers beside them instead of reading as body links. */
+  .dixy-navigation-menu-link {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: max(
+      var(--dixy-size-control-sm),
+      var(--dixy-interaction-target)
+    );
+    padding: var(--dixy-spacing-inset-sm);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-label-md);
+    text-decoration: none;
+  }
+}

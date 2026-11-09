@@ -160,7 +160,7 @@
     },
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor | undefined",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -372,7 +372,7 @@
   "ButtonGroupProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -492,7 +492,7 @@
   "SpinnerProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -522,7 +522,7 @@
   "ProgressCircleProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -776,7 +776,7 @@
   "CalendarRootProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -853,7 +853,7 @@
   "ChartProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1088,7 +1088,7 @@
   "CardProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1132,7 +1132,7 @@
   "AvatarGroupProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1176,7 +1176,7 @@
   "AlertProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1220,7 +1220,7 @@
   "BadgeProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1264,7 +1264,7 @@
   "ChipProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1524,7 +1524,7 @@
     },
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -1710,7 +1710,7 @@
   "ListBoxRootProps": [
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"
@@ -2132,7 +2132,7 @@
     },
     {
       "name": "color",
-      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "type": "VisualColor",
       "required": false,
       "description": "Semantic color.",
       "default": "accent"

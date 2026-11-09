@@ -49,5 +49,6 @@ export const Meter = /* @__PURE__ */ (() => ({
     "dixy-meter-indicator",
   ),
   Label: /* @__PURE__ */ styledPrimitive(Primitive.Label, "dixy-meter-label"),
+  Value: /* @__PURE__ */ styledPrimitive(Primitive.Value, "dixy-meter-value"),
 }))();
 export type * from "@base-ui/react/meter";

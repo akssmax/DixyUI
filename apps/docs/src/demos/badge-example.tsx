@@ -1,17 +1,37 @@
-import { Badge, Stack } from "@dixy-ui/react";
+import { Badge, Inline } from "@dixy-ui/react";
 import type { VisualProps } from "@dixy-ui/react";
 import "@dixy-ui/react/materials.css";
+
+const statuses = [
+  ["accent", "New"],
+  ["neutral", "Draft"],
+  ["info", "In review"],
+  ["success", "Paid"],
+  ["warning", "Due soon"],
+  ["danger", "Overdue"],
+] as const;
+
+/** Every semantic color in the chosen treatment, so a color that ignores it stands out. */
 export default function BadgeExample({
   size = "md",
   variant = "outline",
-  color = "accent",
   radius,
   material,
-}: VisualProps) {
-  const visual = { size, variant, color, radius, material };
+}: Omit<VisualProps, "color">) {
   return (
-    <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
-      <Badge {...visual}>New release</Badge>
-    </Stack>
+    <Inline gap="sm" style={{ justifyContent: "center" }}>
+      {statuses.map(([color, label]) => (
+        <Badge
+          key={color}
+          size={size}
+          variant={variant}
+          color={color}
+          radius={radius}
+          material={material}
+        >
+          {label}
+        </Badge>
+      ))}
+    </Inline>
   );
 }

@@ -2,6 +2,12 @@ import { Select, Stack, Field } from "@dixy-ui/react";
 import type { SelectTriggerProps } from "@dixy-ui/react";
 import "@dixy-ui/react/materials.css";
 
+const plans = [
+  { value: "personal", label: "Personal" },
+  { value: "team", label: "Team" },
+  { value: "enterprise", label: "Enterprise" },
+];
+
 type Props = Pick<
   SelectTriggerProps,
   "size" | "variant" | "radius" | "material"
@@ -29,6 +35,7 @@ export default function SelectExample({
         <Select.Root
           key={String(multiple)}
           multiple={multiple}
+          items={plans}
           defaultValue={multiple ? ["personal"] : "personal"}
           disabled={disabled}
         >
@@ -51,13 +58,13 @@ export default function SelectExample({
                 material={material}
               >
                 <Select.List>
-                  {["personal", "team", "enterprise"].map((plan) => (
+                  {plans.map((plan) => (
                     <Select.Item
-                      key={plan}
-                      value={plan}
-                      disabled={plan === "enterprise" && disableEnterprise}
+                      key={plan.value}
+                      value={plan.value}
+                      disabled={plan.value === "enterprise" && disableEnterprise}
                     >
-                      <Select.ItemText>{plan}</Select.ItemText>
+                      <Select.ItemText>{plan.label}</Select.ItemText>
                       <Select.ItemIndicator />
                     </Select.Item>
                   ))}

@@ -349,7 +349,7 @@ export function OverviewView({
                 <Table.Row key={t.id}>
                   <Table.Head scope="row">{t.merchant}</Table.Head>
                   <Table.Cell>
-                    <Chip size="sm">{t.category}</Chip>
+                    <Chip size="sm" color="neutral">{t.category}</Chip>
                   </Table.Cell>
                   <Table.Cell>{formatDate(t.date)}</Table.Cell>
                   <Table.Cell className="fp-num">
@@ -595,14 +595,14 @@ export function TransactionsView() {
                   <DataTable.Row id={t.id}>
                     <DataTable.Cell>{t.merchant}</DataTable.Cell>
                     <DataTable.Cell>
-                      <Chip size="sm">{t.category}</Chip>
+                      <Chip size="sm" color="neutral">{t.category}</Chip>
                     </DataTable.Cell>
                     <DataTable.Cell>{formatDate(t.date)}</DataTable.Cell>
                     <DataTable.Cell>
                       <Badge
                         size="sm"
-                        variant={t.status === "Pending" ? "outline" : "soft"}
-                        color={t.status === "Pending" ? "neutral" : "success"}
+                        variant="soft"
+                        color={t.status === "Pending" ? "warning" : "success"}
                       >
                         {t.status}
                       </Badge>
@@ -711,11 +711,11 @@ function TransactionDrawer({
                     <Amount value={transaction.amount} />
                   </div>
                   <Inline gap="sm">
-                    <Chip>{transaction.category}</Chip>
+                    <Chip color="neutral">{transaction.category}</Chip>
                     <Badge
                       variant="soft"
                       color={
-                        transaction.status === "Pending" ? "neutral" : "success"
+                        transaction.status === "Pending" ? "warning" : "success"
                       }
                     >
                       {transaction.status}

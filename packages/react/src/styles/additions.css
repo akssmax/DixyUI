@@ -148,6 +148,29 @@
     background-color: var(--dixy-component-subtle);
     color: var(--dixy-component-text);
   }
+  /* Outline carries the color in its edge and label, on a transparent fill. */
+  :where(.dixy-badge, .dixy-chip)[data-variant="outline"] {
+    border-color: var(--dixy-component-border);
+    background-color: transparent;
+    color: var(--dixy-component-text);
+  }
+  :where(.dixy-badge, .dixy-chip)[data-variant="ghost"] {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--dixy-component-text);
+  }
+  /* Neutral outline stays a quiet grey label rather than a tinted one. */
+  :where(.dixy-badge, .dixy-chip)[data-variant="outline"][data-color="neutral"] {
+    border-color: var(--dixy-color-border-default);
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-alert[data-variant="outline"] {
+    border-color: var(--dixy-component-border);
+  }
+  .dixy-alert[data-variant="outline"] > .dixy-alert-title,
+  .dixy-alert[data-variant="soft"] > .dixy-alert-title {
+    color: var(--dixy-component-text);
+  }
   .dixy-kbd {
     font: var(--dixy-font-code-sm);
     box-shadow: 0 2px 0 var(--dixy-color-border-default);
@@ -188,8 +211,24 @@
     > .dixy-button:last-child {
     border-radius: 0 0 var(--dixy-component-radius) var(--dixy-component-radius);
   }
-  .dixy-button-group > .dixy-button:focus-visible {
+  /* Attached buttons share one edge: each overlaps the previous border instead of
+     drawing a second line beside it. The hovered or focused one sits on top so its
+     whole edge shows. */
+  .dixy-button-group[data-attached="true"]:not([data-orientation="vertical"])
+    > .dixy-button
+    + .dixy-button {
+    margin-inline-start: calc(-1 * var(--dixy-button-border-width, 1px));
+  }
+  .dixy-button-group[data-attached="true"][data-orientation="vertical"]
+    > .dixy-button
+    + .dixy-button {
+    margin-block-start: calc(-1 * var(--dixy-button-border-width, 1px));
+  }
+  .dixy-button-group[data-attached="true"] > .dixy-button:hover {
     z-index: 1;
+  }
+  .dixy-button-group > .dixy-button:focus-visible {
+    z-index: 2;
   }
   .dixy-avatar-group {
     display: flex;

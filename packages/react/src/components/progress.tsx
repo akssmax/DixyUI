@@ -55,5 +55,9 @@ export const Progress = /* @__PURE__ */ (() => ({
     Primitive.Label,
     "dixy-progress-label",
   ),
+  Value: /* @__PURE__ */ styledPrimitive(
+    Primitive.Value,
+    "dixy-progress-value",
+  ),
 }))();
 export type * from "@base-ui/react/progress";
