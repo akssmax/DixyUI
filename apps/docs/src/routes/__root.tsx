@@ -17,7 +17,10 @@ import "../styles/docs.css";
 function RoutedContent() {
   const pathname = useLocation({ select: (location) => location.pathname });
   // The landing page and the playground bring their own full-width chrome.
-  return pathname === "/" || pathname === "/playground" ? (
+  return pathname === "/" ||
+    pathname === "/playground" ||
+    pathname.startsWith("/lab/") ||
+    pathname === "/dixy-example" ? (
     <Outlet />
   ) : (
     <DocsShell>

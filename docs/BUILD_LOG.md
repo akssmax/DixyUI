@@ -1348,3 +1348,66 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - In-app browser: Candy Clay in light (selected toggle paint equals the knob's white-to-pink gradient) and dark; Winamp Signal (dark). Clicking Monthly moves the thumb.
   - `pnpm check` and `pnpm package:check` passed.
 - Not tested: other skins' light themes one by one, forced colours, keyboard focus ring on the new thumb, and mobile.
+
+### 2026-11-09 — Shader lab: opt-in WebGL backdrops for Ocean Depths and Phosphor Terminal (prototype)
+
+- Why: to try "fun" motion beyond CSS before committing to shaders across themes. A theme must still look finished without the shader; the shader only adds to it.
+- Change (docs-only prototype, no package or public export change):
+  - New route `/lab/shaders` (`apps/docs/src/routes/lab.shaders.tsx`), full-width like `/` and `/playground` (`__root.tsx`). `?skin=ocean-depths|phosphor-terminal` picks the skin; the skin CSS is inlined on the server like the landing page.
+  - `apps/docs/src/lab/shader-programs.ts`: two original GLSL ES 1.0 fragment shaders. Ocean uses domain-warped noise ridges for caustics plus slanted god rays, rendered at half resolution. Phosphor draws scanlines, grain, a rolling refresh band, a sparse field of blinking 3×5 glyphs and a vignette. It has no full-screen flicker, so nothing flashes.
+  - `apps/docs/src/lab/shader-runtime.ts`: one WebGL context per page, colours read from theme tokens (any CSS colour resolved via a 1×1 2D canvas), 30 fps cap, DPR capped at 1.5, pause when off screen or tab hidden, one still frame under `prefers-reduced-motion`, context-loss handling, "unsupported" fallback to the static backdrop.
+  - Opt-in switch, off by default, remembered per viewer in `localStorage` (wrapped in try/catch). The canvas is `aria-hidden` with no pointer events.
+- Decision: cleanup frees GL objects instead of calling `WEBGL_lose_context`. React dev remounts onto the same canvas, and a deliberately lost context never came back (seen as "Graphics context lost" on first try).
+- Verified:
+  - In-app browser (:3001): Ocean light and dark, Phosphor dark. Opt-in persists across reload. Reduced-motion path checked by stubbing `matchMedia`: status reads "Still frame" and the canvas does not change.
+  - At 375px wide, no horizontal scroll.
+  - GPU cost on Apple M5: caustics 0.22 ms/frame (1080×675), phosphor 0.11 ms/frame (2160×1350).
+  - `pnpm check` passed; Prettier clean on new files.
+- Not tested: real fps (the pane was hidden, so rAF was throttled to 1–25 fps), low-end or mobile GPUs, Safari/Firefox, real OS reduced-motion emulation, reduced transparency, forced colours, Phosphor in light appearance, keyboard pass over the lab controls, WebGL-unsupported fallback in a real browser.
+
+### 2026-11-09 — Shader lab: four more backdrops, display-rate rendering
+
+- New pairings on `/lab/shaders` (skin picker is now a Dixy `Select`): Neon Night Market rain with neon glows and a wet-street reflection, Prism Glass thin-film iridescence, Diwali Lights lamp bokeh in three depths, Solar Sail aurora curtains with twinkling stars. All are original GLSL and read theme tokens.
+- Performance (asked for 120 fps on ProMotion Macs):
+  - Removed the 30 fps cap. The loop draws on every `requestAnimationFrame`, so it runs at the display refresh rate; animation stays time-based.
+  - Host size comes from `ResizeObserver` (no `clientWidth` reads per frame). Size, colour and appearance uniforms upload only when they change; each frame sends `uTime` and one draw call.
+  - `preserveDrawingBuffer: false`, so the browser can swap buffers instead of copying.
+  - Adaptive quality: if frames average more than 1.35× the best observed interval over 45 frames, resolution steps down by 0.8×, to a floor of 0.5×. It never steps back up, so it cannot oscillate.
+  - `highp` floats where available. `mediump` is fp16 on Apple GPUs, so `uTime` lost precision within minutes and the animation would start to step.
+  - Domain-warp inputs use a 3-octave `fbm3`.
+- Measured GPU cost per frame (Apple M5, 1512×982 CSS viewport at DPR 2 capped to 1.5): caustics 0.097 ms, phosphor 0.076, aurora 0.069, neon rain 0.045, iridescence 0.029, bokeh 0.022. The budget at 120 Hz is 8.3 ms.
+- Not tested: live 120 fps reading. The in-app browser pane was hidden, which pauses `requestAnimationFrame`. Also untested: low-end GPUs, Safari and Firefox.
+
+### 2026-11-09 — /dixy-example: Fernpay, a mock fintech app built only from Dixy UI
+
+- Why: one realistic product screen that uses most of the library together and can switch skin live, so the theming story is visible on something that isn't a component demo.
+- Files: `apps/docs/src/example/{data.ts,fernpay-app.tsx,views.tsx,send-money.tsx}`, `routes/dixy-example.tsx`, `styles/dixy-example.css` (layout only; all colour comes from tokens). Full width like `/` (`__root.tsx`).
+- Views: Overview (alert, stat cards, cash-flow chart, savings goal, accounts, budgets, recent activity), Transactions (search, category, date range, direction, sortable paginated table, details drawer), Cards (payment card, freeze, controls, limit, cancel confirmation), Settings (tabs: profile form, notification switches, help accordion). Send money: payee, amount, account and speed, then a six-digit code, then a toast. ⌘K command palette, notifications popover, account menu, and a theme select across all 32 starters plus Original (`?skin=`).
+- Dixy components used (59): Accordion, Alert, AlertDialog, Avatar, AvatarGroup, Badge, Breadcrumbs, Button, Card, Chart, Checkbox, Chip, Combobox, Command (dialog), DataTable, DateRangePicker, RangeCalendar, Dialog, Drawer, Empty, Field, Fieldset, Form, Heading, Icon, IconButton, Inline, Item, Kbd, Link, Menu, Meter, NumberField, OTPField, Pagination, Popover, ProgressCircle, Radio, RadioGroup, ScrollArea, SearchField, Select, Separator, Sidebar (+ Sidebar.Mobile), Skeleton, Slider, Stack, Switch, Table, Tabs, TagGroup, Text, Textarea, TextField, Theme, Toast, Toggle, ToggleGroup, Tooltip. Lucide supplies glyphs only, rendered through Dixy `Icon`.
+- Fixes found while building:
+  - The sticky top bar (`z-index: 2`) painted above Dixy's dialog backdrop (`z-index: auto`). `.fp-shell { isolation: isolate }` contains it.
+  - "Spent ▼29.5%" read as danger; `Delta` takes `lowerIsBetter`.
+- False lead, recorded: the details drawer looked as if it opened and closed at once. Instrumenting showed it stays open (`data-open`, `onOpenChange` never fired). The hidden pane pauses animation frames, so screenshots were stale paints. A speculative outside-press guard was removed again.
+- Library feedback:
+  - `Chart` only draws bars; a finance app wants a line or area chart for balances.
+  - Small `AvatarGroup` initials get clipped by the overlap.
+  - Dixy has no theme-aware z-index scale for app chrome versus overlays.
+- Verified:
+  - In-app browser (:3001): all four views in Original Dixy; Phosphor Terminal, Candy Clay, Ocean Depths and Neon Night Market skins.
+  - Row → drawer → Escape closes. Full send flow ends with the toast in the DOM. The combobox selects a payee.
+  - 375px wide: no horizontal scroll, sidebar becomes a drawer trigger.
+  - `pnpm check` passed.
+- Not tested: dark appearance on every view, screen reader pass, keyboard-only pass through the whole app, Safari/Firefox, ⌘K shortcut with real keys, live animations (pane hidden).
+
+### 2026-11-09 — Fernpay sidebar collapses to an icon rail
+
+- Change (`apps/docs/src/example/fernpay-app.tsx`, `styles/dixy-example.css`):
+  - A Dixy `IconButton` in the sidebar header (and ⌘B / Ctrl+B) toggles between the 248px panel and a 72px icon rail.
+  - In the rail, the brand name, nav labels and footer hide. Each nav `Button` keeps its label as `aria-label` and gets a right-side `Tooltip`.
+  - The toggle has `aria-expanded` and `aria-controls="fp-sidebar"`, plus a tooltip showing the shortcut in a `Kbd`.
+  - State is remembered per viewer in `localStorage` (wrapped in try/catch).
+  - The width animates through `grid-template-columns`, with no transition under `prefers-reduced-motion`. Below 820px the existing mobile drawer is unchanged.
+- Verified:
+  - In-app browser, Prism Glass: rail is 72px and the toggle's name and `aria-expanded` flip. Nav buttons are named.
+  - Collapsed state survives reload. ⌘B toggles and stores the change. Hovering a rail icon shows its label tooltip on the right.
+- Not tested: the width animation itself (pane hidden, so frames are paused), keyboard focus order in the rail with a screen reader, and the first-paint flash for a stored collapsed state. It reads storage after hydration, so it renders expanded for one frame.
