@@ -9,7 +9,11 @@ import "../styles/theme-skins.css";
  * product scenes. The scenes are the playground's own, imported unchanged, so
  * the landing and the playground always show the same compositions.
  */
-const EmailScene = lazy(() => import("./theme-email-scene"));
+const loadEmailScene = () => import("./theme-email-scene");
+const EmailScene = lazy(loadEmailScene);
+// Mail is the default tab. Start its chunk as soon as this module runs on the
+// client, so the download overlaps hydration instead of waiting for it.
+if (typeof window !== "undefined") void loadEmailScene();
 const DashboardScene = lazy(() => import("./theme-dashboard-scene"));
 const PlayerScene = lazy(() => import("./theme-player-scene"));
 

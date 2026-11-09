@@ -182,7 +182,10 @@
     cursor: not-allowed;
   }
   /* Disabled keeps its treatment: an outline or ghost button doesn't turn into a grey fill. */
-  .dixy-button:is([data-variant="outline"], [data-variant="ghost"])[data-disabled] {
+  .dixy-button:is(
+      [data-variant="outline"],
+      [data-variant="ghost"]
+    )[data-disabled] {
     background-color: transparent;
   }
   .dixy-icon-button {

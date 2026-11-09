@@ -103,8 +103,7 @@
   /* A minimum, not a fixed height: starters with large type can make the
      copy taller, and the hero grows instead of clipping it. */
   min-block-size: max(calc(98svh - 60px), 640px);
-  padding: clamp(24px, 4vh, 48px) 0 clamp(24px, 4vh, 48px)
-    var(--landing-inset);
+  padding: clamp(24px, 4vh, 48px) 0 clamp(24px, 4vh, 48px) var(--landing-inset);
 }
 .landing-hero-copy {
   display: grid;
@@ -579,7 +578,6 @@
   flex: 2 1 22rem;
 }
 
-
 /* Emphasis in section titles picks up the starter's accent. */
 .landing .landing-title em,
 .landing-cta-title em {
@@ -671,7 +669,10 @@
 }
 .landing .landing-lab-status {
   min-block-size: 1.5em;
-  color: var(--dixy-color-text-action-success, var(--dixy-color-text-secondary));
+  color: var(
+    --dixy-color-text-action-success,
+    var(--dixy-color-text-secondary)
+  );
 }
 .landing-inspector {
   display: grid;
@@ -816,13 +817,17 @@
 }
 @media (prefers-reduced-motion: no-preference) {
   .landing-show {
-    transition: transform 200ms ease, box-shadow 200ms ease;
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
   }
   .landing-show:hover {
     transform: translateY(-3px);
   }
   .landing-show-arrow {
-    transition: background-color 200ms, color 200ms;
+    transition:
+      background-color 200ms,
+      color 200ms;
   }
 }
 /* Fernpay miniature */
@@ -883,7 +888,11 @@
   block-size: 6px;
   margin-block-start: 8px;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--dixy-accent) 64%, var(--dixy-color-background-surface-sunken) 0);
+  background: linear-gradient(
+    90deg,
+    var(--dixy-accent) 64%,
+    var(--dixy-color-background-surface-sunken) 0
+  );
 }
 .landing-fp-chart {
   grid-column: span 2;
@@ -901,22 +910,34 @@
   background: var(--dixy-accent);
 }
 /* Shader preview */
+/* The gradient lives on an oversized layer that drifts with transform, so the
+   loop runs on the compositor. Animating background-position repainted the
+   card (and re-blurred the chip above it) on every frame. */
 .landing-shader {
+  background: #1b1430;
+}
+.landing-shader::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 140%;
+  block-size: 140%;
   background:
     radial-gradient(60% 80% at 20% 30%, #ff7ab6 0, transparent 60%),
     radial-gradient(50% 70% at 80% 20%, #6c7bff 0, transparent 60%),
-    radial-gradient(60% 70% at 60% 90%, #34d1bf 0, transparent 60%),
-    #1b1430;
-  background-size: 140% 140%;
+    radial-gradient(60% 70% at 60% 90%, #34d1bf 0, transparent 60%);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .landing-shader {
+  .landing-shader::before {
     animation: landing-drift 12s ease-in-out infinite alternate;
   }
 }
+/* Same travel as the old background-position 0% 0% → 100% 60% on a 140%
+   image: 40% and 24% of the card, expressed in the layer's own size. */
 @keyframes landing-drift {
   to {
-    background-position: 100% 60%;
+    transform: translate(-28.57%, -17.14%);
   }
 }
 .landing-shader-chip {
@@ -1127,7 +1148,11 @@
   inset: -30%;
   z-index: -1;
   background:
-    radial-gradient(35% 45% at 25% 30%, color-mix(in srgb, var(--dixy-accent) 75%, transparent), transparent 70%),
+    radial-gradient(
+      35% 45% at 25% 30%,
+      color-mix(in srgb, var(--dixy-accent) 75%, transparent),
+      transparent 70%
+    ),
     radial-gradient(30% 40% at 85% 70%, #ff8a5c80, transparent 70%),
     radial-gradient(30% 40% at 60% 0%, #34d1bf55, transparent 70%);
   filter: blur(30px);
@@ -1332,7 +1357,12 @@
   block-size: 8px;
   border-radius: 50%;
   background: var(--dixy-color-border-success, #1f8a5b);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--dixy-color-border-success, #1f8a5b) 20%, transparent);
+  box-shadow: 0 0 0 4px
+    color-mix(
+      in srgb,
+      var(--dixy-color-border-success, #1f8a5b) 20%,
+      transparent
+    );
 }
 .landing-wordmark {
   margin: 8px 0 -0.1em;

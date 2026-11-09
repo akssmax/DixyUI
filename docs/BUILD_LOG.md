@@ -1571,7 +1571,6 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Verified in the in-app browser on `/lab/kitchen-sink`: each fixed tile at default controls; badges in outline/soft/solid in light and dark; Fernpay transactions show amber Pending and neutral chips. `pnpm check` (99 tests) and `pnpm package:check` pass; API metadata regenerated.
 - Not tested: keyboard pass through the changed Accordion and TagGroup, screen readers, every skin with the new colors (skins don't override the status tokens, so they inherit the defaults), Safari/Firefox, mobile widths for the kitchen sink.
 
-
 ### 2026-11-09 — Landing: 98vh hero, accessibility, built-with, CTA and footer; npm beta
 
 - Request: make the hero 98vh, showcase accessibility and the demo products, and give the landing a modern CTA and footer. Mocked first in `mockups/landing-sections.html`, then implemented in `components/landing-sections.tsx` and `styles/landing.css`.
@@ -1595,6 +1594,57 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Vertical rhythm uses the section tokens: `--dixy-spacing-section-xl` (96px) between sections on wide screens, `-lg` (64px) at ≤960px, `-sm` (32px) above the numbers strip. Section heads have 16px between lines and `clamp(32px, 4vw, 48px)` above their content.
   - Measured at 1440px: the brand, hero copy, numbers strip, section headings, CTA and footer all start at x = 112.
   - Hero Blocks scene: the stage body has `overflow-x: hidden`, so the wide Blocks layout can't be scrolled sideways inside it. Checked: `scrollLeft` stays 0 for the stage and the page at 1024, 768 and 375px, and the document width equals the viewport.
+
+### 2026-11-09 — Docs app performance pass; themed overscroll
+
+- Why: the docs build shipped a 1,072 KB client `dixy-*.js` chunk and a 988 KB entry chunk to every page (2.8 MB `dixy-*.js` on the server). Theme switching in the docs briefly showed half-styled pages.
+- How it was measured: production builds served by `vite preview` on `workerd` from this worktree, the same server for before and after (the before build swapped back in). Per-route JS/CSS = every asset the server HTML links before hydration, fetched and gzipped (`scratchpad/routejs.mjs`). Chunk composition from source maps. Browser numbers come from the in-app browser at 1024px and 375px, on warm second loads, using `PerformanceObserver`.
+- Causes found:
+  - `@dixy-ui/react` was built as one flat `dist/dixy.js`. Bundlers split chunks by module, so the docs put every component, with all of Base UI and react-aria behind them, into one chunk that every page loaded.
+  - Route options (`validateSearch`, `loader`, `head`) and bare side-effect imports in a route file are not code split. `playground.tsx` imported scene ids from the playground component, which pulled in the playground, dialkit and motion (~900 KB of source). `dixy-example.tsx` did the same with Fernpay's views, and `docs.foundations.$foundation.tsx` with every foundation component and `api.json`. `landing.css` and `dixy-example.css`, imported from route files, ended up in the entry CSS on every docs page.
+  - The docs theme menu committed a new `data-dixy-skin` before its stylesheet had loaded.
+  - The root loader inlined the reader's docs theme on pages that never show the docs shell (landing, Fernpay, playground, labs). It was then serialised a second time in the hydration payload.
+  - The landing shader card animated `background-position`, which repaints the card (and re-blurs the chip above it) on every frame.
+- Fixes:
+  - `packages/react/vite.config.ts`: `preserveModules` (root `src`). `dist/dixy.js` is still the entry, now a re-export of one module per component. The public exports and declarations are unchanged.
+  - `apps/docs/vite.config.ts`: a client `codeSplitting` group, `dixy-common`, for library and Base UI modules shared by at least 15 chunks. With no group, `/docs/installation` needed 92 requests and was slower on localhost than baseline. A share count of 4 regrew a 610 KB common chunk. 15 gave 14 requests at the smallest size.
+  - `src/lib/route-search.ts` (playground scene and tab ids, Fernpay view ids) and `src/lib/foundation-pages.ts` (titles and copy) let route options import plain data. The playground and Fernpay types check that the lists stay aligned.
+  - `landing.css` is now imported from `landing-sections.tsx`, and `dixy-example.css` from `fernpay-app.tsx`.
+  - `useDocsTheme` loads the starter's CSS (and materials) through `prepareSkin` before committing it, and drops stale picks.
+  - The root loader inlines the docs theme only on docs-shell routes. Other pages load it in an idle callback, so a later client-side visit to the docs still paints themed.
+  - The shader card's gradient is an oversized `::before` that drifts with `transform` (same travel as before), so the animation runs on the compositor.
+  - The landing's default Mail scene chunk starts downloading when the module runs, overlapping hydration.
+  - Overscroll (user report): on macOS, rubber-band scrolling showed white behind dark starters, because themes live on a `.dixy-theme` wrapper and `<html>` had no background. `DocumentCanvas` (root) copies the outermost wrapper's resolved background and `color-scheme` to `<html>`. It updates when the route, appearance or skin attributes change, or when a skin stylesheet arrives.
+- Before → after (production build, no docs theme cookie unless noted):
+
+  | Measure                                                        | Before                                           | After                                           |
+  | -------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+  | Largest client chunk                                           | `dixy` 1,072 KB (330 KB gz)                      | entry 544 KB (147 KB gz); no `dixy` chunk       |
+  | Largest server chunk                                           | `dixy` 2,775 KB                                  | `index.js` 687 KB (unchanged); no `dixy` chunk  |
+  | `/` initial JS                                                 | 2,380 KB / 687 KB gz, 19 files                   | 1,164 KB / 345 KB gz, 33 files                  |
+  | `/docs/installation` initial JS                                | 2,339 KB / 677 KB gz, 17 files                   | 1,017 KB / 294 KB gz, 14 files                  |
+  | `/docs/components/button` initial JS                           | 2,371 KB / 684 KB gz, 18 files                   | 1,128 KB / 314 KB gz, 19 files                  |
+  | `/dixy-example` initial JS                                     | 2,337 KB / 676 KB gz, 17 files                   | 1,748 KB / 546 KB gz, 86 files                  |
+  | Entry CSS (`/` · docs pages)                                   | 577 KB / 70 KB gz on every page                  | 476 / 55 KB gz · 435 / 47 KB gz                 |
+  | `/` HTML with an Art Deco docs theme                           | 97 KB (16.7 KB gz), docs skin inlined            | 57 KB (10.7 KB gz), prefetched at idle instead  |
+  | Docs theme pick: new skin CSS present when the attribute flips | 0 of 4 (16–100 ms half-styled on localhost)      | 4 of 4 (0 ms)                                   |
+  | Docs theme pick, click event duration                          | 104 ms                                           | 72 ms                                           |
+  | Landing starter click, event duration                          | 40 ms                                            | 48 ms (same code path; noise)                   |
+  | `/` load CLS, 1024px                                           | 0.0511 (hero copy, stage caption, numbers strip) | 0 (two runs)                                    |
+  | CLS at 375px, all three routes                                 | 0                                                | 0                                               |
+  | Long tasks during load, all routes                             | 0                                                | 0                                               |
+  | `load` event, warm, 1024px (`/`, installation, button)         | 169, 87, 158 ms                                  | 175, 62, 105 ms                                 |
+  | Shader card loop                                               | `background-position` (paint per frame)          | `transform` on `::before` (compositor)          |
+  | `<html>` background, Studio Hardware dark                      | none (white overscroll)                          | `oklch(0.145 0.01072 70)`, `color-scheme: dark` |
+
+- Verified: `pnpm check` passes (110 library tests, docs build, 1,583 examples). `pnpm package:check --online` passes; the offline install could not run because this worktree has no local pnpm store. Tree-shaking budgets are unchanged: Button only 17.1 KiB; Theme, Field, TextField and Dialog 139.5 KiB; Navbar, Snippet and DataList 44.4 KiB. Checked in the in-app browser: the Fernpay page in Studio Hardware dark syncs `<html>`; the shader card renders as before, with its only animation on `::before` animating `transform`; switching four starters on the landing page and four in the docs theme menu works; a client-side visit from `/` to `/docs/installation` paints with the prefetched docs skin already present; there were no console errors.
+- Not tested or left as is:
+  - LCP and INP as Core Web Vitals. The browser pane was hidden for most runs, so Chrome reported no paint entries. The one LCP captured (`/`, after, 1024px) was 356 ms; there is no matching baseline. The event durations above come from single clicks, not field INP.
+  - Real network throttling, Safari and Firefox, a real macOS rubber-band gesture (verified by computed style only), reduced motion in the browser (the CSS rule is unchanged), and paint or composite profiles while scrolling (no DevTools).
+  - Docs `<style data-dixy-skin-style>` tags still build up as you switch (2 → 5 after four picks). Selectors are scoped, so the effect is only on style recalc. Pruning inactive installed skins needs care, because some pages show several skins at once.
+  - The landing route still serialises its own starter's CSS in the hydration payload as well as the `<style>` tag (about 3.6 KB brotli for a 22 KB skin).
+  - `generated-skin-loaders` (138 KB, 31 KB gz: all 32 skin definitions plus the authoring modules) still loads on the landing and docs pages. Making skin definitions lazy would make the theme props API async.
+  - The `lab.shaders` and `lab.controls` stylesheets (3.5 KB) are still imported from their route files.
 
 ### 2026-11-09 — NativeSelect chevron; quieter docs playground
 
@@ -1621,21 +1671,20 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Request: TagGroup, Table and other kitchen-sink components still looked off; compare with shadcn first, then fix what we can.
 - Compared against shadcn v4 sources (`apps/v4/registry/new-york-v4/ui/*.tsx`, read with curl): table, badge, kbd, avatar, skeleton, empty, item, scroll-area, carousel, and others. All changes are in `styles/refinements.css` plus the Carousel defaults.
 
-| Component | Before | shadcn | Now |
-| --- | --- | --- | --- |
-| Table, DataTable | Strong rules, 16px cells, bold headers and row headers, caption above, rule under last row | 40px head, 8px cells, `border-b` rows, hover tint, last row clear, caption below, muted | Same: 40px head in secondary label type, 8px cells, subtle hairlines, hover tint, last row clear, caption below; row headers medium weight |
-| TagGroup | 42px button-like tags | (no TagGroup; Badge is a compact pill) | 24/28/32px tags in label-sm, subtle fill, 20px remove icon; selected uses the color |
-| Kbd | Bordered with a drop shadow | `h-5`, muted fill, no border | 20px, muted fill, no border or shadow |
-| ScrollArea | 12px dark-grey rounded-square thumb | 10px track, `p-px`, `bg-border` round thumb | 10px track, 1px inset, round thumb in border colour (darkens on use, as before) |
-| Empty | Solid border | `border-dashed` | Dashed |
-| AvatarGroup count | Bordered pill | Same size as avatars, muted | Same size and radius as avatars, no border |
-| Carousel | "Previous"/"Next" text buttons | 32px round arrow buttons | Square chevron icon buttons at control height, still labelled "Previous slide"/"Next slide"; passing children keeps text |
-| Item | Dark rule, also under the last item | Separators between items only | Subtle hairline, none after the last item |
+| Component         | Before                                                                                     | shadcn                                                                                  | Now                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Table, DataTable  | Strong rules, 16px cells, bold headers and row headers, caption above, rule under last row | 40px head, 8px cells, `border-b` rows, hover tint, last row clear, caption below, muted | Same: 40px head in secondary label type, 8px cells, subtle hairlines, hover tint, last row clear, caption below; row headers medium weight |
+| TagGroup          | 42px button-like tags                                                                      | (no TagGroup; Badge is a compact pill)                                                  | 24/28/32px tags in label-sm, subtle fill, 20px remove icon; selected uses the color                                                        |
+| Kbd               | Bordered with a drop shadow                                                                | `h-5`, muted fill, no border                                                            | 20px, muted fill, no border or shadow                                                                                                      |
+| ScrollArea        | 12px dark-grey rounded-square thumb                                                        | 10px track, `p-px`, `bg-border` round thumb                                             | 10px track, 1px inset, round thumb in border colour (darkens on use, as before)                                                            |
+| Empty             | Solid border                                                                               | `border-dashed`                                                                         | Dashed                                                                                                                                     |
+| AvatarGroup count | Bordered pill                                                                              | Same size as avatars, muted                                                             | Same size and radius as avatars, no border                                                                                                 |
+| Carousel          | "Previous"/"Next" text buttons                                                             | 32px round arrow buttons                                                                | Square chevron icon buttons at control height, still labelled "Previous slide"/"Next slide"; passing children keeps text                   |
+| Item              | Dark rule, also under the last item                                                        | Separators between items only                                                           | Subtle hairline, none after the last item                                                                                                  |
 
 - Verified in the in-app browser by measurement: Table head 40px, last-row border 0, caption bottom; DataTable head 40px; tag 28px with a 20×20 remove; Kbd 20px with no shadow; scrollbar 10px; Empty dashed; count 40×40 at the avatars' 8px radius; carousel controls 40×40 with their labels. Screenshots of Table, TagGroup, Carousel, Empty, Kbd. `pnpm check` (100 tests) and `pnpm package:check` pass.
 - Left as is, on purpose: OTP slots stay separate boxes (HeroUI-style) rather than shadcn's joined group; Switch keeps its thumb icons; ListBox keeps the text check mark; Toggle stays ghost at rest, as in shadcn.
 - Not tested: dark mode on this pass, keyboard through tags and carousel, screen readers, Safari/Firefox, phone width.
-
 
 ### 2026-11-09 — Landing: wide starter fonts, round swatches, the real sideways-scroll cause
 

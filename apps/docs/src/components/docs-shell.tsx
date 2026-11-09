@@ -257,9 +257,7 @@ function ThemeMenu({
         aria-label={`Docs theme: ${themeName(docsTheme.skin)}`}
       >
         <Swatch id={docsTheme.skin} />
-        <span className="theme-trigger-name">
-          {themeName(docsTheme.skin)}
-        </span>
+        <span className="theme-trigger-name">{themeName(docsTheme.skin)}</span>
         <ChevronDown size={13} aria-hidden="true" />
       </Popover.Trigger>
       <Popover.Portal>

@@ -848,6 +848,14 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [x] Remove `private` from the three packages and add `publishConfig` (public, provenance).
 - [ ] Publish `0.1.0-beta.0`, smoke-test from npm, then switch to trusted publishing and delete the token.
 
+## Docs performance pass — 2026-11-09
+
+- [x] `@dixy-ui/react` builds one module per component (`preserveModules`), so docs pages load only the components they render; route options and route CSS no longer pull the playground, Fernpay, foundation components or landing CSS into the entry. `/docs/installation` initial JS 2,339 → 1,017 KB (677 → 294 KB gzip). Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Docs theme switching loads the starter's CSS before committing it (no half-styled frames); the docs theme is inlined only on docs-shell pages; the landing shader loop runs on the compositor; `<html>` follows the themed canvas so overscroll is no longer white.
+- [ ] Measure LCP and INP with the pane visible, on throttled network and CPU, and in Safari and Firefox.
+- [ ] Prune inactive skin `<style>` tags on docs theme switches; make skin definitions load lazily.
+- [ ] Learning: explain why a route's `validateSearch` import ends up in the entry chunk, and how bundlers decide chunk boundaries by module rather than by export.
+
 ## AI parts and Wren example — 2026-11-09
 
 The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base UI + tokens). Evidence: docs/BUILD_LOG.md, 2026-11-09.

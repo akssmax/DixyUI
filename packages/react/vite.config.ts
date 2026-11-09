@@ -60,6 +60,11 @@ export default defineConfig(({ mode }) => ({
         /^react-markdown(?:\/|$)/,
         /^remark-gfm(?:\/|$)/,
       ],
+      // One file per source module, not one flat dixy.js. A consumer's
+      // bundler splits chunks by module, so a single file put every component
+      // (and all of Base UI and react-aria behind them) in one shared chunk on
+      // every page. Separate modules let each page load only what it renders.
+      output: { preserveModules: true, preserveModulesRoot: "src" },
     },
   },
 }));

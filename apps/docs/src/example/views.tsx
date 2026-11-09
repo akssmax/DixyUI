@@ -349,7 +349,9 @@ export function OverviewView({
                 <Table.Row key={t.id}>
                   <Table.Head scope="row">{t.merchant}</Table.Head>
                   <Table.Cell>
-                    <Chip size="sm" color="neutral">{t.category}</Chip>
+                    <Chip size="sm" color="neutral">
+                      {t.category}
+                    </Chip>
                   </Table.Cell>
                   <Table.Cell>{formatDate(t.date)}</Table.Cell>
                   <Table.Cell className="fp-num">
@@ -595,7 +597,9 @@ export function TransactionsView() {
                   <DataTable.Row id={t.id}>
                     <DataTable.Cell>{t.merchant}</DataTable.Cell>
                     <DataTable.Cell>
-                      <Chip size="sm" color="neutral">{t.category}</Chip>
+                      <Chip size="sm" color="neutral">
+                        {t.category}
+                      </Chip>
                     </DataTable.Cell>
                     <DataTable.Cell>{formatDate(t.date)}</DataTable.Cell>
                     <DataTable.Cell>
