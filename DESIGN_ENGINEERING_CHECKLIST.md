@@ -809,5 +809,6 @@ Verification for this pass:
 - [x] Semantic colors: `warning` and `info` join accent/neutral/danger/success on the shared `color` prop (Badge, Chip, Alert, Card and other family components), mapped to the existing status tokens. Outline and ghost Badge/Chip and outline Alert now use the color. Evidence: docs/BUILD_LOG.md, 2026-11-09.
 - [x] Kitchen-sink pass: Accordion rows, Breadcrumbs current page, Item actions, Meter/Progress/Slider value row, Skeleton, TagGroup remove, checkbox description, ColorField label, NavigationMenu link, attached ButtonGroup seams, disabled outline buttons. Evidence: docs/BUILD_LOG.md, 2026-11-09.
 - [x] NativeSelect chevron: a thin wrapper holds the select and a decorative chevron in one grid cell; ref, className and props stay on the select. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Second kitchen-sink pass against shadcn source: Table/DataTable, TagGroup, Kbd, ScrollArea, Empty, AvatarGroup count, Carousel icon controls, Item separators. Evidence: docs/BUILD_LOG.md, 2026-11-09.
 - [ ] Learning: explain why `:is(a, b):not(c)` outranked the Accordion's own `.trigger` rule, and how to read specificity of `:is()`.
 - [ ] Learning: explain why a framed group must own the height and border (and its parts stretch) rather than each part declaring the control height.

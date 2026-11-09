@@ -1593,3 +1593,23 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - `pnpm check` (100 tests) and `pnpm package:check` pass.
 - Not tested: NativeSelect with a screen reader, Safari/Firefox (`appearance: none` on select), and a right-to-left layout for the icon inset.
 
+### 2026-11-09 — Kitchen sink, second pass against shadcn/ui
+
+- Request: TagGroup, Table and other kitchen-sink components still looked off; compare with shadcn first, then fix what we can.
+- Compared against shadcn v4 sources (`apps/v4/registry/new-york-v4/ui/*.tsx`, read with curl): table, badge, kbd, avatar, skeleton, empty, item, scroll-area, carousel, and others. All changes are in `styles/refinements.css` plus the Carousel defaults.
+
+| Component | Before | shadcn | Now |
+| --- | --- | --- | --- |
+| Table, DataTable | Strong rules, 16px cells, bold headers and row headers, caption above, rule under last row | 40px head, 8px cells, `border-b` rows, hover tint, last row clear, caption below, muted | Same: 40px head in secondary label type, 8px cells, subtle hairlines, hover tint, last row clear, caption below; row headers medium weight |
+| TagGroup | 42px button-like tags | (no TagGroup; Badge is a compact pill) | 24/28/32px tags in label-sm, subtle fill, 20px remove icon; selected uses the color |
+| Kbd | Bordered with a drop shadow | `h-5`, muted fill, no border | 20px, muted fill, no border or shadow |
+| ScrollArea | 12px dark-grey rounded-square thumb | 10px track, `p-px`, `bg-border` round thumb | 10px track, 1px inset, round thumb in border colour (darkens on use, as before) |
+| Empty | Solid border | `border-dashed` | Dashed |
+| AvatarGroup count | Bordered pill | Same size as avatars, muted | Same size and radius as avatars, no border |
+| Carousel | "Previous"/"Next" text buttons | 32px round arrow buttons | Square chevron icon buttons at control height, still labelled "Previous slide"/"Next slide"; passing children keeps text |
+| Item | Dark rule, also under the last item | Separators between items only | Subtle hairline, none after the last item |
+
+- Verified in the in-app browser by measurement: Table head 40px, last-row border 0, caption bottom; DataTable head 40px; tag 28px with a 20×20 remove; Kbd 20px with no shadow; scrollbar 10px; Empty dashed; count 40×40 at the avatars' 8px radius; carousel controls 40×40 with their labels. Screenshots of Table, TagGroup, Carousel, Empty, Kbd. `pnpm check` (100 tests) and `pnpm package:check` pass.
+- Left as is, on purpose: OTP slots stay separate boxes (HeroUI-style) rather than shadcn's joined group; Switch keeps its thumb icons; ListBox keeps the text check mark; Toggle stays ghost at rest, as in shadcn.
+- Not tested: dark mode on this pass, keyboard through tags and carousel, screen readers, Safari/Firefox, phone width.
+

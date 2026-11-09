@@ -68,3 +68,7 @@ NativeSelect now has the same 16px chevron as Select (a wrapper, because materia
 
 Still open: Avatar shape in groups, Toggle and ToggleGroup default treatment (no visible frame at rest).
 
+## Third pass — against shadcn/ui source
+
+Table and DataTable, TagGroup, Kbd, ScrollArea, Empty, the AvatarGroup count, Carousel controls and Item separators were brought in line with shadcn's v4 styles; see docs/BUILD_LOG.md (2026-11-09, "second pass against shadcn/ui") for the before/after table.
+
