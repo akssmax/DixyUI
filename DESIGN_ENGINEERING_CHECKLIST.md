@@ -970,3 +970,9 @@ The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base
 - [ ] Check Select with the absolute positioning strategy, and vertical tabs.
 - [ ] Learning: explain containing blocks, and why a positioned zero-height portal wrapper moves absolutely positioned popups.
 - [ ] Learning: explain cascade layer order and why the first declared layer loses.
+
+## Changelog page (2026-11-10)
+
+- [x] `/docs/changelog` renders each package's CHANGELOG.md, newest first, with commit and npm links.
+- [ ] Show release dates (from GitHub releases or the version commit).
+- [ ] Learning: explain why each package keeps its own version line in a Changesets monorepo.
