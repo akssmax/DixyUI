@@ -859,6 +859,17 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Prune inactive skin `<style>` tags on docs theme switches; make skin definitions load lazily.
 - [ ] Learning: explain why a route's `validateSearch` import ends up in the entry chunk, and how bundlers decide chunk boundaries by module rather than by export.
 
+## Performance audit — 2026-11-10
+
+- [x] Generated component index (slug, title, category) replaces the full registry in the docs entry chunk: 563.0 → 374.9 KB (152.0 → 118.3 KB gzip); homepage JS 1,265 → 1,083 KB. Typecheck fails if the index and registry differ. Evidence: docs/BUILD_LOG.md, "Performance audit: packages and docs".
+- [x] Removed a verbatim 245-line duplicate block from `docs.css` (output CSS unchanged: the minifier already dropped it).
+- [x] Checked tree-shaking guards, font loading, images, animation loops, effect dependencies, sidebar and gallery rendering; no change needed.
+- [ ] Make the theme engine (`generated-skin-loaders`, `theme-playground`, ~200 KB) load lazily on pages that use Original Dixy, without a theme flash.
+- [ ] Decide whether accent/neutral palette families become opt-in CSS (206 KB of 386 KB minified `styles.css`; a public CSS change).
+- [ ] Measure throttled LCP/INP and brotli transfer sizes on the deployed worker.
+- [ ] Learning: explain why a module imported by a route's options or the root shell lands in the entry chunk even when only three fields are used.
+- [ ] Learning: explain why removing duplicate CSS rules saved no bytes after minification.
+
 ## Radius and hero fixes — 2026-11-09
 
 - [x] Multi-line fields cap at the card radius under `radius="full"` (library textarea and skin compiler); docs scene cards use the card radius. Evidence: docs/BUILD_LOG.md, 2026-11-09.

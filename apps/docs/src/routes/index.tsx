@@ -74,7 +74,7 @@ import {
   loadSkinCSS,
   prepareSkin,
 } from "../lib/theme-skin-catalogue";
-import { componentRegistry } from "../registry/components";
+import { componentIndex } from "../generated/component-index";
 import { HomeLink } from "../components/home-link";
 
 /** The URL carries the starter's slug ("living-forest"); the app keys skins by id. */
@@ -699,10 +699,10 @@ function Landing() {
         name: promptSkin.name,
       }
     : undefined;
-  const componentCount = Object.keys(componentRegistry).length;
+  const componentCount = Object.keys(componentIndex).length;
   const featured = featuredComponents.filter((slug) =>
-    Object.hasOwn(componentRegistry, slug),
-  ) as (keyof typeof componentRegistry)[];
+    Object.hasOwn(componentIndex, slug),
+  ) as (keyof typeof componentIndex)[];
   const studio: StudioProps = {
     preset: starter.preset,
     pending: starter.pending,
@@ -896,7 +896,7 @@ function Landing() {
                         variant="soft"
                         color="neutral"
                       >
-                        {componentRegistry[slug].title}
+                        {componentIndex[slug].title}
                       </ButtonLink>
                     </li>
                   ))}

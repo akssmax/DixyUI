@@ -2252,3 +2252,41 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The name reads "Keyboard shortcuts"; no horizontal scroll.
   - `pnpm check`, `pnpm format:check`.
 - Not tested: screen readers, mobile footer layout, dark mode for the switch. Remapping isn't offered; turning the shortcut off satisfies 2.1.4 on its own.
+
+### 2026-11-10 — Performance audit: packages and docs
+
+Measured on a production build served by `vite preview` (Cloudflare worker, port 3003), in the in-app browser. Sizes are raw bytes with gzip from `gzip -c`; the preview server doesn't compress. A sourcemap build attributed entry-chunk bytes to source modules.
+
+**Fixed**
+
+1. The site-wide entry chunk carried the whole component registry. The docs shell (sidebar), the landing page and the component route's options imported `registry/components`, so every page downloaded each component's controls, guidance and lessons. That was 171 KB of the 548 KB entry (addition 77, base 72, AI 14, components 8). They only need slug, title and category.
+   - `scripts/generate-component-index.mjs` reads the registry with the TypeScript AST, follows its spreads in order, and writes `apps/docs/src/generated/component-index.ts` (96 entries, plus `isComponentSlug`). `satisfies Record<ComponentSlug, …>` makes typecheck fail if the index and registry differ. `generate-api.mjs` runs it, so `docs:generate`, `docs:check`, the docs build and the dev watcher (which now also watches `src/registry`) keep it fresh.
+   - Entry chunk: **563.0 → 374.9 KB (152.0 → 118.3 KB gzip)**. Homepage JS (decoded, 42 files): **1,265 → 1,083 KB**. The full registry (197.5 KB, 36.6 KB gzip) now loads only with component pages, the playground gallery and the kitchen sink.
+2. `docs.css` had 245 lines (topbar, theme menu, sidebar, nav filter/count/subgroup/subheading/empty, nav theme card) twice, verbatim. The first copy is removed. Output CSS only shrank by 37 bytes, because Lightning CSS already drops a rule that an identical later rule overrides. This is source hygiene, not a byte saving.
+
+**Checked, no change needed**
+
+- Tree-shaking: `sideEffects: ["**/*.css"]`, `preserveModules`, and size budgets in `check-tree-shaking.mjs` already guard the core entry.
+- Fonts: the 30 theme faces are `@font-face` with `font-display: swap` and load only when a theme uses them. The homepage fetched 4 faces (135 KB). CLS was 0.
+- Images: none over 20 KB; `public/` is 12 KB.
+- Animations: library loops animate opacity/transform (the AI shimmer animates `background-position` on short text) and stop for reduced motion. Theme ornament loops are opt-in (`data-animated`, `data-effects`) and guarded. The organic canvas runtime shares one rAF, caps paints at 30 fps, and pauses off-screen and in hidden tabs.
+- Effects: no `useEffect`/`useLayoutEffect` without a dependency array in `packages/react`, `packages/themes` or the docs, except one intentional latest-ref effect.
+- Sidebar: 96 links, about 700 DOM nodes on a component page. The theme gallery already mounts demos through IntersectionObserver.
+- Long tasks: none recorded on the homepage or `/playground` on this machine (Apple Silicon, no throttling).
+
+**Recommended, not done (riskier or API-changing)**
+
+- The theme engine ships on every page. `generated-skin-loaders` (155 KB) and `theme-playground` (43 KB) are static imports of the entry, through `use-docs-theme`, `home-link` and the routes' `validateSearch` and loaders. That's about 200 KB raw and 50 KB gzip for readers using Original Dixy. Making skin definitions lazy needs care to avoid a theme flash; it matches the open checklist item.
+- Color tokens are 206 KB of the 386 KB minified `styles.css` (53%; 13 KB of 37 KB gzip). They put 1,269 custom properties on the theme root. An appearance flip on a docs page took 5.8 ms median (13 ms first) here. Splitting accent/neutral families into opt-in CSS would change the published CSS contract.
+- `dixy-common` (227 KB) loads on every page. Its grouping was measured earlier against request count; revisit after the engine is lazy.
+
+**Verified**
+
+- In the in-app browser: homepage shows "96 components". A component page renders with 96 sidebar links in the ten groups. Sidebar client-side navigation to Number Field set the title and heading. An unknown slug returns 404. Mobile (375px) dark drawer lists the groups, filtering "date" shows Date Field, Date Picker and Date Range Picker, and there's no horizontal scroll.
+- `pnpm check` (122 React tests; tokens, skins and docs checks; all builds). No published package changed, so there's no changeset and `pnpm package:check` wasn't needed.
+
+**Not tested**
+
+- CPU or network throttling. The in-app browser has neither, so there are no throttled LCP or INP numbers. The pane was hidden for part of the run, so some paint timings are missing.
+- Safari and Firefox. Reduced motion (no motion CSS changed). Screen readers.
+- Compressed transfer sizes as Cloudflare serves them (brotli). The gzip figures are estimates.
