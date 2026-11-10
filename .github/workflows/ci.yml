@@ -1,7 +1,14 @@
 name: Quality checks
+# Pushes to main, plus every pull request. Running on every push as well
+# checked each PR commit twice (once as a push, once as a pull request).
 on:
   push:
+    branches: [main]
   pull_request:
+# A newer commit on the same PR cancels the older run; main always finishes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 permissions:
   contents: read
 jobs:
