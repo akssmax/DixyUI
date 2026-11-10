@@ -1,5 +1,5 @@
 import { Button } from "@dixy-ui/react";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import {
   createRootRoute,
   HeadContent,
@@ -13,6 +13,7 @@ import { AppAppearanceProvider } from "../components/app-appearance-provider";
 import { DocumentCanvas } from "../components/document-canvas";
 import { useAppAppearance } from "../components/app-appearance-provider";
 import { getAppPreferences } from "../lib/app-appearance.functions";
+import { loadThemeEngine } from "../lib/theme-engine";
 import "@fontsource/jetbrains-mono/latin-400.css";
 import "@dixy-ui/react/styles.css";
 import "../styles/docs.css";
@@ -30,10 +31,14 @@ function usesDocsShell(pathname: string) {
 
 function RoutedContent() {
   const pathname = useLocation({ select: (location) => location.pathname });
+  // A skinned reader's shell suspends until the theme engine loads. On
+  // hydration React keeps the server HTML meanwhile, so nothing flashes.
   return usesDocsShell(pathname) ? (
-    <DocsShell>
-      <Outlet />
-    </DocsShell>
+    <Suspense>
+      <DocsShell>
+        <Outlet />
+      </DocsShell>
+    </Suspense>
   ) : (
     <>
       <Outlet />
@@ -56,8 +61,8 @@ function DocsSkinPrefetch() {
       window.requestIdleCallback ?? ((run: () => void) => setTimeout(run, 1));
     const cancel = window.cancelIdleCallback ?? clearTimeout;
     const handle = idle(() => {
-      void import("../lib/theme-skin-catalogue")
-        .then(({ prepareSkin }) => prepareSkin(skin, null))
+      void loadThemeEngine()
+        .then(({ skins }) => skins.prepareSkin(skin, null))
         .catch(() => {
           // The docs shell retries when it mounts.
         });
@@ -79,11 +84,10 @@ export const Route = createRootRoute({
     if (skin === "none" || !usesDocsShell(location.pathname))
       return { ...preferences, skinCSS: "", materialCSS: "" };
     try {
-      const [{ loadSkinCSS, loadMaterialCSS }, { skinThemePreset }] =
-        await Promise.all([
-          import("../lib/theme-skin-catalogue"),
-          import("../lib/theme-playground"),
-        ]);
+      // Also readies the engine for the shell's server render.
+      const { skins, playground } = await loadThemeEngine();
+      const { loadSkinCSS, loadMaterialCSS } = skins;
+      const { skinThemePreset } = playground;
       return {
         ...preferences,
         skinCSS: await loadSkinCSS(skin),

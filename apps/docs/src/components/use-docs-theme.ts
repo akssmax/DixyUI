@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ThemeProps } from "@dixy-ui/react";
 import { useAppAppearance } from "./app-appearance-provider";
-import { playgroundThemeProps, skinThemePreset } from "../lib/theme-playground";
 import {
-  deduplicateSkinStyles,
-  prepareSkin,
-} from "../lib/theme-skin-catalogue";
+  loadThemeEngine,
+  loadedThemeEngine,
+  settledThemeEngine,
+} from "../lib/theme-engine";
 import {
   defaultPreviewTheme,
   type PreviewThemeSettings,
@@ -22,23 +22,33 @@ export function useDocsTheme() {
   const { appearance, docsTheme, setDocsTheme } = useAppAppearance();
   const [error, setError] = useState("");
   const { skin, scope } = docsTheme;
+  // Original Dixy never loads the theme engine. A skinned reader suspends
+  // until it arrives; during hydration React keeps the server's themed HTML.
+  const engine =
+    loadedThemeEngine() ??
+    (skin === "none" ? undefined : use(settledThemeEngine()));
+  // Re-render once a retried engine load succeeds after a failed one.
+  const [, setEngineReady] = useState(false);
   const skinProps = useMemo<ThemeProps | null>(() => {
-    if (skin === "none") return null;
+    if (skin === "none" || !engine) return null;
     try {
+      const { playgroundThemeProps, skinThemePreset } = engine.playground;
       return playgroundThemeProps({ ...skinThemePreset(skin), appearance });
     } catch {
       return null;
     }
-  }, [skin, appearance]);
+  }, [engine, skin, appearance]);
   useEffect(() => {
     if (skin === "none") return;
     setError("");
     // Covers a failed server load, and removes the duplicate style the root
     // head added once the client has injected the same skin.
-    void prepareSkin(skin, null)
-      .then(async () => {
-        deduplicateSkinStyles(skin);
-        if (skinThemePreset(skin).material !== "inherit")
+    void loadThemeEngine()
+      .then(async ({ playground, skins }) => {
+        setEngineReady(true);
+        await skins.prepareSkin(skin, null);
+        skins.deduplicateSkinStyles(skin);
+        if (playground.skinThemePreset(skin).material !== "inherit")
           await import("@dixy-ui/react/materials.css");
       })
       .catch(() => setError("That theme could not load. Choose it again."));
@@ -54,8 +64,9 @@ export function useDocsTheme() {
       if (!next || next === "none") return setDocsTheme(patch);
       setError("");
       void (async () => {
-        await prepareSkin(next, null);
-        if (skinThemePreset(next).material !== "inherit")
+        const { playground, skins } = await loadThemeEngine();
+        await skins.prepareSkin(next, null);
+        if (playground.skinThemePreset(next).material !== "inherit")
           await import("@dixy-ui/react/materials.css");
       })()
         .then(() => {

@@ -63,18 +63,17 @@ import {
 import {
   playgroundThemeProps,
   serializeThemePreset,
-  skinCatalog,
   skinThemePreset,
   type ThemePreset,
 } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
+import { loadStarterStyles } from "../lib/theme-engine";
 import { installedThemeDocuments } from "../lib/theme-authoring";
 import {
   deduplicateSkinStyles,
-  loadMaterialCSS,
-  loadSkinCSS,
   prepareSkin,
 } from "../lib/theme-skin-catalogue";
-import { componentRegistry } from "../registry/components";
+import { componentIndex } from "../generated/component-index";
 import { HomeLink } from "../components/home-link";
 
 /** The URL carries the starter's slug ("living-forest"); the app keys skins by id. */
@@ -97,20 +96,7 @@ export const Route = createFileRoute("/")({
   loaderDeps: ({ search }) => ({ id: starterIdFromSlug(search.starter) }),
   // Inline the starter's CSS on the server, like /playground, so a shared
   // link paints in its theme before hydration instead of flashing the default.
-  loader: async ({ deps }) => {
-    try {
-      const preset = skinThemePreset(deps.id);
-      return {
-        id: deps.id,
-        css: await loadSkinCSS(deps.id),
-        materialCSS:
-          preset.material !== "inherit" ? await loadMaterialCSS() : "",
-      };
-    } catch {
-      // The client retries through prepareSkin; the page still renders.
-      return { id: deps.id, css: "", materialCSS: "" };
-    }
-  },
+  loader: ({ deps }) => loadStarterStyles(deps.id),
   head: ({ loaderData }) => ({
     styles: [
       ...(loaderData?.css
@@ -699,10 +685,10 @@ function Landing() {
         name: promptSkin.name,
       }
     : undefined;
-  const componentCount = Object.keys(componentRegistry).length;
+  const componentCount = Object.keys(componentIndex).length;
   const featured = featuredComponents.filter((slug) =>
-    Object.hasOwn(componentRegistry, slug),
-  ) as (keyof typeof componentRegistry)[];
+    Object.hasOwn(componentIndex, slug),
+  ) as (keyof typeof componentIndex)[];
   const studio: StudioProps = {
     preset: starter.preset,
     pending: starter.pending,
@@ -896,7 +882,7 @@ function Landing() {
                         variant="soft"
                         color="neutral"
                       >
-                        {componentRegistry[slug].title}
+                        {componentIndex[slug].title}
                       </ButtonLink>
                     </li>
                   ))}

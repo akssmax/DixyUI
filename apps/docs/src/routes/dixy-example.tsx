@@ -2,16 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
 import { Theme } from "@dixy-ui/react";
 import { useAppAppearance } from "../components/app-appearance-provider";
-import {
-  playgroundThemeProps,
-  skinCatalog,
-  skinThemePreset,
-} from "../lib/theme-playground";
-import {
-  deduplicateSkinStyles,
-  loadMaterialCSS,
-  loadSkinCSS,
-} from "../lib/theme-skin-catalogue";
+import { playgroundThemeProps, skinThemePreset } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
+import { loadStarterStyles } from "../lib/theme-engine";
+import { deduplicateSkinStyles } from "../lib/theme-skin-catalogue";
 import { FernpayApp } from "../example/fernpay-app";
 import {
   fernpayViewIds,
@@ -41,19 +35,7 @@ export const Route = createFileRoute("/dixy-example")({
       : undefined,
   }),
   loaderDeps: ({ search }) => ({ id: skinId(search.skin) }),
-  loader: async ({ deps }) => {
-    try {
-      const preset = skinThemePreset(deps.id);
-      return {
-        id: deps.id,
-        css: await loadSkinCSS(deps.id),
-        materialCSS:
-          preset.material !== "inherit" ? await loadMaterialCSS() : "",
-      };
-    } catch {
-      return { id: deps.id, css: "", materialCSS: "" };
-    }
-  },
+  loader: ({ deps }) => loadStarterStyles(deps.id),
   head: ({ loaderData }) => ({
     meta: [
       { title: "Fernpay — a Dixy UI example app" },

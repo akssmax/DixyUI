@@ -2,6 +2,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import ts from "typescript";
+import {
+  componentRegistryDir,
+  writeComponentIndex,
+} from "./generate-component-index.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const sources = [
@@ -245,6 +249,10 @@ function generate() {
     fs.writeFileSync(target, next);
     console.log(`Generated ${Object.keys(data).length} local API references.`);
   }
+  if (!writeComponentIndex({ check: process.argv.includes("--check") })) {
+    console.error("The docs component index is stale. Run pnpm docs:generate.");
+    process.exit(1);
+  }
 }
 
 generate();
@@ -265,5 +273,17 @@ if (process.argv.includes("--watch")) {
       }, 150);
     },
   );
+  // The sidebar's component index comes from the docs registry.
+  fs.watch(componentRegistryDir, (_event, filename) => {
+    if (!filename?.endsWith(".ts")) return;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      try {
+        writeComponentIndex();
+      } catch (error) {
+        console.error(error);
+      }
+    }, 150);
+  });
   console.log("Watching component contracts for API changes.");
 }

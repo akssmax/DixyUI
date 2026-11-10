@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { ComponentPage } from "../components/component-page";
-import { componentRegistry, isComponentSlug } from "../registry/components";
+import { componentIndex, isComponentSlug } from "../generated/component-index";
 
 export const Route = createFileRoute("/docs/components/$component")({
   loader: ({ params }) => {
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/docs/components/$component")({
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: `${loaderData ? componentRegistry[loaderData.slug].title : "Component"} — Dixy UI`,
+        title: `${loaderData ? componentIndex[loaderData.slug].title : "Component"} — Dixy UI`,
       },
     ],
   }),
