@@ -1850,3 +1850,17 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Screen-reader announcement of the mode switch.
   - Reduced motion (no new motion apart from scroll snapping).
   - Starters other than Original Dixy and Candy Clay.
+
+### 2026-11-10 — Faster CI and releases
+
+- Request: merging felt slow. A CI run took 5–7 minutes and a release three full runs in a row (~20 minutes).
+- Measured from PR #14's run: `pnpm check` 188s, `package:check --online` 173s. Locally, two scripts dominated:
+  - `check-examples.mjs` (inside the docs build): 40s. It type-checked 1,624 examples in batches of 16, building a new TypeScript program per batch. Batches of 1,024 take 5s. Peak memory drops from 1.9 GB to 1.2 GB, because each program kept its predecessor alive through `oldProgram`.
+  - `verify-package.mjs`: 57s, of which 35s was one `tsc` run per skin (30 runs). The skins are now type-checked together, one module per skin, in a single `tsc` run. Each skin is still bundled on its own to prove the others stay out. Now 28s.
+  - The rebuild at the start of `package:check` (9s) and network access (`--online` vs `--offline` made no difference) were not the problem.
+- Workflows:
+  - CI runs on pushes to `main` and on pull requests, instead of on every push plus every PR, which checked each PR commit twice. A newer PR commit cancels the older run.
+  - Release skips its checks when unreleased changesets remain, because then it only updates the "Version packages" PR and publishes nothing. The run that publishes still runs every check.
+- Verified: both changed scripts pass, and both still fail on an injected type error (a demo; one skin's entry, reported as `skin-checks/glass-ui.tsx`). `pnpm check` and `pnpm format:check` pass, and the workflow YAML parses.
+- Not done: Turborepo caching in CI. It would need `scripts/**` in the cache key, since the docs build runs scripts from outside the package, and the remaining build time no longer justifies the risk of stale results.
+- Not verified yet: the CI timing on GitHub; this PR's own run is the first measurement. Branches pushed without a PR no longer get CI.

@@ -366,7 +366,10 @@ for (const [family, names] of Object.entries({
 
 // Share the declaration graph within bounded batches instead of rebuilding it per example.
 // Every complete example remains a separate TSX module checked against the same snapshot.
-const batchSize = 16;
+// Measured with 1,624 examples: batches of 16 took 40s and peaked at 1.9 GB,
+// because each program keeps its predecessor alive through oldProgram;
+// batches of 1,024 take 5s and peak at 1.2 GB.
+const batchSize = 1024;
 for (let offset = 0; offset < examples.length; offset += batchSize) {
   const files = new Map(
     examples

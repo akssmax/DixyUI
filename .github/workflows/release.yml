@@ -28,9 +28,21 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm format:check
-      - run: pnpm check
-      - run: pnpm package:check --online
+      # Unreleased changesets sit at the top of .changeset/ (consumed ones
+      # move to .changeset/pre/). With any left, this run only opens or
+      # updates the "Version packages" PR and publishes nothing, and the
+      # commit already passed CI, so the checks below are skipped. They run
+      # in full on the push that publishes.
+      - id: pending
+        run: |
+          count=$(find .changeset -maxdepth 1 -name '*.md' ! -name README.md | wc -l | tr -d ' ')
+          echo "changesets=$count" >> "$GITHUB_OUTPUT"
+      - if: steps.pending.outputs.changesets == '0'
+        run: pnpm format:check
+      - if: steps.pending.outputs.changesets == '0'
+        run: pnpm check
+      - if: steps.pending.outputs.changesets == '0'
+        run: pnpm package:check --online
       # v2 is required for Changesets CLI 3: v1 mistakes the CLI 3
       # `.changeset/pre/` folder for an old-format changeset and fails.
       - uses: changesets/action@v2.1.2
