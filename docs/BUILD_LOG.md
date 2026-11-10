@@ -1949,3 +1949,36 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `BUILD_LOG.md`: kept every entry from both sides, including both CI write-ups.
 - Verified: `pnpm format:check`, `pnpm check` and `pnpm package:check --online` pass on the merge. (`--offline` failed only because the fresh checkout's store lacked a cached tarball.)
 - Not tested: the merged workflows on GitHub until this push runs them.
+
+### 2026-11-10 — dixyui.com custom domain
+
+- What changed:
+  - Cloudflare (dashboard): deleted the two parking records Cloudflare had imported from Namecheap (`A @ → 192.64.119.65`, `CNAME www → parkingpage.namecheap.com`), then attached `dixyui.com` and `www.dixyui.com` to the `dixy-ui-docs` Worker as Custom Domains.
+  - `apps/docs/wrangler.jsonc`: both hostnames listed under `routes` with `custom_domain: true`, so `wrangler deploy` keeps them attached instead of the config drifting from the dashboard.
+  - Kept: Namecheap email-forwarding MX records and SPF TXT.
+- Why: the domain's nameservers already pointed at Cloudflare and Universal SSL was active, but DNS still served Namecheap's parking page. Over HTTPS it timed out, because Full SSL mode tried HTTPS on the parking server.
+- Verified: both hostnames resolve to Cloudflare and return 200 over HTTPS with the "Dixy UI — Components with character" page. Edited config passes Prettier.
+- Not tested: a CI deploy with the new `routes`. The deploy token may need zone-level permissions (Workers Routes: Edit, Zone: Read) on dixyui.com to manage custom domains; if the next deploy fails on routes, widen the token. No www → apex redirect yet, so both hostnames serve the site.
+
+### 2026-11-10 — System appearance by default
+
+- What changed:
+  - The `dixy-appearance` cookie now stores the reader's choice: `system`, `light` or `dark`. A missing cookie means `system`, so new visitors follow their OS.
+  - `getAppPreferences` resolves `system` on the server. It uses the `Sec-CH-Prefers-Color-Scheme` client hint first (sent with `Accept-CH`, `Critical-CH` and `Vary`), then a `dixy-system-appearance` cookie the client keeps updated, then light.
+  - `AppAppearanceProvider` exposes `appearancePreference` and `setAppearancePreference` alongside the resolved `appearance`. While on `system`, it follows `prefers-color-scheme` changes live. `setAppearance(light|dark)` still exists, so the header toggles and demo apps pick an explicit appearance.
+  - The landing footer toggle is now System / Light / Dark (Monitor, Sun, Moon icons). The docs theme menu's Appearance group also has a System option.
+- Why: the site defaulted to light whatever the OS said.
+- Verified:
+  - `pnpm check` passes.
+  - In the in-app browser (dev server), with cookies cleared and the scheme emulated as dark, the server rendered `data-appearance="dark"` and System was pressed. Flipping the emulated scheme to light updated the page live.
+  - Footer Dark, header toggle and footer System each set the right cookie and pressed state. In the docs menu, keyboard focus plus Enter on Light works.
+  - At 375px the footer toggle fits with no horizontal overflow.
+- Not tested:
+  - The first visit in Safari or Firefox with a dark OS. Those browsers don't send the client hint and have no cookie yet, so that one visit paints light and switches to dark after hydration. Later visits use the cookie.
+  - `Critical-CH` retry on production Chrome, reduced motion (the switch doesn't animate), and screen readers.
+
+### 2026-11-10 — Cache the Worker deploy pointer with the docs build
+
+- What changed: `apps/docs/turbo.json` extends the root config and adds `.wrangler/deploy/**` to the docs `build` outputs.
+- Why: `deploy-docs` failed on PR #16 with "entry-point file at @tanstack/react-start/server-entry was not found". The Cloudflare Vite plugin writes `.wrangler/deploy/config.json` to point wrangler at `dist/server/wrangler.json`. The turbo-cached deploy job restored `dist/` on a cache hit but not that pointer, so wrangler read `wrangler.jsonc` and couldn't resolve its package `main`. Production deploys on `main` would have failed the same way.
+- Verified: built the docs once (cache miss), deleted `dist/` and `.wrangler/deploy`, rebuilt (cache hit) and the pointer came back. `wrangler deploy --dry-run` then resolved the built Worker with its `VISITORS` binding. `pnpm check` passes.
