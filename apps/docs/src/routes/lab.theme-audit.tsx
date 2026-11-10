@@ -17,9 +17,9 @@ import {
 import {
   playgroundThemeProps,
   serializeThemePreset,
-  skinCatalog,
   skinThemePreset,
 } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
 import { installedThemeDocuments } from "../lib/theme-authoring";
 import { loadMaterialCSS, prepareSkin } from "../lib/theme-skin-catalogue";
 import {

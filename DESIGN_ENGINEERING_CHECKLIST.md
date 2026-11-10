@@ -864,7 +864,9 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [x] Generated component index (slug, title, category) replaces the full registry in the docs entry chunk: 563.0 → 374.9 KB (152.0 → 118.3 KB gzip); homepage JS 1,265 → 1,083 KB. Typecheck fails if the index and registry differ. Evidence: docs/BUILD_LOG.md, "Performance audit: packages and docs".
 - [x] Removed a verbatim 245-line duplicate block from `docs.css` (output CSS unchanged: the minifier already dropped it).
 - [x] Checked tree-shaking guards, font loading, images, animation loops, effect dependencies, sidebar and gallery rendering; no change needed.
-- [ ] Make the theme engine (`generated-skin-loaders`, `theme-playground`, ~200 KB) load lazily on pages that use Original Dixy, without a theme flash.
+- [x] The theme engine loads on demand: Original Dixy pages' entry closure 1,061.2 → 700.5 KB from `main` (304.7 → 228.6 KB gzip); themed readers keep server HTML until it loads. Evidence: docs/BUILD_LOG.md, "Theme engine loads on demand".
+- [ ] Split skin definitions per skin, so a themed reader loads one skin instead of all 39 (`generated-skin-loaders`, 164 KB).
+- [ ] Learning: explain how a suspended component keeps its server HTML during hydration, and why `use()` needs a cached promise.
 - [ ] Decide whether accent/neutral palette families become opt-in CSS (206 KB of 386 KB minified `styles.css`; a public CSS change).
 - [ ] Measure throttled LCP/INP and brotli transfer sizes on the deployed worker.
 - [ ] Learning: explain why a module imported by a route's options or the root shell lands in the entry chunk even when only three fields are used.

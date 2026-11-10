@@ -63,15 +63,14 @@ import {
 import {
   playgroundThemeProps,
   serializeThemePreset,
-  skinCatalog,
   skinThemePreset,
   type ThemePreset,
 } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
+import { loadStarterStyles } from "../lib/theme-engine";
 import { installedThemeDocuments } from "../lib/theme-authoring";
 import {
   deduplicateSkinStyles,
-  loadMaterialCSS,
-  loadSkinCSS,
   prepareSkin,
 } from "../lib/theme-skin-catalogue";
 import { componentIndex } from "../generated/component-index";
@@ -97,20 +96,7 @@ export const Route = createFileRoute("/")({
   loaderDeps: ({ search }) => ({ id: starterIdFromSlug(search.starter) }),
   // Inline the starter's CSS on the server, like /playground, so a shared
   // link paints in its theme before hydration instead of flashing the default.
-  loader: async ({ deps }) => {
-    try {
-      const preset = skinThemePreset(deps.id);
-      return {
-        id: deps.id,
-        css: await loadSkinCSS(deps.id),
-        materialCSS:
-          preset.material !== "inherit" ? await loadMaterialCSS() : "",
-      };
-    } catch {
-      // The client retries through prepareSkin; the page still renders.
-      return { id: deps.id, css: "", materialCSS: "" };
-    }
-  },
+  loader: ({ deps }) => loadStarterStyles(deps.id),
   head: ({ loaderData }) => ({
     styles: [
       ...(loaderData?.css

@@ -2290,3 +2290,31 @@ Measured on a production build served by `vite preview` (Cloudflare worker, port
 - CPU or network throttling. The in-app browser has neither, so there are no throttled LCP or INP numbers. The pane was hidden for part of the run, so some paint timings are missing.
 - Safari and Firefox. Reduced motion (no motion CSS changed). Screen readers.
 - Compressed transfer sizes as Cloudflare serves them (brotli). The gzip figures are estimates.
+
+### 2026-11-10 — Theme engine loads on demand
+
+- What: the theme engine (`theme-playground`, `generated-skin-loaders`, `theme-skin-catalogue`: every skin definition, ornament renderer, recipe and stylesheet loader) is no longer a static import of the site-wide entry chunk. Docs pages for readers on Original Dixy no longer download it.
+- How:
+  - `apps/docs/src/lib/theme-engine.ts` caches one `loadThemeEngine()` promise. `loadStarterStyles(id)` replaces the starter loader that six routes had copied. Skin lookups in route options (`validateSearch`, `loaderDeps`) and `HomeLink` read the light `@dixy-ui/themes/catalog`.
+  - `/playground` used to parse the preset in `loaderDeps`. It now passes the raw `?theme=` and parses in the loader. The loader reuses its last result while skin, document and material are unchanged, so control tweaks don't reload CSS.
+  - `useDocsTheme` suspends with `use()` only when the reader has a skin, and the docs shell has a `<Suspense>` boundary. On the server the root loader readies the engine before rendering, so the HTML is themed. During hydration React keeps that HTML until the engine arrives, so nothing flashes. A failed chunk load renders the plain shell with the existing retry message instead of an error. Choosing a skin loads the engine before committing, as it already did for the skin's CSS.
+- Measured (production build; the entry chunk plus everything it imports statically):
+
+  |                          | Files | Raw        | Gzip     |
+  | ------------------------ | ----- | ---------- | -------- |
+  | `main`                   | 12    | 1,061.2 KB | 304.7 KB |
+  | After the registry index | 12    | 877.6 KB   | 271.7 KB |
+  | After this change        | 9     | 700.5 KB   | 228.6 KB |
+
+  Readers with a skin still load the engine (`generated-skin-loaders` 164 KB, `theme-playground` 13 KB) before the shell hydrates, as before.
+
+- Verified in the in-app browser (`vite preview`, worker build):
+  - Original Dixy on `/docs/components/switch`: hydrated, no engine chunk requested.
+  - Candy Clay on `/docs/components/button`: the server and client render the same `data-dixy-skin` and inline style values, one skin `<style>`, and it hydrated.
+  - Switching Original Dixy to Candy Clay from the menu loaded the engine and skin CSS, then committed.
+  - Dark toggle on a Living Forest docs page.
+  - Client navigation from `/playground` to `/docs/foundations/theming` rendered the themed shell.
+  - Server-inlined starter CSS on `/?starter=retro-os`, `/dixy-example`, `/ai-example`, `/lab/controls`, `/lab/kitchen-sink` and `/lab/shaders`. `/lab/theme-audit` returned 200.
+  - `/playground`: a preset link inlined Retro OS, an invalid preset showed its warning, an accent change rewrote `?theme=`, and picking Living Forest loaded its CSS.
+  - No new console errors. `pnpm check`, `pnpm format:check` on changed files.
+- Not tested: how long a themed reader waits for hydration on a slow network or CPU (no throttling available; the engine was in the entry before, so it shouldn't be slower). A failed engine chunk load (only reasoned through). Safari and Firefox, mobile, reduced motion.

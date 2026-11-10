@@ -16,16 +16,10 @@ import {
   Toggle,
   ToggleGroup,
 } from "@dixy-ui/react";
-import {
-  playgroundThemeProps,
-  skinCatalog,
-  skinThemePreset,
-} from "../lib/theme-playground";
-import {
-  deduplicateSkinStyles,
-  loadMaterialCSS,
-  loadSkinCSS,
-} from "../lib/theme-skin-catalogue";
+import { playgroundThemeProps, skinThemePreset } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
+import { loadStarterStyles } from "../lib/theme-engine";
+import { deduplicateSkinStyles } from "../lib/theme-skin-catalogue";
 import { ShaderBackdrop } from "../lab/shader-backdrop";
 import { shaderPairings } from "../lab/shader-pairings";
 import { shaderPrograms } from "../lab/shader-programs";
@@ -56,20 +50,8 @@ export const Route = createFileRoute("/lab/shaders")({
       : undefined,
   }),
   loaderDeps: ({ search }) => ({ slug: search.skin ?? labSkins[0].slug }),
-  loader: async ({ deps }) => {
-    const id = skinCatalog.find((skin) => skin.slug === deps.slug)!.id;
-    try {
-      const preset = skinThemePreset(id);
-      return {
-        id,
-        css: await loadSkinCSS(id),
-        materialCSS:
-          preset.material !== "inherit" ? await loadMaterialCSS() : "",
-      };
-    } catch {
-      return { id, css: "", materialCSS: "" };
-    }
-  },
+  loader: ({ deps }) =>
+    loadStarterStyles(skinCatalog.find((skin) => skin.slug === deps.slug)!.id),
   head: ({ loaderData }) => ({
     meta: [
       { title: "Shader lab — Dixy UI" },
