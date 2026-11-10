@@ -352,7 +352,49 @@ try {
     );
   }
   console.log(
-    "PASS: all eleven independently packed skins, declarations, SSR, procedural artwork and CSS/renderer exclusion.",
+    "PASS: every independently packed ornament skin, declarations, SSR, procedural artwork and CSS/renderer exclusion.",
+  );
+  // Plain skins ship settings and CSS only: no frame, no ornament entry.
+  const plainSkins = [
+    ["ledger", "ledgerTheme"],
+    ["mainframe", "mainframeTheme"],
+    ["dispatch", "dispatchTheme"],
+    ["signal", "signalTheme"],
+  ];
+  for (const [slug, settings] of plainSkins) {
+    fs.writeFileSync(
+      path.join(skinConsumer, "src/main.tsx"),
+      `
+      import { createRoot } from "react-dom/client";
+      import { Theme, Card, Button } from "@dixy-ui/react";
+      import { ${settings} } from "@dixy-ui/themes/${slug}";
+      import "@dixy-ui/react/styles.css";
+      import "@dixy-ui/themes/${slug}.css";
+      createRoot(document.getElementById("root")!).render(
+        <Theme {...${settings}}><Card.Root><Button>Save</Button></Card.Root></Theme>
+      );
+    `,
+    );
+    run(["exec", "tsc", "--noEmit"], skinConsumer);
+    run(["exec", "vite", "build"], skinConsumer);
+    const files = fs.readdirSync(skinAssets);
+    const styles = files
+      .filter((f) => f.endsWith(".css"))
+      .map((f) => fs.readFileSync(path.join(skinAssets, f), "utf8"))
+      .join("");
+    const runtime = files
+      .filter((f) => f.endsWith(".js"))
+      .map((f) => fs.readFileSync(path.join(skinAssets, f), "utf8"))
+      .join("");
+    assert.ok(styles.includes(slug), "Plain skin CSS missing for " + slug);
+    for (const [, , prefix] of proceduralSkins)
+      assert.ok(
+        !rendererPresent(runtime, prefix),
+        "An ornament renderer leaked into plain skin " + slug,
+      );
+  }
+  console.log(
+    "PASS: plain skins (Ledger, Mainframe, Dispatch, Signal) pack settings and CSS without any ornament renderer.",
   );
 
   const tokensConsumer = path.join(temporary, "tokens-consumer");

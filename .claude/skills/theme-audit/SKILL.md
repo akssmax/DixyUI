@@ -31,6 +31,9 @@ Checks: `contrast` (text 4.5:1, large text 3:1), `boundary` (a field's border
 or fill 3:1 against the surface around it), `focus` (a visible change
 when focused, ring 3:1 against what's behind it), `target` (24×24 minimum,
 warning only), `overflow` (clipped labels or content past the card).
+Selected tabs and segments (`tab-selected`, `tab-filled-selected`,
+`segment-selected`) are measured against every colour in their fill; a
+readable but split fill (two colours more than 1.5:1 apart) is a warning.
 
 - Fix failures in a theme's `defaultAppearance` first; that's how people see it.
 - Group issues by cause. The same message across many roles in one theme

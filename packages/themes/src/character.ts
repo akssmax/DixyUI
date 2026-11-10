@@ -44,6 +44,7 @@ export const focusStyles = [
   "dashed",
   "glow",
   "offset",
+  "halo",
 ] as const;
 export const dividerStyles = [
   "line",
@@ -482,6 +483,13 @@ function detailCSS(c: ThemeCharacter, S: Scope, theme: string): string {
     );
   if (d.focus === "offset")
     rules.push(`${focus} { outline-width:2px; outline-offset:5px; }`);
+  // High-contrast: a solid 3px ring plus a yellow halo outside it, visible on any surface.
+  // Skin and material rules set box-shadow at higher specificity (fields at 0,5,0), so the
+  // halo is important: a focus indicator has to win over decoration.
+  if (d.focus === "halo")
+    rules.push(
+      `${focus} { --dixy-focus-halo:0 0 0 8px var(--dixy-color-yellow-9); outline-style:solid; outline-width:3px; outline-offset:2px; box-shadow:var(--dixy-focus-halo) !important; }`,
+    );
   const lines = {
     dashed: (a: string) =>
       `repeating-linear-gradient(${a},${EDGE} 0 6px,transparent 6px 10px)`,

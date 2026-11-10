@@ -30,6 +30,7 @@ import { ShaderBackdrop } from "../lab/shader-backdrop";
 import { shaderPairings } from "../lab/shader-pairings";
 import type { ShaderStatus } from "../lab/shader-runtime";
 import "../styles/shader-lab.css";
+import { HomeLink } from "../components/home-link";
 
 /** Prototype pairings. A skin gets a shader only after it is reviewed here. */
 const labSkins = shaderPairings;
@@ -150,9 +151,9 @@ function ShaderLab() {
         ) : null}
 
         <header className="shader-lab-bar">
-          <Link to="/" className="shader-lab-back">
+          <HomeLink className="shader-lab-back">
             <ArrowLeft size={16} aria-hidden="true" /> Dixy
-          </Link>
+          </HomeLink>
           <Badge variant="soft">Lab · prototype</Badge>
         </header>
 

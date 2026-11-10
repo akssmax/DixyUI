@@ -96,6 +96,8 @@ const fontKeys = [
   "manrope",
   "figtree",
   "cormorant",
+  "plexSans",
+  "atkinson",
 ] as const;
 
 /** This closed JSON Schema also supplies TypeScript types, validation and control metadata. */

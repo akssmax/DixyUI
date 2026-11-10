@@ -1981,3 +1981,55 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - Keyboard focus beyond what the audit measures.
   - Light mode screenshots of the Save Point and Arcade shaders.
 - Fonts reuse faces already in the library (Tilt Neon, Figtree, Silkscreen, VT323), not the mocks' exact fonts.
+
+### 2026-11-10 — Flat selected states for tabs and segments, audited
+
+- Reported: on ANSI Panes the home page's Light/Dark control showed a pressed segment half blue, half cream.
+- Cause: a pressed toggle used `var(--dixy-skin-selected, var(--dixy-skin-thumb))`, and `--dixy-skin-selected` was only set in dark mode. In light mode every pressed segment wore its theme's switch-thumb artwork: splits, hazard stripes, a conic rainbow, flags. Filled tab indicators used the material sheen, and `materials.css` (0,3,0) could override the skin's indicator image too.
+- Fix: in `compile-css.ts`, selected toggles and filled tab indicators have `background-image: none`. They are raised by edge and relief only. The indicator rule adds `:not([data-variant="line"])` so it outranks `materials.css`. `--dixy-skin-selected` is removed (nothing else read it).
+- Audit: the specimen gains line tabs, segmented tabs and a segmented toggle group. New roles: `tab`, `tab-selected`, `tab-filled`, `tab-filled-selected`, `segment`, `segment-selected`.
+  - Selected labels are measured against the flat fill and every colour stop in the fill's image (for tabs, the indicator, but only when it sits behind the label, so a line underline is skipped).
+  - A stop under 4.5:1 is a failure. A readable but split fill (stops more than 1.5:1 apart) is a warning.
+  - First run had false failures on every theme because the line indicator was treated as the fill; fixed with the overlap test.
+- Before the fix, light only: 12 failures and 12 split-fill warnings (24 of 34 themes, ANSI Panes included). With finish instead of thumb, dark still had 7 failures and 24 warnings from sheen. After the flat fill: 34 of 34 clean in light and dark.
+- Screenshots: ANSI Panes, Freighter and Glass UI tabs and segments in light and dark.
+- Verified: `pnpm check`, `pnpm format:check`, `pnpm package:check`.
+- Not tested: hover and pressed (mouse-down) states of tabs, keyboard focus moving between tabs, vertical tabs.
+
+### 2026-11-10 — Ledger, Mainframe and Dispatch: themes for data-heavy apps
+
+- Why: the catalogue had almost nothing for dense product screens. These come from the mocks in `docs/mocks/theme-suggestions.html` (Ledger) and `docs/mocks/theme-data-heavy.html` (Mainframe and Dispatch, in the spirit of large enterprise and app design systems). Each has its own name, colours and open fonts.
+- First themes with `frame: "none"`: no ornament and no `/react` entry. Package exports are the settings module and CSS only. `verify-package` gains a plain-skin pass: each one type-checks and bundles on its own with no ornament renderer in the output.
+- Ledger: jade on gray, Inter body, IBM Plex Mono headings, tabular numerals, faint ruled columns on the canvas, double-rule chrome with a ruled paper well.
+- Mainframe: blue on neutral, radius none, square shape, no depth. The material draws flat grey layers (#f4f4f4 canvas, white cards; #161616/#262626 in dark) with no shadow or inset. Headings are weight 300 in IBM Plex Sans.
+- Dispatch: neutral accent with the new `monoAccent` material flag. With `[data-accent="neutral"]`, the skin maps brand 9/10/11, pressed and on-solid to neutral 12/11/1, and focus to blue. Solid buttons, switches and checkboxes are black in light and white in dark. Pill shape, Inter weight 800 headings.
+- New font `plexSans`: added to `themeFonts`, `themeFontPackages`, the schema font list, a docs `@font-face`, and `@fontsource-variable/ibm-plex-sans` 5.2.8 in the docs app. Checked in the browser that it loads, at weight 300.
+- Uniqueness tests: Ledger's first signature (standard/snappy/none) matched Tokyo Transit, so Ledger uses `weighted` motion.
+- Sizes (gzip): Ledger 3.0 KB, Mainframe 3.5 KB, Dispatch 3.3 KB, all under the 5 KB budget.
+- Verified:
+  - Audit: 37 of 37 clean in light and dark.
+  - Specimen screenshots of all three in both appearances.
+  - `pnpm check`, `pnpm format:check` and `pnpm package:check`.
+- Not tested:
+  - The mock's data screens (tables, KPIs, side nav) built with real components.
+  - Compact density: Mainframe's 40px rows and Ledger's tight spacing need a density step the library doesn't have yet.
+  - Mobile width and reduced motion.
+
+### 2026-11-10 — Signal: an accessibility-first theme
+
+- Why: the industry map (`docs/mocks/theme-industry-map.html`) showed government, healthcare and education as thin. Signal is the AAA-leaning theme from `docs/mocks/theme-suggestions.html`.
+- Theme: blue on neutral, Atkinson Hyperlegible for body and headings (weight 700), 2px edges, no depth, native scrollbars, stroke-2 icons, plain voice ("Save changes", "Cancel"). Frame none, so settings and CSS only.
+- New material `signal-contrast`: black edges in light and white in dark, no shadows. It sets two new flags:
+  - `deepSolid` moves light-mode solid actions to brand 11/12. With step 9 the solid button was 5.23:1.
+  - `controlHeights` sets `--dixy-size-control-*` and `--dixy-height-*` to 44/48/56px. Segmented tracks read the size variables, so both are needed.
+- New focus style `halo`: a 3px outline plus an 8px yellow-9 ring. The first version set `box-shadow` normally. Buttons showed it only after routing it through the relief variables, and text fields still showed `none`: the matte material rule sets field `box-shadow` at 0,5,0, above the focus rule's 0,4,0. The halo's `box-shadow` is now `!important` and the variable routing is gone. Checked with real keyboard focus (Tab) on the Soft button and the text field: both compute `0 0 0 8px` yellow.
+- New font `atkinson`: `themeFonts`, `themeFontPackages`, the schema enum, a docs `@font-face` (400 and 700), and `@fontsource/atkinson-hyperlegible` 5.2.6 in the docs app.
+- Home logo: the top-nav logo on docs, playground and lab pages now links to `/?starter=<slug>` for the current skin (`HomeLink`), so returning home no longer resets the theme picked there.
+- Size (gzip): Signal 2.8 KB, under the 5 KB budget.
+- Measured: lowest text contrast is 7.69:1 in light (soft button) and 8.69:1 in dark. Buttons 44px, fields 48px.
+- Verified: audit clean for Signal in light and dark (full run below); specimen screenshots; halo on button and field with keyboard focus.
+- Not tested or not met:
+  - Segments and tabs are 38px and the switch 24px, below the 44px AAA target size (2.5.5). Those components don't read the control-size variables.
+  - The selected segment has no check mark, so selection still relies on fill and weight.
+  - Signal isn't picked automatically for `prefers-contrast: more`.
+  - Mobile width, reduced motion and screen readers.

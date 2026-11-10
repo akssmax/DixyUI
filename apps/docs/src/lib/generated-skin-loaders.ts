@@ -36,6 +36,10 @@ import { glassUI } from "@dixy-ui/themes/glass-ui";
 import { sunsetDrive } from "@dixy-ui/themes/sunset-drive";
 import { savePoint } from "@dixy-ui/themes/save-point";
 import { arcadeCabinet } from "@dixy-ui/themes/arcade-cabinet";
+import { ledger } from "@dixy-ui/themes/ledger";
+import { mainframe } from "@dixy-ui/themes/mainframe";
+import { dispatch } from "@dixy-ui/themes/dispatch";
+import { signal } from "@dixy-ui/themes/signal";
 export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/living-forest": livingForest,
   "dixy/retro-os": retroOS,
@@ -71,6 +75,10 @@ export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/sunset-drive": sunsetDrive,
   "dixy/save-point": savePoint,
   "dixy/arcade-cabinet": arcadeCabinet,
+  "dixy/ledger": ledger,
+  "dixy/mainframe": mainframe,
+  "dixy/dispatch": dispatch,
+  "dixy/signal": signal,
 };
 export const ornamentRenderers: Record<
   string,
@@ -220,4 +228,8 @@ export const skinCSSLoaders: Readonly<
   "dixy/save-point": () => import("@dixy-ui/themes/save-point.css?inline"),
   "dixy/arcade-cabinet": () =>
     import("@dixy-ui/themes/arcade-cabinet.css?inline"),
+  "dixy/ledger": () => import("@dixy-ui/themes/ledger.css?inline"),
+  "dixy/mainframe": () => import("@dixy-ui/themes/mainframe.css?inline"),
+  "dixy/dispatch": () => import("@dixy-ui/themes/dispatch.css?inline"),
+  "dixy/signal": () => import("@dixy-ui/themes/signal.css?inline"),
 };

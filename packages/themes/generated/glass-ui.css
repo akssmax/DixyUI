@@ -131,7 +131,6 @@
     --dixy-organic-b: #6ea8ff;
     --dixy-organic-c: #d68cff;
     --dixy-organic-d: #e8f0ff;
-    --dixy-skin-selected: var(--dixy-skin-finish);
     --dixy-skin-edge: #ffffff38;
     --dixy-skin-surface: color-mix(
       in srgb,
@@ -144,6 +143,7 @@
       #1c2233a6
     );
   }
+
   .dixy-theme[data-dixy-skin="dixy/glass-ui"][data-relief="2"] {
     --dixy-skin-shadow:
       var(--dixy-skin-depth-shadow, var(--dixy-skin-authored-shadow)),
@@ -408,14 +408,19 @@
     border: 1px solid var(--dixy-skin-edge);
     box-shadow: var(--dixy-skin-inset);
   }
+  /* Selected tabs and toggles are one flat colour, lifted by edge and relief only. A gradient behind the label (thumb art, sheen, material image) splits it across two colours. :not([data-variant="line"]) also outranks materials.css (0,3,0). */
   :is(.dixy-tabs-indicator)[data-dixy-skin="dixy/glass-ui"]:not(
       [data-dixy-material-override]
     ):not(:where([data-dixy-material-override]) *) {
-    background-image: var(--dixy-skin-finish);
     box-shadow: var(--dixy-skin-control-relief);
     border: 1px solid var(--dixy-skin-edge);
   }
-  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised thumb (slider-knob paint in light, the raised finish in dark so its label stays readable). */
+  :is(.dixy-tabs-indicator)[data-dixy-skin="dixy/glass-ui"]:not(
+      [data-dixy-material-override]
+    ):not(:where([data-dixy-material-override]) *):not([data-variant="line"]) {
+    background-image: none;
+  }
+  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised, flat thumb. */
   .dixy-theme[data-dixy-skin="dixy/glass-ui"]
     .dixy-toggle-group:is([data-attached], [data-segmented]):not(
       [data-dixy-material-override]
@@ -430,7 +435,7 @@
       [data-variant="solid"]
     )[data-pressed]:not([data-disabled]) {
     background-color: var(--dixy-color-background-surface-raised);
-    background-image: var(--dixy-skin-selected, var(--dixy-skin-thumb));
+    background-image: none;
     box-shadow: var(--dixy-skin-control-relief);
     border-color: var(--dixy-skin-edge);
     color: var(--dixy-color-text-primary);

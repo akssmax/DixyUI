@@ -37,6 +37,7 @@ import { ButtonLink } from "./button-link";
 // Imported here, not in routes/index.tsx: a bare import in a route file stays
 // in the unsplit route module, which put the landing CSS on every docs page.
 import "../styles/landing.css";
+import { HomeLink } from "./home-link";
 
 /** Published on npm under the beta dist-tag. */
 export const installCommand =
@@ -769,12 +770,12 @@ export function LandingFooter({
       <Container className="landing-footer-inner">
         <div className="landing-footer-top">
           <div className="landing-footer-about">
-            <Link to="/" className="landing-brand" aria-label="Dixy UI home">
+            <HomeLink className="landing-brand" aria-label="Dixy UI home">
               <DixyMark size={24} />
               <strong>
                 dixy<span>UI</span>
               </strong>
-            </Link>
+            </HomeLink>
             <Text size="sm" tone="muted">
               Accessible React components with character. Built on Base UI,
               styled with plain CSS.

@@ -123,7 +123,10 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
     --dixy-skin-mark-opacity:1;
     ${characterTokenCSS(m.character)}
   }
-  ${theme}[data-appearance="dark"] { ${colors("dark")} --dixy-skin-selected:var(--dixy-skin-finish); ${m.inkTint ? `--dixy-color-text-primary:color-mix(in srgb,var(--dixy-color-base-12) ${100 - m.inkTint * 100}%,${m.tint[0]});` : ""} --dixy-skin-edge:${m.darkEdge}; ${m.darkShadow ? `--dixy-skin-authored-shadow:${m.darkShadow};` : ""} ${m.darkInset ? `--dixy-skin-inset:${m.darkInset};` : ""} ${m.darkCanvas ? `--dixy-skin-canvas:${m.darkCanvas};` : ""} --dixy-skin-surface:color-mix(in srgb,var(--dixy-color-background-surface-raised) ${m.darkSurfaceMix}%,${m.tint[1]}); --dixy-skin-ground:color-mix(in srgb,var(--dixy-color-background-canvas) 65%,${m.tint[1]}); }
+  ${theme}[data-appearance="dark"] { ${colors("dark")} ${m.inkTint ? `--dixy-color-text-primary:color-mix(in srgb,var(--dixy-color-base-12) ${100 - m.inkTint * 100}%,${m.tint[0]});` : ""} --dixy-skin-edge:${m.darkEdge}; ${m.darkShadow ? `--dixy-skin-authored-shadow:${m.darkShadow};` : ""} ${m.darkInset ? `--dixy-skin-inset:${m.darkInset};` : ""} ${m.darkCanvas ? `--dixy-skin-canvas:${m.darkCanvas};` : ""} --dixy-skin-surface:color-mix(in srgb,var(--dixy-color-background-surface-raised) ${m.darkSurfaceMix}%,${m.tint[1]}); --dixy-skin-ground:color-mix(in srgb,var(--dixy-color-background-canvas) 65%,${m.tint[1]}); }
+  ${m.deepSolid ? `${theme}:not([data-appearance="dark"]) { --dixy-color-brand-9:var(--dixy-color-brand-11); --dixy-color-brand-10:var(--dixy-color-brand-12); --dixy-color-brand-pressed:var(--dixy-color-brand-12); }` : ""}
+  ${m.controlHeights ? `${theme} { --dixy-size-control-sm:${m.controlHeights[0]}; --dixy-size-control-md:${m.controlHeights[1]}; --dixy-size-control-lg:${m.controlHeights[2]}; --dixy-height-sm:${m.controlHeights[0]}; --dixy-height-md:${m.controlHeights[1]}; --dixy-height-lg:${m.controlHeights[2]}; }` : ""}
+  ${m.monoAccent ? `${theme}[data-accent="neutral"] { --dixy-color-brand-9:var(--dixy-color-neutral-12); --dixy-color-brand-10:var(--dixy-color-neutral-11); --dixy-color-brand-11:var(--dixy-color-neutral-12); --dixy-color-brand-pressed:var(--dixy-color-neutral-11); --dixy-color-brand-on-solid:var(--dixy-color-neutral-1); --dixy-color-brand-focus:var(--dixy-color-blue-focus); }` : ""}
   ${theme}[data-relief="2"] { --dixy-skin-shadow:var(--dixy-skin-depth-shadow,var(--dixy-skin-authored-shadow)),0 10px 18px #0002; }
   ${theme}[data-relief="0"],${theme}[data-effects="reduced"] { --dixy-skin-shadow:none; --dixy-skin-inset:none; --dixy-skin-control-edge:none; --dixy-skin-panel-relief:none; --dixy-skin-control-relief:none; }
   ${theme}[data-effects="reduced"] { --dixy-skin-paint:none; --dixy-skin-finish:none; --dixy-skin-canvas:none; --dixy-skin-thumb:none; --dixy-skin-mark-opacity:0; }
@@ -150,10 +153,12 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   ${m.tintActions ? `${own(".dixy-button", '[data-variant="solid"][data-color="accent"]:not([data-disabled])')} { background-color:var(--dixy-skin-surface); color:var(--dixy-color-text-action-primary); }` : ""}
   ${own(".dixy-button", actions + ":active")} { box-shadow:var(--dixy-skin-inset); }
   ${own(".dixy-tabs-list")} { background-color:var(--dixy-color-background-canvas); border:1px solid var(--dixy-skin-edge); box-shadow:var(--dixy-skin-inset); }
-  ${own(".dixy-tabs-indicator")} { background-image:var(--dixy-skin-finish); box-shadow:var(--dixy-skin-control-relief); border:1px solid var(--dixy-skin-edge); }
-  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised thumb (slider-knob paint in light, the raised finish in dark so its label stays readable). */
+  /* Selected tabs and toggles are one flat colour, lifted by edge and relief only. A gradient behind the label (thumb art, sheen, material image) splits it across two colours. :not([data-variant="line"]) also outranks materials.css (0,3,0). */
+  ${own(".dixy-tabs-indicator")} { box-shadow:var(--dixy-skin-control-relief); border:1px solid var(--dixy-skin-edge); }
+  ${own(".dixy-tabs-indicator", ':not([data-variant="line"])')} { background-image:none; }
+  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised, flat thumb. */
   ${theme} .dixy-toggle-group:is([data-attached],[data-segmented])${guard} { background-color:var(--dixy-color-background-canvas); border:1px solid var(--dixy-skin-edge); box-shadow:var(--dixy-skin-inset); }
-  ${own(".dixy-toggle", ':not([data-variant="solid"])[data-pressed]:not([data-disabled])')} { background-color:var(--dixy-color-background-surface-raised); background-image:var(--dixy-skin-selected,var(--dixy-skin-thumb)); box-shadow:var(--dixy-skin-control-relief); border-color:var(--dixy-skin-edge); color:var(--dixy-color-text-primary); }
+  ${own(".dixy-toggle", ':not([data-variant="solid"])[data-pressed]:not([data-disabled])')} { background-color:var(--dixy-color-background-surface-raised); background-image:none; box-shadow:var(--dixy-skin-control-relief); border-color:var(--dixy-skin-edge); color:var(--dixy-color-text-primary); }
   ${own(tracks)} { border:1px solid var(--dixy-skin-edge); background-color:var(--dixy-color-background-surface); box-shadow:var(--dixy-skin-inset); }
   ${own(fills)} { background-image:var(--dixy-skin-finish); }
   ${own(".dixy-switch-root,.dixy-checkbox-root,.dixy-radio-root")}::before { box-shadow:var(--dixy-skin-inset); }

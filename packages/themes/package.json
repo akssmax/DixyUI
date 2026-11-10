@@ -349,7 +349,27 @@
     "./arcade-cabinet/react": {
       "types": "./dist/arcade/ornament.d.ts",
       "import": "./dist/arcade/ornament.js"
-    }
+    },
+    "./ledger": {
+      "types": "./dist/skins/ledger.d.ts",
+      "import": "./dist/skins/ledger.js"
+    },
+    "./ledger.css": "./dist/ledger.css",
+    "./mainframe": {
+      "types": "./dist/skins/mainframe.d.ts",
+      "import": "./dist/skins/mainframe.js"
+    },
+    "./mainframe.css": "./dist/mainframe.css",
+    "./dispatch": {
+      "types": "./dist/skins/dispatch.d.ts",
+      "import": "./dist/skins/dispatch.js"
+    },
+    "./dispatch.css": "./dist/dispatch.css",
+    "./signal": {
+      "types": "./dist/skins/signal.d.ts",
+      "import": "./dist/skins/signal.js"
+    },
+    "./signal.css": "./dist/signal.css"
   },
   "scripts": {
     "build": "node ../../scripts/generate-skins.mjs && tsc && node ../../scripts/generate-skins.mjs --dist",

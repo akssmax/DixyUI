@@ -7,9 +7,12 @@ import {
   Checkbox,
   Heading,
   Switch,
+  Tabs,
   Text,
   TextField,
   Theme,
+  Toggle,
+  ToggleGroup,
 } from "@dixy-ui/react";
 import {
   playgroundThemeProps,
@@ -143,6 +146,42 @@ function Specimen({ id, appearance }: { id: string; appearance: Appearance }) {
             <Text size="sm" tone="muted" data-audit="text-muted">
               Muted text
             </Text>
+          </div>
+          <div className="audit-row">
+            <Tabs.Root defaultValue="overview">
+              <Tabs.List aria-label={`${meta.name} ${appearance} tabs`}>
+                <Tabs.Tab value="overview" data-audit="tab-selected">
+                  Overview
+                </Tabs.Tab>
+                <Tabs.Tab value="activity" data-audit="tab">
+                  Activity
+                </Tabs.Tab>
+                <Tabs.Indicator />
+              </Tabs.List>
+            </Tabs.Root>
+            <Tabs.Root defaultValue="list" variant="segmented">
+              <Tabs.List aria-label={`${meta.name} ${appearance} view`}>
+                <Tabs.Tab value="list" data-audit="tab-filled-selected">
+                  List
+                </Tabs.Tab>
+                <Tabs.Tab value="board" data-audit="tab-filled">
+                  Board
+                </Tabs.Tab>
+                <Tabs.Indicator />
+              </Tabs.List>
+            </Tabs.Root>
+            <ToggleGroup
+              aria-label={`${meta.name} ${appearance} range`}
+              segmented
+              defaultValue={["day"]}
+            >
+              <Toggle value="day" size="sm" data-audit="segment-selected">
+                Day
+              </Toggle>
+              <Toggle value="week" size="sm" data-audit="segment">
+                Week
+              </Toggle>
+            </ToggleGroup>
           </div>
         </Card.Content>
       </Card.Root>
@@ -281,7 +320,8 @@ function ThemeAudit() {
           </Heading>
           <Text tone="muted">
             Every theme on the same components, measured in this browser: text
-            contrast, focus indicators, target size and clipped labels.
+            contrast (including selected tabs and segments against every colour
+            in their fill), focus indicators, target size and clipped labels.
           </Text>
         </div>
         <div className="audit-actions">

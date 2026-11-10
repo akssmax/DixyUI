@@ -89,6 +89,15 @@ export const themeFonts = {
     value:
       '"Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif',
   },
+  atkinson: {
+    label: "Atkinson Hyperlegible",
+    value: '"Atkinson Hyperlegible", ui-sans-serif, system-ui, sans-serif',
+  },
+  plexSans: {
+    label: "IBM Plex Sans",
+    value:
+      '"IBM Plex Sans Variable", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif',
+  },
   figtree: {
     label: "Figtree",
     value:
@@ -125,6 +134,8 @@ export const themeFontPackages: Partial<
   jetbrains: "@fontsource/jetbrains-mono",
   manrope: "@fontsource-variable/manrope",
   figtree: "@fontsource-variable/figtree",
+  plexSans: "@fontsource-variable/ibm-plex-sans",
+  atkinson: "@fontsource/atkinson-hyperlegible",
   cormorant: "@fontsource-variable/cormorant-garamond",
 };
 

@@ -129,7 +129,9 @@
             "jetbrains",
             "manrope",
             "figtree",
-            "cormorant"
+            "cormorant",
+            "plexSans",
+            "atkinson"
           ]
         },
         "headingFont": {
@@ -157,7 +159,9 @@
             "jetbrains",
             "manrope",
             "figtree",
-            "cormorant"
+            "cormorant",
+            "plexSans",
+            "atkinson"
           ]
         },
         "border": { "enum": [1, 2] },
@@ -230,6 +234,10 @@
                 "wool",
                 "liquid-glass",
                 "sunset-neon",
+                "ledger-ruled",
+                "layer-grid",
+                "mono-ink",
+                "signal-contrast",
                 "menu-window",
                 "arcade-bezel"
               ]
@@ -697,7 +705,9 @@
         "details": {
           "type": "object",
           "properties": {
-            "focus": { "enum": ["ring", "double", "dashed", "glow", "offset"] },
+            "focus": {
+              "enum": ["ring", "double", "dashed", "glow", "offset", "halo"]
+            },
             "divider": {
               "enum": ["line", "dashed", "dotted", "double", "groove"]
             },

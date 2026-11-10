@@ -32,6 +32,15 @@ const textRoles: Record<string, string> = {
   "button-soft": "Soft button label",
   badge: "Badge label",
   "input-value": "Field text",
+  tab: "Unselected tab label",
+  "tab-filled": "Unselected segmented tab label",
+  segment: "Unselected segment label",
+};
+/** Selected states: measured against every colour in their fill. */
+const stateRoles: Record<string, string> = {
+  "tab-selected": "Selected tab label",
+  "tab-filled-selected": "Selected segmented tab label",
+  "segment-selected": "Selected segment label",
 };
 const focusRoles = new Set([
   "button-solid",
@@ -39,6 +48,9 @@ const focusRoles = new Set([
   "input",
   "switch",
   "checkbox",
+  "tab-selected",
+  "tab-filled-selected",
+  "segment-selected",
 ]);
 const targetRoles = new Set([
   "button-solid",
@@ -46,12 +58,24 @@ const targetRoles = new Set([
   "button-soft",
   "switch",
   "checkbox",
+  "tab",
+  "tab-selected",
+  "tab-filled",
+  "tab-filled-selected",
+  "segment",
+  "segment-selected",
 ]);
 const overflowRoles = new Set([
   "button-solid",
   "button-outline",
   "button-soft",
   "badge",
+  "tab",
+  "tab-selected",
+  "tab-filled",
+  "tab-filled-selected",
+  "segment",
+  "segment-selected",
 ]);
 
 type Rgba = [number, number, number, number];
@@ -143,6 +167,78 @@ function contrastIssue(
     required: `${need}:1`,
     foreground: hex(fg),
     background: hex(bg),
+  };
+}
+
+const colorPattern =
+  /rgba?\([^)]*\)|#[\da-f]{3,8}\b|(?:oklch|oklab|lab|lch|hsla?|color)\([^)]*\)/gi;
+/** Every colour stop in an element's background image. */
+function imageStops(element: Element): Rgba[] {
+  const image = getComputedStyle(element).backgroundImage;
+  if (image === "none") return [];
+  return [...image.matchAll(colorPattern)].map(([color]) => toRgba(color));
+}
+
+/**
+ * A selected tab or segment: its label is checked against the flat fill and
+ * against every colour stop in the fill's image. A split or patterned fill
+ * (a switch-thumb gradient, say) puts part of the label on a second colour,
+ * which the flat measurement can't see. A tab's fill is its indicator, a
+ * sibling element, so it is passed in.
+ */
+function stateIssue(
+  element: HTMLElement,
+  role: string,
+  root: Element,
+  fill: Element,
+): AuditIssue | null {
+  const style = getComputedStyle(element);
+  const base = backdrop(fill, root).color;
+  const fg = over(toRgba(style.color), base);
+  const size = parseFloat(style.fontSize);
+  const large =
+    size >= 24 || (size >= 18.66 && Number(style.fontWeight) >= 700);
+  const need = large ? 3 : 4.5;
+  let worst = { value: ratio(fg, base), bg: base, stop: false };
+  const stops = [
+    ...imageStops(fill),
+    ...(fill === element ? [] : imageStops(element)),
+  ];
+  for (const stop of stops) {
+    const bg = over(stop, base);
+    const value = ratio(fg, bg);
+    if (value < worst.value) worst = { value, bg, stop: true };
+  }
+  const value = Math.floor(worst.value * 100) / 100;
+  if (value >= need) {
+    // Readable, but still split: two clearly different colours behind one
+    // label read as a pattern, not a selected state.
+    const fills = [base, ...stops.map((stop) => over(stop, base))];
+    let spread = { value: 1, a: base, b: base };
+    for (const a of fills)
+      for (const b of fills)
+        if (ratio(a, b) > spread.value) spread = { value: ratio(a, b), a, b };
+    if (spread.value < 1.5) return null;
+    return {
+      check: "contrast",
+      severity: "warn",
+      role,
+      message: `${stateRoles[role]} sits on a split fill (${hex(spread.a)} and ${hex(spread.b)}, ${spread.value.toFixed(2)}:1 apart); a selected state should be one colour`,
+      foreground: hex(spread.a),
+      background: hex(spread.b),
+    };
+  }
+  return {
+    check: "contrast",
+    severity: "fail",
+    role,
+    message: worst.stop
+      ? `${stateRoles[role]} is ${value.toFixed(2)}:1 on part of its fill (${hex(worst.bg)}); a selected state should sit on one colour`
+      : `${stateRoles[role]} is ${value.toFixed(2)}:1, needs ${need}:1`,
+    measured: `${value.toFixed(2)}:1`,
+    required: `${need}:1`,
+    foreground: hex(fg),
+    background: hex(worst.bg),
   };
 }
 
@@ -321,6 +417,22 @@ export function auditSpecimen(root: Element): AuditIssue[] {
       }
       const boundary = boundaryIssue(element, root);
       if (boundary) issues.push(boundary);
+    } else if (stateRoles[role]) {
+      // A tab's fill is its indicator, but only when the indicator sits
+      // behind the label (filled variants); a line variant's underline
+      // doesn't.
+      const indicator = element
+        .closest(".dixy-tabs-list")
+        ?.querySelector(".dixy-tabs-indicator");
+      const label = element.getBoundingClientRect();
+      const box = indicator?.getBoundingClientRect();
+      const middle = label.top + label.height / 2;
+      const fill =
+        indicator && box && box.top <= middle && box.bottom >= middle
+          ? indicator
+          : element;
+      const issue = stateIssue(element, role, root, fill);
+      if (issue) issues.push(issue);
     } else if (textRoles[role]) {
       const issue = contrastIssue(element, role, root);
       if (issue) issues.push(issue);

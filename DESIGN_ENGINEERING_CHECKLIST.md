@@ -884,7 +884,22 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Check the new ornaments and shaders at mobile width and with reduced motion.
 - [ ] Load the mocks' exact fonts for the game themes, or confirm the substitutes.
 - [ ] Learning: explain how selector specificity let one property of a rule win while another lost.
+- [x] Selected tabs and segments are one flat colour (no thumb art or sheen); audit measures their labels against every fill colour stop and warns on split fills. 34/34 clean.
+- [ ] Audit hover and pressed tab states, and vertical tabs.
+- [x] Ledger, Mainframe and Dispatch data themes (frame none, settings + CSS only); audit 37/37 clean; plain-skin packaging check.
+- [x] `monoAccent` material flag: neutral accent uses ink for solid actions, blue focus.
+- [x] `plexSans` font option (IBM Plex Sans).
+- [ ] A compact density step for data themes (40px rows, tighter gaps).
+- [ ] Build the data-screen specimen (table, KPIs, side nav) with real components and audit it.
+- [ ] Learning: explain why a neutral accent's step 9 can't be the solid-action colour, and what `monoAccent` changes.
 - [ ] Extend the audit to hover, pressed and disabled states and to ornaments over text.
+- [x] Signal accessibility-first theme (Atkinson Hyperlegible, 2px edges, 44/48px controls); text at least 7:1 in light and dark.
+- [x] `halo` focus style, checked with keyboard focus on buttons and fields.
+- [x] `deepSolid` and `controlHeights` material flags; `atkinson` font option.
+- [x] Home logo keeps the selected theme (`HomeLink` passes `?starter=`).
+- [ ] Make segments, tabs and switches reach 44px in Signal (AAA target size).
+- [ ] Offer Signal automatically for `prefers-contrast: more`.
+- [ ] Learning: explain why `!important` is justified for a focus indicator here, and what it costs.
 - [ ] Learning: explain why `focus()` from a script doesn't match `:focus-visible`, and how the audit measures focus styles instead.
 
 ## Wren modes and phone layout — 2026-11-10
