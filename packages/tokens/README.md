@@ -6,7 +6,7 @@ Framework-independent design tokens for [Dixy UI](https://github.com/akssmax/Dix
 
 > **Public beta.** APIs may change between `0.x` releases. See the [changelog](./CHANGELOG.md) and the [known issues](https://github.com/akssmax/DixyUI#known-issues).
 
-[Documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) · [Components](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button) · [Themes](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
+[Documentation](https://dixyui.com) · [Components](https://dixyui.com/docs/components/button) · [Themes](https://dixyui.com/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
 
 ## Install
 

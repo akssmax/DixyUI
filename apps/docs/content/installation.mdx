@@ -1,5 +1,9 @@
 import { CodeBlock } from "../src/components/code-block";
-import { AgentPrompt, InstallCommand } from "../src/components/install-command";
+import {
+  AgentPrompt,
+  InstallCommand,
+  ThemeFonts,
+} from "../src/components/install-command";
 
 <div className="page-eyebrow">GETTING STARTED</div>
 
@@ -36,6 +40,26 @@ Paste this into Claude Code, Cursor, Codex or another coding agent to install Di
 Import the stylesheet at the application root. Dixy ships CSS variables and component styles; consumers do not need a Tailwind compiler. CSS layers allow application styles to override library defaults.
 
 For TanStack Start, the root route imports the stylesheet before rendering the page. Verify the production HTML includes styles before hydration.
+
+### With Tailwind CSS v4
+
+Tailwind's reset (`border: 0 solid` on every element) lives in its `base` layer. Layers declared first lose, so if Dixy's stylesheet loads before Tailwind, the reset strips borders and backgrounds from Dixy's controls. Declare the layer order yourself, then import Dixy from the same CSS file:
+
+<CodeBlock
+  language="css"
+  filename="app.css"
+  code={
+    '@layer theme, base, dixy, components, utilities;\n@import "tailwindcss";\n@import "@dixy-ui/react/styles.css";\n@import "@dixy-ui/themes/retro-os.css";'
+  }
+/>
+
+Dixy now sits above Tailwind's reset and below its utilities, so a utility class still overrides a component default. Don't also import Dixy's CSS from JavaScript: a JS import that loads first declares the `dixy` layer before this order exists.
+
+## Load the theme's fonts
+
+Themes name their fonts but don't bundle them. Install the matching [Fontsource](https://fontsource.org) packages and import them once at the app root. Without them, headings fall back to a generic font. These are the fonts for the theme you're wearing; switch themes in the header to see another's.
+
+<ThemeFonts />
 
 ## Make room for overlays
 

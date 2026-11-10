@@ -1,6 +1,7 @@
 import { Tabs } from "@dixy-ui/react";
 import {
   agentPrompt,
+  fontPackages,
   installCommand,
   packageManagers,
   usePackageManager,
@@ -73,6 +74,29 @@ export function AgentPrompt() {
       code={agentPrompt(manager, theme)}
       collapsible
       collapsedLines={9}
+    />
+  );
+}
+
+/** Font packages for the theme the visitor is wearing (Signal otherwise). */
+export function ThemeFonts() {
+  const [manager] = usePackageManager();
+  const theme = usePromptTheme() ?? { slug: "signal", name: "Signal" };
+  const fonts = fontPackages(theme.slug);
+  if (!fonts.length)
+    return (
+      <p>
+        {theme.name} uses the system font stack, so there is nothing to load.
+      </p>
+    );
+  return (
+    <CodeBlock
+      language="tsx"
+      filename={`${theme.name} fonts`}
+      copyLabel="Copy font setup"
+      code={`// ${installCommand(manager, fonts)}\n${fonts
+        .map((pkg) => `import "${pkg}";`)
+        .join("\n")}`}
     />
   );
 }

@@ -802,7 +802,7 @@ function Landing() {
                 Components with <em>character.</em>
               </Heading>
               <Text size="lg" tone="muted" className="landing-lede">
-                Accessible React components with {starters.length} starter
+                Accessible React components with {skinCatalog.length} starter
                 themes that change the whole feel of your product. Try one on
                 this page.
               </Text>
@@ -827,7 +827,7 @@ function Landing() {
 
           <ProofStrip
             componentCount={componentCount}
-            starterCount={starters.length}
+            starterCount={skinCatalog.length}
           />
 
           <BuiltWithSection
@@ -916,7 +916,7 @@ function Landing() {
 
           <CtaSection
             starters={starters}
-            starterCount={starters.length}
+            starterCount={skinCatalog.length}
             skinName={activeStarter.name}
             playgroundSearch={playgroundSearch}
           />
