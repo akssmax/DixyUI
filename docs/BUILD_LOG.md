@@ -1751,3 +1751,18 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - OS-level reduced-motion emulation (covered only by the generated-CSS test)
   - Safari/Firefox, touch, screen readers
 - Left as is: skin CSS in `packages/themes` and docs-app CSS that time opacity with `--dixy-motion-duration-*` still snap under reduction. That's safe, but they could adopt the effects tokens later.
+
+### 2026-11-10 — Faster, gated CI
+
+- What changed:
+  - `ci.yml` runs on pull requests and pushes to `main` only (it used to run on every push and every PR, so PR commits ran twice). A concurrency group cancels superseded PR runs; runs on `main` queue instead, so a production deploy is never cut off.
+  - Turbo's `.turbo/cache` is saved with `actions/cache` (key per commit, restore-keys fall back to the newest). Entries untouched for 7 days are pruned before saving. `release.yml` and the deploy job restore it but don't save.
+  - `package:check` builds tokens, react and themes through `turbo run build --filter=…` instead of `pnpm --filter … build`, so it replays the builds `pnpm check` just made.
+  - `timeout-minutes`: 20 for checks, 15 for deploy, 30 for release.
+  - The docs deploy is now the `deploy-docs` job in `ci.yml` with `needs: check`. `deploy-docs.yml` is deleted. Before, a push to `main` that failed checks still deployed. `docs/BETA_PLAN.md` now points at the new job.
+- Why: CI built the packages three or four times per push to `main`, always from a cold cache, and production deploys didn't wait for tests.
+- Verified:
+  - Both workflows parse as YAML (jobs `check`, `deploy-docs`; `release`). Edited files pass Prettier.
+  - `TURBO_FORCE=true pnpm check` passes (66s, 0 cached). `pnpm package:check` then passes with its 3 builds fully cached (13ms instead of a rebuild).
+- Not tested: the workflows haven't run on GitHub yet, so cache save/restore, the `needs` gate, the main-only cancel expression and the Cloudflare steps are unverified until the first push. No actionlint was run (not installed).
+- Found, left as is: `pnpm format:check` already fails on this branch (22 files, including this log), so CI's first step fails no matter what. Fixing it is a separate `pnpm format` change.
