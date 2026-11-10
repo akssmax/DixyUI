@@ -1753,6 +1753,15 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Each `@dixy-ui` package now has a GitHub Actions trusted publisher on npm (`akssmax/DixyUI`, `release.yml`, `npm publish` allowed). npm marks them "pending validation" until the first OIDC publish, which must happen before 2026-11-10 10:44 UTC.
 - The release workflow no longer uses `NPM_TOKEN` or `registry-url`; `id-token: write` lets pnpm sign in through OIDC and attach provenance. To confirm on the next publish: provenance attached, then delete the `NPM_TOKEN` secret and revoke the token.
 
+### 2026-11-09 — Material finishes that read
+
+- **Cause:** every solid/soft button squashed its finish image into a 3px band (`background-size: 100% 3px`). That suited glossy's highlight but hid soft, metal and paper. On surfaces those recipes sat at 2–4% opacity.
+- **Change:** the strip sizing now applies to glossy only. Soft clay gained a broad top light, a shaded underside and a thicker inset rim. Metal and paper gained an opaque stock layer blended with `multiply` (cool steel bands; warm cream), under an irregular brushed grain or hairline fibres. Recipes carry a new `blend` field (`--dixy-material-<name>-blend`). Every finish still stays within two gradient layers and two shadows, with no `url()`, SVG filters or animation; the existing materials test enforces that.
+- **Dark mode:** `multiply` only darkens, so metal and paper carry an optional `dark` recipe, emitted under `[data-appearance="dark"]` (and reset under `[data-appearance="light"]` for nested themes). Dark metal screens dim steel bands into gunmetal with a softer bevel; dark paper screens a warm kraft stock with pale fibres.
+- **Contrast:** steel's darkest band scales the surface by about 0.85, and dark metal's brightest screened band plus grain lifts it by about 0.3. The text-contrast test's extremes went from 0.07/0.2 to 0.16 black and 0.32 white. Primary text still passes 4.5:1 on every neutral in light and dark.
+- **Verified:** in the in-app browser, all five finishes side by side as solid and soft controls on a card, in light and dark mode, plus a light theme nested in a dark one. `pnpm check` and `pnpm package:check` pass.
+- **Untested:** mobile, forced colours and reduced effects were not rechecked visually. Reduced effects and contrast preferences still strip every finish through the existing `!important` rules.
+
 ### 2026-11-09 — AI parts (`@dixy-ui/react/ai`) and the Wren example app
 
 - Why: the app showcase needed an AI app, and Dixy needed the parts to build one. The anatomy follows Vercel's AI Elements (Apache-2.0), which is itself a shadcn registry. **None of its code is ported**: it is Tailwind + Radix, and Dixy is Base UI + tokens, so each part is composed from Dixy primitives instead.

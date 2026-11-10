@@ -44,9 +44,17 @@ const tokens = `${header}@layer dixy.tokens {
   :root { ${Object.entries(materialRecipes)
     .map(
       ([name, recipe]) =>
-        `--dixy-material-${name}-image: ${recipe.image};\n--dixy-material-${name}-edge: ${recipe.edge};`,
+        `--dixy-material-${name}-image: ${recipe.image};\n--dixy-material-${name}-edge: ${recipe.edge};\n--dixy-material-${name}-blend: ${recipe.blend};`,
     )
     .join("\n")} }
+  ${Object.entries(materialRecipes)
+    .filter(([, recipe]) => recipe.dark)
+    .map(
+      ([name, recipe]) =>
+        `[data-appearance="light"] { --dixy-material-${name}-image: ${recipe.image}; --dixy-material-${name}-edge: ${recipe.edge}; --dixy-material-${name}-blend: ${recipe.blend}; }
+  [data-appearance="dark"] { --dixy-material-${name}-image: ${recipe.dark.image}; --dixy-material-${name}-edge: ${recipe.dark.edge}; --dixy-material-${name}-blend: ${recipe.dark.blend}; }`,
+    )
+    .join("\n")}
 }`;
 const button =
   '.dixy-button[data-material]:is([data-variant="solid"], [data-variant="soft"]):not([data-disabled])';
@@ -64,42 +72,38 @@ const material = `${header}@layer dixy.components {
         name,
         recipe,
       ]) => `:is(.dixy-box[data-material="${name}"], ${button.replace("[data-material]", `[data-material="${name}"]`)}) {
-    background-image: var(--dixy-material-${name}-image);
+    background-image: var(--dixy-material-${name}-image); background-blend-mode: var(--dixy-material-${name}-blend);
     box-shadow: ${recipe.depth === "none" ? `var(--dixy-material-${name}-edge)` : `var(--dixy-shadow-raised)`};
   }
   .dixy-switch-root[data-material="${name}"]:not([data-disabled])::before,
   .dixy-checkbox-root[data-material="${name}"]:not([data-disabled])::before {
-    background-image: var(--dixy-material-${name}-image);
+    background-image: var(--dixy-material-${name}-image); background-blend-mode: var(--dixy-material-${name}-blend);
     box-shadow: var(--dixy-material-${name}-edge);
   }
   :is(${familySurfaces})[data-dixy-visual][data-material="${name}"]:not([data-disabled]):not([data-pressed="false"]) {
-    background-image: var(--dixy-material-${name}-image);
+    background-image: var(--dixy-material-${name}-image); background-blend-mode: var(--dixy-material-${name}-blend);
     box-shadow: var(--dixy-material-${name}-edge);
   }
   /* A card's finish must not erase its independent elevation token. */
   .dixy-card[data-dixy-visual][data-material="${name}"]:not([data-disabled]):not([data-pressed="false"]) {
     box-shadow: var(--dixy-card-shadow);
   }
-  .dixy-toggle[data-material="${name}"][data-pressed]:is([data-variant="solid"],[data-variant="soft"]):not([data-disabled]) { background-image: var(--dixy-material-${name}-image); box-shadow: var(--dixy-material-${name}-edge); }
+  .dixy-toggle[data-material="${name}"][data-pressed]:is([data-variant="solid"],[data-variant="soft"]):not([data-disabled]) { background-image: var(--dixy-material-${name}-image); background-blend-mode: var(--dixy-material-${name}-blend); box-shadow: var(--dixy-material-${name}-edge); }
   .dixy-radio-root[data-material="${name}"]:not([data-disabled])::before,
   :is(.dixy-progress-root,.dixy-meter-root,.dixy-slider-root)[data-material="${name}"]:not([data-disabled]) :is(.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator),
   .dixy-number-field-root[data-material="${name}"]:not([data-disabled]) .dixy-number-field-group,
   .dixy-otp-field-root[data-material="${name}"]:not([data-disabled]) .dixy-otp-field-input {
-    background-image: var(--dixy-material-${name}-image);
+    background-image: var(--dixy-material-${name}-image); background-blend-mode: var(--dixy-material-${name}-blend);
     box-shadow: var(--dixy-material-${name}-edge);
   }
   .dixy-tabs-indicator[data-material="${name}"]:not([data-variant="line"]) {
-    background-image: var(--dixy-material-${name}-image);
+    background-image: var(--dixy-material-${name}-image); background-blend-mode: var(--dixy-material-${name}-blend);
     box-shadow: var(--dixy-material-${name}-edge);
   }`,
     )
     .join("\n")}
-  .dixy-box[data-material="paper"] { background-size: 5px 7px; }
-  :is(.dixy-switch-root, .dixy-checkbox-root)[data-material="paper"]::before { background-size: 5px 7px; }
-  [data-dixy-visual][data-material="paper"], .dixy-radio-root[data-material="paper"]::before { background-size: 5px 7px; }
-  :is(.dixy-progress-root,.dixy-meter-root,.dixy-slider-root)[data-material="paper"] :is(.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator), .dixy-number-field-root[data-material="paper"] .dixy-number-field-group, .dixy-otp-field-root[data-material="paper"] .dixy-otp-field-input { background-size: 5px 7px; }
-  .dixy-tabs-indicator[data-material="paper"] { background-size: 5px 7px; }
-  ${button} { background-size: 100% 3px; background-repeat: no-repeat; background-position: top, bottom; }
+  /* Glossy keeps its enamel as two thin bands; other finishes cover the whole button. */
+  ${button.replace("[data-material]", '[data-material="glossy"]')} { background-size: 100% 3px; background-repeat: no-repeat; background-position: top, bottom; }
   [data-effects="reduced"] :is([data-dixy-visual],.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator,.dixy-number-field-group,.dixy-otp-field-input) { background-image: none !important; box-shadow: none !important; }
   [data-effects="reduced"] .dixy-radio-root::before { background-image: none !important; box-shadow: none !important; }
   [data-effects="reduced"] .dixy-tabs-indicator { background-image: none !important; box-shadow: none !important; }
