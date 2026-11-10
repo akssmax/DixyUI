@@ -64,6 +64,10 @@ try {
     !css.includes("dixy-backdrop-pilot"),
     "Core CSS must not load the backdrop pilot",
   );
+  assert.ok(
+    !css.includes("dixy-prompt-input"),
+    "Core CSS must not load the optional AI styles",
+  );
   assert.match(css, /--dixy-size-icon-2xl/);
   for (const selector of [
     "dixy-checkbox-root",
@@ -266,7 +270,6 @@ try {
     ["freighter", "FreighterOrnament", "freighter-ornament", "freighterTheme"],
     ["solar-sail", "SailOrnament", "sail-ornament", "solarSailTheme"],
     ["diwali-lights", "DiwaliOrnament", "diwali-ornament", "diwaliLightsTheme"],
-    ["lunar-new-year", "LunarOrnament", "lunar-ornament", "lunarNewYearTheme"],
     ["papel-picado", "PicadoOrnament", "picado-ornament", "papelPicadoTheme"],
     ["holi-colours", "HoliOrnament", "holi-ornament", "holiColoursTheme"],
     ["yule-knit", "YuleOrnament", "yule-ornament", "yuleKnitTheme"],
@@ -281,10 +284,7 @@ try {
       )
     );
   };
-  for (const [slug, symbol, prefix, settings] of proceduralSkins) {
-    fs.writeFileSync(
-      path.join(skinConsumer, "src/main.tsx"),
-      `
+  const skinEntry = ([slug, symbol, , settings]) => `
       import { createRoot } from "react-dom/client";
       import { Theme, Card, Button } from "@dixy-ui/react";
       import { ${settings} } from "@dixy-ui/themes/${slug}";
@@ -294,9 +294,20 @@ try {
       createRoot(document.getElementById("root")!).render(
         <Theme {...${settings}} ornamentRenderer={${symbol}}><Card.Root><Button>Save</Button></Card.Root></Theme>
       );
-    `,
-    );
-    run(["exec", "tsc", "--noEmit"], skinConsumer);
+    `;
+  // Type-check every skin's entry in one tsc run: one module per skin, so
+  // each still resolves its own subpath exports. One run per skin cost ~1s
+  // each, the largest share of this script.
+  const skinChecks = path.join(skinConsumer, "src/skin-checks");
+  fs.mkdirSync(skinChecks);
+  for (const skin of proceduralSkins)
+    fs.writeFileSync(path.join(skinChecks, `${skin[0]}.tsx`), skinEntry(skin));
+  run(["exec", "tsc", "--noEmit"], skinConsumer);
+  fs.rmSync(skinChecks, { recursive: true });
+  // Bundle each skin on its own to prove the others stay out.
+  for (const skin of proceduralSkins) {
+    const [slug, , prefix] = skin;
+    fs.writeFileSync(path.join(skinConsumer, "src/main.tsx"), skinEntry(skin));
     run(["exec", "vite", "build"], skinConsumer);
     const files = fs.readdirSync(skinAssets);
     const styles = files

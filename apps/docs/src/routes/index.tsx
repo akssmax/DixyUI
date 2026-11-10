@@ -7,7 +7,6 @@ import {
   type CSSProperties,
 } from "react";
 import {
-  Accessibility,
   ArrowRight,
   ArrowUpRight,
   Blocks,
@@ -23,13 +22,11 @@ import {
   Badge,
   Card,
   Chip,
+  Container,
   Heading,
   IconButton,
-  Kbd,
   Select,
-  Separator,
   Slider,
-  Switch,
   Text,
   TextField,
   Theme,
@@ -40,6 +37,15 @@ import { DixyMark } from "../components/dixy-mark";
 import { CodeBlock } from "../components/code-block";
 import { ButtonAnchor, ButtonLink } from "../components/button-link";
 import { LandingWindow } from "../components/landing-window";
+import {
+  AccessibilitySection,
+  BuiltWithSection,
+  ProofStrip,
+  CtaSection,
+  LandingFooter,
+  installCommand,
+} from "../components/landing-sections";
+import { GitHubStarButton } from "../components/landing-meta";
 import { useAppAppearance } from "../components/app-appearance-provider";
 import {
   PreviewVoiceContext,
@@ -60,7 +66,6 @@ import {
   prepareSkin,
 } from "../lib/theme-skin-catalogue";
 import { componentRegistry } from "../registry/components";
-import "../styles/landing.css";
 
 /** The URL carries the starter's slug ("living-forest"); the app keys skins by id. */
 function starterIdFromSlug(slug: string | undefined) {
@@ -109,8 +114,6 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const installCommand = "pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta";
-
 const original = {
   id: "none",
   name: "Original Dixy",
@@ -136,6 +139,7 @@ function useStarter() {
   const [pending, setPending] = useState<string | null>(null);
   const [error, setError] = useState("");
   const request = useRef(0);
+  const { setDocsTheme } = useAppAppearance();
   useEffect(() => {
     // Covers a server load that failed, and removes the duplicate style the
     // route head adds once the client has already injected the same skin.
@@ -148,6 +152,8 @@ function useStarter() {
   function select(id: string) {
     const generation = ++request.current;
     const next = skinThemePreset(id);
+    // The starter you pick on the landing page carries into the docs.
+    setDocsTheme({ skin: id });
     setPending(id);
     setError("");
     void (async () => {
@@ -156,7 +162,7 @@ function useStarter() {
         await import("@dixy-ui/react/materials.css");
       if (request.current !== generation) return;
       const slug = slugFromStarterId(id);
-      // Replace, not push: browsing 33 starters should not fill Back history.
+      // Replace, not push: browsing every starter should not fill Back history.
       await navigate({
         search: slug ? { starter: slug } : {},
         replace: true,
@@ -255,8 +261,20 @@ interface StudioProps {
   onAppearance: (appearance: Appearance) => void;
 }
 
-/** Floating toolbar over the app window: the quickest way to restyle the page. */
-function ThemeDock({
+/** A few one-click starters; the full list sits behind the select beside them. */
+const quickStarterIds = [
+  "none",
+  "dixy/studio-hardware",
+  "dixy/ocean-depths",
+  "dixy/retro-os",
+  "dixy/candy-clay",
+];
+const quickStarters = quickStarterIds
+  .map((id) => starters.find((s) => s.id === id))
+  .filter((s) => s !== undefined);
+
+/** Lives in the hero's copy column: the quickest way to restyle the page. */
+function StarterPicker({
   preset,
   pending,
   error,
@@ -271,133 +289,124 @@ function ThemeDock({
     onSelect(others[Math.floor(Math.random() * others.length)]!.id);
   }
   return (
-    <div className="landing-dock" role="toolbar" aria-label="Theme">
-      <span
-        className="landing-dock-swatch"
-        style={swatchStyle(active.swatches)}
-        aria-hidden="true"
-      />
-      <Select.Root
-        value={current}
-        items={starterItems}
-        onValueChange={(value) => value && onSelect(String(value))}
-      >
-        <Select.Trigger size="sm" aria-label="Starter theme">
-          <Select.Value />
-          <Select.Icon />
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Positioner sideOffset={8}>
-            <Select.Popup size="sm">
-              <Select.List>
-                {starters.map((s) => (
-                  <Select.Item key={s.id} value={s.id}>
-                    <span
-                      className="landing-dock-swatch is-small"
-                      style={swatchStyle(s.swatches)}
-                      aria-hidden="true"
-                    />
-                    <Select.ItemText>{s.name}</Select.ItemText>
-                    <Select.ItemIndicator />
-                  </Select.Item>
-                ))}
-              </Select.List>
-            </Select.Popup>
-          </Select.Positioner>
-        </Select.Portal>
-      </Select.Root>
-      <IconButton
-        size="sm"
-        variant="ghost"
-        color="neutral"
-        aria-label="Shuffle starter theme"
-        onClick={shuffle}
-      >
-        <Shuffle size={15} />
-      </IconButton>
-      <Separator orientation="vertical" className="landing-dock-rule" />
-      <ToggleGroup
-        aria-label="Appearance"
-        attached
-        value={[appearance]}
-        onValueChange={(value) =>
-          value[0] && onAppearance(value[0] as Appearance)
-        }
-      >
-        <Toggle value="light" size="sm" variant="soft" color="neutral">
-          <Sun size={14} aria-hidden="true" />
-          <span className="landing-dock-label">Light</span>
-        </Toggle>
-        <Toggle value="dark" size="sm" variant="soft" color="neutral">
-          <Moon size={14} aria-hidden="true" />
-          <span className="landing-dock-label">Dark</span>
-        </Toggle>
-      </ToggleGroup>
-      <ButtonLink
-        to="/playground"
-        search={{ theme: serializeThemePreset({ ...preset, appearance }) }}
-        size="sm"
-        className="landing-dock-cta"
-      >
-        Customise <ArrowUpRight size={14} />
-      </ButtonLink>
-      <span className="sr-only" role="status">
-        {pending ? "Loading theme…" : error || `${active.name} applied.`}
-      </span>
-    </div>
-  );
-}
-
-function StarterGallery({ preset, pending, onSelect }: StudioProps) {
-  return (
-    <section
-      id="themes"
-      className="landing-section"
-      aria-labelledby="themes-heading"
+    <div
+      className="landing-picker"
+      role="group"
+      aria-labelledby="picker-heading"
     >
-      <div className="landing-section-head landing-section-head-row">
-        <div>
-          <Text as="span" className="landing-kicker" tone="muted">
-            STARTER THEMES
-          </Text>
-          <Heading as="h2" id="themes-heading" className="landing-title">
-            {skinCatalog.length} personalities.
-            <br />
-            One component API.
-          </Heading>
-        </div>
-        <Text tone="muted" className="landing-section-aside">
-          Every starter is data: a material, a frame, a character and a chrome,
-          composed over the same accessible components. Pick one and the whole
-          page changes with it, down to the focus rings.
+      <div className="landing-picker-head">
+        <Text as="span" id="picker-heading" className="landing-picker-title">
+          Try a starter
+        </Text>
+        <Text as="span" size="sm" tone="muted">
+          {active.name}
         </Text>
       </div>
-      <ToggleGroup
-        className="landing-gallery"
-        aria-label="Starter theme"
-        value={[pending ?? preset.skin]}
-        onValueChange={(value) => value[0] && onSelect(value[0])}
-      >
-        {starters.map((skin) => (
-          <Toggle
-            key={skin.id}
-            value={skin.id}
-            variant="outline"
-            color="neutral"
-            className="landing-gallery-item"
-            style={swatchStyle(skin.swatches)}
+      <div className="landing-picker-row">
+        <ToggleGroup
+          aria-label="Quick starters"
+          className="landing-picker-swatches"
+          value={quickStarterIds.includes(current) ? [current] : []}
+          onValueChange={(value) => value[0] && onSelect(value[0])}
+        >
+          {quickStarters.map((s) => (
+            <Toggle
+              key={s.id}
+              value={s.id}
+              aria-label={s.name}
+              title={s.name}
+              variant="ghost"
+              color="neutral"
+              className="landing-picker-swatch"
+            >
+              <span
+                className="landing-dock-swatch"
+                style={swatchStyle(s.swatches)}
+                aria-hidden="true"
+              />
+            </Toggle>
+          ))}
+        </ToggleGroup>
+        <Select.Root
+          value={current}
+          items={starterItems}
+          onValueChange={(value) => value && onSelect(String(value))}
+        >
+          <Select.Trigger
+            size="sm"
+            aria-label="All starter themes"
+            className="landing-picker-select"
           >
-            <span className="landing-gallery-swatch" aria-hidden="true">
-              <i />
-              <i />
-              <i />
-            </span>
-            <span className="landing-gallery-name">{skin.name}</span>
-            <span className="landing-gallery-note">{skin.description}</span>
+            <Select.Value />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner sideOffset={8}>
+              <Select.Popup size="sm">
+                <Select.List>
+                  {starters.map((s) => (
+                    <Select.Item key={s.id} value={s.id}>
+                      <span
+                        className="landing-dock-swatch is-small"
+                        style={swatchStyle(s.swatches)}
+                        aria-hidden="true"
+                      />
+                      <Select.ItemText>{s.name}</Select.ItemText>
+                      <Select.ItemIndicator />
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </div>
+      <div className="landing-picker-row">
+        <ToggleGroup
+          aria-label="Appearance"
+          segmented
+          value={[appearance]}
+          onValueChange={(value) =>
+            value[0] && onAppearance(value[0] as Appearance)
+          }
+        >
+          <Toggle value="light" size="sm">
+            <Sun size={14} aria-hidden="true" />
+            Light
           </Toggle>
-        ))}
-      </ToggleGroup>
-    </section>
+          <Toggle value="dark" size="sm">
+            <Moon size={14} aria-hidden="true" />
+            Dark
+          </Toggle>
+        </ToggleGroup>
+        <IconButton
+          size="sm"
+          variant="ghost"
+          color="neutral"
+          aria-label="Shuffle starter theme"
+          onClick={shuffle}
+        >
+          <Shuffle size={15} />
+        </IconButton>
+        <ButtonLink
+          to="/playground"
+          search={{ theme: serializeThemePreset({ ...preset, appearance }) }}
+          size="sm"
+          variant="ghost"
+          className="landing-picker-cta"
+        >
+          Customise <ArrowUpRight size={14} />
+        </ButtonLink>
+      </div>
+      {error && (
+        <Text size="sm" className="landing-picker-error" role="alert">
+          {error}
+        </Text>
+      )}
+      <span className="sr-only" role="status">
+        {pending ? "Loading theme…" : `${active.name} applied.`}
+      </span>
+    </div>
   );
 }
 
@@ -416,9 +425,12 @@ function Bento({ preset }: { preset: ThemePreset }) {
         ["Body", preset.bodyFont],
         ["Heading", preset.headingFont],
       ];
-  const [haptics, setHaptics] = useState(true);
   return (
-    <section className="landing-section" aria-labelledby="why-heading">
+    <Container
+      as="section"
+      className="landing-section"
+      aria-labelledby="why-heading"
+    >
       <div className="landing-section-head">
         <Text as="span" className="landing-kicker" tone="muted">
           WHY DIXY
@@ -428,32 +440,6 @@ function Bento({ preset }: { preset: ThemePreset }) {
         </Heading>
       </div>
       <div className="landing-bento">
-        <Card.Root className="landing-bento-card landing-bento-wide">
-          <Card.Header>
-            <Accessibility size={18} aria-hidden="true" />
-            <Card.Title>Accessible by construction</Card.Title>
-          </Card.Header>
-          <Card.Content>
-            <Card.Description>
-              Built on Base UI, so focus, keyboard, ARIA and state come from a
-              tested foundation. Themes change paint, never behaviour.
-            </Card.Description>
-            <div className="landing-keys" aria-hidden="true">
-              <Kbd>Tab</Kbd>
-              <Kbd>←</Kbd>
-              <Kbd>→</Kbd>
-              <Kbd>Space</Kbd>
-              <Kbd>Esc</Kbd>
-            </div>
-            <label className="landing-setting">
-              <Text size="sm">Keyboard-first toggle, try Space</Text>
-              <Switch.Root checked={haptics} onCheckedChange={setHaptics}>
-                <Switch.Thumb />
-              </Switch.Root>
-            </label>
-          </Card.Content>
-        </Card.Root>
-
         <Card.Root className="landing-bento-card">
           <Card.Header>
             <Layers size={18} aria-hidden="true" />
@@ -500,7 +486,7 @@ function Bento({ preset }: { preset: ThemePreset }) {
           </Card.Content>
         </Card.Root>
 
-        <Card.Root className="landing-bento-card landing-bento-wide">
+        <Card.Root className="landing-bento-card">
           <Card.Header>
             <Sparkles size={18} aria-hidden="true" />
             <Card.Title>Tuned, not hard-coded</Card.Title>
@@ -525,7 +511,7 @@ function Bento({ preset }: { preset: ThemePreset }) {
           </Card.Content>
         </Card.Root>
       </div>
-    </section>
+    </Container>
   );
 }
 
@@ -540,10 +526,55 @@ const featuredComponents = [
   "command",
 ];
 
+/**
+ * Starters change the display font, and some (pixel, deco, wide grotesks)
+ * set "COMPONENTS" wider than the copy column. Grid items can't shrink below
+ * their longest word, so the whole column would spill under the demo. This
+ * shrinks the headline only when its longest word doesn't fit, and re-checks
+ * on resize, font load and starter change.
+ */
+function useFitHeading(key: string) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    const heading = ref.current;
+    const column = heading?.parentElement;
+    if (!heading || !column) return;
+    let frame = 0;
+    const fit = () => {
+      heading.style.fontSize = "";
+      const available = column.clientWidth;
+      const needed = Math.max(heading.scrollWidth, heading.offsetWidth);
+      if (available > 0 && needed > available) {
+        const size = parseFloat(getComputedStyle(heading).fontSize);
+        heading.style.fontSize = `${Math.floor((size * available) / needed)}px`;
+      }
+    };
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(fit);
+    };
+    schedule();
+    void document.fonts?.ready.then(schedule);
+    const observer = new ResizeObserver(schedule);
+    observer.observe(column);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [key]);
+  return ref;
+}
+
 function Landing() {
-  const { appearance, setAppearance } = useAppAppearance();
+  const {
+    appearance,
+    setAppearance,
+    appearancePreference,
+    setAppearancePreference,
+  } = useAppAppearance();
   const starter = useStarter();
-  // The whole page wears the chosen starter. The header, dock and gallery all
+  const heading = useFitHeading(`${starter.preset.skin}:${appearance}`);
+  // The whole page wears the chosen starter. The header and the hero picker both
   // drive the same state, and light/dark is the site-wide appearance.
   const themeProps = useMemo(
     () => playgroundThemeProps({ ...starter.preset, appearance }),
@@ -562,6 +593,8 @@ function Landing() {
     onSelect: starter.select,
     onAppearance: setAppearance,
   };
+  const activeStarter =
+    starters.find((s) => s.id === starter.preset.skin) ?? original;
   const playgroundSearch = {
     theme: serializeThemePreset({ ...starter.preset, appearance }),
   };
@@ -573,101 +606,130 @@ function Landing() {
           Skip to content
         </a>
         <header className="landing-header">
-          <Link to="/" className="landing-brand" aria-label="Dixy UI home">
-            <DixyMark size={24} />
-            <strong>
-              dixy<span>UI</span>
-            </strong>
-          </Link>
-          <nav aria-label="Primary">
-            <ButtonLink
-              to="/docs/installation"
+          <Container className="landing-header-inner">
+            <Link to="/" className="landing-brand" aria-label="Dixy UI home">
+              <DixyMark size={24} />
+              <strong>
+                dixy<span>UI</span>
+              </strong>
+            </Link>
+            <nav aria-label="Primary">
+              <ButtonLink
+                to="/docs/installation"
+                variant="ghost"
+                color="neutral"
+                size="sm"
+              >
+                Docs
+              </ButtonLink>
+              <ButtonLink
+                to="/docs/components/$component"
+                params={{ component: "button" }}
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                className="landing-nav-wide"
+              >
+                Components
+              </ButtonLink>
+              <ButtonAnchor
+                href="#showcase"
+                variant="ghost"
+                color="neutral"
+                size="sm"
+                className="landing-nav-wide"
+              >
+                Showcase
+              </ButtonAnchor>
+              <ButtonLink
+                to="/playground"
+                variant="ghost"
+                color="neutral"
+                size="sm"
+              >
+                Playground
+              </ButtonLink>
+            </nav>
+            <GitHubStarButton />
+            <IconButton
               variant="ghost"
               color="neutral"
               size="sm"
+              aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} appearance`}
+              onClick={() =>
+                setAppearance(appearance === "light" ? "dark" : "light")
+              }
             >
-              Docs
-            </ButtonLink>
-            <ButtonLink
-              to="/docs/components/$component"
-              params={{ component: "button" }}
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              className="landing-nav-wide"
-            >
-              Components
-            </ButtonLink>
-            <ButtonAnchor
-              href="#themes"
-              variant="ghost"
-              color="neutral"
-              size="sm"
-              className="landing-nav-wide"
-            >
-              Themes
-            </ButtonAnchor>
-            <ButtonLink
-              to="/playground"
-              variant="ghost"
-              color="neutral"
-              size="sm"
-            >
-              Playground
-            </ButtonLink>
-          </nav>
-          <IconButton
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} appearance`}
-            onClick={() =>
-              setAppearance(appearance === "light" ? "dark" : "light")
-            }
-          >
-            {appearance === "light" ? <Moon size={17} /> : <Sun size={17} />}
-          </IconButton>
+              {appearance === "light" ? <Moon size={17} /> : <Sun size={17} />}
+            </IconButton>
+          </Container>
         </header>
 
         <main id="landing-main" tabIndex={-1}>
           <section className="landing-hero" aria-labelledby="hero-heading">
-            <Badge variant="soft" className="landing-pill">
-              0.1 beta · Built on Base UI
-            </Badge>
-            <Heading as="h1" id="hero-heading" className="landing-display">
-              Components with <em>character.</em>
-            </Heading>
-            <Text size="lg" tone="muted" className="landing-lede">
-              Accessible React components with {skinCatalog.length} starter
-              themes that change the whole feel of your product. Try one on this
-              page.
-            </Text>
-            <div className="landing-ctas">
-              <ButtonLink to="/docs/installation" size="lg">
-                Get started <ArrowRight size={16} />
-              </ButtonLink>
-              <ButtonAnchor
-                href="#themes"
-                size="lg"
-                variant="outline"
-                color="neutral"
+            <div className="landing-hero-copy">
+              <Badge variant="soft" className="landing-pill">
+                0.1 beta · Now on npm
+              </Badge>
+              <Heading
+                as="h1"
+                id="hero-heading"
+                className="landing-display"
+                ref={heading}
               >
-                Browse themes
-              </ButtonAnchor>
+                Components with <em>character.</em>
+              </Heading>
+              <Text size="lg" tone="muted" className="landing-lede">
+                Accessible React components with {starters.length} starter
+                themes that change the whole feel of your product. Try one on
+                this page.
+              </Text>
+              <div className="landing-ctas">
+                <ButtonLink to="/docs/installation" size="lg">
+                  Get started <ArrowRight size={16} />
+                </ButtonLink>
+                <ButtonAnchor
+                  href="#showcase"
+                  size="lg"
+                  variant="outline"
+                  color="neutral"
+                >
+                  See it in real apps
+                </ButtonAnchor>
+              </div>
+              <InstallCommand />
+              <Text size="sm" tone="muted">
+                Beta on npm. APIs may still change before 1.0.
+              </Text>
+              <StarterPicker {...studio} />
             </div>
-            <InstallCommand />
-            <Text size="sm" tone="muted">
-              Public beta. APIs may change before 1.0.
-            </Text>
+            <LandingWindow />
           </section>
 
-          <LandingWindow dock={<ThemeDock {...studio} />} />
+          <ProofStrip
+            componentCount={componentCount}
+            starterCount={starters.length}
+          />
 
-          <StarterGallery {...studio} />
+          <BuiltWithSection
+            starterSlug={slugFromStarterId(starter.preset.skin)}
+            starterName={activeStarter.name}
+            componentCount={componentCount}
+            starters={starters}
+            playgroundSearch={playgroundSearch}
+          />
+
+          <AccessibilitySection
+            themeKey={`${starter.preset.skin}:${appearance}`}
+          />
 
           <Bento preset={starter.preset} />
 
-          <section className="landing-section" aria-labelledby="ship-heading">
+          <Container
+            as="section"
+            className="landing-section"
+            aria-labelledby="ship-heading"
+          >
             <div className="landing-snippet">
               <div>
                 <Text as="span" className="landing-kicker" tone="muted">
@@ -687,9 +749,10 @@ function Landing() {
                 filename="app.tsx"
               />
             </div>
-          </section>
+          </Container>
 
-          <section
+          <Container
+            as="section"
             className="landing-section"
             aria-labelledby="components-heading"
           >
@@ -730,54 +793,20 @@ function Landing() {
                 </ButtonLink>
               </Card.Content>
             </Card.Root>
-          </section>
+          </Container>
 
-          <section className="landing-section" aria-labelledby="final-heading">
-            <Card.Root className="landing-final">
-              <Card.Content>
-                <Heading as="h2" id="final-heading" className="landing-title">
-                  Make one that feels like you.
-                </Heading>
-                <Text tone="muted">
-                  Start from a starter, change the material, the frame and the
-                  type, then export it.
-                </Text>
-                <div className="landing-ctas">
-                  <ButtonLink
-                    to="/playground"
-                    search={playgroundSearch}
-                    size="lg"
-                  >
-                    Open the theme playground <ArrowUpRight size={16} />
-                  </ButtonLink>
-                  <ButtonLink
-                    to="/docs/learning"
-                    size="lg"
-                    variant="outline"
-                    color="neutral"
-                  >
-                    Learn the system
-                  </ButtonLink>
-                </div>
-              </Card.Content>
-            </Card.Root>
-          </section>
+          <CtaSection
+            starters={starters}
+            starterCount={starters.length}
+            skinName={activeStarter.name}
+            playgroundSearch={playgroundSearch}
+          />
         </main>
 
-        <footer className="landing-footer">
-          <Separator />
-          <div>
-            <Text as="span" size="sm" tone="muted">
-              <DixyMark size={13} /> Dixy UI
-            </Text>
-            <Text as="span" size="sm" tone="muted">
-              Considered details. Open possibilities.
-            </Text>
-            <Text as="span" size="sm" tone="muted">
-              Built in the open · 2026
-            </Text>
-          </div>
-        </footer>
+        <LandingFooter
+          appearance={appearancePreference}
+          onAppearance={setAppearancePreference}
+        />
       </PreviewVoiceContext.Provider>
     </Theme>
   );

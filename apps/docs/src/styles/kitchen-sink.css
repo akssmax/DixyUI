@@ -1,0 +1,108 @@
+.ks-page {
+  min-height: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+.ks-main {
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--dixy-spacing-stack-xl, 32px);
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: clamp(16px, 4vw, 40px);
+}
+.ks-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--dixy-spacing-inline-lg);
+}
+.ks-head h1 {
+  margin: 0;
+}
+.ks-search {
+  width: min(100%, 22rem);
+}
+.ks-index {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dixy-spacing-inline-sm);
+  padding-block: var(--dixy-spacing-stack-sm);
+  background: var(--dixy-color-background-canvas);
+  border-bottom: 1px solid var(--dixy-color-border-subtle);
+}
+.ks-index a {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-label-md);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: var(--dixy-radius-full);
+}
+.ks-index a:hover {
+  color: var(--dixy-color-text-primary);
+  background: var(--dixy-color-background-subtle);
+}
+.ks-category {
+  display: grid;
+  gap: var(--dixy-spacing-stack-md);
+  scroll-margin-top: 64px;
+}
+.ks-category h2 {
+  margin: 0;
+}
+.ks-count {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-label-md);
+}
+.ks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: var(--dixy-spacing-stack-md);
+  align-items: start;
+}
+.ks-tile {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: var(--dixy-radius-card, 12px);
+  background: var(--dixy-color-background-surface);
+  scroll-margin-top: 64px;
+}
+.ks-tile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--dixy-color-border-subtle);
+}
+.ks-tile-head h3 {
+  margin: 0;
+}
+.ks-docs-link {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-label-sm);
+}
+.ks-stage {
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  padding: 20px;
+  overflow: auto;
+}
+.ks-stage > * {
+  max-width: 100%;
+}
+.ks-skeleton {
+  width: 100%;
+  height: 120px;
+}
+.ks-error {
+  color: var(--dixy-color-text-danger);
+  font: var(--dixy-font-body-sm);
+}

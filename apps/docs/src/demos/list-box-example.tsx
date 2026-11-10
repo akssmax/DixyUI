@@ -22,8 +22,8 @@ export default function ListBoxExample({
         selectionMode="single"
         defaultSelectedKeys={["personal"]}
       >
-        {["personal", "team", "enterprise"].map((plan) => (
-          <ListBox.Item id={plan} key={plan} textValue={plan}>
+        {["Personal", "Team", "Enterprise"].map((plan) => (
+          <ListBox.Item id={plan.toLowerCase()} key={plan} textValue={plan}>
             {plan}
           </ListBox.Item>
         ))}

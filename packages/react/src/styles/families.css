@@ -8,6 +8,12 @@
     --dixy-component-subtle: var(--dixy-color-background-action-primary-subtle);
     --dixy-component-text: var(--dixy-color-text-action-primary);
     --dixy-component-on-fill: var(--dixy-color-text-on-action-primary);
+    /* Outline edge in the component's color; status colors set their own token. */
+    --dixy-component-border: color-mix(
+      in oklab,
+      var(--dixy-component-text) 45%,
+      transparent
+    );
   }
   [data-dixy-visual][data-size="sm"] {
     --dixy-component-height: var(--dixy-size-control-sm);
@@ -53,6 +59,21 @@
     --dixy-component-subtle: var(--dixy-color-background-action-success-subtle);
     --dixy-component-text: var(--dixy-color-text-action-success);
     --dixy-component-on-fill: var(--dixy-color-text-on-action-success);
+  }
+  /* Status colors: no action ramp, so they use the feedback tokens directly. */
+  [data-dixy-visual][data-color="warning"] {
+    --dixy-component-fill: var(--dixy-color-background-warning-bold);
+    --dixy-component-subtle: var(--dixy-color-background-warning);
+    --dixy-component-text: var(--dixy-color-text-warning);
+    --dixy-component-on-fill: var(--dixy-color-text-on-warning);
+    --dixy-component-border: var(--dixy-color-border-warning);
+  }
+  [data-dixy-visual][data-color="info"] {
+    --dixy-component-fill: var(--dixy-color-background-information-bold);
+    --dixy-component-subtle: var(--dixy-color-background-information);
+    --dixy-component-text: var(--dixy-color-text-information);
+    --dixy-component-on-fill: var(--dixy-color-text-on-information);
+    --dixy-component-border: var(--dixy-color-border-information);
   }
 
   :is(

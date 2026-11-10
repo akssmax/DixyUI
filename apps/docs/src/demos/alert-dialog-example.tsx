@@ -22,7 +22,9 @@ export default function AlertDialogExample({
   return (
     <Stack gap="md" style={{ width: "min(100%, 22rem)" }}>
       <AlertDialog.Root>
-        <AlertDialog.Trigger render={<Button disabled={disabled} />}>
+        <AlertDialog.Trigger
+          render={<Button color="danger" disabled={disabled} />}
+        >
           Delete project
         </AlertDialog.Trigger>
         <AlertDialog.Portal>

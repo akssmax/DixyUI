@@ -132,6 +132,7 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   ${own(surfaces)} { background-image:var(--dixy-skin-paint); background-size:var(--dixy-skin-grain-size) var(--dixy-skin-grain-size),100% 100%,100% 100%,100% 100%; box-shadow:var(--dixy-skin-panel-relief); }
   ${own(surfaces, ':not([data-variant="solid"]):not([data-variant="soft"])')} { background-color:var(--dixy-skin-surface); }
   ${S(fields)} { border-radius:calc(var(--dixy-radius-control) * ${p.cornerScale}); }
+  ${S(".dixy-textarea")} { border-radius:calc(min(var(--dixy-radius-control), var(--dixy-radius-card)) * ${p.cornerScale}); }
   ${own(fields)} { border-width:var(--dixy-input-border-width); border-color:var(--dixy-skin-edge); background-image:var(--dixy-skin-paint); background-color:var(--dixy-color-background-canvas); background-size:var(--dixy-skin-grain-size) var(--dixy-skin-grain-size),100% 100%,100% 100%,100% 100%; box-shadow:var(--dixy-skin-inset); }
   ${own(".dixy-button", actions)} { border-width:var(--dixy-button-border-width); border-color:var(--dixy-skin-edge); border-radius:calc(var(--dixy-shape-control) * ${p.cornerScale}); background-image:var(--dixy-skin-finish); box-shadow:var(--dixy-skin-control-relief); }
   ${m.tintActions ? `${own(".dixy-button", '[data-variant="solid"][data-color="accent"]:not([data-disabled])')} { background-color:var(--dixy-skin-surface); color:var(--dixy-color-text-action-primary); }` : ""}

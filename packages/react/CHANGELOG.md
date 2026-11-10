@@ -1,5 +1,20 @@
 # @dixy-ui/react
 
+## 0.1.0-beta.3
+
+### Minor Changes
+
+- 6e03dbd: New optional `@dixy-ui/react/ai` entry with chat and agent interface parts: `Conversation`, `Message`, `Response` (streaming-safe markdown), `CodeBlock`, `PromptInput`, `Suggestions`, `Reasoning`, `Tool`, `Sources`, `Shimmer` and `Loader`. Import `@dixy-ui/react/ai.css` after the core styles. `Response` needs the optional peers `react-markdown` and `remark-gfm`; the core entry and stylesheet are unchanged.
+
+### Patch Changes
+
+- d87ef39: Ship one ES module per component instead of a single flat `dist/dixy.js`. The entry and public exports are unchanged; app bundlers can now split chunks per component, so a page loads only the components it renders.
+- d0fea70: `PromptInput.Textarea` re-measures its height when its width changes, so a resize or a layout change no longer leaves it too tall or too short. Markdown tables in `Response` wrap only between words and scroll sideways on narrow screens, instead of breaking words letter by letter.
+
+  `Conversation.Content` is now a positioning context, so visually hidden labels inside messages no longer stretch the page and let it scroll beneath the conversation.
+
+- c9f171c: Textarea no longer turns into an ellipse under `radius="full"`: multi-line fields take `min(control radius, card radius)`, so they cap at the card radius in full mode and are unchanged in every other radius mode. Skin CSS applies the same cap before its corner scale.
+
 ## 0.1.0-beta.2
 
 ### Patch Changes

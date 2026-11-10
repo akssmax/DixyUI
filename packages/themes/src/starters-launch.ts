@@ -1,5 +1,5 @@
 /**
- * The fifteen 2026-12 launch starters, authored as v2 data plus their own
+ * The fourteen 2026-12 launch starters, authored as v2 data plus their own
  * character, window chrome and catalog metadata. documents.ts and manifests.ts
  * splice these in, so each starter stays one self-contained record here.
  */
@@ -570,55 +570,6 @@ export const launchStarters: readonly LaunchStarter[] = [
       backdrop: { pattern: "dots", intensity: 0.3, scale: 1 },
     },
     chrome: { edge: "stepped", well: "tinted", corners: "round" },
-  },
-  {
-    slug: "lunar-new-year",
-    symbol: "lunarNewYear",
-    name: "Lunar New Year",
-    description: "Fortune at the door.",
-    detail: "Paper-cut scallops, lanterns, red and gold.",
-    swatches: ["#c8102e", "#f5c542", "#fff4e6"],
-    voice: {
-      eyebrow: "新年快乐 · SPRING FESTIVAL",
-      headline: "Fortune at the door.",
-      body: "Sweep out the old year and hang the lanterns high.",
-      primary: "Welcome",
-      secondary: "Visit family",
-    },
-    foundations: {
-      accentColor: "red",
-      neutralColor: "sand",
-      radius: "sm",
-      shape: "rounded",
-      appearance: "light",
-      bodyFont: "inter",
-      headingFont: "playfair",
-      border: 1,
-      depth: "raised",
-      material: "paper",
-    },
-    material: { id: "red-paper", parameters: mat(25, 40, 0, 0.35, 0.2) },
-    frame: "papercut",
-    character: {
-      controls: "standard",
-      motion: { style: "weighted", press: 1, tempo: 1 },
-      type: {
-        headingCase: "none",
-        headingTracking: 0.02,
-        headingWeight: 700,
-        numerals: "proportional",
-      },
-      states: "stamp",
-      details: {
-        focus: "offset",
-        divider: "double",
-        selection: "accent",
-        scrollbar: "accent",
-        iconStroke: 2,
-      },
-      backdrop: { pattern: "dots", intensity: 0.25, scale: 1.6 },
-    },
-    chrome: { edge: "double", well: "paper", corners: "inherit" },
   },
   {
     slug: "papel-picado",

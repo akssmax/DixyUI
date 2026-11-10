@@ -12,6 +12,8 @@ import {
   motionDuration,
   motionEasing,
   motionTransition,
+  motionEffectsDuration,
+  reducedEffectsMaxDuration,
 } from "../src/motion.ts";
 
 test("transition recipes resolve to bounded shared timing definitions", () => {
@@ -22,6 +24,12 @@ test("transition recipes resolve to bounded shared timing definitions", () => {
     for (const coordinate of transition.ease)
       assert.ok(coordinate >= 0 && coordinate <= 1);
     assert.equal(tweenTransition(role, true).duration, 0);
+    const fade = tweenTransition(role, true, "effects").duration;
+    assert.ok(fade > 0 && fade <= reducedEffectsMaxDuration / 1000);
+    assert.equal(
+      tweenTransition(role, false, "effects").duration,
+      transition.duration,
+    );
   }
   assert.equal(motionDurations.fast, 120);
   assert.equal(motionDurations.normal, 200);
@@ -57,10 +65,15 @@ test("spring conversion preserves damping ratio and effects cannot overshoot", (
         );
         if (kind === "effects" || scheme === "standard")
           assert.ok(ratio >= 1 - 1e-12);
-        assert.deepEqual(springTransition(scheme, kind, speed, true), {
-          type: "tween",
-          duration: 0,
-        });
+        const reduced = springTransition(scheme, kind, speed, true);
+        assert.equal(reduced.type, "tween");
+        // Reduction removes movement; effects keep a short, bounded fade.
+        if (kind === "spatial") assert.equal(reduced.duration, 0);
+        else
+          assert.ok(
+            reduced.duration > 0 &&
+              reduced.duration <= reducedEffectsMaxDuration / 1000,
+          );
       }
     }
   }
@@ -84,9 +97,16 @@ test("CSS and JavaScript references share a complete reduction policy", () => {
     css.indexOf('[data-motion="reduced"]'),
     css.indexOf("@media"),
   );
-  for (const name of Object.keys(motionDurations)) {
+  assert.equal(
+    motionEffectsDuration("fast"),
+    "var(--dixy-motion-effects-duration-fast)",
+  );
+  for (const [name, ms] of Object.entries(motionDurations)) {
     assert.ok(media.includes(`--dixy-motion-duration-${name}: 0ms;`));
     assert.ok(local.includes(`--dixy-motion-duration-${name}: 0ms;`));
+    const fade = `--dixy-motion-effects-duration-${name}: ${Math.min(ms, reducedEffectsMaxDuration)}ms;`;
+    assert.ok(media.includes(fade), fade);
+    assert.ok(local.includes(fade), fade);
   }
   execFileSync(process.execPath, ["scripts/generate-motion.mjs", "--check"], {
     cwd: new URL("../../../", import.meta.url),

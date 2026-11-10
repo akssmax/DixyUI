@@ -18,17 +18,19 @@ export const themePreviewEntries: readonly ThemePreviewEntry[] = [
     category: entry.category,
     description: entry.description,
     coveredExports:
-      "exportName" in entry
-        ? [entry.exportName]
-        : slug === "typography"
-          ? ["Heading", "Text"]
-          : slug === "radio-group"
-            ? ["Radio", "RadioGroup"]
-            : slug === "text-field"
-              ? ["TextField"]
-              : slug === "icon"
-                ? ["Icon"]
-                : [entry.primitive!],
+      "exportNames" in entry
+        ? entry.exportNames
+        : "exportName" in entry
+          ? [entry.exportName]
+          : slug === "typography"
+            ? ["Heading", "Text"]
+            : slug === "radio-group"
+              ? ["Radio", "RadioGroup"]
+              : slug === "text-field"
+                ? ["TextField"]
+                : slug === "icon"
+                  ? ["Icon"]
+                  : [entry.primitive!],
     defaults: Object.fromEntries(
       entry.controls
         .filter(

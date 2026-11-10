@@ -7,6 +7,7 @@ import {
   motionEasings,
   motionTransitions,
   motionLoops,
+  reducedEffectsDuration,
 } from "../packages/tokens/src/motion.ts";
 import { componentMotion } from "../packages/react/src/tokens/component-motion.ts";
 
@@ -15,6 +16,15 @@ const durations = (reduced = false) =>
   Object.entries(motionDurations)
     .map(
       ([name, ms]) => `--dixy-motion-duration-${name}: ${reduced ? 0 : ms}ms;`,
+    )
+    .join("\n");
+// Effects (opacity, colour) follow the duration, so skin speed scaling still applies;
+// under reduction they keep a short literal fade while spatial durations go to 0ms.
+const effects = (reduced = false) =>
+  Object.keys(motionDurations)
+    .map(
+      (name) =>
+        `--dixy-motion-effects-duration-${name}: ${reduced ? `${reducedEffectsDuration(name)}ms` : `var(--dixy-motion-duration-${name})`};`,
     )
     .join("\n");
 const scope = ":root, .dixy-theme, [data-motion]";
@@ -39,19 +49,21 @@ const content = await format(
     ${Object.entries(motionTransitions)
       .map(
         ([role, recipe]) =>
-          `--dixy-motion-transition-${role}: var(--dixy-motion-duration-${recipe.duration}) var(--dixy-motion-easing-${recipe.easing});`,
+          `--dixy-motion-transition-${role}: var(--dixy-motion-duration-${recipe.duration}) var(--dixy-motion-easing-${recipe.easing});\n--dixy-motion-transition-${role}-effects: var(--dixy-motion-effects-duration-${recipe.duration}) var(--dixy-motion-easing-${recipe.easing});`,
       )
       .join("\n")}
+    ${effects()}
     --dixy-duration-fast: var(--dixy-motion-duration-fast);
     --dixy-duration-normal: var(--dixy-motion-duration-normal);
     --dixy-ease: var(--dixy-motion-easing-standard);
   }
   [data-motion="reduced"], [data-motion="reduced"] [data-motion] {
     ${durations(true)}
+    ${effects(true)}
     --dixy-motion-spatial-factor: 0;
   }
   @media (prefers-reduced-motion: reduce) {
-    ${scope} { ${durations(true)} --dixy-motion-spatial-factor: 0; }
+    ${scope} { ${durations(true)} ${effects(true)} --dixy-motion-spatial-factor: 0; }
   }
 }
 `,
@@ -66,7 +78,7 @@ const componentContent = await format(
         Object.entries(phases).map(([phase, role]) => {
           const recipe = motionTransitions[role];
           const name = `--dixy-${component}-motion-${phase}`;
-          return `${name}-duration: var(--dixy-motion-duration-${recipe.duration});\n${name}-easing: var(--dixy-motion-easing-${recipe.easing});\n${name}: var(${name}-duration) var(${name}-easing);`;
+          return `${name}-duration: var(--dixy-motion-duration-${recipe.duration});\n${name}-easing: var(--dixy-motion-easing-${recipe.easing});\n${name}: var(${name}-duration) var(${name}-easing);\n${name}-effects-duration: var(--dixy-motion-effects-duration-${recipe.duration});\n${name}-effects: var(${name}-effects-duration) var(${name}-easing);`;
         }),
       )
       .join("\n")}

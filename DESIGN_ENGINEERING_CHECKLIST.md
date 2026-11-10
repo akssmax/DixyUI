@@ -297,6 +297,8 @@ No additional component-library dependency is needed: Base UI is already install
 - [x] Run `pnpm check` and `pnpm package:check`; typecheck 22 Motion configurations within 268 complete examples.
 - [x] Codex in-app browser: normal/reduced previews, spring/effects behavior, stagger, keyboard, RTL, desktop/320/390px, light/dark and a production smoke test.
 - [ ] Actual OS reduced-motion media emulation, clipboard byte equivalence, manual screen-reader/forced-colors/zoom/touch and durable visual regression review.
+- [x] 2026-11-09: exit easing changed from ease-in to ease-out (`0.23, 1, 0.32, 1`) for all presence exits; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Close animation not reviewed visually.
+- [x] 2026-11-09: reduced motion keeps effects fades (opacity/colour, 200ms or less) through `--dixy-motion-effects-duration-*` while movement stays 0ms; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Fades not watched; OS media emulation not run.
 
 Personal motion learning remains separate:
 
@@ -782,6 +784,38 @@ Verification for this pass:
 - [ ] Check segmented in forced colours, with a screen reader, vertically oriented, and under each material finish.
 - [ ] Personally explain why the segmented thumb rule is scoped through the list (cascade order versus materials.css in the same layer), before claiming mastery.
 
+## Shader backdrops (prototype) — 2026-11-09
+
+- [x] Opt-in WebGL backdrop on `/lab/shaders` for Ocean Depths and Phosphor Terminal, driven by theme tokens, with reduced-motion still frame, off-screen pause and static fallback. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Four more pairings (Neon Night Market, Prism Glass, Diwali Lights, Solar Sail); uncapped display-rate loop with adaptive resolution; every shader ≤0.1 ms/frame on Apple M5. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] `/lab/shaders` rebuilt as a workbench: pinned preview stage with scene switcher and status HUD, inspector with shader gallery, pause/restart/speed, token-input swatches and render stats. Evidence: docs/BUILD_LOG.md, 2026-11-09 ("Shader lab workbench").
+- [ ] Measure real frame rate (120 Hz) and battery cost on a low-end laptop and a phone; test Safari and Firefox.
+- [ ] Decide whether shaders graduate into `@dixy-ui/themes` as an `effects: "shader"` option behind a separate lazy export (needs `pnpm package:check`).
+- [ ] Learning: explain how a fragment shader runs per pixel, why the runtime keeps a single WebGL context, and how token colours reach the GPU as uniforms.
+
+## Example app — Fernpay (/dixy-example), 2026-11-09
+
+- [x] Mock fintech app built only from Dixy components (59 used), with live skin switching across all starters. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Keyboard-only and screen-reader pass through the whole app; dark appearance on every view; Safari/Firefox.
+- [ ] Library follow-ups found while building: line/area `Chart`, `AvatarGroup` clipping at `sm`, a z-index scale for app chrome vs overlays.
+- [ ] Learning: explain why `isolation: isolate` fixed the top bar painting over the dialog backdrop.
+- [x] Layout molecules (PageHeader, SectionHeader, SectionFooter, StatCard) on every view; no shift between views or filter states; no horizontal overflow from 375 to 1600px. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Learning: explain how fixed slot heights and reserved space prevent layout shift, and why a molecule owns those rules rather than each view.
+
+## Base control alignment — 2026-11-09
+
+- [x] Every field-like control measures 32/40/48 at sm/md/lg across the default theme and 30 skins, checked on `/lab/controls`. Evidence: docs/COMPONENT_AUDIT.md, docs/BUILD_LOG.md 2026-11-09.
+- [x] Built-in SVG icons replace consumer text glyphs in the date, calendar, number, search and tag parts.
+- [ ] Coarse-pointer hit-area extension for 32px controls; Accordion indicator part.
+- [x] Pagination: square tiles at control height, Previous/Next parts with icons. `/lab/kitchen-sink` renders all 76 registry demos for review. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Review the kitchen sink (user) and list remaining component fixes.
+- [x] Semantic colors: `warning` and `info` join accent/neutral/danger/success on the shared `color` prop (Badge, Chip, Alert, Card and other family components), mapped to the existing status tokens. Outline and ghost Badge/Chip and outline Alert now use the color. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Kitchen-sink pass: Accordion rows, Breadcrumbs current page, Item actions, Meter/Progress/Slider value row, Skeleton, TagGroup remove, checkbox description, ColorField label, NavigationMenu link, attached ButtonGroup seams, disabled outline buttons. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] NativeSelect chevron: a thin wrapper holds the select and a decorative chevron in one grid cell; ref, className and props stay on the select. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Second kitchen-sink pass against shadcn source: Table/DataTable, TagGroup, Kbd, ScrollArea, Empty, AvatarGroup count, Carousel icon controls, Item separators. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [ ] Learning: explain why `:is(a, b):not(c)` outranked the Accordion's own `.trigger` rule, and how to read specificity of `:is()`.
+- [ ] Learning: explain why a framed group must own the height and border (and its parts stretch) rather than each part declaring the control height.
+
 ## Library gap fill (shadcn / HeroUI / Radix comparison) — 2026-11-07
 
 Components that shadcn/ui, HeroUI or Radix (Primitives + Themes) ship and Dixy did not. Spacer was skipped (Stack and Grid gaps cover it); Portal and Slot are not needed (Base UI portals and `useRender`/`mergeProps`).
@@ -816,3 +850,49 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Beta accessibility bar: contrast script, keyboard, forced colours and zoom passes, Known issues page.
 - [x] Remove `private` from the three packages and add `publishConfig` (public, provenance).
 - [ ] Publish `0.1.0-beta.0`, smoke-test from npm, then switch to trusted publishing and delete the token.
+
+## Docs performance pass — 2026-11-09
+
+- [x] `@dixy-ui/react` builds one module per component (`preserveModules`), so docs pages load only the components they render; route options and route CSS no longer pull the playground, Fernpay, foundation components or landing CSS into the entry. `/docs/installation` initial JS 2,339 → 1,017 KB (677 → 294 KB gzip). Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Docs theme switching loads the starter's CSS before committing it (no half-styled frames); the docs theme is inlined only on docs-shell pages; the landing shader loop runs on the compositor; `<html>` follows the themed canvas so overscroll is no longer white.
+- [ ] Measure LCP and INP with the pane visible, on throttled network and CPU, and in Safari and Firefox.
+- [ ] Prune inactive skin `<style>` tags on docs theme switches; make skin definitions load lazily.
+- [ ] Learning: explain why a route's `validateSearch` import ends up in the entry chunk, and how bundlers decide chunk boundaries by module rather than by export.
+
+## Radius and hero fixes — 2026-11-09
+
+- [x] Multi-line fields cap at the card radius under `radius="full"` (library textarea and skin compiler); docs scene cards use the card radius. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] Homepage hero height no longer follows the active scene (`contain: size` on the stage body).
+- [ ] Audit other multi-line surfaces that use `--dixy-radius-control` under `radius="full"`.
+- [ ] Learning: explain why `min(control, card)` changes only the full radius mode.
+- [ ] Learning: explain how `contain: size` stops a grid item's content from sizing its row.
+
+## Wren modes and phone layout — 2026-11-10
+
+- [x] Chat and Work modes: a compact one-row composer in Chat; a taller composer and starter cards in Work. Evidence: docs/BUILD_LOG.md, 2026-11-10.
+- [x] Composer text is centred on the tools through one shared row height (desktop and coarse pointer).
+- [x] Phone layout: drawer holds the theme and appearance controls, replies use the full width, Work cards scroll sideways.
+- [x] Library: textarea re-fits on width change; response tables scroll instead of breaking words; the transcript contains its positioned descendants.
+- [ ] Test on a real phone (iOS Safari keyboard, safe area).
+- [ ] Learning: explain why an unpositioned scroll container lets absolute children stretch the page.
+
+## AI parts and Wren example — 2026-11-09
+
+The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base UI + tokens). Evidence: docs/BUILD_LOG.md, 2026-11-09.
+
+- [x] Optional `@dixy-ui/react/ai` entry and `ai.css`; core JS and CSS unchanged, guarded by the tree-shaking and package checks.
+- [x] Conversation: stick-to-bottom that yields to the reader, a keyboard-scrollable log, status announced once per change.
+- [x] Response: GFM markdown through Dixy parts, streaming repair of partial markdown, memoized finished blocks.
+- [x] PromptInput: Enter/Shift+Enter/IME rules, autosize, one Send↔Stop button that keeps focus.
+- [x] Message, Reasoning, Tool, Sources, Suggestions, CodeBlock, Shimmer, Loader; reduced-motion handling.
+- [x] Wren example (`/ai-example`) on a scripted, AI SDK-shaped mock stream; landing showcase card.
+- [x] Docs component pages, playgrounds and generated API for the AI parts (AI category, 10 pages, gallery coverage test).
+- [x] Wren: starter-skin picker, collapsible icon-rail sidebar with chat search, centred empty state.
+- [ ] Shared `Sidebar` rail mode in the library (Fernpay and Wren each hand-build one).
+- [ ] Screen reader pass (VoiceOver/NVDA) on streaming announcements; OS reduced motion; touch scrolling; forced colours; zoom; RTL.
+- [ ] Packed consumer test importing `@dixy-ui/react/ai` with its markdown peers.
+- [ ] Learning: explain why the log is not a live region and what Root announces instead.
+- [ ] Learning: explain why streaming pins with an instant scroll, and why wheel/touch/key intent releases the pin before scroll events do.
+- [ ] Learning: explain why Send/Stop is one button and why empty input uses `focusableWhenDisabled`.
+- [ ] Learning: explain what `completeMarkdown` repairs and why only the last block is re-parsed.
+- [ ] Learning: explain why the sidebar toggle and composer must stay the same DOM element across layout changes.

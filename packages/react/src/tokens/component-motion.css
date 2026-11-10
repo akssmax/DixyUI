@@ -7,10 +7,24 @@
     --dixy-button-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-button-motion-feedback: var(--dixy-button-motion-feedback-duration)
       var(--dixy-button-motion-feedback-easing);
+    --dixy-button-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-button-motion-feedback-effects: var(
+        --dixy-button-motion-feedback-effects-duration
+      )
+      var(--dixy-button-motion-feedback-easing);
     --dixy-checkbox-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-checkbox-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-checkbox-motion-feedback: var(
         --dixy-checkbox-motion-feedback-duration
+      )
+      var(--dixy-checkbox-motion-feedback-easing);
+    --dixy-checkbox-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-checkbox-motion-feedback-effects: var(
+        --dixy-checkbox-motion-feedback-effects-duration
       )
       var(--dixy-checkbox-motion-feedback-easing);
     --dixy-checkbox-motion-indicator-duration: var(--dixy-motion-duration-fast);
@@ -19,73 +33,199 @@
         --dixy-checkbox-motion-indicator-duration
       )
       var(--dixy-checkbox-motion-indicator-easing);
+    --dixy-checkbox-motion-indicator-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-checkbox-motion-indicator-effects: var(
+        --dixy-checkbox-motion-indicator-effects-duration
+      )
+      var(--dixy-checkbox-motion-indicator-easing);
     --dixy-dialog-motion-enter-duration: var(--dixy-motion-duration-normal);
     --dixy-dialog-motion-enter-easing: var(--dixy-motion-easing-enter);
     --dixy-dialog-motion-enter: var(--dixy-dialog-motion-enter-duration)
+      var(--dixy-dialog-motion-enter-easing);
+    --dixy-dialog-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-dialog-motion-enter-effects: var(
+        --dixy-dialog-motion-enter-effects-duration
+      )
       var(--dixy-dialog-motion-enter-easing);
     --dixy-dialog-motion-exit-duration: var(--dixy-motion-duration-fast);
     --dixy-dialog-motion-exit-easing: var(--dixy-motion-easing-exit);
     --dixy-dialog-motion-exit: var(--dixy-dialog-motion-exit-duration)
       var(--dixy-dialog-motion-exit-easing);
+    --dixy-dialog-motion-exit-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-dialog-motion-exit-effects: var(
+        --dixy-dialog-motion-exit-effects-duration
+      )
+      var(--dixy-dialog-motion-exit-easing);
     --dixy-drawer-motion-enter-duration: var(--dixy-motion-duration-deliberate);
     --dixy-drawer-motion-enter-easing: var(--dixy-motion-easing-standard);
     --dixy-drawer-motion-enter: var(--dixy-drawer-motion-enter-duration)
+      var(--dixy-drawer-motion-enter-easing);
+    --dixy-drawer-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-deliberate
+    );
+    --dixy-drawer-motion-enter-effects: var(
+        --dixy-drawer-motion-enter-effects-duration
+      )
       var(--dixy-drawer-motion-enter-easing);
     --dixy-drawer-motion-exit-duration: var(--dixy-motion-duration-fast);
     --dixy-drawer-motion-exit-easing: var(--dixy-motion-easing-exit);
     --dixy-drawer-motion-exit: var(--dixy-drawer-motion-exit-duration)
       var(--dixy-drawer-motion-exit-easing);
+    --dixy-drawer-motion-exit-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-drawer-motion-exit-effects: var(
+        --dixy-drawer-motion-exit-effects-duration
+      )
+      var(--dixy-drawer-motion-exit-easing);
     --dixy-menu-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-menu-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-menu-motion-feedback: var(--dixy-menu-motion-feedback-duration)
+      var(--dixy-menu-motion-feedback-easing);
+    --dixy-menu-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-menu-motion-feedback-effects: var(
+        --dixy-menu-motion-feedback-effects-duration
+      )
       var(--dixy-menu-motion-feedback-easing);
     --dixy-menu-motion-enter-duration: var(--dixy-motion-duration-normal);
     --dixy-menu-motion-enter-easing: var(--dixy-motion-easing-enter);
     --dixy-menu-motion-enter: var(--dixy-menu-motion-enter-duration)
       var(--dixy-menu-motion-enter-easing);
+    --dixy-menu-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-menu-motion-enter-effects: var(
+        --dixy-menu-motion-enter-effects-duration
+      )
+      var(--dixy-menu-motion-enter-easing);
     --dixy-menu-motion-exit-duration: var(--dixy-motion-duration-fast);
     --dixy-menu-motion-exit-easing: var(--dixy-motion-easing-exit);
     --dixy-menu-motion-exit: var(--dixy-menu-motion-exit-duration)
+      var(--dixy-menu-motion-exit-easing);
+    --dixy-menu-motion-exit-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-menu-motion-exit-effects: var(
+        --dixy-menu-motion-exit-effects-duration
+      )
       var(--dixy-menu-motion-exit-easing);
     --dixy-switch-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-switch-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-switch-motion-feedback: var(--dixy-switch-motion-feedback-duration)
       var(--dixy-switch-motion-feedback-easing);
+    --dixy-switch-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-switch-motion-feedback-effects: var(
+        --dixy-switch-motion-feedback-effects-duration
+      )
+      var(--dixy-switch-motion-feedback-easing);
     --dixy-switch-motion-thumb-duration: var(--dixy-motion-duration-fast);
     --dixy-switch-motion-thumb-easing: var(--dixy-motion-easing-standard);
     --dixy-switch-motion-thumb: var(--dixy-switch-motion-thumb-duration)
+      var(--dixy-switch-motion-thumb-easing);
+    --dixy-switch-motion-thumb-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-switch-motion-thumb-effects: var(
+        --dixy-switch-motion-thumb-effects-duration
+      )
       var(--dixy-switch-motion-thumb-easing);
     --dixy-tabs-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-tabs-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-tabs-motion-feedback: var(--dixy-tabs-motion-feedback-duration)
       var(--dixy-tabs-motion-feedback-easing);
+    --dixy-tabs-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-tabs-motion-feedback-effects: var(
+        --dixy-tabs-motion-feedback-effects-duration
+      )
+      var(--dixy-tabs-motion-feedback-easing);
     --dixy-tabs-motion-indicator-duration: var(--dixy-motion-duration-normal);
     --dixy-tabs-motion-indicator-easing: var(--dixy-motion-easing-enter);
     --dixy-tabs-motion-indicator: var(--dixy-tabs-motion-indicator-duration)
+      var(--dixy-tabs-motion-indicator-easing);
+    --dixy-tabs-motion-indicator-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-tabs-motion-indicator-effects: var(
+        --dixy-tabs-motion-indicator-effects-duration
+      )
       var(--dixy-tabs-motion-indicator-easing);
     --dixy-radio-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-radio-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-radio-motion-feedback: var(--dixy-radio-motion-feedback-duration)
       var(--dixy-radio-motion-feedback-easing);
+    --dixy-radio-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-radio-motion-feedback-effects: var(
+        --dixy-radio-motion-feedback-effects-duration
+      )
+      var(--dixy-radio-motion-feedback-easing);
     --dixy-radio-motion-indicator-duration: var(--dixy-motion-duration-fast);
     --dixy-radio-motion-indicator-easing: var(--dixy-motion-easing-standard);
     --dixy-radio-motion-indicator: var(--dixy-radio-motion-indicator-duration)
+      var(--dixy-radio-motion-indicator-easing);
+    --dixy-radio-motion-indicator-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-radio-motion-indicator-effects: var(
+        --dixy-radio-motion-indicator-effects-duration
+      )
       var(--dixy-radio-motion-indicator-easing);
     --dixy-toggle-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-toggle-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-toggle-motion-feedback: var(--dixy-toggle-motion-feedback-duration)
       var(--dixy-toggle-motion-feedback-easing);
+    --dixy-toggle-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-toggle-motion-feedback-effects: var(
+        --dixy-toggle-motion-feedback-effects-duration
+      )
+      var(--dixy-toggle-motion-feedback-easing);
     --dixy-select-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-select-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-select-motion-feedback: var(--dixy-select-motion-feedback-duration)
+      var(--dixy-select-motion-feedback-easing);
+    --dixy-select-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-select-motion-feedback-effects: var(
+        --dixy-select-motion-feedback-effects-duration
+      )
       var(--dixy-select-motion-feedback-easing);
     --dixy-select-motion-enter-duration: var(--dixy-motion-duration-normal);
     --dixy-select-motion-enter-easing: var(--dixy-motion-easing-enter);
     --dixy-select-motion-enter: var(--dixy-select-motion-enter-duration)
       var(--dixy-select-motion-enter-easing);
+    --dixy-select-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-select-motion-enter-effects: var(
+        --dixy-select-motion-enter-effects-duration
+      )
+      var(--dixy-select-motion-enter-easing);
     --dixy-select-motion-exit-duration: var(--dixy-motion-duration-fast);
     --dixy-select-motion-exit-easing: var(--dixy-motion-easing-exit);
     --dixy-select-motion-exit: var(--dixy-select-motion-exit-duration)
+      var(--dixy-select-motion-exit-easing);
+    --dixy-select-motion-exit-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-select-motion-exit-effects: var(
+        --dixy-select-motion-exit-effects-duration
+      )
       var(--dixy-select-motion-exit-easing);
     --dixy-disclosure-motion-feedback-duration: var(
       --dixy-motion-duration-fast
@@ -97,6 +237,13 @@
         --dixy-disclosure-motion-feedback-duration
       )
       var(--dixy-disclosure-motion-feedback-easing);
+    --dixy-disclosure-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-disclosure-motion-feedback-effects: var(
+        --dixy-disclosure-motion-feedback-effects-duration
+      )
+      var(--dixy-disclosure-motion-feedback-easing);
     --dixy-disclosure-motion-reveal-duration: var(
       --dixy-motion-duration-deliberate
     );
@@ -105,33 +252,89 @@
         --dixy-disclosure-motion-reveal-duration
       )
       var(--dixy-disclosure-motion-reveal-easing);
+    --dixy-disclosure-motion-reveal-effects-duration: var(
+      --dixy-motion-effects-duration-deliberate
+    );
+    --dixy-disclosure-motion-reveal-effects: var(
+        --dixy-disclosure-motion-reveal-effects-duration
+      )
+      var(--dixy-disclosure-motion-reveal-easing);
     --dixy-field-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-field-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-field-motion-feedback: var(--dixy-field-motion-feedback-duration)
+      var(--dixy-field-motion-feedback-easing);
+    --dixy-field-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-field-motion-feedback-effects: var(
+        --dixy-field-motion-feedback-effects-duration
+      )
       var(--dixy-field-motion-feedback-easing);
     --dixy-avatar-motion-enter-duration: var(--dixy-motion-duration-normal);
     --dixy-avatar-motion-enter-easing: var(--dixy-motion-easing-enter);
     --dixy-avatar-motion-enter: var(--dixy-avatar-motion-enter-duration)
       var(--dixy-avatar-motion-enter-easing);
+    --dixy-avatar-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-avatar-motion-enter-effects: var(
+        --dixy-avatar-motion-enter-effects-duration
+      )
+      var(--dixy-avatar-motion-enter-easing);
     --dixy-floating-motion-enter-duration: var(--dixy-motion-duration-normal);
     --dixy-floating-motion-enter-easing: var(--dixy-motion-easing-enter);
     --dixy-floating-motion-enter: var(--dixy-floating-motion-enter-duration)
+      var(--dixy-floating-motion-enter-easing);
+    --dixy-floating-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-floating-motion-enter-effects: var(
+        --dixy-floating-motion-enter-effects-duration
+      )
       var(--dixy-floating-motion-enter-easing);
     --dixy-floating-motion-exit-duration: var(--dixy-motion-duration-fast);
     --dixy-floating-motion-exit-easing: var(--dixy-motion-easing-exit);
     --dixy-floating-motion-exit: var(--dixy-floating-motion-exit-duration)
       var(--dixy-floating-motion-exit-easing);
+    --dixy-floating-motion-exit-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-floating-motion-exit-effects: var(
+        --dixy-floating-motion-exit-effects-duration
+      )
+      var(--dixy-floating-motion-exit-easing);
     --dixy-range-motion-feedback-duration: var(--dixy-motion-duration-fast);
     --dixy-range-motion-feedback-easing: var(--dixy-motion-easing-standard);
     --dixy-range-motion-feedback: var(--dixy-range-motion-feedback-duration)
+      var(--dixy-range-motion-feedback-easing);
+    --dixy-range-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-range-motion-feedback-effects: var(
+        --dixy-range-motion-feedback-effects-duration
+      )
       var(--dixy-range-motion-feedback-easing);
     --dixy-toast-motion-enter-duration: var(--dixy-motion-duration-normal);
     --dixy-toast-motion-enter-easing: var(--dixy-motion-easing-enter);
     --dixy-toast-motion-enter: var(--dixy-toast-motion-enter-duration)
       var(--dixy-toast-motion-enter-easing);
+    --dixy-toast-motion-enter-effects-duration: var(
+      --dixy-motion-effects-duration-normal
+    );
+    --dixy-toast-motion-enter-effects: var(
+        --dixy-toast-motion-enter-effects-duration
+      )
+      var(--dixy-toast-motion-enter-easing);
     --dixy-toast-motion-exit-duration: var(--dixy-motion-duration-fast);
     --dixy-toast-motion-exit-easing: var(--dixy-motion-easing-exit);
     --dixy-toast-motion-exit: var(--dixy-toast-motion-exit-duration)
+      var(--dixy-toast-motion-exit-easing);
+    --dixy-toast-motion-exit-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-toast-motion-exit-effects: var(
+        --dixy-toast-motion-exit-effects-duration
+      )
       var(--dixy-toast-motion-exit-easing);
     --dixy-scrollArea-motion-feedback-duration: var(
       --dixy-motion-duration-fast
@@ -141,6 +344,13 @@
     );
     --dixy-scrollArea-motion-feedback: var(
         --dixy-scrollArea-motion-feedback-duration
+      )
+      var(--dixy-scrollArea-motion-feedback-easing);
+    --dixy-scrollArea-motion-feedback-effects-duration: var(
+      --dixy-motion-effects-duration-fast
+    );
+    --dixy-scrollArea-motion-feedback-effects: var(
+        --dixy-scrollArea-motion-feedback-effects-duration
       )
       var(--dixy-scrollArea-motion-feedback-easing);
   }

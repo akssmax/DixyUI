@@ -1,4 +1,5 @@
 import { Button } from "@dixy-ui/react";
+import { useEffect } from "react";
 import {
   createRootRoute,
   HeadContent,
@@ -9,27 +10,108 @@ import {
 } from "@tanstack/react-router";
 import { DocsShell } from "../components/docs-shell";
 import { AppAppearanceProvider } from "../components/app-appearance-provider";
+import { DocumentCanvas } from "../components/document-canvas";
+import { useAppAppearance } from "../components/app-appearance-provider";
 import { getAppPreferences } from "../lib/app-appearance.functions";
 import "@fontsource/jetbrains-mono/latin-400.css";
 import "@dixy-ui/react/styles.css";
 import "../styles/docs.css";
 
-function RoutedContent() {
-  const pathname = useLocation({ select: (location) => location.pathname });
-  // The landing page and the playground bring their own full-width chrome.
-  return pathname === "/" || pathname === "/playground" ? (
-    <Outlet />
-  ) : (
-    <DocsShell>
-      <Outlet />
-    </DocsShell>
+/** The landing page, playground, labs and example bring their own chrome. */
+function usesDocsShell(pathname: string) {
+  return !(
+    pathname === "/" ||
+    pathname === "/playground" ||
+    pathname.startsWith("/lab/") ||
+    pathname === "/dixy-example" ||
+    pathname === "/ai-example"
   );
 }
 
+function RoutedContent() {
+  const pathname = useLocation({ select: (location) => location.pathname });
+  return usesDocsShell(pathname) ? (
+    <DocsShell>
+      <Outlet />
+    </DocsShell>
+  ) : (
+    <>
+      <Outlet />
+      <DocsSkinPrefetch />
+    </>
+  );
+}
+
+/**
+ * Pages without the docs shell don't get the docs theme inlined. Load it when
+ * the browser is idle instead, so a later client-side visit to the docs still
+ * paints in the reader's theme on its first frame.
+ */
+function DocsSkinPrefetch() {
+  const { docsTheme } = useAppAppearance();
+  const { skin } = docsTheme;
+  useEffect(() => {
+    if (skin === "none") return;
+    const idle =
+      window.requestIdleCallback ?? ((run: () => void) => setTimeout(run, 1));
+    const cancel = window.cancelIdleCallback ?? clearTimeout;
+    const handle = idle(() => {
+      void import("../lib/theme-skin-catalogue")
+        .then(({ prepareSkin }) => prepareSkin(skin, null))
+        .catch(() => {
+          // The docs shell retries when it mounts.
+        });
+    });
+    return () => cancel(handle as number);
+  }, [skin]);
+  return null;
+}
+
 export const Route = createRootRoute({
-  loader: () => getAppPreferences(),
+  // The docs theme's stylesheet is inlined on the server, like the landing
+  // page's starter, so a themed reader never sees Original Dixy flash first.
+  // Only docs-shell pages wear the docs theme. Inlining it elsewhere added
+  // ~22 KB of CSS to the HTML (twice, counting the hydration payload), and
+  // duplicated the landing's own starter when the two matched.
+  loader: async ({ location }) => {
+    const preferences = await getAppPreferences();
+    const { skin } = preferences.docsTheme;
+    if (skin === "none" || !usesDocsShell(location.pathname))
+      return { ...preferences, skinCSS: "", materialCSS: "" };
+    try {
+      const [{ loadSkinCSS, loadMaterialCSS }, { skinThemePreset }] =
+        await Promise.all([
+          import("../lib/theme-skin-catalogue"),
+          import("../lib/theme-playground"),
+        ]);
+      return {
+        ...preferences,
+        skinCSS: await loadSkinCSS(skin),
+        materialCSS:
+          skinThemePreset(skin).material !== "inherit"
+            ? await loadMaterialCSS()
+            : "",
+      };
+    } catch {
+      // The shell retries through prepareSkin on the client.
+      return { ...preferences, skinCSS: "", materialCSS: "" };
+    }
+  },
   staleTime: Infinity,
-  head: () => ({
+  head: ({ loaderData }) => ({
+    styles: [
+      ...(loaderData?.skinCSS
+        ? [
+            {
+              "data-dixy-skin-style": loaderData.docsTheme.skin,
+              children: loaderData.skinCSS,
+            },
+          ]
+        : []),
+      ...(loaderData?.materialCSS
+        ? [{ children: loaderData.materialCSS }]
+        : []),
+    ],
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -64,7 +146,8 @@ export const Route = createRootRoute({
 });
 
 function RootDocument() {
-  const { appearance, previewTheme } = Route.useLoaderData();
+  const { appearancePreference, appearance, previewTheme, docsTheme } =
+    Route.useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -72,10 +155,13 @@ function RootDocument() {
       </head>
       <body>
         <AppAppearanceProvider
+          initialAppearancePreference={appearancePreference}
           initialAppearance={appearance}
           initialPreviewTheme={previewTheme}
+          initialDocsTheme={docsTheme}
         >
           <RoutedContent />
+          <DocumentCanvas />
         </AppAppearanceProvider>
         <Scripts />
       </body>

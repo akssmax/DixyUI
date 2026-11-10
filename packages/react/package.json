@@ -1,6 +1,6 @@
 {
   "name": "@dixy-ui/react",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "description": "Expressive, accessible React components built on Base UI.",
   "license": "MIT",
   "author": "Akshay Saini",
@@ -41,7 +41,12 @@
     "./feedback": {
       "types": "./dist/feedback.d.ts",
       "import": "./dist/feedback.js"
-    }
+    },
+    "./ai": {
+      "types": "./dist/ai.d.ts",
+      "import": "./dist/ai.js"
+    },
+    "./ai.css": "./dist/ai.css"
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
@@ -59,7 +64,9 @@
   "peerDependencies": {
     "motion": "^14.2.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.0.0",
+    "remark-gfm": "^4.0.0"
   },
   "devDependencies": {
     "@dixy-ui/typescript-config": "workspace:*",
@@ -73,12 +80,20 @@
     "motion": "14.2.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "react-markdown": "10.1.0",
+    "remark-gfm": "4.0.1",
     "typescript": "5.9.3",
     "vite": "8.3.4",
     "vitest": "5.0.4"
   },
   "peerDependenciesMeta": {
     "motion": {
+      "optional": true
+    },
+    "react-markdown": {
+      "optional": true
+    },
+    "remark-gfm": {
       "optional": true
     }
   }

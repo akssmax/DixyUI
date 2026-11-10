@@ -1,10 +1,14 @@
 import type { Material, RadiusPreset } from "@dixy-ui/tokens";
 import { useThemeSettings } from "../theme/theme";
 
+/** Semantic colors shared by the family styles. warning and info map to the status tokens. */
+export type VisualColor =
+  "accent" | "neutral" | "danger" | "success" | "warning" | "info";
+
 type VisualSettings = {
   size?: "sm" | "md" | "lg";
   variant?: string;
-  color?: "accent" | "neutral" | "danger" | "success";
+  color?: VisualColor;
   radius?: RadiusPreset;
   material?: Material;
 };

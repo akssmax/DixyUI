@@ -139,6 +139,7 @@ export * from "./components/resizable";
 export * from "./components/carousel";
 export * from "./components/chart";
 export type { VisualProps } from "./utilities/native-part";
+export type { VisualColor } from "./utilities/component-visuals";
 export { I18nProvider as LocaleProvider } from "react-aria-components/I18nProvider";
 export {
   parseDate,

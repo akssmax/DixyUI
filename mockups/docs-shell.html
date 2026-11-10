@@ -1,0 +1,2738 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dixy Docs Shell</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&family=Nunito:wght@500;700;800&family=VT323&display=swap"
+    />
+    <style>
+      /* ---------------------------------------------------------------
+   MOCK ONLY. Token names mirror @dixy-ui/themes (--dixy-*).
+   One root (.dixy-theme) owns the skin + appearance, so docs chrome
+   and component previews resolve the same tokens.
+---------------------------------------------------------------- */
+
+      /* ---------- Skins: light ---------- */
+      .dixy-theme {
+        --dixy-font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+        --dixy-font-display: var(--dixy-font-sans);
+        --dixy-font-mono: "JetBrains Mono", ui-monospace, monospace;
+        --display-weight: 700;
+        --display-tracking: -0.035em;
+        --dixy-color-background-canvas: #fafafa;
+        --dixy-color-background-surface: #ffffff;
+        --dixy-color-background-surface-raised: #ffffff;
+        --dixy-color-background-muted: #f2f2f4;
+        --dixy-color-text-primary: #18181b;
+        --dixy-color-text-secondary: #5b5b66;
+        --dixy-color-text-tertiary: #8b8b96;
+        --dixy-color-border-default: #e4e4e9;
+        --dixy-color-border-strong: #cfcfd6;
+        --dixy-color-brand: #7c3aed;
+        --dixy-color-brand-soft: #f1eafe;
+        --dixy-color-brand-on-solid: #ffffff;
+        --dixy-color-border-focus: #7c3aed;
+        --dixy-radius-panel: 14px;
+        --dixy-radius-control: 9px;
+        --dixy-stroke-width: 1px;
+        --dixy-shadow-raised:
+          0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.04);
+        --dixy-skin-canvas: none;
+        --header-bg: color-mix(
+          in srgb,
+          var(--dixy-color-background-canvas) 82%,
+          transparent
+        );
+        --header-blur: 14px;
+        --dot-grid: radial-gradient(
+          circle at 1px 1px,
+          var(--dixy-color-border-default) 1px,
+          transparent 1.4px
+        );
+        color-scheme: light;
+      }
+
+      .dixy-theme[data-skin="ocean-depths"] {
+        --dixy-font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+        --dixy-font-display: "Fraunces", ui-serif, Georgia, serif;
+        --display-weight: 600;
+        --display-tracking: -0.02em;
+        --dixy-color-background-canvas: #e3f3f1;
+        --dixy-color-background-surface: #f4fbfa;
+        --dixy-color-background-surface-raised: #ffffffd9;
+        --dixy-color-background-muted: #d4ecea;
+        --dixy-color-text-primary: #0c2c33;
+        --dixy-color-text-secondary: #3d5f66;
+        --dixy-color-text-tertiary: #6c8a90;
+        --dixy-color-border-default: #c3e0de;
+        --dixy-color-border-strong: #9ccbc9;
+        --dixy-color-brand: #0e7c86;
+        --dixy-color-brand-soft: #cdeeee;
+        --dixy-color-border-focus: #0e7c86;
+        --dixy-radius-panel: 20px;
+        --dixy-radius-control: 12px;
+        --dixy-shadow-raised:
+          0 1px 0 rgb(255 255 255 / 0.8) inset, 0 10px 30px rgb(14 72 82 / 0.1);
+        --dixy-skin-canvas:
+          radial-gradient(
+            60% 30% at 25% 0%,
+            rgb(255 255 255 / 0.6),
+            transparent 70%
+          ),
+          linear-gradient(180deg, #dff3f1, #c6e6e6 70%, #b6dcde);
+      }
+
+      .dixy-theme[data-skin="retro-os"] {
+        --dixy-font-sans: "Inter", Tahoma, Verdana, sans-serif;
+        --dixy-font-display: "VT323", ui-monospace, monospace;
+        --dixy-font-mono: "VT323", ui-monospace, monospace;
+        --display-weight: 400;
+        --display-tracking: 0;
+        --dixy-color-background-canvas: #008080;
+        --dixy-color-background-surface: #c0c0c0;
+        --dixy-color-background-surface-raised: #c0c0c0;
+        --dixy-color-background-muted: #b4b4b4;
+        --dixy-color-text-primary: #000000;
+        --dixy-color-text-secondary: #222222;
+        --dixy-color-text-tertiary: #444444;
+        --dixy-color-border-default: #808080;
+        --dixy-color-border-strong: #000000;
+        --dixy-color-brand: #000080;
+        --dixy-color-brand-soft: #c8c8e8;
+        --dixy-color-border-focus: #000000;
+        --dixy-radius-panel: 0px;
+        --dixy-radius-control: 0px;
+        --dixy-stroke-width: 2px;
+        --dixy-shadow-raised:
+          inset -2px -2px 0 #404040, inset 2px 2px 0 #ffffff;
+        --header-bg: #c0c0c0;
+        --header-blur: 0px;
+        --dot-grid: none;
+      }
+
+      .dixy-theme[data-skin="swiss-poster"] {
+        --dixy-font-sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+        --display-weight: 700;
+        --display-tracking: -0.05em;
+        --dixy-color-background-canvas: #f4f1ea;
+        --dixy-color-background-surface: #ffffff;
+        --dixy-color-background-surface-raised: #ffffff;
+        --dixy-color-background-muted: #ebe6db;
+        --dixy-color-text-primary: #0a0a0a;
+        --dixy-color-text-secondary: #333333;
+        --dixy-color-text-tertiary: #666;
+        --dixy-color-border-default: #0a0a0a;
+        --dixy-color-border-strong: #0a0a0a;
+        --dixy-color-brand: #e3120b;
+        --dixy-color-brand-soft: #fde2df;
+        --dixy-color-border-focus: #e3120b;
+        --dixy-radius-panel: 0px;
+        --dixy-radius-control: 0px;
+        --dixy-stroke-width: 2px;
+        --dixy-shadow-raised: 6px 6px 0 #0a0a0a;
+        --dot-grid: none;
+      }
+
+      .dixy-theme[data-skin="candy-clay"] {
+        --dixy-font-sans: "Nunito", ui-rounded, system-ui, sans-serif;
+        --display-weight: 800;
+        --display-tracking: -0.02em;
+        --dixy-color-background-canvas: #fdf0f4;
+        --dixy-color-background-surface: #fff8fa;
+        --dixy-color-background-surface-raised: #ffffff;
+        --dixy-color-background-muted: #fbe1ea;
+        --dixy-color-text-primary: #3b1d2a;
+        --dixy-color-text-secondary: #74505f;
+        --dixy-color-text-tertiary: #a07f8c;
+        --dixy-color-border-default: #f6d3df;
+        --dixy-color-border-strong: #eeb6ca;
+        --dixy-color-brand: #e2457c;
+        --dixy-color-brand-soft: #ffe0eb;
+        --dixy-color-border-focus: #e2457c;
+        --dixy-radius-panel: 28px;
+        --dixy-radius-control: 999px;
+        --dixy-shadow-raised:
+          0 10px 0 -4px #f3c2d3, 0 18px 30px rgb(226 69 124 / 0.12),
+          inset 0 2px 0 #fff;
+        --dot-grid: radial-gradient(
+          circle at 1px 1px,
+          #f2c5d5 1px,
+          transparent 1.6px
+        );
+      }
+
+      /* ---------- Appearance: dark ---------- */
+      .dixy-theme[data-appearance="dark"] {
+        color-scheme: dark;
+        --dixy-color-background-canvas: #0d0d10;
+        --dixy-color-background-surface: #141418;
+        --dixy-color-background-surface-raised: #1a1a20;
+        --dixy-color-background-muted: #1f1f26;
+        --dixy-color-text-primary: #f2f2f5;
+        --dixy-color-text-secondary: #a8a8b3;
+        --dixy-color-text-tertiary: #74747f;
+        --dixy-color-border-default: #2a2a32;
+        --dixy-color-border-strong: #3a3a44;
+        --dixy-color-brand: #a78bfa;
+        --dixy-color-brand-soft: #2a2140;
+        --dixy-color-brand-on-solid: #140b2b;
+        --dixy-color-border-focus: #a78bfa;
+        --dixy-shadow-raised:
+          0 1px 0 rgb(255 255 255 / 0.04) inset, 0 8px 24px rgb(0 0 0 / 0.35);
+      }
+      .dixy-theme[data-skin="ocean-depths"][data-appearance="dark"] {
+        --dixy-color-background-canvas: #06191e;
+        --dixy-color-background-surface: #0b252b;
+        --dixy-color-background-surface-raised: #0f2e35e6;
+        --dixy-color-background-muted: #123540;
+        --dixy-color-text-primary: #e2f6f4;
+        --dixy-color-text-secondary: #94bfc0;
+        --dixy-color-text-tertiary: #6a9396;
+        --dixy-color-border-default: #18414a;
+        --dixy-color-border-strong: #23606a;
+        --dixy-color-brand: #4fd1c5;
+        --dixy-color-brand-soft: #103f44;
+        --dixy-color-brand-on-solid: #04201f;
+        --dixy-color-border-focus: #4fd1c5;
+        --dixy-skin-canvas:
+          radial-gradient(
+            60% 30% at 25% 0%,
+            rgb(79 209 197 / 0.12),
+            transparent 70%
+          ),
+          linear-gradient(180deg, #08222a, #051419);
+      }
+      .dixy-theme[data-skin="retro-os"][data-appearance="dark"] {
+        --dixy-color-background-canvas: #001a1a;
+        --dixy-color-background-surface: #2b2b2b;
+        --dixy-color-background-surface-raised: #2b2b2b;
+        --dixy-color-background-muted: #222;
+        --dixy-color-text-primary: #e6e6e6;
+        --dixy-color-text-secondary: #cfcfcf;
+        --dixy-color-text-tertiary: #a0a0a0;
+        --dixy-color-border-default: #5a5a5a;
+        --dixy-color-border-strong: #000;
+        --dixy-color-brand: #3a6ee8;
+        --dixy-color-brand-soft: #1d2b55;
+        --dixy-color-brand-on-solid: #fff;
+        --dixy-color-border-focus: #fff;
+        --dixy-shadow-raised: inset -2px -2px 0 #0a0a0a, inset 2px 2px 0 #555;
+        --header-bg: #2b2b2b;
+      }
+      .dixy-theme[data-skin="swiss-poster"][data-appearance="dark"] {
+        --dixy-color-background-canvas: #0a0a0a;
+        --dixy-color-background-surface: #121212;
+        --dixy-color-background-surface-raised: #121212;
+        --dixy-color-background-muted: #1c1c1c;
+        --dixy-color-text-primary: #f4f1ea;
+        --dixy-color-text-secondary: #cfcac0;
+        --dixy-color-text-tertiary: #8f8a80;
+        --dixy-color-border-default: #f4f1ea;
+        --dixy-color-border-strong: #f4f1ea;
+        --dixy-color-brand: #ff3b30;
+        --dixy-color-brand-soft: #3a0f0c;
+        --dixy-color-brand-on-solid: #fff;
+        --dixy-color-border-focus: #ff3b30;
+        --dixy-shadow-raised: 6px 6px 0 #ff3b30;
+      }
+      .dixy-theme[data-skin="candy-clay"][data-appearance="dark"] {
+        --dixy-color-background-canvas: #1d1017;
+        --dixy-color-background-surface: #26151e;
+        --dixy-color-background-surface-raised: #2e1925;
+        --dixy-color-background-muted: #351d2a;
+        --dixy-color-text-primary: #ffe9f1;
+        --dixy-color-text-secondary: #d6aebd;
+        --dixy-color-text-tertiary: #a07f8c;
+        --dixy-color-border-default: #4a2636;
+        --dixy-color-border-strong: #6a3650;
+        --dixy-color-brand: #ff7aa8;
+        --dixy-color-brand-soft: #4a1d30;
+        --dixy-color-brand-on-solid: #2a0a17;
+        --dixy-color-border-focus: #ff7aa8;
+        --dixy-shadow-raised:
+          0 10px 0 -4px #12080d, 0 18px 30px rgb(0 0 0 / 0.35),
+          inset 0 1px 0 rgb(255 255 255 / 0.06);
+        --dot-grid: radial-gradient(
+          circle at 1px 1px,
+          #4a2636 1px,
+          transparent 1.6px
+        );
+      }
+
+      /* "Previews only" scope: chrome falls back to the neutral Dixy skin,
+   while .preview-scope keeps the chosen skin. */
+      .docs-chrome-neutral {
+        /* applied to <body> wrapper; preview keeps its own data-skin */
+      }
+
+      /* ---------- Base ---------- */
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        background: #fafafa;
+      }
+      .dixy-theme {
+        min-height: 100vh;
+        font-family: var(--dixy-font-sans);
+        color: var(--dixy-color-text-primary);
+        background: var(--dixy-color-background-canvas);
+        background-image: var(--dixy-skin-canvas);
+        background-attachment: fixed;
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        transition:
+          background-color 0.25s ease,
+          color 0.25s ease;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button {
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
+      }
+      :focus-visible {
+        outline: 2px solid var(--dixy-color-border-focus);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+      .mono {
+        font-family: var(--dixy-font-mono);
+      }
+      .eyebrow {
+        font-family: var(--dixy-font-mono);
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--dixy-color-text-tertiary);
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+
+      /* ---------- Header ---------- */
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: var(--header-bg);
+        backdrop-filter: blur(var(--header-blur)) saturate(1.4);
+        -webkit-backdrop-filter: blur(var(--header-blur)) saturate(1.4);
+        border-bottom: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+      }
+      [data-skin="retro-os"] .header {
+        box-shadow: var(--dixy-shadow-raised);
+        border-bottom-color: #000;
+      }
+      .header-inner {
+        max-width: 1320px;
+        margin: 0 auto;
+        height: 60px;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 19px;
+        letter-spacing: -0.03em;
+        margin-right: 18px;
+      }
+      .brand-mark {
+        width: 28px;
+        height: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: calc(var(--dixy-radius-control) * 0.9);
+        background: var(--dixy-color-brand);
+        color: var(--dixy-color-brand-on-solid);
+        font-size: 15px;
+        font-weight: 800;
+      }
+      .brand .ver {
+        font-family: var(--dixy-font-mono);
+        font-weight: 500;
+        font-size: 10.5px;
+        padding: 2px 6px;
+        border: 1px solid var(--dixy-color-border-default);
+        border-radius: 6px;
+        color: var(--dixy-color-text-tertiary);
+        letter-spacing: 0;
+      }
+
+      .primary-nav {
+        display: flex;
+        gap: 2px;
+      }
+      .nav-trigger {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        padding: 0 12px;
+        border: 0;
+        background: transparent;
+        border-radius: var(--dixy-radius-control);
+        color: var(--dixy-color-text-secondary);
+        font-size: 14px;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .nav-trigger:hover,
+      .nav-trigger[aria-expanded="true"] {
+        background: var(--dixy-color-background-muted);
+        color: var(--dixy-color-text-primary);
+      }
+      .nav-trigger[aria-current="true"] {
+        color: var(--dixy-color-text-primary);
+      }
+      .nav-trigger[aria-current="true"]::after {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--dixy-color-brand);
+      }
+      .nav-trigger svg {
+        width: 12px;
+        height: 12px;
+        opacity: 0.6;
+        transition: transform 0.2s;
+      }
+      .nav-trigger[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+      }
+
+      .header-tools {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 36px;
+        width: 260px;
+        padding: 0 6px 0 12px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        background: var(--dixy-color-background-surface);
+        border-radius: var(--dixy-radius-control);
+        color: var(--dixy-color-text-tertiary);
+        font-size: 14px;
+      }
+      .search kbd {
+        margin-left: auto;
+        font-family: var(--dixy-font-mono);
+        font-size: 11px;
+        padding: 2px 6px;
+        border: 1px solid var(--dixy-color-border-default);
+        border-radius: 5px;
+        background: var(--dixy-color-background-muted);
+      }
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        background: var(--dixy-color-background-surface);
+        border-radius: var(--dixy-radius-control);
+      }
+      .icon-btn svg {
+        width: 17px;
+        height: 17px;
+      }
+      .theme-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 36px;
+        padding: 0 10px 0 6px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        background: var(--dixy-color-background-surface);
+        border-radius: var(--dixy-radius-control);
+        font-size: 13.5px;
+        font-weight: 500;
+      }
+      [data-skin="retro-os"] :is(.search, .icon-btn, .theme-chip, .btn) {
+        box-shadow: var(--dixy-shadow-raised);
+        border-color: transparent;
+      }
+      .swatch {
+        width: 22px;
+        height: 22px;
+        border-radius: calc(var(--dixy-radius-control) * 0.7);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        overflow: hidden;
+        border: 1px solid rgb(0 0 0 / 0.1);
+        flex: none;
+      }
+      .swatch i {
+        display: block;
+      }
+      .menu-btn {
+        display: none;
+      }
+
+      /* ---------- Mega menu ---------- */
+      .mega {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        background: var(--dixy-color-background-surface);
+        border-bottom: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+        box-shadow: 0 24px 48px rgb(0 0 0 / 0.08);
+        display: none;
+      }
+      .mega[data-open] {
+        display: block;
+        animation: drop 0.18s ease-out;
+      }
+      @keyframes drop {
+        from {
+          opacity: 0;
+          transform: translateY(-6px);
+        }
+      }
+      .mega-inner {
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: 28px 24px 32px;
+        display: grid;
+        gap: 32px;
+      }
+      .mega-inner.cols-components {
+        grid-template-columns: 240px 1fr;
+      }
+      .mega-feature {
+        padding: 20px;
+        border-radius: var(--dixy-radius-panel);
+        background: var(--dixy-color-brand-soft);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .mega-feature h3 {
+        margin: 0;
+        font-family: var(--dixy-font-display);
+        font-weight: var(--display-weight);
+        font-size: 22px;
+        letter-spacing: var(--display-tracking);
+      }
+      .mega-feature p {
+        margin: 0;
+        color: var(--dixy-color-text-secondary);
+        font-size: 13.5px;
+      }
+      .mega-feature a {
+        margin-top: auto;
+        font-weight: 600;
+        font-size: 13.5px;
+        color: var(--dixy-color-brand);
+      }
+      .mega-groups {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px 28px;
+      }
+      .mega-group h4 {
+        margin: 0 0 8px;
+      }
+      .mega-group ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 1px;
+      }
+      .mega-group a {
+        display: block;
+        padding: 4px 8px;
+        margin: 0 -8px;
+        border-radius: 6px;
+        font-size: 14px;
+        color: var(--dixy-color-text-secondary);
+      }
+      .mega-group a:hover {
+        background: var(--dixy-color-background-muted);
+        color: var(--dixy-color-text-primary);
+      }
+      .mega-group a[aria-current="page"] {
+        color: var(--dixy-color-brand);
+        font-weight: 600;
+      }
+      .mega-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+      .mega-card {
+        padding: 16px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        display: grid;
+        gap: 4px;
+      }
+      .mega-card:hover {
+        border-color: var(--dixy-color-border-strong);
+        background: var(--dixy-color-background-muted);
+      }
+      .mega-card strong {
+        font-size: 14.5px;
+      }
+      .mega-card span {
+        font-size: 13px;
+        color: var(--dixy-color-text-secondary);
+      }
+      .scrim {
+        position: fixed;
+        inset: 60px 0 0;
+        background: rgb(0 0 0 / 0.18);
+        z-index: 30;
+        display: none;
+      }
+      .scrim[data-open] {
+        display: block;
+      }
+
+      /* ---------- Theme popover ---------- */
+      .popover-anchor {
+        position: relative;
+      }
+      .theme-pop {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 8px);
+        width: 320px;
+        z-index: 60;
+        background: var(--dixy-color-background-surface);
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        box-shadow: 0 20px 50px rgb(0 0 0 / 0.16);
+        padding: 14px;
+        display: none;
+      }
+      .theme-pop[data-open] {
+        display: grid;
+        gap: 14px;
+        animation: drop 0.16s ease-out;
+      }
+      .theme-pop h4 {
+        margin: 0 0 8px;
+      }
+      .skin-list {
+        display: grid;
+        gap: 4px;
+      }
+      .skin-opt {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 8px;
+        text-align: left;
+        border: var(--dixy-stroke-width) solid transparent;
+        background: transparent;
+        border-radius: var(--dixy-radius-control);
+        font-size: 14px;
+      }
+      .skin-opt:hover {
+        background: var(--dixy-color-background-muted);
+      }
+      .skin-opt[aria-checked="true"] {
+        border-color: var(--dixy-color-brand);
+        background: var(--dixy-color-brand-soft);
+      }
+      .skin-opt small {
+        display: block;
+        color: var(--dixy-color-text-tertiary);
+        font-size: 12px;
+      }
+      .seg {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        padding: 3px;
+        gap: 3px;
+        background: var(--dixy-color-background-muted);
+        border-radius: var(--dixy-radius-control);
+      }
+      .seg button {
+        border: 0;
+        background: transparent;
+        height: 30px;
+        border-radius: calc(var(--dixy-radius-control) - 2px);
+        font-size: 13px;
+        color: var(--dixy-color-text-secondary);
+      }
+      .seg button[aria-pressed="true"] {
+        background: var(--dixy-color-background-surface);
+        color: var(--dixy-color-text-primary);
+        box-shadow: 0 1px 2px rgb(0 0 0 / 0.08);
+        font-weight: 600;
+      }
+      .pop-note {
+        font-size: 12.5px;
+        color: var(--dixy-color-text-tertiary);
+        margin: 6px 0 0;
+      }
+
+      /* ---------- Sidebar ---------- */
+      .primary-nav,
+      .mega,
+      .scrim {
+        display: none !important;
+      }
+      .header-inner {
+        max-width: none;
+      }
+      .shell {
+        display: grid;
+        grid-template-columns: 264px minmax(0, 1fr);
+      }
+      .sidebar {
+        position: sticky;
+        top: 60px;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        padding: 20px 14px 32px 20px;
+        border-right: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+        background: color-mix(
+          in srgb,
+          var(--dixy-color-background-surface) 55%,
+          transparent
+        );
+        scrollbar-width: thin;
+      }
+      [data-skin="retro-os"] .sidebar {
+        background: var(--dixy-color-background-surface);
+        box-shadow: var(--dixy-shadow-raised);
+        border-right: 0;
+      }
+      .side-filter {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 34px;
+        padding: 0 10px;
+        margin-bottom: 18px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-control);
+        background: var(--dixy-color-background-surface);
+        color: var(--dixy-color-text-tertiary);
+        font-size: 13.5px;
+      }
+      .side-filter input {
+        border: 0;
+        outline: 0;
+        background: transparent;
+        font: inherit;
+        color: var(--dixy-color-text-primary);
+        width: 100%;
+      }
+      .side-group {
+        margin-bottom: 14px;
+      }
+      .side-group summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 8px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--dixy-color-text-primary);
+      }
+      .side-group summary::-webkit-details-marker {
+        display: none;
+      }
+      .side-group summary .count {
+        font-family: var(--dixy-font-mono);
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--dixy-color-text-tertiary);
+        margin-left: auto;
+        margin-right: 8px;
+      }
+      .side-group summary svg {
+        width: 12px;
+        height: 12px;
+        opacity: 0.5;
+        transition: transform 0.2s;
+      }
+      .side-group:not([open]) summary svg {
+        transform: rotate(-90deg);
+      }
+      .side-group h5 {
+        margin: 12px 8px 4px;
+      }
+      .side-group ul {
+        list-style: none;
+        margin: 2px 0 0;
+        padding: 0;
+      }
+      .side-group a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 8px;
+        border-radius: calc(var(--dixy-radius-control) * 0.8);
+        font-size: 14px;
+        color: var(--dixy-color-text-secondary);
+      }
+      .side-group a:hover {
+        background: var(--dixy-color-background-muted);
+        color: var(--dixy-color-text-primary);
+      }
+      .side-group a[aria-current="page"] {
+        background: var(--dixy-color-brand-soft);
+        color: var(--dixy-color-brand);
+        font-weight: 600;
+      }
+      [data-skin="retro-os"] .side-group a[aria-current="page"] {
+        background: var(--dixy-color-brand);
+        color: #fff;
+      }
+      [data-skin="swiss-poster"] .side-group a[aria-current="page"] {
+        background: transparent;
+        box-shadow: inset 3px 0 0 var(--dixy-color-brand);
+      }
+      .side-group a .new {
+        font-family: var(--dixy-font-mono);
+        font-size: 10px;
+        padding: 1px 5px;
+        border-radius: 4px;
+        background: var(--dixy-color-brand-soft);
+        color: var(--dixy-color-brand);
+      }
+      .side-theme {
+        margin-top: 18px;
+        padding: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        width: 100%;
+        text-align: left;
+        border: var(--dixy-stroke-width) dashed var(--dixy-color-border-strong);
+        border-radius: var(--dixy-radius-panel);
+        background: transparent;
+        font-size: 12.5px;
+        color: var(--dixy-color-text-secondary);
+      }
+      .side-theme strong {
+        display: block;
+        color: var(--dixy-color-text-primary);
+        font-size: 13px;
+      }
+
+      /* ---------- Page layout ---------- */
+      .page {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 220px;
+        gap: 64px;
+        padding-top: 28px;
+      }
+      .content {
+        max-width: 860px;
+        min-width: 0;
+      }
+      .crumbs {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 13.5px;
+        color: var(--dixy-color-text-tertiary);
+      }
+      .crumbs a:hover {
+        color: var(--dixy-color-text-primary);
+      }
+      .crumbs .sep {
+        opacity: 0.5;
+      }
+      .page-head {
+        padding: 28px 0 32px;
+        border-bottom: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+      }
+      .page-head h1 {
+        margin: 14px 0 12px;
+        font-family: var(--dixy-font-display);
+        font-weight: var(--display-weight);
+        font-size: clamp(42px, 6vw, 64px);
+        line-height: 1;
+        letter-spacing: var(--display-tracking);
+      }
+      .page-head h1 .dot {
+        color: var(--dixy-color-brand);
+      }
+      [data-skin="retro-os"] .page-head h1 {
+        font-size: clamp(52px, 8vw, 84px);
+      }
+      .lede {
+        font-size: 19px;
+        line-height: 1.45;
+        margin: 0 0 8px;
+      }
+      .sub {
+        color: var(--dixy-color-text-secondary);
+        margin: 0;
+        max-width: 62ch;
+      }
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 28px;
+        padding: 0 10px;
+        font-size: 12.5px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: 999px;
+        color: var(--dixy-color-text-secondary);
+        background: var(--dixy-color-background-surface);
+      }
+      [data-skin="retro-os"] .pill,
+      [data-skin="swiss-poster"] .pill {
+        border-radius: 0;
+      }
+      .pill.brand {
+        color: var(--dixy-color-brand);
+        border-color: color-mix(
+          in srgb,
+          var(--dixy-color-brand) 35%,
+          transparent
+        );
+        background: var(--dixy-color-brand-soft);
+      }
+
+      section.block {
+        padding: 48px 0 8px;
+        scroll-margin-top: 80px;
+      }
+      section.block h2 {
+        margin: 6px 0 10px;
+        font-family: var(--dixy-font-display);
+        font-weight: var(--display-weight);
+        font-size: 28px;
+        letter-spacing: var(--display-tracking);
+        line-height: 1.15;
+      }
+      [data-skin="retro-os"] section.block h2 {
+        font-size: 36px;
+      }
+      section.block > p {
+        color: var(--dixy-color-text-secondary);
+        margin: 0 0 20px;
+        max-width: 64ch;
+      }
+
+      /* Playground */
+      .playground {
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        background: var(--dixy-color-background-surface);
+        overflow: hidden;
+        box-shadow: var(--dixy-shadow-raised);
+      }
+      .pg-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-bottom: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+      }
+      [data-skin="retro-os"] .pg-bar {
+        background: var(--dixy-color-brand);
+        color: #fff;
+        border-bottom: 0;
+      }
+      [data-skin="retro-os"] .pg-bar .seg {
+        background: #c0c0c0;
+      }
+      .pg-bar .seg {
+        width: 180px;
+      }
+      .pg-bar .right {
+        margin-left: auto;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 12.5px;
+        white-space: nowrap;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      @media (max-width: 640px) {
+        .pg-bar .seg {
+          width: 140px;
+        }
+        .pg-bar .right {
+          font-size: 11px;
+        }
+      }
+      .pg-body {
+        display: grid;
+        grid-template-columns: 1fr 240px;
+        min-height: 340px;
+      }
+      .stage {
+        display: grid;
+        place-items: center;
+        gap: 12px;
+        padding: 32px;
+        background-image: var(--dot-grid);
+        background-size: 16px 16px;
+        position: relative;
+      }
+      .stage .tag {
+        position: absolute;
+        left: 12px;
+        bottom: 10px;
+        font-family: var(--dixy-font-mono);
+        font-size: 11px;
+        color: var(--dixy-color-text-tertiary);
+      }
+      .props {
+        border-left: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+        padding: 14px;
+        display: grid;
+        gap: 14px;
+        align-content: start;
+        background: var(--dixy-color-background-muted);
+      }
+      .prop label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .select {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 34px;
+        padding: 0 10px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-strong);
+        background: var(--dixy-color-background-surface);
+        border-radius: var(--dixy-radius-control);
+        font-size: 13.5px;
+        width: 100%;
+      }
+
+      /* Avatars (preview components read the same tokens) */
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .avatar {
+        --size: 44px;
+        width: var(--size);
+        height: var(--size);
+        display: grid;
+        place-items: center;
+        border-radius: min(var(--dixy-radius-control), 50%);
+        font-weight: 700;
+        font-size: calc(var(--size) * 0.34);
+        background: var(--dixy-color-brand-soft);
+        color: var(--dixy-color-brand);
+        border: var(--dixy-stroke-width) solid
+          color-mix(in srgb, var(--dixy-color-brand) 18%, transparent);
+        overflow: hidden;
+      }
+      [data-skin="candy-clay"] .avatar {
+        border-radius: 50%;
+        box-shadow:
+          inset 0 -3px 0 rgb(0 0 0 / 0.06),
+          0 4px 10px rgb(226 69 124 / 0.18);
+      }
+      [data-skin="retro-os"] .avatar {
+        box-shadow: var(--dixy-shadow-raised);
+        border: 0;
+        background: #c0c0c0;
+        color: #000080;
+      }
+      .avatar.solid {
+        background: var(--dixy-color-brand);
+        color: var(--dixy-color-brand-on-solid);
+      }
+      .avatar.outline {
+        background: transparent;
+        border-color: var(--dixy-color-border-strong);
+        color: var(--dixy-color-text-primary);
+      }
+      .avatar.sm {
+        --size: 32px;
+      }
+      .avatar.lg {
+        --size: 60px;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .avatar-group {
+        display: flex;
+      }
+      .avatar-group .avatar {
+        margin-left: -10px;
+        outline: 3px solid var(--dixy-color-background-surface);
+      }
+      .avatar-group .avatar:first-child {
+        margin-left: 0;
+      }
+
+      /* Code */
+      .code {
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        overflow: hidden;
+        background: var(--dixy-color-background-surface);
+      }
+      .code-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 14px;
+        border-bottom: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+        font-family: var(--dixy-font-mono);
+        font-size: 12px;
+        color: var(--dixy-color-text-tertiary);
+      }
+      .code pre {
+        margin: 0;
+        padding: 16px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        line-height: 1.7;
+        overflow-x: auto;
+        background: var(--dixy-color-background-muted);
+      }
+      .code .k {
+        color: var(--dixy-color-brand);
+      }
+      .code .s {
+        color: var(--dixy-color-text-secondary);
+      }
+      .code .c {
+        color: var(--dixy-color-text-tertiary);
+      }
+
+      /* Examples grid */
+      .examples {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .example {
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        background: var(--dixy-color-background-surface);
+        overflow: hidden;
+      }
+      .example .stage {
+        min-height: 150px;
+        padding: 24px;
+      }
+      .example footer {
+        padding: 12px 14px;
+        border-top: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+      }
+      .example footer strong {
+        display: block;
+        font-size: 14px;
+      }
+      .example footer span {
+        font-size: 13px;
+        color: var(--dixy-color-text-secondary);
+      }
+
+      /* API table */
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        overflow: hidden;
+        border-style: hidden;
+        box-shadow: 0 0 0 var(--dixy-stroke-width)
+          var(--dixy-color-border-default);
+      }
+      .table th,
+      .table td {
+        text-align: left;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--dixy-color-border-default);
+        vertical-align: top;
+      }
+      .table th {
+        font-family: var(--dixy-font-mono);
+        font-size: 11.5px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--dixy-color-text-tertiary);
+        background: var(--dixy-color-background-muted);
+      }
+      .table code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12.5px;
+      }
+      .table td:first-child code {
+        color: var(--dixy-color-brand);
+        font-weight: 500;
+      }
+      .table td small {
+        display: block;
+        color: var(--dixy-color-text-secondary);
+        margin-top: 4px;
+      }
+
+      /* TOC (on-page only, not navigation) */
+      .toc {
+        position: sticky;
+        top: 92px;
+        align-self: start;
+        font-size: 13.5px;
+      }
+      .toc ol {
+        list-style: none;
+        margin: 10px 0 0;
+        padding: 0;
+        border-left: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+      }
+      .toc a {
+        display: block;
+        padding: 5px 0 5px 14px;
+        margin-left: -1px;
+        border-left: 2px solid transparent;
+        color: var(--dixy-color-text-secondary);
+      }
+      .toc a:hover {
+        color: var(--dixy-color-text-primary);
+      }
+      .toc a[aria-current="true"] {
+        color: var(--dixy-color-text-primary);
+        border-left-color: var(--dixy-color-brand);
+        font-weight: 600;
+      }
+      .toc .theme-card {
+        margin-top: 24px;
+        padding: 14px;
+        border-radius: var(--dixy-radius-panel);
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        background: var(--dixy-color-background-surface);
+        font-size: 13px;
+        color: var(--dixy-color-text-secondary);
+      }
+      .toc .theme-card strong {
+        color: var(--dixy-color-text-primary);
+        display: block;
+        margin-bottom: 4px;
+      }
+      .toc-mobile {
+        display: none;
+      }
+
+      /* Prev / next */
+      .pager {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 56px 0 24px;
+      }
+      .pager a {
+        padding: 16px 18px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        background: var(--dixy-color-background-surface);
+        display: grid;
+        gap: 2px;
+      }
+      .pager a:hover {
+        border-color: var(--dixy-color-brand);
+      }
+      .pager a:last-child {
+        text-align: right;
+      }
+      .pager strong {
+        font-size: 16px;
+      }
+      .footer {
+        border-top: var(--dixy-stroke-width) solid
+          var(--dixy-color-border-default);
+        margin-top: 32px;
+      }
+      .footer .page {
+        display: flex;
+        justify-content: space-between;
+        padding: 24px;
+        font-size: 13px;
+        color: var(--dixy-color-text-tertiary);
+      }
+
+      /* Components index view */
+      .index-head {
+        padding: 40px 0 28px;
+      }
+      .filter-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 4px 0 24px;
+      }
+      .filter-row button {
+        height: 32px;
+        padding: 0 14px;
+        font-size: 13.5px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: 999px;
+        background: var(--dixy-color-background-surface);
+        color: var(--dixy-color-text-secondary);
+      }
+      [data-skin="retro-os"] .filter-row button,
+      [data-skin="swiss-poster"] .filter-row button {
+        border-radius: 0;
+      }
+      .filter-row button[aria-pressed="true"] {
+        background: var(--dixy-color-text-primary);
+        color: var(--dixy-color-background-canvas);
+        border-color: var(--dixy-color-text-primary);
+      }
+      .cgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 16px;
+        padding-bottom: 32px;
+      }
+      .ccard {
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        background: var(--dixy-color-background-surface);
+        overflow: hidden;
+        transition:
+          transform 0.15s,
+          border-color 0.15s;
+      }
+      .ccard:hover {
+        transform: translateY(-2px);
+        border-color: var(--dixy-color-border-strong);
+      }
+      [data-skin="swiss-poster"] .ccard:hover {
+        box-shadow: var(--dixy-shadow-raised);
+        transform: translate(-3px, -3px);
+      }
+      .ccard .thumb {
+        height: 120px;
+        display: grid;
+        place-items: center;
+        background-image: var(--dot-grid);
+        background-size: 14px 14px;
+        background-color: var(--dixy-color-background-muted);
+      }
+      .ccard .meta {
+        padding: 12px 14px;
+      }
+      .ccard .meta strong {
+        display: block;
+        font-size: 14.5px;
+      }
+      .ccard .meta span {
+        font-size: 12.5px;
+        color: var(--dixy-color-text-tertiary);
+      }
+      .mini-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--dixy-color-brand);
+        color: var(--dixy-color-brand-on-solid);
+        border-radius: var(--dixy-radius-control);
+      }
+      .mini-switch {
+        width: 38px;
+        height: 22px;
+        border-radius: 999px;
+        background: var(--dixy-color-brand);
+        position: relative;
+      }
+      .mini-switch::after {
+        content: "";
+        position: absolute;
+        right: 3px;
+        top: 3px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+      }
+      .mini-input {
+        width: 140px;
+        height: 32px;
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-strong);
+        border-radius: var(--dixy-radius-control);
+        background: var(--dixy-color-background-surface);
+      }
+      .mini-tabs {
+        display: flex;
+        gap: 2px;
+        padding: 3px;
+        background: var(--dixy-color-background-surface);
+        border-radius: var(--dixy-radius-control);
+        border: 1px solid var(--dixy-color-border-default);
+      }
+      .mini-tabs i {
+        display: block;
+        width: 36px;
+        height: 20px;
+        border-radius: calc(var(--dixy-radius-control) - 3px);
+      }
+      .mini-tabs i:first-child {
+        background: var(--dixy-color-brand-soft);
+      }
+      .mini-slider {
+        width: 140px;
+        height: 4px;
+        background: var(--dixy-color-border-strong);
+        border-radius: 4px;
+        position: relative;
+      }
+      .mini-slider::before {
+        content: "";
+        position: absolute;
+        inset: 0 40% 0 0;
+        background: var(--dixy-color-brand);
+        border-radius: 4px;
+      }
+      .mini-slider::after {
+        content: "";
+        position: absolute;
+        left: 60%;
+        top: 50%;
+        width: 16px;
+        height: 16px;
+        translate: -50% -50%;
+        border-radius: 50%;
+        background: #fff;
+        border: 2px solid var(--dixy-color-brand);
+      }
+      .mini-card {
+        width: 140px;
+        padding: 10px;
+        display: grid;
+        gap: 6px;
+        background: var(--dixy-color-background-surface);
+        border: 1px solid var(--dixy-color-border-default);
+        border-radius: calc(var(--dixy-radius-panel) * 0.6);
+      }
+      .mini-card i {
+        display: block;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--dixy-color-border-strong);
+      }
+      .mini-card i:first-child {
+        width: 60%;
+        background: var(--dixy-color-text-primary);
+      }
+
+      /* Mobile sheet */
+      .sheet {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        background: var(--dixy-color-background-canvas);
+        display: none;
+        flex-direction: column;
+      }
+      .sheet[data-open] {
+        display: flex;
+      }
+      .sheet-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+        padding: 0 16px;
+        border-bottom: 1px solid var(--dixy-color-border-default);
+      }
+      .sheet-body {
+        overflow: auto;
+        padding: 16px;
+        display: grid;
+        gap: 8px;
+      }
+      .sheet details {
+        border: var(--dixy-stroke-width) solid var(--dixy-color-border-default);
+        border-radius: var(--dixy-radius-panel);
+        background: var(--dixy-color-background-surface);
+      }
+      .sheet summary {
+        padding: 14px 16px;
+        font-weight: 600;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+      }
+      .sheet summary::after {
+        content: "+";
+        color: var(--dixy-color-text-tertiary);
+      }
+      .sheet details[open] summary::after {
+        content: "–";
+      }
+      .sheet details ul {
+        list-style: none;
+        margin: 0;
+        padding: 0 16px 14px;
+        columns: 2;
+        gap: 16px;
+      }
+      .sheet details li a {
+        display: block;
+        padding: 6px 0;
+        font-size: 14.5px;
+        color: var(--dixy-color-text-secondary);
+      }
+
+      /* ---------- Responsive ---------- */
+      @media (max-width: 1180px) {
+        .layout {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .toc {
+          display: none;
+        }
+        .toc-mobile {
+          display: block;
+          position: sticky;
+          top: 60px;
+          z-index: 20;
+          margin: 0 -24px;
+          padding: 8px 24px;
+          background: var(--header-bg);
+          backdrop-filter: blur(var(--header-blur));
+          border-bottom: 1px solid var(--dixy-color-border-default);
+        }
+        .toc-mobile select {
+          width: 100%;
+          height: 36px;
+          border-radius: var(--dixy-radius-control);
+          border: 1px solid var(--dixy-color-border-default);
+          background: var(--dixy-color-background-surface);
+          color: var(--dixy-color-text-primary);
+          padding: 0 10px;
+          font: inherit;
+          font-size: 14px;
+        }
+        .mega-groups {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 1024px) {
+        .search {
+          display: none;
+        }
+        .menu-btn {
+          display: grid;
+        }
+        .search-icon {
+          display: grid !important;
+        }
+        .shell {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .sidebar {
+          display: none;
+        }
+      }
+      @media (max-width: 900px) {
+        .theme-chip .label {
+          display: none;
+        }
+        .theme-chip {
+          padding: 0 6px;
+        }
+        .pg-body {
+          grid-template-columns: 1fr;
+        }
+        .props {
+          border-left: 0;
+          border-top: var(--dixy-stroke-width) solid
+            var(--dixy-color-border-default);
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .header-inner,
+        .page {
+          padding: 0 16px;
+        }
+        .toc-mobile {
+          margin: 0 -16px;
+          padding: 8px 16px;
+        }
+        .brand .ver {
+          display: none;
+        }
+        .examples,
+        .pager {
+          grid-template-columns: 1fr;
+        }
+        .theme-pop {
+          position: fixed;
+          left: 12px;
+          right: 12px;
+          top: 64px;
+          width: auto;
+        }
+        .table thead {
+          display: none;
+        }
+        .table tr {
+          display: grid;
+          padding: 4px 0;
+          border-bottom: 1px solid var(--dixy-color-border-default);
+        }
+        .table td {
+          border: 0;
+          padding: 6px 14px;
+        }
+        .lede {
+          font-size: 17px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dixy-theme" id="root" data-skin="dixy" data-appearance="light">
+      <a class="sr-only" href="#main">Skip to content</a>
+
+      <!-- ===================== HEADER ===================== -->
+      <header class="header">
+        <div class="header-inner">
+          <a
+            class="brand"
+            href="#"
+            data-view="components"
+            aria-label="Dixy UI home"
+          >
+            <span class="brand-mark">d</span>dixy
+            <span class="ver">0.1 beta</span>
+          </a>
+
+          <nav class="primary-nav" aria-label="Documentation">
+            <button class="nav-trigger" aria-expanded="false" data-mega="start">
+              Get started
+              <svg
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <path d="M3 4.5 6 7.5 9 4.5" />
+              </svg>
+            </button>
+            <button
+              class="nav-trigger"
+              aria-expanded="false"
+              data-mega="foundations"
+            >
+              Foundations
+              <svg
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <path d="M3 4.5 6 7.5 9 4.5" />
+              </svg>
+            </button>
+            <button
+              class="nav-trigger"
+              aria-expanded="false"
+              aria-current="true"
+              data-mega="components"
+            >
+              Components
+              <svg
+                viewBox="0 0 12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <path d="M3 4.5 6 7.5 9 4.5" />
+              </svg>
+            </button>
+            <a class="nav-trigger" href="#">Playground</a>
+            <a class="nav-trigger" href="#">Accessibility</a>
+          </nav>
+
+          <div class="header-tools">
+            <button class="search" aria-label="Search documentation">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <circle cx="7" cy="7" r="5" />
+                <path d="m11 11 3.5 3.5" />
+              </svg>
+              Search docs <kbd>⌘K</kbd>
+            </button>
+            <button
+              class="icon-btn search-icon"
+              aria-label="Search documentation"
+              style="display: none"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <circle cx="7" cy="7" r="5" />
+                <path d="m11 11 3.5 3.5" />
+              </svg>
+            </button>
+
+            <div class="popover-anchor">
+              <button
+                class="theme-chip"
+                id="themeBtn"
+                aria-haspopup="dialog"
+                aria-expanded="false"
+              >
+                <span class="swatch" id="chipSwatch"></span>
+                <span class="label"><span id="chipName">Dixy</span></span>
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                >
+                  <path d="M3 4.5 6 7.5 9 4.5" />
+                </svg>
+              </button>
+              <div
+                class="theme-pop"
+                id="themePop"
+                role="dialog"
+                aria-label="Theme"
+              >
+                <div>
+                  <h4 class="eyebrow">Theme</h4>
+                  <div class="skin-list" role="radiogroup" id="skinList"></div>
+                </div>
+                <div>
+                  <h4 class="eyebrow">Appearance</h4>
+                  <div class="seg" id="appearanceSeg">
+                    <button aria-pressed="true" data-appearance="light">
+                      Light
+                    </button>
+                    <button aria-pressed="false" data-appearance="dark">
+                      Dark
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="eyebrow">Apply to</h4>
+                  <div class="seg" id="scopeSeg">
+                    <button aria-pressed="true" data-scope="all">
+                      Whole docs
+                    </button>
+                    <button aria-pressed="false" data-scope="previews">
+                      Previews only
+                    </button>
+                  </div>
+                  <p class="pop-note">
+                    Same setting the playground writes. Saved in a cookie so SSR
+                    renders it on first paint.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <button class="icon-btn" id="modeBtn" aria-label="Toggle dark mode">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M13.5 9.5A5.5 5.5 0 0 1 6.5 2.5a5.5 5.5 0 1 0 7 7Z" />
+              </svg>
+            </button>
+            <button
+              class="icon-btn menu-btn"
+              id="menuBtn"
+              aria-label="Open navigation"
+            >
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              >
+                <path d="M2.5 5h11M2.5 11h11" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mega menus -->
+        <div class="mega" id="mega-components">
+          <div class="mega-inner cols-components">
+            <div class="mega-feature">
+              <span class="eyebrow">72 components</span>
+              <h3>Built on Base UI, styled by your theme.</h3>
+              <p>Every preview follows the theme you pick in the header.</p>
+              <a href="#" data-view="components">Browse all components →</a>
+            </div>
+            <div class="mega-groups" id="megaGroups"></div>
+          </div>
+        </div>
+        <div class="mega" id="mega-foundations">
+          <div class="mega-inner">
+            <div class="mega-cards">
+              <a class="mega-card" href="#"
+                ><strong>Theming</strong
+                ><span>Skins, appearance and the Theme root.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Color</strong
+                ><span>Semantic roles across light and dark.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Typography</strong
+                ><span>Display, title, body and label roles.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Spacing & sizing</strong
+                ><span>Density-aware insets and shirt sizes.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Radius, border & shadow</strong
+                ><span>Contextual rounding and elevation.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Materials</strong
+                ><span>Matte, glossy, soft, metal, paper.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Motion</strong
+                ><span>Feedback timing and reduced motion.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Icons</strong><span>Built-in set and sizing.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Emotion & haptics</strong
+                ><span>Character beyond the visuals.</span></a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="mega" id="mega-start">
+          <div class="mega-inner">
+            <div class="mega-cards">
+              <a class="mega-card" href="#"
+                ><strong>Introduction</strong
+                ><span>What Dixy is and how it's built.</span></a
+              >
+              <a class="mega-card" href="#"
+                ><strong>Installation</strong
+                ><span>pnpm add, styles.css, Theme root.</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="scrim" id="scrim"></div>
+
+      <!-- ===================== MAIN ===================== -->
+      <div class="shell">
+        <aside class="sidebar" aria-label="Documentation">
+          <label class="side-filter">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.6"
+            >
+              <circle cx="7" cy="7" r="5" />
+              <path d="m11 11 3.5 3.5" />
+            </svg>
+            <input
+              id="sideFilter"
+              placeholder="Filter pages"
+              aria-label="Filter pages"
+            />
+          </label>
+          <nav id="sideNav"></nav>
+          <button class="side-theme" id="sideTheme">
+            <span class="swatch" id="sideSwatch"></span>
+            <span
+              ><strong id="sideSkin">Dixy</strong>Applied to docs and
+              previews</span
+            >
+          </button>
+        </aside>
+        <main id="main">
+          <!-- View: component page -->
+          <div class="page" data-page="avatar">
+            <div class="toc-mobile">
+              <label class="sr-only" for="tocSelect">On this page</label>
+              <select id="tocSelect">
+                <option value="playground">On this page · Playground</option>
+                <option value="usage">Usage</option>
+                <option value="examples">Examples & states</option>
+                <option value="api">API reference</option>
+                <option value="a11y">Accessibility</option>
+              </select>
+            </div>
+
+            <div class="layout">
+              <article class="content">
+                <nav class="crumbs" aria-label="Breadcrumb">
+                  <a href="#" data-view="components">Components</a
+                  ><span class="sep">/</span><span>Content</span
+                  ><span class="sep">/</span
+                  ><span
+                    aria-current="page"
+                    style="color: var(--dixy-color-text-primary)"
+                    >Avatar</span
+                  >
+                </nav>
+
+                <header class="page-head">
+                  <h1>Avatar<span class="dot">.</span></h1>
+                  <p class="lede">
+                    A recognizable face, with a dependable fallback.
+                  </p>
+                  <p class="sub">
+                    Root controls the frame; Image and Fallback share it. A
+                    failed image reveals the fallback.
+                  </p>
+                  <div class="meta-row">
+                    <span class="pill brand">● Beta</span>
+                    <span class="pill">Built on Base UI</span>
+                    <span class="pill">Keyboard considered</span>
+                    <a class="pill" href="#">View source ↗</a>
+                  </div>
+                </header>
+
+                <section class="block" id="playground">
+                  <span class="eyebrow">Make it yours</span>
+                  <h2>Playground</h2>
+                  <p>
+                    A real component, rendered inside the same theme as this
+                    page.
+                  </p>
+                  <div class="playground">
+                    <div class="pg-bar">
+                      <div class="seg">
+                        <button aria-pressed="true">Preview</button
+                        ><button aria-pressed="false">Code</button>
+                      </div>
+                      <div class="right">
+                        <span class="mono" id="themeTag">dixy / light</span>
+                      </div>
+                    </div>
+                    <div class="pg-body">
+                      <div class="stage">
+                        <div
+                          style="
+                            display: grid;
+                            gap: 18px;
+                            justify-items: center;
+                          "
+                        >
+                          <div class="avatar-row">
+                            <span class="avatar sm">AS</span>
+                            <span class="avatar">AS</span>
+                            <span class="avatar lg">AS</span>
+                          </div>
+                          <div class="avatar-group">
+                            <span class="avatar">KL</span
+                            ><span class="avatar solid">MR</span
+                            ><span class="avatar outline">JP</span
+                            ><span class="avatar">+4</span>
+                          </div>
+                        </div>
+                        <span class="tag"
+                          >Image and initials share the same frame.</span
+                        >
+                      </div>
+                      <div class="props">
+                        <div class="prop">
+                          <label>Size</label
+                          ><button class="select">md <span>⌄</span></button>
+                        </div>
+                        <div class="prop">
+                          <label>Variant</label
+                          ><button class="select">soft <span>⌄</span></button>
+                        </div>
+                        <div class="prop">
+                          <label>Color</label
+                          ><button class="select">accent <span>⌄</span></button>
+                        </div>
+                        <div class="prop">
+                          <label>Radius</label
+                          ><button class="select">theme <span>⌄</span></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="block" id="usage">
+                  <span class="eyebrow">A place to start</span>
+                  <h2>Usage</h2>
+                  <p>Import the stylesheet once at your application root.</p>
+                  <div class="code">
+                    <div class="code-head">
+                      <span>avatar-example.tsx</span
+                      ><button class="pill" style="height: 24px">Copy</button>
+                    </div>
+                    <pre><span class="k">import</span> <span class="s">"@dixy-ui/react/styles.css"</span>;
+<span class="k">import</span> { Avatar, Theme } <span class="k">from</span> <span class="s">"@dixy-ui/react"</span>;
+
+<span class="k">export function</span> Profile() {
+  <span class="k">return</span> (
+    &lt;Theme skin=<span class="s">"<span id="codeSkin">dixy</span>"</span>&gt;
+      &lt;Avatar.Root size=<span class="s">"md"</span>&gt;
+        &lt;Avatar.Image src={url} alt=<span class="s">"Akshay Saini"</span> /&gt;
+        &lt;Avatar.Fallback&gt;AS&lt;/Avatar.Fallback&gt;
+      &lt;/Avatar.Root&gt;
+    &lt;/Theme&gt;
+  );
+}</pre>
+                  </div>
+                </section>
+
+                <section class="block" id="examples">
+                  <span class="eyebrow">Details that make a difference</span>
+                  <h2>Examples &amp; states</h2>
+                  <p>Each example renders live in the current theme.</p>
+                  <div class="examples">
+                    <div class="example">
+                      <div class="stage">
+                        <div class="avatar-row">
+                          <span class="avatar sm">S</span
+                          ><span class="avatar">M</span
+                          ><span class="avatar lg">L</span>
+                        </div>
+                      </div>
+                      <footer>
+                        <strong>Sizes</strong
+                        ><span>sm, md, lg shirt sizes.</span>
+                      </footer>
+                    </div>
+                    <div class="example">
+                      <div class="stage">
+                        <div class="avatar-row">
+                          <span class="avatar">So</span
+                          ><span class="avatar solid">Sd</span
+                          ><span class="avatar outline">Ol</span>
+                        </div>
+                      </div>
+                      <footer>
+                        <strong>Visual treatments</strong
+                        ><span>Emphasis changes, behavior doesn't.</span>
+                      </footer>
+                    </div>
+                    <div class="example">
+                      <div class="stage">
+                        <div class="avatar-group">
+                          <span class="avatar">AB</span
+                          ><span class="avatar">CD</span
+                          ><span class="avatar">EF</span
+                          ><span class="avatar outline">+9</span>
+                        </div>
+                      </div>
+                      <footer>
+                        <strong>Group</strong
+                        ><span>Overlap with a surface ring.</span>
+                      </footer>
+                    </div>
+                    <div class="example">
+                      <div class="stage">
+                        <div class="avatar-row">
+                          <span class="avatar outline">?</span
+                          ><span class="avatar">AS</span>
+                        </div>
+                      </div>
+                      <footer>
+                        <strong>Fallback</strong
+                        ><span>Failed image reveals initials.</span>
+                      </footer>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="block" id="api">
+                  <span class="eyebrow">The finer details</span>
+                  <h2>API reference</h2>
+                  <p>Generated from Dixy's local TypeScript interfaces.</p>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Prop</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>size</code></td>
+                        <td>
+                          <code>"sm" | "md" | "lg"</code
+                          ><small>Image and fallback frame dimensions.</small>
+                        </td>
+                        <td><code>md</code></td>
+                      </tr>
+                      <tr>
+                        <td><code>variant</code></td>
+                        <td>
+                          <code>"soft" | "solid" | "outline"</code
+                          ><small>Visual emphasis.</small>
+                        </td>
+                        <td><code>soft</code></td>
+                      </tr>
+                      <tr>
+                        <td><code>color</code></td>
+                        <td>
+                          <code
+                            >"neutral" | "accent" | "danger" | "success"</code
+                          ><small>Semantic emphasis.</small>
+                        </td>
+                        <td><code>accent</code></td>
+                      </tr>
+                      <tr>
+                        <td><code>radius</code></td>
+                        <td>
+                          <code>"none" | "sm" | "md" | "lg" | "full"</code
+                          ><small>Contextual rounding.</small>
+                        </td>
+                        <td><code>Theme.radius</code></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+
+                <section class="block" id="a11y">
+                  <span class="eyebrow">Consider everyone</span>
+                  <h2>Accessibility</h2>
+                  <p>
+                    A fallback is a loading/error path, not evidence the image
+                    loaded. Provide meaningful names; colour alone never
+                    communicates state.
+                  </p>
+                </section>
+
+                <nav class="pager" aria-label="Pagination">
+                  <a href="#"
+                    ><span class="eyebrow">Previous</span
+                    ><strong>Autocomplete</strong></a
+                  >
+                  <a href="#"
+                    ><span class="eyebrow">Next</span
+                    ><strong>Avatar Group</strong></a
+                  >
+                </nav>
+              </article>
+
+              <aside class="toc" aria-label="On this page">
+                <span class="eyebrow">On this page</span>
+                <ol id="tocList">
+                  <li>
+                    <a href="#playground" aria-current="true">Playground</a>
+                  </li>
+                  <li><a href="#usage">Usage</a></li>
+                  <li><a href="#examples">Examples &amp; states</a></li>
+                  <li><a href="#api">API reference</a></li>
+                  <li><a href="#a11y">Accessibility</a></li>
+                </ol>
+                <div class="theme-card">
+                  <strong>Viewing in <span id="tocSkin">Dixy</span></strong>
+                  Every page, preview and code sample follows the header theme.
+                </div>
+              </aside>
+            </div>
+          </div>
+
+          <!-- View: components index -->
+          <div class="page" data-page="components" hidden>
+            <div class="index-head">
+              <span class="eyebrow">Components</span>
+              <div class="page-head" style="border: 0; padding: 0">
+                <h1>Components<span class="dot">.</span></h1>
+                <p class="sub">
+                  72 accessible primitives, each one rendered live in the theme
+                  you've picked.
+                </p>
+              </div>
+            </div>
+            <div class="filter-row" id="filters"></div>
+            <div class="cgrid" id="cgrid"></div>
+          </div>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <div class="page">
+          <span>Dixy UI · Considered details. Open possibilities.</span
+          ><span>Built in the open · 2026</span>
+        </div>
+      </footer>
+
+      <!-- Mobile nav sheet -->
+      <div class="sheet" id="sheet" role="dialog" aria-label="Navigation">
+        <div class="sheet-head">
+          <span class="brand"><span class="brand-mark">d</span>dixy</span
+          ><button
+            class="icon-btn"
+            id="sheetClose"
+            aria-label="Close navigation"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="sheet-body" id="sheetBody"></div>
+      </div>
+    </div>
+
+    <script>
+      const skins = [
+        {
+          id: "dixy",
+          name: "Dixy",
+          note: "Default · neutral",
+          c: ["#7c3aed", "#fafafa", "#18181b", "#f1eafe"],
+        },
+        {
+          id: "ocean-depths",
+          name: "Ocean Depths",
+          note: "Serif · glassy teal",
+          c: ["#0e7c86", "#dff3f1", "#0c2c33", "#cdeeee"],
+        },
+        {
+          id: "retro-os",
+          name: "Retro OS",
+          note: "Bevels · pixel display",
+          c: ["#000080", "#c0c0c0", "#008080", "#ffffff"],
+        },
+        {
+          id: "swiss-poster",
+          name: "Swiss Poster",
+          note: "Hard edges · grid",
+          c: ["#e3120b", "#f4f1ea", "#0a0a0a", "#ffffff"],
+        },
+        {
+          id: "candy-clay",
+          name: "Candy Clay",
+          note: "Soft · rounded",
+          c: ["#e2457c", "#fdf0f4", "#3b1d2a", "#ffe0eb"],
+        },
+      ];
+      const groups = {
+        Actions: [
+          "Button",
+          "Button Group",
+          "Toggle",
+          "Toggle Group",
+          "Toolbar",
+          "Link",
+          "Kbd",
+        ],
+        Forms: [
+          "Text Field",
+          "Textarea",
+          "Number Field",
+          "Search Field",
+          "OTP Field",
+          "Checkbox",
+          "Checkbox Group",
+          "Radio Group",
+          "Switch",
+          "Slider",
+          "Select",
+          "Combobox",
+          "Autocomplete",
+          "DatePicker",
+          "ColorPicker",
+          "Field",
+          "Form",
+        ],
+        Overlays: [
+          "Dialog",
+          "Alert Dialog",
+          "Drawer",
+          "Popover",
+          "Tooltip",
+          "Menu",
+          "Context Menu",
+          "Preview Card",
+          "Toast",
+          "Command",
+        ],
+        Navigation: [
+          "Tabs",
+          "Breadcrumbs",
+          "Pagination",
+          "Navigation Menu",
+          "Menubar",
+          "Sidebar",
+        ],
+        Content: [
+          "Avatar",
+          "Avatar Group",
+          "Badge",
+          "Chip",
+          "Card",
+          "Item",
+          "Icon",
+          "Typography",
+          "Empty State",
+        ],
+        Data: [
+          "Table",
+          "DataTable",
+          "Chart",
+          "Calendar",
+          "ListBox",
+          "TagGroup",
+        ],
+        Feedback: [
+          "Alert",
+          "Progress",
+          "ProgressCircle",
+          "Meter",
+          "Spinner",
+          "Skeleton",
+        ],
+        Layout: [
+          "Accordion",
+          "Collapsible",
+          "Separator",
+          "Scroll Area",
+          "Resizable Panels",
+          "AspectRatio",
+          "Carousel",
+        ],
+      };
+      const thumbs = {
+        Button: '<span class="mini-btn">Continue</span>',
+        Switch: '<span class="mini-switch"></span>',
+        "Text Field": '<span class="mini-input"></span>',
+        Tabs: '<span class="mini-tabs"><i></i><i></i><i></i></span>',
+        Slider: '<span class="mini-slider"></span>',
+        Card: '<span class="mini-card"><i></i><i></i><i></i></span>',
+        Avatar:
+          '<span class="avatar-row"><span class="avatar">AS</span><span class="avatar solid">KL</span></span>',
+        "Avatar Group":
+          '<span class="avatar-group"><span class="avatar">A</span><span class="avatar">B</span><span class="avatar">C</span></span>',
+      };
+
+      const root = document.getElementById("root");
+      const store = {
+        get(k, d) {
+          try {
+            return localStorage.getItem("dixy-mock-" + k) ?? d;
+          } catch {
+            return d;
+          }
+        },
+        set(k, v) {
+          try {
+            localStorage.setItem("dixy-mock-" + k, v);
+          } catch {}
+        },
+      };
+      let state = {
+        skin: store.get("skin", "dixy"),
+        appearance: store.get("appearance", "light"),
+        scope: store.get("scope", "all"),
+      };
+
+      const swatchHTML = (s) =>
+        s.c.map((c) => `<i style="background:${c}"></i>`).join("");
+
+      function apply() {
+        const s = skins.find((x) => x.id === state.skin) ?? skins[0];
+        // Whole docs: the root carries the skin. Previews only: root stays Dixy,
+        // and each preview surface opts into the skin.
+        root.dataset.skin = state.scope === "all" ? s.id : "dixy";
+        root.dataset.appearance = state.appearance;
+        document.querySelectorAll(".stage, .ccard .thumb").forEach((el) => {
+          if (state.scope === "previews") {
+            el.classList.add("dixy-theme");
+            el.dataset.skin = s.id;
+            el.dataset.appearance = state.appearance;
+            el.style.minHeight = "";
+          } else {
+            el.classList.remove("dixy-theme");
+            delete el.dataset.skin;
+            delete el.dataset.appearance;
+          }
+        });
+        document.getElementById("chipSwatch").innerHTML = swatchHTML(s);
+        document.getElementById("chipName").textContent = s.name;
+        document.getElementById("tocSkin").textContent = s.name;
+        document.getElementById("codeSkin").textContent = s.id;
+        document.getElementById("themeTag").textContent =
+          `${s.id} / ${state.appearance}`;
+        document
+          .querySelectorAll(".skin-opt")
+          .forEach((b) =>
+            b.setAttribute("aria-checked", b.dataset.skin === s.id),
+          );
+        document
+          .querySelectorAll("#appearanceSeg button")
+          .forEach((b) =>
+            b.setAttribute(
+              "aria-pressed",
+              b.dataset.appearance === state.appearance,
+            ),
+          );
+        document
+          .querySelectorAll("#scopeSeg button")
+          .forEach((b) =>
+            b.setAttribute("aria-pressed", b.dataset.scope === state.scope),
+          );
+        Object.entries(state).forEach(([k, v]) => store.set(k, v));
+      }
+
+      // Skin list
+      document.getElementById("skinList").innerHTML = skins
+        .map(
+          (s) =>
+            `<button class="skin-opt" role="radio" data-skin="${s.id}"><span class="swatch">${swatchHTML(s)}</span><span>${s.name}<small>${s.note}</small></span></button>`,
+        )
+        .join("");
+      document.getElementById("skinList").addEventListener("click", (e) => {
+        const b = e.target.closest(".skin-opt");
+        if (!b) return;
+        state.skin = b.dataset.skin;
+        apply();
+      });
+      document
+        .getElementById("appearanceSeg")
+        .addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          state.appearance = b.dataset.appearance;
+          apply();
+        });
+      document.getElementById("scopeSeg").addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        state.scope = b.dataset.scope;
+        apply();
+      });
+      document.getElementById("modeBtn").addEventListener("click", () => {
+        state.appearance = state.appearance === "light" ? "dark" : "light";
+        apply();
+      });
+
+      // Theme popover
+      const themeBtn = document.getElementById("themeBtn"),
+        themePop = document.getElementById("themePop");
+      themeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeMega();
+        const open = !themePop.hasAttribute("data-open");
+        themePop.toggleAttribute("data-open", open);
+        themeBtn.setAttribute("aria-expanded", open);
+      });
+      themePop.addEventListener("click", (e) => e.stopPropagation());
+      document.addEventListener("click", () => {
+        themePop.removeAttribute("data-open");
+        themeBtn.setAttribute("aria-expanded", "false");
+      });
+
+      // Mega menus
+      document.getElementById("megaGroups").innerHTML = Object.entries(groups)
+        .map(
+          ([g, items]) =>
+            `<div class="mega-group"><h4 class="eyebrow">${g}</h4><ul>${items
+              .slice(0, 7)
+              .map(
+                (i) =>
+                  `<li><a href="#" data-view="${i === "Avatar" ? "avatar" : "avatar"}" ${i === "Avatar" ? 'aria-current="page"' : ""}>${i}</a></li>`,
+              )
+              .join(
+                "",
+              )}${items.length > 7 ? `<li><a href="#" data-view="components" style="color:var(--dixy-color-text-tertiary)">+${items.length - 7} more</a></li>` : ""}</ul></div>`,
+        )
+        .join("");
+      const scrim = document.getElementById("scrim");
+      function closeMega() {
+        document
+          .querySelectorAll(".mega")
+          .forEach((m) => m.removeAttribute("data-open"));
+        document
+          .querySelectorAll("[data-mega]")
+          .forEach((b) => b.setAttribute("aria-expanded", "false"));
+        scrim.removeAttribute("data-open");
+      }
+      document.querySelectorAll("[data-mega]").forEach((btn) =>
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const panel = document.getElementById("mega-" + btn.dataset.mega);
+          const wasOpen = panel.hasAttribute("data-open");
+          closeMega();
+          themePop.removeAttribute("data-open");
+          if (!wasOpen) {
+            panel.setAttribute("data-open", "");
+            btn.setAttribute("aria-expanded", "true");
+            scrim.setAttribute("data-open", "");
+          }
+        }),
+      );
+      scrim.addEventListener("click", closeMega);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeMega();
+          themePop.removeAttribute("data-open");
+          sheet.removeAttribute("data-open");
+        }
+      });
+
+      // Views
+      function show(view) {
+        document
+          .querySelectorAll("[data-page]")
+          .forEach((p) => (p.hidden = p.dataset.page !== view));
+        closeMega();
+        sheet.removeAttribute("data-open");
+        window.scrollTo({ top: 0 });
+        apply();
+      }
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest("[data-view]");
+        if (a) {
+          e.preventDefault();
+          show(a.dataset.view);
+        }
+      });
+
+      // Components index
+      const all = Object.entries(groups).flatMap(([g, items]) =>
+        items.map((n) => ({ n, g })),
+      );
+      let filter = "All";
+      function renderIndex() {
+        document.getElementById("filters").innerHTML = [
+          "All",
+          ...Object.keys(groups),
+        ]
+          .map(
+            (f) =>
+              `<button aria-pressed="${f === filter}" data-f="${f}">${f}</button>`,
+          )
+          .join("");
+        document.getElementById("cgrid").innerHTML = all
+          .filter((c) => filter === "All" || c.g === filter)
+          .map(
+            (c) =>
+              `<a class="ccard" href="#" data-view="avatar"><div class="thumb">${thumbs[c.n] ?? '<span class="mini-card"><i></i><i></i></span>'}</div><div class="meta"><strong>${c.n}</strong><span>${c.g}</span></div></a>`,
+          )
+          .join("");
+        apply();
+      }
+      document.getElementById("filters").addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (b) {
+          filter = b.dataset.f;
+          renderIndex();
+        }
+      });
+
+      // Mobile sheet
+      const sheet = document.getElementById("sheet");
+      document.getElementById("sheetBody").innerHTML =
+        `<details open><summary>Get started</summary><ul><li><a href="#">Introduction</a></li><li><a href="#">Installation</a></li><li><a href="#">Playground</a></li><li><a href="#">Accessibility</a></li></ul></details>` +
+        `<details><summary>Foundations</summary><ul>${["Theming", "Color", "Typography", "Icons", "Spacing", "Sizing & layout", "Surfaces", "Shape", "Materials", "Motion"].map((x) => `<li><a href="#">${x}</a></li>`).join("")}</ul></details>` +
+        Object.entries(groups)
+          .map(
+            ([g, items]) =>
+              `<details><summary>${g}</summary><ul>${items.map((i) => `<li><a href="#" data-view="avatar">${i}</a></li>`).join("")}</ul></details>`,
+          )
+          .join("");
+      document
+        .getElementById("menuBtn")
+        .addEventListener("click", () => sheet.setAttribute("data-open", ""));
+      document
+        .getElementById("sheetClose")
+        .addEventListener("click", () => sheet.removeAttribute("data-open"));
+
+      // Sidebar
+      const chev =
+        '<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 4.5 6 7.5 9 4.5"/></svg>';
+      const sideData = [
+        ["Start here", ["Introduction", "Installation"]],
+        [
+          "Foundations",
+          [
+            "Theming",
+            "Color",
+            "Typography",
+            "Icons",
+            "Spacing",
+            "Sizing & layout",
+            "Radius, border & shadow",
+            "Shape",
+            "Materials",
+            "Emotion",
+            "Haptics",
+            "Motion",
+          ],
+        ],
+        ["Components", null],
+        ["Resources", ["Accessibility", "Playground"]],
+      ];
+      function renderSide(q = "") {
+        q = q.toLowerCase();
+        const link = (i) =>
+          `<li><a href="#" data-view="${["Avatar"].includes(i) || groups.Content.includes(i) || all.some((c) => c.n === i) ? "avatar" : "avatar"}" ${i === "Avatar" ? 'aria-current="page"' : ""}><span>${i}</span>${["Chart", "DataTable", "ColorPicker"].includes(i) ? '<span class="new">new</span>' : ""}</a></li>`;
+        document.getElementById("sideNav").innerHTML = sideData
+          .map(([title, items]) => {
+            if (items) {
+              const hits = items.filter((i) => i.toLowerCase().includes(q));
+              if (!hits.length) return "";
+              return `<details class="side-group" open><summary>${title}<span class="count">${items.length}</span>${chev}</summary><ul>${hits.map(link).join("")}</ul></details>`;
+            }
+            const sub = Object.entries(groups)
+              .map(([g, list]) => {
+                const hits = list.filter((i) => i.toLowerCase().includes(q));
+                return hits.length
+                  ? `<h5 class="eyebrow">${g}</h5><ul>${hits.map(link).join("")}</ul>`
+                  : "";
+              })
+              .join("");
+            return sub
+              ? `<details class="side-group" open><summary>${title}<span class="count">${all.length}</span>${chev}</summary>${sub}</details>`
+              : "";
+          })
+          .join("");
+      }
+      renderSide();
+      document
+        .getElementById("sideFilter")
+        .addEventListener("input", (e) => renderSide(e.target.value));
+      document.getElementById("sideTheme").addEventListener("click", (e) => {
+        e.stopPropagation();
+        themeBtn.click();
+      });
+      const _apply = apply;
+      apply = function () {
+        _apply();
+        const s = skins.find((x) => x.id === state.skin) ?? skins[0];
+        document.getElementById("sideSwatch").innerHTML = swatchHTML(s);
+        document.getElementById("sideSkin").textContent = s.name;
+      };
+      setTimeout(
+        () =>
+          document
+            .querySelector('.sidebar [aria-current="page"]')
+            ?.scrollIntoView({ block: "center" }),
+        0,
+      );
+
+      // TOC scrollspy + mobile select
+      const tocLinks = [...document.querySelectorAll("#tocList a")];
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((en) => {
+            if (en.isIntersecting) {
+              tocLinks.forEach((a) =>
+                a.setAttribute(
+                  "aria-current",
+                  a.getAttribute("href") === "#" + en.target.id,
+                ),
+              );
+              document.getElementById("tocSelect").value = en.target.id;
+            }
+          });
+        },
+        { rootMargin: "-30% 0px -60% 0px" },
+      );
+      document.querySelectorAll("section.block").forEach((s) => io.observe(s));
+      document
+        .getElementById("tocSelect")
+        .addEventListener("change", (e) =>
+          document
+            .getElementById(e.target.value)
+            .scrollIntoView({ behavior: "smooth" }),
+        );
+
+      renderIndex();
+      apply();
+    </script>
+  </body>
+</html>

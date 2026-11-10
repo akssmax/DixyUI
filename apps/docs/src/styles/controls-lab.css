@@ -1,0 +1,26 @@
+.controls-lab {
+  min-height: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+.controls-main {
+  display: grid;
+  gap: var(--dixy-spacing-stack-lg);
+  padding: clamp(16px, 4vw, 40px);
+  max-width: 1280px;
+}
+.controls-row {
+  display: grid;
+  gap: var(--dixy-spacing-stack-md);
+}
+.controls-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-lg);
+}
+/* A faint guide so mismatched heights are visible at a glance. */
+.controls-line [data-audit]:not(:focus-within) {
+  outline: 1px dashed color-mix(in oklab, currentColor 25%, transparent);
+  outline-offset: 2px;
+}

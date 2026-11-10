@@ -6,4 +6,13 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
+  // Custom domains on the dixyui.com zone. Wrangler creates and keeps the
+  // DNS records and certificates; don't add A/CNAME records for these by hand.
+  "routes": [
+    { "pattern": "dixyui.com", "custom_domain": true },
+    { "pattern": "www.dixyui.com", "custom_domain": true },
+  ],
+  // Landing-page visitor count. No id: `wrangler deploy` provisions the
+  // namespace on first deploy and reuses it after. Local dev uses Miniflare.
+  "kv_namespaces": [{ "binding": "VISITORS" }],
 }

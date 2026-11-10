@@ -4,6 +4,7 @@ import type { VisualProps } from "../utilities/native-part";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { styledPrimitive } from "../utilities/styled-primitive";
+import { defaultArtwork } from "../utilities/default-artwork";
 export interface RangeCalendarRootProps<T extends DateValue>
   extends
     Omit<Primitive.RangeCalendarProps<T>, keyof VisualProps>,
@@ -58,5 +59,10 @@ export const RangeCalendar = /* @__PURE__ */ (() => ({
     Primitive.Heading,
     "dixy-aria-heading",
   ),
-  Button: /* @__PURE__ */ styledPrimitive(Primitive.Button, "dixy-aria-button"),
+  Button: /* @__PURE__ */ defaultArtwork(
+    Primitive.Button,
+    "dixy-aria-button",
+    (props) => (props.slot === "previous" ? "chevron-left" : "chevron-right"),
+    false,
+  ),
 }))();

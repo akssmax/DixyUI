@@ -6,7 +6,7 @@ import fs from "node:fs";
 const optionalStyles = () => ({
   name: "dixy-optional-styles",
   buildStart(this: { addWatchFile: (path: string) => void }) {
-    for (const name of ["materials", "backdrop-pilot"])
+    for (const name of ["materials", "backdrop-pilot", "ai"])
       this.addWatchFile(
         new URL(`./src/styles/${name}.css`, import.meta.url).pathname,
       );
@@ -18,7 +18,7 @@ const optionalStyles = () => ({
       source: string;
     }) => void;
   }) {
-    for (const name of ["materials", "backdrop-pilot"]) {
+    for (const name of ["materials", "backdrop-pilot", "ai"]) {
       this.emitFile({
         type: "asset",
         fileName: `${name}.css`,
@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => ({
         dixy: "src/build.ts",
         motion: "src/motion.tsx",
         feedback: "src/feedback.tsx",
+        ai: "src/ai.tsx",
       },
       formats: ["es"],
       fileName: (_format, name) => `${name}.js`,
@@ -56,7 +57,14 @@ export default defineConfig(({ mode }) => ({
         /^motion(?:\/|$)/,
         /^react-aria-components(?:\/|$)/,
         /^@internationalized\/date(?:\/|$)/,
+        /^react-markdown(?:\/|$)/,
+        /^remark-gfm(?:\/|$)/,
       ],
+      // One file per source module, not one flat dixy.js. A consumer's
+      // bundler splits chunks by module, so a single file put every component
+      // (and all of Base UI and react-aria behind them) in one shared chunk on
+      // every page. Separate modules let each page load only what it renders.
+      output: { preserveModules: true, preserveModulesRoot: "src" },
     },
   },
 }));

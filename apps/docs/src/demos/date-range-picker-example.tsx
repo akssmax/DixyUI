@@ -28,21 +28,18 @@ export default function DateRangePickerExample({
           <DateRangePicker.Input slot="end">
             {(segment) => <DateRangePicker.Segment segment={segment} />}
           </DateRangePicker.Input>
-          <DateRangePicker.Button aria-label="Open calendar">
-            ▦
-          </DateRangePicker.Button>
+          <DateRangePicker.Button aria-label="Open calendar" />
         </DateRangePicker.Group>
         <DateRangePicker.Error />
         <DateRangePicker.Popover aria-label="Choose appointment date range">
           <RangeCalendar.Root {...visual} aria-label="Choose a date">
             <Inline>
-              <RangeCalendar.Button slot="previous" aria-label="Previous month">
-                ‹
-              </RangeCalendar.Button>
+              <RangeCalendar.Button
+                slot="previous"
+                aria-label="Previous month"
+              />
               <RangeCalendar.Heading />
-              <RangeCalendar.Button slot="next" aria-label="Next month">
-                ›
-              </RangeCalendar.Button>
+              <RangeCalendar.Button slot="next" aria-label="Next month" />
             </Inline>
             <RangeCalendar.Grid>
               <RangeCalendar.GridHeader>

@@ -181,16 +181,18 @@
     color: var(--dixy-color-text-disabled);
     cursor: not-allowed;
   }
+  /* Disabled keeps its treatment: an outline or ghost button doesn't turn into a grey fill. */
+  .dixy-button:is(
+      [data-variant="outline"],
+      [data-variant="ghost"]
+    )[data-disabled] {
+    background-color: transparent;
+  }
   .dixy-icon-button {
     width: var(--dixy-height-md);
-    min-inline-size: max(
-      var(--dixy-interaction-target),
-      var(--dixy-size-target-comfortable)
-    );
-    min-block-size: max(
-      var(--dixy-interaction-target),
-      var(--dixy-size-target-comfortable)
-    );
+    /* Square at the control height, so it lines up with fields of the same size. */
+    min-inline-size: var(--dixy-interaction-target);
+    min-block-size: var(--dixy-interaction-target);
     padding: 0;
   }
   .dixy-icon-button[data-size="sm"] {
@@ -261,7 +263,7 @@
     color: var(--dixy-input-text);
     font: var(--dixy-font-body-md);
     letter-spacing: var(--dixy-font-body-md-letter-spacing);
-    transition: border-color var(--dixy-motion-transition-feedback);
+    transition: border-color var(--dixy-motion-transition-feedback-effects);
   }
   .dixy-input::placeholder {
     color: var(--dixy-color-text-secondary);

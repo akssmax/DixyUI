@@ -1,11 +1,13 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { nativePart, type NativePartProps } from "../utilities/native-part";
 import { Avatar } from "./avatar";
 
 export interface UserProps extends Omit<
   NativePartProps<"div", "size" | "color" | "radius">,
-  "children"
+  "children" | "color"
 > {
+  /** Avatar color. User passes it to Avatar, so it takes Avatar's colors. */
+  color?: ComponentProps<typeof Avatar.Root>["color"];
   /** The person's visible name. */
   name: ReactNode;
   /** A secondary line, such as a role or handle. */

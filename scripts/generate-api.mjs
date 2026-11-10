@@ -10,9 +10,16 @@ const sources = [
   "utilities/aria-popover.tsx",
   ...fs
     .readdirSync(path.join(root, "packages/react/src/components"))
+    .sort()
     .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
     .map((name) => `components/${name}`),
   "feedback.tsx",
+  // The optional @dixy-ui/react/ai entry.
+  ...fs
+    .readdirSync(path.join(root, "packages/react/src/ai"))
+    .sort()
+    .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
+    .map((name) => `ai/${name}`),
 ];
 const configPath = path.join(root, "packages/react/tsconfig.json");
 function generate() {
@@ -72,11 +79,18 @@ function generate() {
           type = member.type.getText(member.getSourceFile());
         for (const parameter of node.typeParameters ?? []) {
           if (parameter.constraint) {
-            const constraint = checker.typeToString(
+            let constraint = checker.typeToString(
               checker.getTypeFromTypeNode(parameter.constraint),
               parameter,
               ts.TypeFormatFlags.InTypeAlias,
             );
+            // Same rule for constraints: an expansion such as ElementType's
+            // embeds an absolute path, which differs per checkout and failed
+            // CI. Keep the source spelling instead.
+            if (constraint.includes('import("'))
+              constraint = parameter.constraint.getText(
+                parameter.getSourceFile(),
+              );
             type = type.replace(
               new RegExp(`\\b${parameter.name.text}\\b`, "g"),
               constraint,
@@ -105,9 +119,11 @@ function generate() {
   // Compound wrappers add no new props: derive their full part inventory and
   // primitive-owned props from the exact local exported TypeScript contract.
   // Keep per-family files separate so opening one page does not load every API.
-  for (const filename of fs.readdirSync(
-    path.join(root, "packages/react/src/components"),
-  )) {
+  // Sorted: readdir order is alphabetical on macOS but arbitrary on Linux
+  // (CI), and later sources win when names repeat.
+  for (const filename of fs
+    .readdirSync(path.join(root, "packages/react/src/components"))
+    .sort()) {
     if (!filename.endsWith(".tsx") || filename.endsWith(".test.tsx")) continue;
     const source = program.getSourceFile(
       path.join(root, "packages/react/src/components", filename),

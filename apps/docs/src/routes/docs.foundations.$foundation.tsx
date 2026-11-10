@@ -1,9 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
-import {
-  FoundationPage,
-  foundationPages,
-  type FoundationSlug,
-} from "../components/foundation-page";
+import { FoundationPage } from "../components/foundation-page";
+import { foundationPages, type FoundationSlug } from "../lib/foundation-pages";
 
 export const Route = createFileRoute("/docs/foundations/$foundation")({
   loader: ({ params }) => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, ButtonGroup, Stack, Text } from "@dixy-ui/react";
-import type { VisualProps } from "@dixy-ui/react";
+import type { ButtonProps, VisualProps } from "@dixy-ui/react";
 import "@dixy-ui/react/materials.css";
 export default function ButtonGroupExample({
   size = "md",
@@ -10,10 +10,11 @@ export default function ButtonGroupExample({
   material,
   attached = true,
   orientation = "horizontal",
-}: VisualProps & {
-  attached?: boolean;
-  orientation?: "horizontal" | "vertical";
-}) {
+}: Omit<VisualProps, "color"> &
+  Pick<ButtonProps, "color"> & {
+    attached?: boolean;
+    orientation?: "horizontal" | "vertical";
+  }) {
   const [action, setAction] = useState("Choose an action.");
   const visual = { size, variant, color, radius, material };
   return (
@@ -24,10 +25,22 @@ export default function ButtonGroupExample({
         orientation={orientation}
         aria-label="Document actions"
       >
-        <Button size={size} variant={variant} color={color} material={material}>
+        <Button
+          size={size}
+          variant={variant}
+          color={color}
+          material={material}
+          onClick={() => setAction("Saved the document.")}
+        >
           Save
         </Button>
-        <Button size={size} variant={variant} color={color} material={material}>
+        <Button
+          size={size}
+          variant={variant}
+          color={color}
+          material={material}
+          onClick={() => setAction("Shared the document.")}
+        >
           Share
         </Button>
         <Button

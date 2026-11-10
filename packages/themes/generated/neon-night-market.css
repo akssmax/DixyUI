@@ -284,6 +284,11 @@
   )[data-dixy-skin="dixy/neon-night-market"] {
     border-radius: calc(var(--dixy-radius-control) * 1.2);
   }
+  :is(.dixy-textarea)[data-dixy-skin="dixy/neon-night-market"] {
+    border-radius: calc(
+      min(var(--dixy-radius-control), var(--dixy-radius-card)) * 1.2
+    );
+  }
   :is(
       .dixy-input,
       .dixy-textarea,

@@ -275,6 +275,11 @@
   )[data-dixy-skin="dixy/blueprint"] {
     border-radius: calc(var(--dixy-radius-control) * 0.5);
   }
+  :is(.dixy-textarea)[data-dixy-skin="dixy/blueprint"] {
+    border-radius: calc(
+      min(var(--dixy-radius-control), var(--dixy-radius-card)) * 0.5
+    );
+  }
   :is(
       .dixy-input,
       .dixy-textarea,

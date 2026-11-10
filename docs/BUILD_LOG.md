@@ -1324,6 +1324,20 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` and `pnpm package:check` pass.
 - Not tested: forced colours and screen readers in a real browser; segmented with `orientation="vertical"` (no vertical-specific styles were written); each material finish visually.
 
+### 2026-11-07 — Lunar New Year removed as a starter (32 starters)
+
+- Decision (user): keep 32 starters, so Lunar New Year is removed (31 skins + Original Dixy).
+- Removed:
+  - Its record in `packages/themes/src/starters-launch.ts`.
+  - The generated `src/skins/lunar-new-year.ts` and `generated/lunar-new-year.css`.
+  - The `./lunar-new-year` and `./lunar-new-year.css` package exports.
+  - Its entries in `scripts/verify-package.mjs` and the SSR consumer fixture.
+- Regenerated with `pnpm skins:generate`: `catalog.ts` and `generated-skin-loaders.ts`, no hand edits.
+- Kept on purpose: the **papercut** frame recipe and its ornament renderer (`src/lunar/ornament.tsx`, export `./lunar-new-year/react`). Any theme can still pick that frame in the playground. `organic-paint-launch.ts` is untouched because another session owns it; its paper-cut painting serves the frame.
+- Landing copy now counts the gallery (`starters.length`, Original included) instead of `skinCatalog.length`, so it says 32, matching the playground.
+- Breaking for consumers of the alpha package: `@dixy-ui/themes/lunar-new-year` and its CSS no longer exist.
+- Verified: `pnpm check` and `pnpm package:check` pass. Playground and landing server HTML both say 32. `/?starter=lunar-new-year` falls back to Original Dixy.
+
 ### 2026-11-07 — Ocean Depths and Candy Clay use plain cards, as in the HTML redesign
 
 - Request: the user preferred the frame borders from the HTML mockup for these two starters. Everything else in both themes stays as it was.
@@ -1348,6 +1362,340 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - In-app browser: Candy Clay in light (selected toggle paint equals the knob's white-to-pink gradient) and dark; Winamp Signal (dark). Clicking Monthly moves the thumb.
   - `pnpm check` and `pnpm package:check` passed.
 - Not tested: other skins' light themes one by one, forced colours, keyboard focus ring on the new thumb, and mobile.
+
+### 2026-11-09 — Shader lab: opt-in WebGL backdrops for Ocean Depths and Phosphor Terminal (prototype)
+
+- Why: to try "fun" motion beyond CSS before committing to shaders across themes. A theme must still look finished without the shader; the shader only adds to it.
+- Change (docs-only prototype, no package or public export change):
+  - New route `/lab/shaders` (`apps/docs/src/routes/lab.shaders.tsx`), full-width like `/` and `/playground` (`__root.tsx`). `?skin=ocean-depths|phosphor-terminal` picks the skin; the skin CSS is inlined on the server like the landing page.
+  - `apps/docs/src/lab/shader-programs.ts`: two original GLSL ES 1.0 fragment shaders. Ocean uses domain-warped noise ridges for caustics plus slanted god rays, rendered at half resolution. Phosphor draws scanlines, grain, a rolling refresh band, a sparse field of blinking 3×5 glyphs and a vignette. It has no full-screen flicker, so nothing flashes.
+  - `apps/docs/src/lab/shader-runtime.ts`: one WebGL context per page, colours read from theme tokens (any CSS colour resolved via a 1×1 2D canvas), 30 fps cap, DPR capped at 1.5, pause when off screen or tab hidden, one still frame under `prefers-reduced-motion`, context-loss handling, "unsupported" fallback to the static backdrop.
+  - Opt-in switch, off by default, remembered per viewer in `localStorage` (wrapped in try/catch). The canvas is `aria-hidden` with no pointer events.
+- Decision: cleanup frees GL objects instead of calling `WEBGL_lose_context`. React dev remounts onto the same canvas, and a deliberately lost context never came back (seen as "Graphics context lost" on first try).
+- Verified:
+  - In-app browser (:3001): Ocean light and dark, Phosphor dark. Opt-in persists across reload. Reduced-motion path checked by stubbing `matchMedia`: status reads "Still frame" and the canvas does not change.
+  - At 375px wide, no horizontal scroll.
+  - GPU cost on Apple M5: caustics 0.22 ms/frame (1080×675), phosphor 0.11 ms/frame (2160×1350).
+  - `pnpm check` passed; Prettier clean on new files.
+- Not tested: real fps (the pane was hidden, so rAF was throttled to 1–25 fps), low-end or mobile GPUs, Safari/Firefox, real OS reduced-motion emulation, reduced transparency, forced colours, Phosphor in light appearance, keyboard pass over the lab controls, WebGL-unsupported fallback in a real browser.
+
+### 2026-11-09 — Shader lab: four more backdrops, display-rate rendering
+
+- New pairings on `/lab/shaders` (skin picker is now a Dixy `Select`): Neon Night Market rain with neon glows and a wet-street reflection, Prism Glass thin-film iridescence, Diwali Lights lamp bokeh in three depths, Solar Sail aurora curtains with twinkling stars. All are original GLSL and read theme tokens.
+- Performance (asked for 120 fps on ProMotion Macs):
+  - Removed the 30 fps cap. The loop draws on every `requestAnimationFrame`, so it runs at the display refresh rate; animation stays time-based.
+  - Host size comes from `ResizeObserver` (no `clientWidth` reads per frame). Size, colour and appearance uniforms upload only when they change; each frame sends `uTime` and one draw call.
+  - `preserveDrawingBuffer: false`, so the browser can swap buffers instead of copying.
+  - Adaptive quality: if frames average more than 1.35× the best observed interval over 45 frames, resolution steps down by 0.8×, to a floor of 0.5×. It never steps back up, so it cannot oscillate.
+  - `highp` floats where available. `mediump` is fp16 on Apple GPUs, so `uTime` lost precision within minutes and the animation would start to step.
+  - Domain-warp inputs use a 3-octave `fbm3`.
+- Measured GPU cost per frame (Apple M5, 1512×982 CSS viewport at DPR 2 capped to 1.5): caustics 0.097 ms, phosphor 0.076, aurora 0.069, neon rain 0.045, iridescence 0.029, bokeh 0.022. The budget at 120 Hz is 8.3 ms.
+- Not tested: live 120 fps reading. The in-app browser pane was hidden, which pauses `requestAnimationFrame`. Also untested: low-end GPUs, Safari and Firefox.
+
+### 2026-11-09 — /dixy-example: Fernpay, a mock fintech app built only from Dixy UI
+
+- Why: one realistic product screen that uses most of the library together and can switch skin live, so the theming story is visible on something that isn't a component demo.
+- Files: `apps/docs/src/example/{data.ts,fernpay-app.tsx,views.tsx,send-money.tsx}`, `routes/dixy-example.tsx`, `styles/dixy-example.css` (layout only; all colour comes from tokens). Full width like `/` (`__root.tsx`).
+- Views: Overview (alert, stat cards, cash-flow chart, savings goal, accounts, budgets, recent activity), Transactions (search, category, date range, direction, sortable paginated table, details drawer), Cards (payment card, freeze, controls, limit, cancel confirmation), Settings (tabs: profile form, notification switches, help accordion). Send money: payee, amount, account and speed, then a six-digit code, then a toast. ⌘K command palette, notifications popover, account menu, and a theme select across all 32 starters plus Original (`?skin=`).
+- Dixy components used (59): Accordion, Alert, AlertDialog, Avatar, AvatarGroup, Badge, Breadcrumbs, Button, Card, Chart, Checkbox, Chip, Combobox, Command (dialog), DataTable, DateRangePicker, RangeCalendar, Dialog, Drawer, Empty, Field, Fieldset, Form, Heading, Icon, IconButton, Inline, Item, Kbd, Link, Menu, Meter, NumberField, OTPField, Pagination, Popover, ProgressCircle, Radio, RadioGroup, ScrollArea, SearchField, Select, Separator, Sidebar (+ Sidebar.Mobile), Skeleton, Slider, Stack, Switch, Table, Tabs, TagGroup, Text, Textarea, TextField, Theme, Toast, Toggle, ToggleGroup, Tooltip. Lucide supplies glyphs only, rendered through Dixy `Icon`.
+- Fixes found while building:
+  - The sticky top bar (`z-index: 2`) painted above Dixy's dialog backdrop (`z-index: auto`). `.fp-shell { isolation: isolate }` contains it.
+  - "Spent ▼29.5%" read as danger; `Delta` takes `lowerIsBetter`.
+- False lead, recorded: the details drawer looked as if it opened and closed at once. Instrumenting showed it stays open (`data-open`, `onOpenChange` never fired). The hidden pane pauses animation frames, so screenshots were stale paints. A speculative outside-press guard was removed again.
+- Library feedback:
+  - `Chart` only draws bars; a finance app wants a line or area chart for balances.
+  - Small `AvatarGroup` initials get clipped by the overlap.
+  - Dixy has no theme-aware z-index scale for app chrome versus overlays.
+- Verified:
+  - In-app browser (:3001): all four views in Original Dixy; Phosphor Terminal, Candy Clay, Ocean Depths and Neon Night Market skins.
+  - Row → drawer → Escape closes. Full send flow ends with the toast in the DOM. The combobox selects a payee.
+  - 375px wide: no horizontal scroll, sidebar becomes a drawer trigger.
+  - `pnpm check` passed.
+- Not tested: dark appearance on every view, screen reader pass, keyboard-only pass through the whole app, Safari/Firefox, ⌘K shortcut with real keys, live animations (pane hidden).
+
+### 2026-11-09 — Fernpay sidebar collapses to an icon rail
+
+- Change (`apps/docs/src/example/fernpay-app.tsx`, `styles/dixy-example.css`):
+  - A Dixy `IconButton` in the sidebar header (and ⌘B / Ctrl+B) toggles between the 248px panel and a 72px icon rail.
+  - In the rail, the brand name, nav labels and footer hide. Each nav `Button` keeps its label as `aria-label` and gets a right-side `Tooltip`.
+  - The toggle has `aria-expanded` and `aria-controls="fp-sidebar"`, plus a tooltip showing the shortcut in a `Kbd`.
+  - State is remembered per viewer in `localStorage` (wrapped in try/catch).
+  - The width animates through `grid-template-columns`, with no transition under `prefers-reduced-motion`. Below 820px the existing mobile drawer is unchanged.
+- Verified:
+  - In-app browser, Prism Glass: rail is 72px and the toggle's name and `aria-expanded` flip. Nav buttons are named.
+  - Collapsed state survives reload. ⌘B toggles and stores the change. Hovering a rail icon shows its label tooltip on the right.
+- Not tested: the width animation itself (pane hidden, so frames are paused), keyboard focus order in the rail with a screen reader, and the first-paint flash for a stored collapsed state. It reads storage after hydration, so it renders expanded for one frame.
+
+### 2026-11-09 — Base controls: one height, built-in icons, no double frames
+
+- Request: base components used text glyphs for icons, had extra wrapper boxes and mismatched heights. Compare with shadcn/ui and HeroUI and fix, on branch `fix/base-components`. Full audit: `docs/COMPONENT_AUDIT.md`.
+- Measured on a new regression page, `/lab/controls`. Before the fix, md heights ranged from 40 to 58px. After it, every field-like control is exactly 32/40/48. This holds in the default theme and all 30 starter skins, checked by loading each `?skin=` in an iframe.
+- Library:
+  - `alignment.css`: a framed group owns the height and border, and its parts stretch inside it. Toggle tracks and tab lists own the height, and their items stretch.
+  - Default SVG icons on DatePicker/DateRangePicker.Button, Calendar/RangeCalendar.Button (picked by `slot`), NumberField steppers, SearchField.Clear, TagGroup.Remove and Combobox.ChipRemove.
+  - New `SearchField.Group`.
+  - IconButton follows the control height.
+  - A calendar inside a popover has no frame of its own.
+- NumberField (user report: "too much width"): the group is now `inline-flex` and sized to its content (138px at md). Focus draws one ring, on the group.
+- Docs: `docs.css` had a global `input:not(.dixy-input):focus-visible` rule that put a second ring, offset by 4px, on every Dixy input except TextField. It now skips any `dixy-*` element.
+- Demos, Fernpay and the theme workspace scene no longer pass glyph children. Fernpay's filter toggles moved from sm to md so the filter row is one height.
+- Verified:
+  - `pnpm check` and `pnpm package:check` pass. API metadata was regenerated with `pnpm docs:generate`.
+  - In the in-app browser: heights at three sizes × 31 themes; date-range popover has a single frame and chevrons; search clear hides while empty and has an accessible name; focus rings on all five grouped fields.
+- Not tested: dark appearance on the harness, Safari/Firefox, screen readers, coarse-pointer target size.
+
+### 2026-11-09 — Fernpay: layout molecules, no layout shift, responsive polish
+
+- Request: the example app wasn't fully responsive and its layout shifted. Use one consistent header, footer and action-area template, treated as molecules, built from Dixy components.
+- `apps/docs/src/example/layout.tsx` adds four molecules, all made of Dixy `Card`, `Heading` and `Text`:
+  - `PageHeader`: title, a one-line description and `Actions`; fixed 72px.
+  - `SectionHeader`: card title and description, with optional `Actions`.
+  - `SectionFooter`: meta text on the left, `Actions` on the right; always one md control tall and pinned to the card's bottom.
+  - `StatCard`: the trend sits in the footer, not a nested content box. Candy Clay's inset Card.Content was what made the stat cards look double-framed.
+  - Every view uses them. The Settings panels and the Help accordion are now cards with a header and footer, and Save lives in the footer (`form="fp-profile"`).
+- Layout shift:
+  - The top bar and the page share one centred column (`--fp-max` 1200px, `--fp-gutter`). The page's left edge matches the top bar at every width.
+  - The Transactions summary moved from a loose line into the filter card's footer, with a "Clear filters" action that is always present.
+  - The table card stays mounted, with the empty state inside it. Pagination always renders.
+  - The table area reserves a full page of rows (33rem), so filtering doesn't move the page.
+- Responsive:
+  - The chart is a fixed height, `clamp(160px, 22vw, 240px)`, instead of scaling with width.
+  - Overview rows always fill: Budgets spans two columns.
+  - Under 640px, metrics become a swipe row with a peek of the next card, and tables scroll sideways inside their card instead of wrapping each cell.
+  - The payment card keeps its aspect ratio instead of stretching over its neighbour.
+  - The Settings cards fill their panel.
+- Verified in the in-app browser:
+  - Page header 72px (62px on phones) and content aligned with the top bar, across 4 views × 5 widths (1600/1280/1024/768/375), with zero horizontal overflow.
+  - Overview rows full at 1440, 1024 and 375.
+  - All footers 56px, and the same distance from their card's bottom edge.
+  - Transactions card positions and heights unchanged through full, filtered and empty states (default, Studio Hardware; Swiss Poster led to the 33rem reserve).
+  - Cards view in dark appearance.
+  - `pnpm check` passes.
+- Not tested: dark appearance on every view and skin; Safari/Firefox; touch scrolling of the metrics row on a real phone; screen reader.
+
+### 2026-11-09 — Pagination fixed; /lab/kitchen-sink for reviewing every component
+
+- Request: fix Pagination (links were underlined and the current page was a tall pill), and add a kitchen-sink page so the user can spot which components still need fixes.
+- Pagination (library):
+  - Page links and the ellipsis are square ghost tiles at `--dixy-component-height`, with no underline and tabular numbers.
+  - The current page is a filled `selected` tile. Hover uses the subtle background, and `aria-disabled` gives the disabled colour with no pointer events.
+  - New `Pagination.Previous` and `Pagination.Next` parts draw chevron icons, label themselves "Previous page"/"Next page", and accept children to replace the icon.
+  - The demo and Fernpay use them.
+- `/lab/kitchen-sink`:
+  - Renders every component in the registry (76) at its default controls, grouped by category, with a sticky category index, a filter box and `?skin=`.
+  - New components appear automatically. Each tile has its own error boundary and a link to its docs page.
+  - Demos render client-only, so SSR doesn't stream 76 lazy chunks.
+- Docs: the unlayered `a { color: inherit }` in `docs.css` overrode every library colour on Dixy links; it was why the disabled Previous looked enabled. It now skips `dixy-*` elements.
+- Verified:
+  - All 76 tiles load with no crashes and no tile overflowing.
+  - Fernpay pagination: all links 40×40, no underline; disabled is grey and current is accent.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested: kitchen sink in each skin and in dark mode (that review is the user's); pagination with many pages (no automatic ellipsis logic, by design).
+
+### 2026-11-09 — Docs follow the chosen theme; icon rail and Learning page removed
+
+- Request: keep the left sidebar, make the applied theme style the documentation itself (not only previews), adopt the header theme menu from the HTML mock (`mockups/docs-shell.html`), and remove "Learning the system".
+- Docs theme setting:
+  - New `dixy-docs-theme` cookie (`lib/docs-theme.ts`): `{ skin, scope }`, where scope is "Whole docs" or "Previews only". Unknown skin ids fall back to Original Dixy.
+  - The root loader inlines the skin stylesheet on the server (same pattern as the landing `?starter=`), so a themed reader gets no flash of the default theme. The client still runs `prepareSkin` and drops the duplicate style.
+  - Choosing a starter on the landing page or in the theme playground also sets the docs theme.
+- Shell:
+  - Removed the icon rail. The brand, sidebar toggle and breadcrumbs sit in the top bar, together with search, a theme menu (Popover + ToggleGroup: theme, appearance, scope) and an appearance button.
+  - The sidebar gains a page filter, group counts, components grouped by registry category, and a theme card that opens the menu.
+  - The frame paints `--dixy-skin-ground`/`--dixy-skin-canvas`. Selected states mix from `--dixy-accent`, because skins don't override `--dixy-color-background-selected`; it stayed lavender under Ocean Depths.
+- Previews: `previewThemeProps` uses the skin as the base, and only preview settings changed from their defaults override it. The default purple accent no longer paints over a skin's accent.
+- Removed `/docs/learning` and `content/learning.mdx`. The landing CTA now reads "Read the docs" (→ Installation), the component-page design note lost its link, and the Navigation Menu demo links to Accessibility instead.
+- Verified in the in-app browser (own dev server, :3002):
+  - Ocean Depths light chosen through the menu: frame, sidebar, preview and serif headings all switch, and the cookie is saved.
+  - Server HTML carries `data-dixy-skin` and the inlined skin style.
+  - After a reload, Retro OS dark renders across the whole page.
+  - "Previews only" leaves the shell on Original Dixy (`data-dixy-skin="none"`) and skins the preview.
+  - At 375px, Candy Clay renders and the phone navigation dialog opens with the filter and 92 links. No console errors.
+- Not tested: keyboard-only pass through the theme menu, reduced motion, screen reader, every one of the 31 skins on every page, Safari/Firefox. Foundation-page previews still pass explicit settings and don't take on the skin. Bundle cost: the docs shell now imports the theme-playground helpers, so every docs page loads skin definitions.
+
+### 2026-11-09 — Fernpay: opt-in shader backdrops, toggled in Settings
+
+- Request: bring the lab shaders into the fintech demo and make them toggleable in Settings.
+- `lab/shader-pairings.ts` now holds the six reviewed skin→shader pairings, shared by `/lab/shaders` and Fernpay; the lab's copy was removed.
+- `example/effects.tsx`:
+  - `EffectsProvider`/`useEffects` hold the preference: off by default, kept in browser storage as `fernpay-shader`, and safe when storage throws.
+  - They also give the current skin's pairing and the runtime state.
+  - Only state changes are stored, not fps, so the app doesn't re-render every second.
+- Shell: a fixed `.fp-shader` layer at `z-index: -1` inside the isolated `.fp-shell`. Cards stay opaque, so the shader shows only in the canvas gaps and behind the frosted top bar. It unmounts when WebGL is unsupported.
+- Settings: a new **Appearance** tab built with SectionHeader and SectionFooter.
+  - An "Animated background" switch with the shader's name and a live status line ("Running", "Still frame (reduced motion)", "Paused while hidden", "WebGL isn't available").
+  - On a skin without a shader, the switch is disabled and buttons offer the six themes that have one.
+- Reduced motion: the runtime already draws a still frame; the fade-in animation is now off too.
+- Verified in a hidden frame: Ocean Depths runs caustics and Solar Sail runs aurora, both "Running". Living Forest shows a disabled switch and six suggestions with no canvas. `pnpm check` passes.
+- Not tested: visual tuning of each shader behind the app chrome (the user was driving the pane); real 120 Hz; Safari/Firefox.
+
+### 2026-11-09 — Homepage hero: split layout, no browser frame
+
+- Request: drop the browser-window frame around the homepage demo. Two hero versions were mocked in `mockups/hero-versions.html`; the user chose **A · Split**. **B · Stage** stays in that file as an alternative: centred copy, a dock across the app's top edge, and an app that fades into the page.
+- `LandingWindow` is now a frameless stage. The traffic lights, window bar and border are gone; the scene switch is a segmented `Tabs` above the app; a caption sits below.
+  - On wide screens the stage is the hero's right column. It runs past the viewport by 64px, so the app reads as cropped rather than framed. `.landing` already clips horizontal overflow.
+- The floating `ThemeDock` became `StarterPicker`, in the hero's copy column under the install command:
+  - Five quick swatch toggles (Original, Studio Hardware, Ocean Depths, Retro OS, Candy Clay) and a select with all 32 starters.
+  - A light/dark segmented control, shuffle, and a Customise link to the playground.
+  - Picking a starter still updates `?starter=` and, since the docs-theme change, the docs theme.
+- Below 960px the hero stacks: copy, then the stage. Below 640px the stage stops running past the edge, and the picker's second row tightens so Customise stays on the same line.
+- Verified in the in-app browser (own dev server, :3002):
+  - 1440px: copy on the left; the mail scene starts at 616px and runs past the right edge.
+  - Studio Hardware via its swatch restyles the whole hero.
+  - 850px stacks with no horizontal scroll.
+  - 375px in dark: picker rows fit (Customise on the same line), no horizontal scroll.
+  - No console errors after a fresh load.
+- Not tested: keyboard order through the picker and tabs, reduced motion, Dashboard/Music/Blocks scenes inside the bled stage, every starter, Safari/Firefox.
+
+### 2026-11-09 — Badge semantic colors and a kitchen-sink pass over base components
+
+- Request: decide whether Badge needs semantic variants, fix it, and improve other base components.
+- **Colors.** Badge already took `color`, but only `solid` and `soft` used it; the default `outline` hard-coded grey. And there was no warning or info.
+  - New `VisualColor` type (exported) adds `warning` and `info`. `families.css` maps them to the existing status tokens (`background-warning-bold`, `background-warning`, `text-warning`, `text-on-warning`, `border-warning`, and the `information` set), because there's no action ramp for them.
+  - New `--dixy-component-border`: the color at 45% for accent/neutral/danger/success, the status border token for warning/info.
+  - Outline and ghost Badge/Chip use the color's border and text; neutral outline stays a quiet grey. Outline Alert gets a tinted edge, and outline/soft Alert titles take the color.
+  - Button, Link, Avatar, Tabs, Switch and the other components with their own per-color CSS keep the four colors. Their demos now type `color` from the component, not `VisualProps`.
+  - The Badge demo shows all six colors in the chosen treatment (its Color control was replaced by that row; Treatment gained ghost). Card, Alert and Chip controls list warning and info. Fernpay's Pending badges now use soft warning, and its category chips are neutral.
+- **ButtonGroup attached.** Each button kept its own border, so seams were 2px. Buttons after the first now overlap the previous border by its width; hovered and focused buttons sit on top. Disabled outline/ghost buttons keep a transparent fill instead of turning grey. The demo's status line now updates on Save/Share.
+- **Kitchen-sink pass** (`styles/refinements.css`, imported last):
+  - Accordion: items were bordered, centred buttons. The shared trigger reset is `:is(…):not(.dixy-button)`, and `:is()` takes its highest argument's specificity, so it outranked `.dixy-accordion-trigger`. Triggers are now full-width rows with the chevron at the end and hairlines between items.
+  - Breadcrumbs: ancestors are secondary-colour links (underline on hover); the current page is plain primary text, not a faded link.
+  - Item: actions sat next to the title with a stray top margin; content now fills the row and actions sit at the end.
+  - Meter, Progress, Slider: new `Value` parts with classes (`dixy-*-value`). Label and value share the first row, value right-aligned in tabular numbers, track below. Vertical sliders are left as they were.
+  - Skeleton: no border, a slow pulse that stops under reduced motion.
+  - TagGroup: the remove button is a borderless 24px icon inside the tag instead of a second bordered box.
+  - Checkbox in a label: the library sets the box-to-text gap (8px), and a field description lines up with the label text (measured: both at 541.8px).
+  - ColorField: label above the input. NavigationMenu links: label font and padding like the triggers, no underline.
+  - Demos: Select shows "Personal" rather than the raw value (via `items`); ListBox labels are capitalised; Textarea and NativeSelect use the Dixy label style; Alert Dialog's "Delete project" trigger is a danger button.
+- Tried and reverted: a custom NativeSelect chevron as a background image. The material system resets `background-image: none !important`, so it vanished; doing it properly needs a wrapper element.
+- Verified in the in-app browser on `/lab/kitchen-sink`: each fixed tile at default controls; badges in outline/soft/solid in light and dark; Fernpay transactions show amber Pending and neutral chips. `pnpm check` (99 tests) and `pnpm package:check` pass; API metadata regenerated.
+- Not tested: keyboard pass through the changed Accordion and TagGroup, screen readers, every skin with the new colors (skins don't override the status tokens, so they inherit the defaults), Safari/Firefox, mobile widths for the kitchen sink.
+
+### 2026-11-09 — Landing: 98vh hero, accessibility, built-with, CTA and footer; npm beta
+
+- Request: make the hero 98vh, showcase accessibility and the demo products, and give the landing a modern CTA and footer. Mocked first in `mockups/landing-sections.html`, then implemented in `components/landing-sections.tsx` and `styles/landing.css`.
+- **Hero:** `block-size: max(calc(98svh - 60px), 640px)`. The demo stage is a flex column whose body scrolls with a fade mask. `Tabs.Root` sets `align-items: start`, which squeezed the Dashboard panel to 26px; the stage now stretches and only the tab list is `flex-start`. At ≤960px the hero is auto height and the demo is capped at 640px.
+- **Accessibility section:** four short claims plus a lab built from Dixy Field, Checkbox, Button, ToggleGroup and Kbd. A side inspector shows keys pressed (hidden from screen readers to avoid noise), the focused control's role, name and state, and the text-to-surface contrast. The contrast is measured live from the current starter: colours are read back through a 1px canvas so `oklch()` and `color-mix()` values work. The toggles simulate reduced motion, higher contrast and larger text inside the lab only. The status message uses `role="status"`. The copy says "Target: WCAG 2.2 AA", not a conformance claim.
+- **Built with Dixy:** Fernpay (opens in the current starter via `?skin=`), Shader lab, Postbox (the hero mail app), Kitchen sink and the Theme playground. Each card is a single link (stretched `::after`) inside an `h3`, with the focus ring drawn on the card through `:has(:focus-visible)`. Hover lift and shader drift run only with `prefers-reduced-motion: no-preference`.
+- **CTA:** a dark panel lit by the starter's accent, with a terminal card holding the install command (copy button with a status announcement) and a starter swatch row. It replaces the old centred final card.
+- **Footer:** brand, npm package link, Product/Learn/Demos/Project columns, a status line, a light/dark ToggleGroup and a large faded wordmark.
+- The Bento lost its accessibility card (now its own section). Its three remaining cards share one row.
+- **npm beta:** the packages are published (`npm view` shows `latest` 0.1.0-beta.0 and `beta` 0.1.0-beta.2). The install command is now `pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta`. The hero badge says "0.1 beta · Now on npm". The installation page and README no longer say the package is unpublished. The workspace `package.json` versions (alpha, private) were not changed here.
+- Verified in the in-app browser: 1440, 1200, 850 and 375px wide; Original Dixy (light) and Ocean Depths (light and dark); no horizontal scroll at 375px. Keyboard: Tab through the lab, Space on a checkbox, and the inspector updates the checked state. Contrast readouts: 15.5:1 (Original light), 15.4:1 (Ocean light), 16.0:1 (Ocean dark). No console errors. `tsc --noEmit` and `pnpm check` pass.
+- Not tested: screen readers, Safari and Firefox (`zoom` on the larger-text toggle needs a recent Firefox), forced colours, every starter, real copy-to-clipboard permission failures.
+- **Follow-up fixes (same day):**
+  - Regression: removing the old final card and footer CSS cut everything between two comments, which also deleted the starter picker, demo stage and gallery rules, so the hero picker rendered unstyled. Restored them from HEAD, with the 98vh stage version.
+  - The starter gallery below the hero is gone, since the hero picker (swatches plus a full Select) already covers all 32 starters. A numbers strip replaces it, then the Built with Dixy showcase. Header "Themes" became "Showcase" (`#showcase`), and the hero's second button is "See it in real apps".
+  - Horizontal scroll in the CTA: its glow layer sits at `inset: -30%`. `overflow: hidden` clips the glow, but the box can still be scrolled sideways (446px of content in a 343px box on a phone). The CTA, showcase cards, lab, terminal and footer now use `overflow: clip`. The hero stage body sets `overflow-x: hidden`, because `overflow-y: auto` alone also makes the x axis scrollable. Checked: forcing `scrollLeft = 200` on the CTA stays 0 at 1440, 1024 and 768px, and the document width equals the viewport at 1440, 1024, 768 and 375px. The only remaining x-scroller is the "Ship it" code block, which is meant to scroll and can be focused.
+- **Containers and spacing (same day):**
+  - The header contents, every section, the numbers strip and the footer now use Dixy's `Container` (size `xl`, 80rem, gutter `--dixy-layout-gutter`: 16, 24 or 32px depending on screen width). The header bar stays full width, with its contents contained.
+  - `.dixy-container` lives in a cascade layer, so the unlayered landing classes would have overridden it. Their own `max-inline-size` and side padding were removed, so `Container` alone controls width and gutters.
+  - The hero copy uses the same edge: `max(0px, (100% - container) / 2) + gutter`, with `%` instead of `100vw` so the scrollbar doesn't shift it.
+  - Vertical rhythm uses the section tokens: `--dixy-spacing-section-xl` (96px) between sections on wide screens, `-lg` (64px) at ≤960px, `-sm` (32px) above the numbers strip. Section heads have 16px between lines and `clamp(32px, 4vw, 48px)` above their content.
+  - Measured at 1440px: the brand, hero copy, numbers strip, section headings, CTA and footer all start at x = 112.
+  - Hero Blocks scene: the stage body has `overflow-x: hidden`, so the wide Blocks layout can't be scrolled sideways inside it. Checked: `scrollLeft` stays 0 for the stage and the page at 1024, 768 and 375px, and the document width equals the viewport.
+
+### 2026-11-09 — Docs app performance pass; themed overscroll
+
+- Why: the docs build shipped a 1,072 KB client `dixy-*.js` chunk and a 988 KB entry chunk to every page (2.8 MB `dixy-*.js` on the server). Theme switching in the docs briefly showed half-styled pages.
+- How it was measured: production builds served by `vite preview` on `workerd` from this worktree, the same server for before and after (the before build swapped back in). Per-route JS/CSS = every asset the server HTML links before hydration, fetched and gzipped (`scratchpad/routejs.mjs`). Chunk composition from source maps. Browser numbers come from the in-app browser at 1024px and 375px, on warm second loads, using `PerformanceObserver`.
+- Causes found:
+  - `@dixy-ui/react` was built as one flat `dist/dixy.js`. Bundlers split chunks by module, so the docs put every component, with all of Base UI and react-aria behind them, into one chunk that every page loaded.
+  - Route options (`validateSearch`, `loader`, `head`) and bare side-effect imports in a route file are not code split. `playground.tsx` imported scene ids from the playground component, which pulled in the playground, dialkit and motion (~900 KB of source). `dixy-example.tsx` did the same with Fernpay's views, and `docs.foundations.$foundation.tsx` with every foundation component and `api.json`. `landing.css` and `dixy-example.css`, imported from route files, ended up in the entry CSS on every docs page.
+  - The docs theme menu committed a new `data-dixy-skin` before its stylesheet had loaded.
+  - The root loader inlined the reader's docs theme on pages that never show the docs shell (landing, Fernpay, playground, labs). It was then serialised a second time in the hydration payload.
+  - The landing shader card animated `background-position`, which repaints the card (and re-blurs the chip above it) on every frame.
+- Fixes:
+  - `packages/react/vite.config.ts`: `preserveModules` (root `src`). `dist/dixy.js` is still the entry, now a re-export of one module per component. The public exports and declarations are unchanged.
+  - `apps/docs/vite.config.ts`: a client `codeSplitting` group, `dixy-common`, for library and Base UI modules shared by at least 15 chunks. With no group, `/docs/installation` needed 92 requests and was slower on localhost than baseline. A share count of 4 regrew a 610 KB common chunk. 15 gave 14 requests at the smallest size.
+  - `src/lib/route-search.ts` (playground scene and tab ids, Fernpay view ids) and `src/lib/foundation-pages.ts` (titles and copy) let route options import plain data. The playground and Fernpay types check that the lists stay aligned.
+  - `landing.css` is now imported from `landing-sections.tsx`, and `dixy-example.css` from `fernpay-app.tsx`.
+  - `useDocsTheme` loads the starter's CSS (and materials) through `prepareSkin` before committing it, and drops stale picks.
+  - The root loader inlines the docs theme only on docs-shell routes. Other pages load it in an idle callback, so a later client-side visit to the docs still paints themed.
+  - The shader card's gradient is an oversized `::before` that drifts with `transform` (same travel as before), so the animation runs on the compositor.
+  - The landing's default Mail scene chunk starts downloading when the module runs, overlapping hydration.
+  - Overscroll (user report): on macOS, rubber-band scrolling showed white behind dark starters, because themes live on a `.dixy-theme` wrapper and `<html>` had no background. `DocumentCanvas` (root) copies the outermost wrapper's resolved background and `color-scheme` to `<html>`. It updates when the route, appearance or skin attributes change, or when a skin stylesheet arrives.
+- Before → after (production build, no docs theme cookie unless noted):
+
+  | Measure                                                        | Before                                           | After                                           |
+  | -------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------- |
+  | Largest client chunk                                           | `dixy` 1,072 KB (330 KB gz)                      | entry 544 KB (147 KB gz); no `dixy` chunk       |
+  | Largest server chunk                                           | `dixy` 2,775 KB                                  | `index.js` 687 KB (unchanged); no `dixy` chunk  |
+  | `/` initial JS                                                 | 2,380 KB / 687 KB gz, 19 files                   | 1,164 KB / 345 KB gz, 33 files                  |
+  | `/docs/installation` initial JS                                | 2,339 KB / 677 KB gz, 17 files                   | 1,017 KB / 294 KB gz, 14 files                  |
+  | `/docs/components/button` initial JS                           | 2,371 KB / 684 KB gz, 18 files                   | 1,128 KB / 314 KB gz, 19 files                  |
+  | `/dixy-example` initial JS                                     | 2,337 KB / 676 KB gz, 17 files                   | 1,748 KB / 546 KB gz, 86 files                  |
+  | Entry CSS (`/` · docs pages)                                   | 577 KB / 70 KB gz on every page                  | 476 / 55 KB gz · 435 / 47 KB gz                 |
+  | `/` HTML with an Art Deco docs theme                           | 97 KB (16.7 KB gz), docs skin inlined            | 57 KB (10.7 KB gz), prefetched at idle instead  |
+  | Docs theme pick: new skin CSS present when the attribute flips | 0 of 4 (16–100 ms half-styled on localhost)      | 4 of 4 (0 ms)                                   |
+  | Docs theme pick, click event duration                          | 104 ms                                           | 72 ms                                           |
+  | Landing starter click, event duration                          | 40 ms                                            | 48 ms (same code path; noise)                   |
+  | `/` load CLS, 1024px                                           | 0.0511 (hero copy, stage caption, numbers strip) | 0 (two runs)                                    |
+  | CLS at 375px, all three routes                                 | 0                                                | 0                                               |
+  | Long tasks during load, all routes                             | 0                                                | 0                                               |
+  | `load` event, warm, 1024px (`/`, installation, button)         | 169, 87, 158 ms                                  | 175, 62, 105 ms                                 |
+  | Shader card loop                                               | `background-position` (paint per frame)          | `transform` on `::before` (compositor)          |
+  | `<html>` background, Studio Hardware dark                      | none (white overscroll)                          | `oklch(0.145 0.01072 70)`, `color-scheme: dark` |
+
+- Verified: `pnpm check` passes (110 library tests, docs build, 1,583 examples). `pnpm package:check --online` passes; the offline install could not run because this worktree has no local pnpm store. Tree-shaking budgets are unchanged: Button only 17.1 KiB; Theme, Field, TextField and Dialog 139.5 KiB; Navbar, Snippet and DataList 44.4 KiB. Checked in the in-app browser: the Fernpay page in Studio Hardware dark syncs `<html>`; the shader card renders as before, with its only animation on `::before` animating `transform`; switching four starters on the landing page and four in the docs theme menu works; a client-side visit from `/` to `/docs/installation` paints with the prefetched docs skin already present; there were no console errors.
+- Not tested or left as is:
+  - LCP and INP as Core Web Vitals. The browser pane was hidden for most runs, so Chrome reported no paint entries. The one LCP captured (`/`, after, 1024px) was 356 ms; there is no matching baseline. The event durations above come from single clicks, not field INP.
+  - Real network throttling, Safari and Firefox, a real macOS rubber-band gesture (verified by computed style only), reduced motion in the browser (the CSS rule is unchanged), and paint or composite profiles while scrolling (no DevTools).
+  - Docs `<style data-dixy-skin-style>` tags still build up as you switch (2 → 5 after four picks). Selectors are scoped, so the effect is only on style recalc. Pruning inactive installed skins needs care, because some pages show several skins at once.
+  - The landing route still serialises its own starter's CSS in the hydration payload as well as the `<style>` tag (about 3.6 KB brotli for a 22 KB skin).
+  - `generated-skin-loaders` (138 KB, 31 KB gz: all 32 skin definitions plus the authoring modules) still loads on the landing and docs pages. Making skin definitions lazy would make the theme props API async.
+  - The `lab.shaders` and `lab.controls` stylesheets (3.5 KB) are still imported from their route files.
+
+### 2026-11-09 — NativeSelect chevron; quieter docs playground
+
+- **NativeSelect.** A background-image chevron can't work: materials set the select's `background-image`, and reduced effects reset it with `!important`. NativeSelect is now a small component:
+  - A `span.dixy-native-select-root` (inline-grid) holds the `<select>` and a decorative `Mark kind="chevron"` in the same grid cell, so the wrapper adds no box of its own.
+  - Props, `ref` and `className` still reach the `<select>`. The browser arrow is removed (`appearance: none`), with 36px of end padding for the icon.
+  - `multiple` hides the chevron; disabled greys it. The icon ignores pointer events, so clicks open the picker.
+  - New test: the ref and props land on the select, the icon is `aria-hidden`, and `multiple` marks the root.
+  - Verified on the docs page (Ocean Depths skin): heights stay 32/40/48 at sm/md/lg, the chevron is centred with a 12px inset at every size, a click on the chevron hits the select, glossy keeps its gradient, and dark mode reads well.
+- **Docs playground.** Removed the filler text: the "A real component. Your decisions." caption, the "Small changes. Different character." note, the "light / skin" stage label and the footer ("Live from @dixy-ui/react", "Try it. Tab through it. Make it yours."). The status line that announces prop changes stays as a visually hidden live region. Dead CSS for the footer and caption was removed.
+- `pnpm check` (100 tests) and `pnpm package:check` pass.
+- Not tested: NativeSelect with a screen reader, Safari/Firefox (`appearance: none` on select), and a right-to-left layout for the icon inset.
+
+### 2026-11-09 — Color page palette explorer swatches render again
+
+- Symptom: on `/docs/foundations/color`, the "Twelve stops" explorer showed family buttons with no gradient and a stop strip of thin grey bars.
+- Cause: layout, not color. Every swatch already resolved its color (e.g. `var(--dixy-color-neutral-1)` computed to `oklch(0.99 0 0)`). The swatches are empty `<span>`s inside Dixy `Button`, which is an `inline-flex` row with centered items, so each span sat beside its label and shrank to 0–2px. The docs CSS was written for block-flow buttons.
+- Fix (`apps/docs/src/styles/docs.css`): `.color-family-choices > button` and `.color-stop` get `inline-size: 100%`, `flex-direction: column`, `align-items: stretch` and `justify-content: flex-start`; `.color-stop` also gets `block-size: auto`. The rules are unlayered, so they override the library's `@layer dixy.components` button layout only here.
+- Verified in the in-app browser: Neutrals (11), Colors (28) and overlays (2) have no swatch narrower than 8px; stop tiles are about 48px wide on desktop. The light and dark ramps fill; overlay tiles show the checker and alpha layer. Picking a family or stop updates the readout (`--dixy-color-slate-5 oklch(0.887 0.014499 260)`, dark `--dixy-color-neutral-5 oklch(0.32 0 0)`). At 375px the ramp uses 6 columns with no horizontal overflow. `pnpm check` passes.
+- Not tested: keyboard focus ring appearance on the stretched buttons, reduced motion (no motion changed), screen readers, Safari/Firefox, skins other than Ocean Depths.
+
+### 2026-11-09 — Kitchen sink, second pass against shadcn/ui
+
+- Request: TagGroup, Table and other kitchen-sink components still looked off; compare with shadcn first, then fix what we can.
+- Compared against shadcn v4 sources (`apps/v4/registry/new-york-v4/ui/*.tsx`, read with curl): table, badge, kbd, avatar, skeleton, empty, item, scroll-area, carousel, and others. All changes are in `styles/refinements.css` plus the Carousel defaults.
+
+| Component         | Before                                                                                     | shadcn                                                                                  | Now                                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Table, DataTable  | Strong rules, 16px cells, bold headers and row headers, caption above, rule under last row | 40px head, 8px cells, `border-b` rows, hover tint, last row clear, caption below, muted | Same: 40px head in secondary label type, 8px cells, subtle hairlines, hover tint, last row clear, caption below; row headers medium weight |
+| TagGroup          | 42px button-like tags                                                                      | (no TagGroup; Badge is a compact pill)                                                  | 24/28/32px tags in label-sm, subtle fill, 20px remove icon; selected uses the color                                                        |
+| Kbd               | Bordered with a drop shadow                                                                | `h-5`, muted fill, no border                                                            | 20px, muted fill, no border or shadow                                                                                                      |
+| ScrollArea        | 12px dark-grey rounded-square thumb                                                        | 10px track, `p-px`, `bg-border` round thumb                                             | 10px track, 1px inset, round thumb in border colour (darkens on use, as before)                                                            |
+| Empty             | Solid border                                                                               | `border-dashed`                                                                         | Dashed                                                                                                                                     |
+| AvatarGroup count | Bordered pill                                                                              | Same size as avatars, muted                                                             | Same size and radius as avatars, no border                                                                                                 |
+| Carousel          | "Previous"/"Next" text buttons                                                             | 32px round arrow buttons                                                                | Square chevron icon buttons at control height, still labelled "Previous slide"/"Next slide"; passing children keeps text                   |
+| Item              | Dark rule, also under the last item                                                        | Separators between items only                                                           | Subtle hairline, none after the last item                                                                                                  |
+
+- Verified in the in-app browser by measurement: Table head 40px, last-row border 0, caption bottom; DataTable head 40px; tag 28px with a 20×20 remove; Kbd 20px with no shadow; scrollbar 10px; Empty dashed; count 40×40 at the avatars' 8px radius; carousel controls 40×40 with their labels. Screenshots of Table, TagGroup, Carousel, Empty, Kbd. `pnpm check` (100 tests) and `pnpm package:check` pass.
+- Left as is, on purpose: OTP slots stay separate boxes (HeroUI-style) rather than shadcn's joined group; Switch keeps its thumb icons; ListBox keeps the text check mark; Toggle stays ghost at rest, as in shadcn.
+- Not tested: dark mode on this pass, keyboard through tags and carousel, screen readers, Safari/Firefox, phone width.
+
+### 2026-11-09 — Landing: wide starter fonts, round swatches, the real sideways-scroll cause
+
+- **Retro OS overlap and clipping.** The pixel display font sets "COMPONENTS" at 574px in a 432px copy column. `.landing-hero-copy` is a grid whose single auto column grew to that min-content width. The whole column, including the starter picker, spilled under the demo, and the fixed 98vh height clipped the taller copy.
+  - The copy grid is now `minmax(0, 1fr)` with `min-inline-size: 0`, and its children cap at 100%.
+  - `useFitHeading` shrinks the h1 only when its widest word doesn't fit. It re-checks on resize, after `document.fonts.ready` and when the starter or appearance changes.
+  - The hero uses `min-block-size` (98svh) instead of a fixed height, so it grows instead of clipping.
+  - Measured across 22 starters at 1440×900: the copy never passes 542px, and the demo starts at 606px. The h1 shrinks only where needed (Retro OS 60px, Y2K Titanium 55px, Riso Zine and Swiss Poster 67px, others 71–80px).
+- **Oval swatch ring.** Toggle's 40px minimum control height beat the 36px size, so swatches measured 36×40. Resetting the minimums and adding `aspect-ratio: 1` gives 36×36.
+- **Sideways scroll still possible.** A real trackpad gesture over the CTA scrolled `<main>` by 64px. `docs.css` (loaded globally from the root route) had a bare `main { overflow: auto }` meant for the docs shell. On the landing page it made `main` a scroll container that could reach the hero stage's −64px bleed. `overflow: clip` on the CTA couldn't help, because the scrolling box was its ancestor. Scoped the rule to `.docs-app main`. Verified: right-scroll gestures at three points move nothing (`scrollLeft` 0 on every element). The docs page still scrolls inside its shell (`scrollTop` 400 of 2226). The kitchen sink scrolls normally, with the document width equal to the viewport.
+- Not tested: Safari and Firefox trackpads, and the fit at every viewport width for every starter (checked 1440 for all 22, plus Retro OS by eye).
 
 ### 2026-11-07 — Components from the shadcn / HeroUI / Radix gap list
 
@@ -1413,3 +1761,233 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - **Contrast:** steel's darkest band scales the surface by about 0.85, and dark metal's brightest screened band plus grain lifts it by about 0.3. The text-contrast test's extremes went from 0.07/0.2 to 0.16 black and 0.32 white. Primary text still passes 4.5:1 on every neutral in light and dark.
 - **Verified:** in the in-app browser, all five finishes side by side as solid and soft controls on a card, in light and dark mode, plus a light theme nested in a dark one. `pnpm check` and `pnpm package:check` pass.
 - **Untested:** mobile, forced colours and reduced effects were not rechecked visually. Reduced effects and contrast preferences still strip every finish through the existing `!important` rules.
+
+### 2026-11-09 — AI parts (`@dixy-ui/react/ai`) and the Wren example app
+
+- Why: the app showcase needed an AI app, and Dixy needed the parts to build one. The anatomy follows Vercel's AI Elements (Apache-2.0), which is itself a shadcn registry. **None of its code is ported**: it is Tailwind + Radix, and Dixy is Base UI + tokens, so each part is composed from Dixy primitives instead.
+- Library: a new optional entry, `@dixy-ui/react/ai`, with its own `ai.css` (emitted like `materials.css`). The core `dixy.js` and `styles.css` are unchanged. `ai.js` imports Button, Tooltip, Toolbar, Badge, Table and Avatar from the shared chunk rather than copying them.
+  - `Conversation` (Root, Content, ScrollButton, EmptyState) plus `useStickToBottom`. The log follows streamed growth with an instant pin (smooth scrolling lags each token and jitters). An upward wheel, touch or key releases the pin immediately, because scroll events alone arrive too late for a small nudge. The log is `role="log"` with `aria-live="off"`, keyboard scrollable; Root announces status changes once each ("Responding", "Response complete") instead of every token. The scroll button moves focus into the log as it unmounts.
+  - `Message` (Root, Avatar, Content, Actions, Action). An `article` named "You"/"Assistant". Actions are a Base UI Toolbar, so a long transcript costs one Tab stop per message.
+  - `Response`: `react-markdown` + `remark-gfm` (optional peers). It maps markdown elements to Dixy Code, Blockquote, Table and CodeBlock, and to a native `a.dixy-link`: the React Aria Link is too heavy for every markdown link. Headings shift down two levels by default. Raw HTML stays text. While streaming, `completeMarkdown` closes open fences, inline code, bold and strikethrough, and turns a half-arrived link into text. `splitMarkdownBlocks` memoizes finished blocks, so each token re-parses only the last one. These are the problems Streamdown solves for AI Elements.
+  - `PromptInput` (Root, Textarea, Footer, Tools, Submit). Enter sends, Shift+Enter adds a line, an IME-confirming Enter (`isComposing`, keyCode 229) never sends, the field autosizes up to `maxHeight`, and typing is allowed while busy. Submit is one button that changes role (Send ↔ Stop), so focus survives the switch. Empty input uses `focusableWhenDisabled` rather than `disabled`, so focus is never dropped to the body.
+  - `Reasoning` opens while streaming and closes once when it ends, unless the reader toggled it. `Tool` shows AI SDK tool states with a Badge (labels overridable). `Sources` puts its links behind "Used N sources", each with "(opens in a new tab)". `Suggestions`, `CodeBlock`, `Shimmer` and `Loader` complete the set. All disclosures use Base UI Collapsible directly.
+  - Reduced motion (media query and `data-effects="reduced"`) stops the shimmer, loader pulse, streaming caret and panel transitions.
+- Docs: `/ai-example`, "Wren", a chat app built only from Dixy parts. A scripted `useMockChat` streams reasoning, tool calls, markdown and sources on timers, in the AI SDK's message-part shape. It has no network and no keys, and runs are deterministic. There are four scenarios (tables and task list; code; comparison with sources; failing tool), plus Deep/Swift models, a Search toggle, stop (button or Esc), regenerate, copy, rating, chat history and a mobile drawer. The landing showcase has a full-width Wren card and a footer link.
+- Verified:
+  - `pnpm check` passes, including 12 new tests in `src/ai/ai.test.tsx`: markdown repair and block splitting; Enter/Shift+Enter/IME; inert-but-focusable Send turning into Stop with focus kept; one status announcement per change; GFM through Dixy parts with HTML left as text; streaming aria-busy; Reasoning auto open and close and the reader's override; Tool states with no alert role; axe with zero violations.
+  - `pnpm package:check`: tree shaking passes with core bundles unchanged (17.0 / 140.1 / 44.1 KiB). It now forbids `react-markdown`, `remark-gfm`, `micromark` and `mdast-util-from-markdown` in core. `verify-package` (run with `--online`, because this worktree's offline store lacked `vite@8.3.4`) passes and now asserts that core CSS has no AI styles.
+  - In-app browser, :3005: every scenario streamed to completion while pinned to the bottom. Reasoning and tool panels open and close; sources expand while still pinned. Keyboard sending works, with the textarea growing to two lines and clearing. Esc mid-stream stops: the button returns to Send, focus stays in the textarea, reasoning stops spinning, and an unfinished tool shows "Cancelled". Light and dark both checked. At 375px there is no horizontal overflow; the drawer traps focus, Esc closes it and focus returns to "Open chats". Setting `data-effects="reduced"` sets the shimmer's animation to `none`.
+  - Fixed during verification: React Markdown v10 renders no wrapper, so the caret selectors were wrong. The Select trigger's `inline-size: 100%` wrapped the composer row. The radiating reasoning icon read as a spinner and became a lightbulb. Tool.Error's `role="alert"` would fire when the reader opened the panel, so it was removed (the badge already reports the error). Long suggestions overflowed the fixed Button height. The mobile landing art was clipped.
+- Cost: the `/ai-example` client chunk is 173 KiB (53 KiB gzipped), mostly `react-markdown` + micromark + GFM. It loads only on that route.
+- Not tested: the OS `prefers-reduced-motion` media query (the pane cannot emulate it; only the `data-effects` path was checked), screen readers (announcement wording and timing are unit-tested only), real touch scrolling against the pin, IME in a real browser (unit-tested), forced colours, 200%/400% zoom, RTL, Safari and Firefox, skins other than Original Dixy, the clipboard in a real browser, and the packed consumer importing `@dixy-ui/react/ai` (the fixture installs no markdown peers). The AI parts have no docs component pages, playgrounds or generated API yet.
+
+### 2026-11-09 — AI docs pages; Wren gets theme controls, a collapsible sidebar and a centred start
+
+- What changed:
+  - Ten docs pages under the new **AI** category (`apps/docs/src/registry/ai-components.ts`): Conversation, Message, Response, Code Block, Prompt Input, Suggestions, Reasoning, Tool, Sources, Shimmer & Loader. Each has a playground demo, controls, composition, keyboard and accessibility notes, and generated API tables (`scripts/generate-api.mjs` now reads `ai/*.tsx`; 139 references).
+  - The theme gallery test imports `@dixy-ui/react/ai`, so every AI export must be covered by a page.
+  - Wren has a starter-skin picker in its top bar (`?skin=` in the URL, same catalogue as Fernpay).
+  - Wren's sidebar collapses to a 60px icon rail, like Fernpay's and ChatGPT's. The one toggle (`aria-expanded`, `aria-controls`) stays in the same place in the DOM, so focus stays on it. In the rail, labels become visually hidden rather than removed, and tooltips appear.
+  - Search chats filters Recents. In the rail it expands the sidebar and focuses the field; Escape closes it and returns focus to the button. Unsent chats are no longer listed.
+  - The empty chat centres the heading, composer and starter list, ChatGPT-style. The composer keeps its place in the tree, so focus survives the first send.
+- Why the rail lives in the app: `Sidebar` is a layout primitive with no collapsed mode. Fernpay and Wren now both build a rail by hand, so a shared `Sidebar` rail mode is a candidate for the library.
+- Fixed during verification:
+  - `pnpm examples:check` expects `demos/<slug>-example.tsx`, so the `ai-` prefix was dropped from the demos.
+  - Prompt Input's starter token duplicated a fixed row in the token table (React duplicate-key warning).
+  - Closing search dropped focus to `<body>`.
+- Verified:
+  - `pnpm check` passes. `pnpm docs:check`, the docs tests (23) and `pnpm examples:check` (1,624 generated examples typechecked) also pass.
+  - In-app browser: all ten AI pages render a preview and their controls without errors.
+  - Wren collapse, expand, search, the first send, light and dark, and the 375px drawer, checked through the DOM and screenshots.
+- Not tested:
+  - Rail tooltips are confirmed in markup only; the screenshot did not capture a hover.
+  - The rail width transition with OS reduced motion.
+  - Screen readers on the toggle and search.
+  - The collapsed state is not persisted across reloads, by choice.
+
+### 2026-11-09 — Candy Clay corners on multi-line boxes; hero height no longer follows the scene
+
+- Request: in Candy Clay some elements were "too full" (pill-shaped message cards and an elliptical reply field), and the Dashboard scene stretched the homepage hero, leaving the copy column floating.
+- Radius, cause: `radius="full"` sets `--dixy-radius-control` to 9999px. That is right for one-line controls but turns any taller box using it into an ellipse.
+  - Library: `.dixy-textarea` now uses `min(var(--dixy-radius-control), var(--dixy-radius-card))` (an explicit component `radius` still wins). In none/sm/md/lg the control radius is already the smaller value, so only `full` changes. It caps at 16px, and Candy Clay's ×1.5 corner scale gives 24px.
+  - Skin compiler (`packages/themes/src/compile-css.ts`): the same cap is applied to the textarea before the skin's corner scale. All 31 generated skins are regenerated; only `full` renders differently.
+  - Docs scenes: mail message rows and the dashboard table wrapper used the control radius for card-like boxes; they now use the card radius.
+- Hero, cause: the stage is a grid item whose height came from its content, so the 1,389px Dashboard grew the hero row to 1,541px (Mail: 830px). `contain: size` on `.landing-stage-body` stops the scene sizing the row; the copy and the hero minimum decide it, and the scene scrolls inside.
+- Verified (in-app browser at 1440×900, emulated because the pane was hidden):
+  - The hero is 822px for Mail, Dashboard, Music and Blocks. The Dashboard scrolls inside the stage (670 of 1,389px), with the caption in the first viewport.
+  - At 900px and 375px, the stacked stage keeps its fixed height and there is no horizontal scroll.
+  - Candy Clay: message rows 16px, reply textarea 24px, search field and buttons still pills.
+  - `pnpm check`, `pnpm format:check`, tree-shaking and online package verify pass.
+- Not tested:
+  - Every starter with `radius="full"` beyond Candy Clay.
+  - Other multi-line boxes that may still use the control radius (e.g. app-level cards elsewhere).
+  - Keyboard scrolling of the hero stage.
+  - Safari and Firefox.
+
+### 2026-11-09 — Homepage showcase: Wren replaces Postbox
+
+- Request: remove the Postbox card (the mail app is already the hero) and put Wren in its place, because the full-width Wren row made the bento much longer.
+- Wren is now a standard card in the second row (Wren, Kitchen sink, Theme playground). The full-width `landing-show-wide` variant, its mobile overrides and the Postbox miniature CSS are deleted.
+- The Wren miniature was trimmed to fit a standard card's 206px art area: tighter inset and padding, no placeholder lines (request, thinking chip, tool call and composer remain). Its description is one line.
+- Verified at 1440×900 and 375px (emulated, pane hidden):
+  - The showcase is 736px tall in two rows, as before the Wren row was added.
+  - The miniature does not overflow; the composer has 13px clearance.
+  - No horizontal scroll at 375px.
+  - `pnpm check` and `pnpm format:check` pass.
+- Also checked: Candy Clay, Retro OS, Phosphor Terminal, Swiss Poster and Y2K Titanium all fit with the same 13px clearance. Not tested: the other 27 starters.
+
+### 2026-11-10 — Wren: Chat and Work modes, a compact composer, phone layout
+
+- Request: make the Wren example work on phones, make the chat input smaller, and add Chat and Work modes (ChatGPT reference). Mid-way the user also flagged that the composer text sat lower than the icons, and that the page scrolled beneath the app.
+- Modes: a segmented `ToggleGroup` centred in the top bar (a three-column grid keeps it centred).
+  - Chat: "What's on your mind?", a single-row composer (field, model, a square globe toggle that keeps "Search" as its accessible name, submit) and the list of starters.
+  - Work: "What should we work on?", a taller composer with tools underneath, and three starter cards ("See what Work can do"). The cards reuse existing scripts, so their replies still show tool calls and code.
+- Alignment: the field and the tools share one row height (`--wren-row`: 40px, or 44px under `any-pointer: coarse` to match the library's touch targets). The field's padding is `(row − 1.5em) / 2`, so one line of text is centred on the icons. Measured: text and icon centres both at 420px (desktop) and 426px (phone). Three lines grow the field upward, and the tools stay on the last line.
+- Library fixes found along the way (changeset `prompt-input-refit`, patch):
+  - `PromptInput.Textarea` measured its height only when the text changed. A width change (a resize, or switching modes) left it at the wrong height. A `ResizeObserver` now re-fits when the width changes; height changes are ignored to avoid a loop.
+  - `Response` tables inherited `overflow-wrap: anywhere` from the message, so on a phone cells broke words letter by letter ("Satu rday") instead of scrolling. The table wrapper now uses `overflow-wrap: normal`.
+  - `Conversation.Content` was not positioned, so the absolutely positioned visually hidden labels inside messages were placed against the conversation root. As a reply scrolled, one sat 61px below the window and made the page itself scroll. The content is now `position: relative`. Wren's app root also uses `overflow: clip`.
+- Phones (<768px): the top bar is menu, mode switch, new chat; the title stays for screen readers only. The theme picker and appearance toggle move to the foot of the chats drawer. Assistant avatars are hidden so replies get the full width. Work cards become a swipeable, snapping row. The disclaimer is hidden, and the composer respects the bottom safe area. Below 1024px the theme picker shrinks so the top bar fits beside the sidebar.
+- Verified (in-app browser, emulated sizes):
+  - 1280×800 and 375×812: no horizontal scroll; page height equals the window with the transcript at top and bottom.
+  - At 820px the top bar fits after the picker fix (it overflowed by 10px before).
+  - Composer heights: Chat 58px, Work 138px, correct after switching both ways.
+  - Dark appearance at 375px for Work mode and a Chat conversation.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested:
+  - Real touch devices, iOS Safari's keyboard and the safe-area padding.
+  - Screen-reader announcement of the mode switch.
+  - Reduced motion (no new motion apart from scroll snapping).
+  - Starters other than Original Dixy and Candy Clay.
+
+### 2026-11-10 — Faster CI and releases
+
+- Request: merging felt slow. A CI run took 5–7 minutes and a release three full runs in a row (~20 minutes).
+- Measured from PR #14's run: `pnpm check` 188s, `package:check --online` 173s. Locally, two scripts dominated:
+  - `check-examples.mjs` (inside the docs build): 40s. It type-checked 1,624 examples in batches of 16, building a new TypeScript program per batch. Batches of 1,024 take 5s. Peak memory drops from 1.9 GB to 1.2 GB, because each program kept its predecessor alive through `oldProgram`.
+  - `verify-package.mjs`: 57s, of which 35s was one `tsc` run per skin (30 runs). The skins are now type-checked together, one module per skin, in a single `tsc` run. Each skin is still bundled on its own to prove the others stay out. Now 28s.
+  - The rebuild at the start of `package:check` (9s) and network access (`--online` vs `--offline` made no difference) were not the problem.
+- Workflows:
+  - CI runs on pushes to `main` and on pull requests, instead of on every push plus every PR, which checked each PR commit twice. A newer PR commit cancels the older run.
+  - Release skips its checks when unreleased changesets remain, because then it only updates the "Version packages" PR and publishes nothing. The run that publishes still runs every check.
+- Verified: both changed scripts pass, and both still fail on an injected type error (a demo; one skin's entry, reported as `skin-checks/glass-ui.tsx`). `pnpm check` and `pnpm format:check` pass, and the workflow YAML parses.
+- Not done: Turborepo caching in CI. It would need `scripts/**` in the cache key, since the docs build runs scripts from outside the package, and the remaining build time no longer justifies the risk of stale results.
+- Not verified yet: the CI timing on GitHub; this PR's own run is the first measurement. Branches pushed without a PR no longer get CI.
+
+### 2026-11-09 — Shader lab workbench
+
+- What changed: `/lab/shaders` was a small card of controls beside a demo page. It is now a playground workbench.
+  - Top bar: back link, title, Prototype badge, Light/Dark toggle.
+  - Stage (the shader host, sticky on desktop): a Hero / Surfaces / Backdrop scene switcher, so the shader can be judged under content, on surfaces, or on its own; a status HUD (state, fps, canvas size) pinned to the corner.
+  - Inspector: on/off switch; a shader gallery (radio rows: shader, skin, program id) replacing the Select; playback (Pause/Play, Restart, speed 0.25–2× on a stepped Slider); token inputs showing the three tokens behind `uDeep` / `uMid` / `uLight` as live swatches for the current appearance; render stats (canvas, fps, base resolution, adaptive quality, pixel-ratio cap).
+- Runtime: `startShaderBackdrop` takes `speed` and `paused`, and gains `configure()` and `restart()`; changing them never rebuilds the GL program. `running` and `still` statuses now carry `width`, `height` and `quality`. After a resize while idle it re-runs `update()` so the reported size stays current. `ShaderBackdrop` forwards `speed`, `paused` and `restartKey`. The Fernpay example only reads `status.state`, so it is unaffected.
+- Why: a lab should show the cause next to the effect. Token swatches make the token → uniform path visible; the stats make the adaptive-resolution step visible; scenes test readability, which is the real acceptance bar for a backdrop.
+- Verified:
+  - `pnpm check` and Prettier pass.
+  - In-app browser (own server on :3001): Ocean caustics running with live canvas size and 80% adaptive quality; Pause holds the frame and the HUD reads "Paused"; ArrowRight ×2 on the speed thumb goes 1× → 2×; switching to Aurora updates the URL (`?skin=solar-sail`), the radio state and the token swatches; Phosphor Terminal in dark; Neon Night Market at 375px stacks stage over inspector with no horizontal overflow. No console errors.
+- Not tested: reduced-motion (the Pause/Restart/Speed controls disable and a note appears, but OS reduced motion was not toggled), screen readers, Safari/Firefox, touch devices, and 120 Hz frame rate (the in-app pane reported 29 fps and less while backgrounded).
+
+### 2026-11-09 — Exit easing is now ease-out
+
+- What changed: `motionEasings.exit` in `packages/tokens/src/motion.ts` went from `[0.4, 0, 1, 1]` (an ease-in) to `[0.23, 1, 0.32, 1]` (a strong ease-out). `motion.css` was regenerated with `scripts/generate-motion.mjs`. No component CSS changed: Dialog, AlertDialog, Drawer, Menu, ContextMenu, NavigationMenu, Select, Combobox, Autocomplete, Popover, PreviewCard, Tooltip and Toast all read the token through `--dixy-*-motion-exit-easing`. The token name and exit duration (`fast`, 120ms) stay the same, so the public API is unchanged.
+- Why: from a review of Emil Kowalski's animation rules. An ease-in exit starts slowly, so a closing popup hangs for a moment at full opacity, right when the user expects it to go. An ease-out exit starts fast and feels like the interface is responding. Motion users of `tweenTransition("exit")` get the same curve.
+- Verified:
+  - `pnpm check` passes (110 tests) and `pnpm package:check` passes.
+  - In the in-app browser (own dev server), the Motion foundation page lists the new exit curve.
+  - The exit easing of all six component families resolves to `cubic-bezier(0.23, 1, 0.32, 1)`. An open Menu popup with `data-ending-style` computes `opacity, transform` at 0.12s with the new curve.
+  - Inside `[data-motion="reduced"]` the exit still resolves to 0ms.
+- Not tested: watching the close animation visually (the pane was hidden, so animation frames didn't run), OS-level reduced-motion emulation, Safari/Firefox and touch.
+
+### 2026-11-09 — Reduced motion keeps short fades
+
+- What changed: reduced motion used to set every duration to 0ms. Now it removes movement but keeps opacity and colour changes as short fades.
+  - New tokens `--dixy-motion-effects-duration-{instant,fast,normal,deliberate,slow}`. Normally they equal `--dixy-motion-duration-*` (so a skin's speed scaling still applies). Under `[data-motion="reduced"]` and `prefers-reduced-motion: reduce` they become `min(duration, 200ms)`: 0, 120, 200, 200, 200ms. `--dixy-motion-duration-*` and `--dixy-motion-spatial-factor` still go to 0, so anything that moves stays immediate.
+  - The generator also emits `--dixy-motion-transition-{role}-effects` and, for each component phase, `--dixy-{component}-motion-{phase}-effects` and `-effects-duration`.
+  - Library CSS: 56 `opacity`/`color`/`background`/`border-color` transitions now use the effects variants. `transform`, sizes, `rotate` and height reveals are unchanged. The drawer exit's `transition-duration` is now an (opacity, transform) pair.
+  - JS helpers: `tweenTransition(role, reduced, kind = "spatial")` gains a `kind` argument; `springTransition(…, "effects", …, true)` now returns a short tween instead of 0. New exports: `motionEffectsDuration`, `reducedEffectsDuration`, `reducedEffectsMaxDuration`. Existing calls keep their old results, except effects springs under reduction.
+  - Docs: the Motion demo fades without travel under reduction. Motion foundation and component-motion copy describe the new policy.
+- Why: the Emil Kowalski review (and WCAG 2.3.3) treats reduced motion as "no movement", not "no feedback". A popup that snaps in and out gives no cue about where it came from or that it went away. A short fade does, without anything travelling. Effects follow the normal durations instead of fixed values so skins that slow motion (Holi, Neon Night Market, Studio Hardware) keep opacity and transform in step.
+- Verified:
+  - `pnpm check` passes (110 React tests; token tests extended to cover effects fades in JS and in both reduced CSS blocks) and `pnpm package:check` passes.
+  - In the in-app browser (own dev server, computed styles), reduced mode gives:
+    - menu exit, drawer exit: `opacity 0.12s, transform 0s`
+    - popover, dialog, toast: `0.2s, 0s`
+    - button: colours 0.12s, transform 0s
+    - switch thumb: transform 0s, colours 0.12s
+    - tabs indicator: all 0s
+  - System mode is unchanged. A theme scope with `--dixy-motion-duration-normal: 408ms` gives a popover `0.408s, 0.408s`.
+- Not tested:
+  - watching the fades, or clicking through the Motion demo (the pane was hidden with a 0×0 viewport, so animation frames don't run)
+  - OS-level reduced-motion emulation (covered only by the generated-CSS test)
+  - Safari/Firefox, touch, screen readers
+- Left as is: skin CSS in `packages/themes` and docs-app CSS that time opacity with `--dixy-motion-duration-*` still snap under reduction. That's safe, but they could adopt the effects tokens later.
+
+### 2026-11-10 — Faster, gated CI
+
+- What changed:
+  - `ci.yml` runs on pull requests and pushes to `main` only (it used to run on every push and every PR, so PR commits ran twice). A concurrency group cancels superseded PR runs; runs on `main` queue instead, so a production deploy is never cut off.
+  - Turbo's `.turbo/cache` is saved with `actions/cache` (key per commit, restore-keys fall back to the newest). Entries untouched for 7 days are pruned before saving. `release.yml` and the deploy job restore it but don't save.
+  - `package:check` builds tokens, react and themes through `turbo run build --filter=…` instead of `pnpm --filter … build`, so it replays the builds `pnpm check` just made.
+  - `timeout-minutes`: 20 for checks, 15 for deploy, 30 for release.
+  - The docs deploy is now the `deploy-docs` job in `ci.yml` with `needs: check`. `deploy-docs.yml` is deleted. Before, a push to `main` that failed checks still deployed. `docs/BETA_PLAN.md` now points at the new job.
+- Why: CI built the packages three or four times per push to `main`, always from a cold cache, and production deploys didn't wait for tests.
+- Verified:
+  - Both workflows parse as YAML (jobs `check`, `deploy-docs`; `release`). Edited files pass Prettier.
+  - `TURBO_FORCE=true pnpm check` passes (66s, 0 cached). `pnpm package:check` then passes with its 3 builds fully cached (13ms instead of a rebuild).
+- Not tested: the workflows haven't run on GitHub yet, so cache save/restore, the `needs` gate, the main-only cancel expression and the Cloudflare steps are unverified until the first push. No actionlint was run (not installed).
+- Found, left as is: `pnpm format:check` already fails on this branch (22 files, including this log), so CI's first step fails no matter what. Fixing it is a separate `pnpm format` change.
+
+### 2026-11-10 — Landing: GitHub star button, author credit, visitor count
+
+- What changed:
+  - Header: a "Star" link to `akssmax/DixyUI` with a live star count (`landing-meta.tsx`, `GitHubStarButton`). The count comes from the public GitHub API in the browser and is cached in `sessionStorage`; if GitHub fails, the button shows without a number.
+  - Footer: "© 2026 Dixy UI · Built by Akshay Saini", linking to https://www.akshaysaini.xyz/, and a visitor total next to the beta status.
+  - Visitor count: `recordVisit` server function (`src/lib/visitors.functions.ts`) backed by a Cloudflare KV binding `VISITORS` in `wrangler.jsonc`. A browser counts once: the server only increments when the client has no `dixy-visited` flag in `localStorage`, and the flag is written after the server confirms. A module-level guard stops StrictMode's double effect from counting twice. `cloudflare:workers` is typed minimally in `env.d.ts` and imported inside the handler, so it never reaches the client bundle.
+  - Phones (≤480px): the header keeps the Dixy mark but drops the wordmark, and gaps tighten, so brand, Docs, Playground, GitHub and the theme toggle fit at 375px. ≤360px also hides the star count. ≤640px hides the "Star" label (screen readers still get "Star Dixy UI on GitHub, N stars").
+- Why: UI kit landing pages usually show the repo and its stars. KV was chosen over a third-party counter so visitor requests stay on our Worker.
+- Verified:
+  - `pnpm check` passes. The client build has no `cloudflare:workers` or KV code; `dist/server/wrangler.json` carries the `VISITORS` binding.
+  - In the in-app browser (dev server, Miniflare KV): first visit with no flag incremented the total; reloads sent `isNew: false` and didn't increment (two read-only requests per load from StrictMode). Star count renders (repo currently has 0). Footer link points at the portfolio. Light and dark checked. At 375px the header's last item ends at 359px (no overflow); desktop layout unchanged apart from the new button.
+- Not tested: production deploy. The binding has no `id`, so `wrangler deploy` should auto-provision the namespace on first deploy; the CI token (currently "Workers Scripts: Edit") also needs "Workers KV Storage: Edit" for that. KV reads are eventually consistent (up to ~60s), so a fresh total can lag, and two simultaneous first visits can produce one increment. The counter is unauthenticated, so anyone can inflate it by clearing storage. Keyboard focus ring, reduced motion (nothing animates), Safari/Firefox and screen readers not checked.
+
+### 2026-11-10 — Merge GitHub main into local main
+
+- What changed: local `main` (shader lab workbench, exit easing, reduced-motion fades, base-components merge, gated CI with turbo cache, landing star/credit/visitors) merged with GitHub's PRs #12, #14 and #15.
+  - `ci.yml`: both sides restricted pushes to `main` and added a concurrency group. Kept the local version: `workflow_dispatch`, and runs on `main` queue instead of being cancelled, so a deploy is never cut off. The header now also lists the KV permission the visitor counter needs.
+  - `release.yml` merged cleanly: it restores the turbo cache (local) and skips checks while changesets are pending (PR #15).
+  - `BUILD_LOG.md`: kept every entry from both sides, including both CI write-ups.
+- Verified: `pnpm format:check`, `pnpm check` and `pnpm package:check --online` pass on the merge. (`--offline` failed only because the fresh checkout's store lacked a cached tarball.)
+- Not tested: the merged workflows on GitHub until this push runs them.
+
+### 2026-11-10 — dixyui.com custom domain
+
+- What changed:
+  - Cloudflare (dashboard): deleted the two parking records Cloudflare had imported from Namecheap (`A @ → 192.64.119.65`, `CNAME www → parkingpage.namecheap.com`), then attached `dixyui.com` and `www.dixyui.com` to the `dixy-ui-docs` Worker as Custom Domains.
+  - `apps/docs/wrangler.jsonc`: both hostnames listed under `routes` with `custom_domain: true`, so `wrangler deploy` keeps them attached instead of the config drifting from the dashboard.
+  - Kept: Namecheap email-forwarding MX records and SPF TXT.
+- Why: the domain's nameservers already pointed at Cloudflare and Universal SSL was active, but DNS still served Namecheap's parking page. Over HTTPS it timed out, because Full SSL mode tried HTTPS on the parking server.
+- Verified: both hostnames resolve to Cloudflare and return 200 over HTTPS with the "Dixy UI — Components with character" page. Edited config passes Prettier.
+- Not tested: a CI deploy with the new `routes`. The deploy token may need zone-level permissions (Workers Routes: Edit, Zone: Read) on dixyui.com to manage custom domains; if the next deploy fails on routes, widen the token. No www → apex redirect yet, so both hostnames serve the site.
+
+### 2026-11-10 — System appearance by default
+
+- What changed:
+  - The `dixy-appearance` cookie now stores the reader's choice: `system`, `light` or `dark`. A missing cookie means `system`, so new visitors follow their OS.
+  - `getAppPreferences` resolves `system` on the server. It uses the `Sec-CH-Prefers-Color-Scheme` client hint first (sent with `Accept-CH`, `Critical-CH` and `Vary`), then a `dixy-system-appearance` cookie the client keeps updated, then light.
+  - `AppAppearanceProvider` exposes `appearancePreference` and `setAppearancePreference` alongside the resolved `appearance`. While on `system`, it follows `prefers-color-scheme` changes live. `setAppearance(light|dark)` still exists, so the header toggles and demo apps pick an explicit appearance.
+  - The landing footer toggle is now System / Light / Dark (Monitor, Sun, Moon icons). The docs theme menu's Appearance group also has a System option.
+- Why: the site defaulted to light whatever the OS said.
+- Verified:
+  - `pnpm check` passes.
+  - In the in-app browser (dev server), with cookies cleared and the scheme emulated as dark, the server rendered `data-appearance="dark"` and System was pressed. Flipping the emulated scheme to light updated the page live.
+  - Footer Dark, header toggle and footer System each set the right cookie and pressed state. In the docs menu, keyboard focus plus Enter on Light works.
+  - At 375px the footer toggle fits with no horizontal overflow.
+- Not tested:
+  - The first visit in Safari or Firefox with a dark OS. Those browsers don't send the client hint and have no cookie yet, so that one visit paints light and switches to dark after hydration. Later visits use the cookie.
+  - `Critical-CH` retry on production Chrome, reduced motion (the switch doesn't animate), and screen readers.
+
+### 2026-11-10 — Cache the Worker deploy pointer with the docs build
+
+- What changed: `apps/docs/turbo.json` extends the root config and adds `.wrangler/deploy/**` to the docs `build` outputs.
+- Why: `deploy-docs` failed on PR #16 with "entry-point file at @tanstack/react-start/server-entry was not found". The Cloudflare Vite plugin writes `.wrangler/deploy/config.json` to point wrangler at `dist/server/wrangler.json`. The turbo-cached deploy job restored `dist/` on a cache hit but not that pointer, so wrangler read `wrangler.jsonc` and couldn't resolve its package `main`. Production deploys on `main` would have failed the same way.
+- Verified: built the docs once (cache miss), deleted `dist/` and `.wrangler/deploy`, rebuilt (cache hit) and the pointer came back. `wrangler deploy --dry-run` then resolved the built Worker with its `VISITORS` binding. `pnpm check` passes.

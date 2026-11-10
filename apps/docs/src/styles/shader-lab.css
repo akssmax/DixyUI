@@ -1,0 +1,366 @@
+/*
+ * Shader lab: a workbench. The stage is the shader host (the runtime sizes
+ * the canvas to it); the inspector holds every control beside it.
+ */
+.shader-lab {
+  --shader-lab-gutter: clamp(12px, 2vw, 20px);
+  --shader-lab-inspector: 340px;
+  --shader-lab-bar-height: 56px;
+  min-height: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+
+/* ---------- Top bar ---------- */
+
+.shader-lab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--shader-lab-bar-height);
+  padding: 8px var(--shader-lab-gutter);
+  border-bottom: 1px solid var(--dixy-color-border-subtle);
+}
+.shader-lab-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.shader-lab-title h1 {
+  margin: 0;
+  white-space: nowrap;
+}
+.shader-lab-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--dixy-color-border-subtle);
+}
+.shader-lab-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--dixy-color-text-secondary);
+  text-decoration: none;
+  font-weight: 600;
+}
+.shader-lab-back:hover {
+  color: var(--dixy-color-text-primary);
+}
+.shader-lab-back:focus-visible {
+  outline: 2px solid var(--dixy-color-border-focus);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ---------- Layout ---------- */
+
+.shader-lab-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--shader-lab-inspector);
+  gap: var(--shader-lab-gutter);
+  padding: var(--shader-lab-gutter);
+  align-items: start;
+}
+
+/* ---------- Stage ---------- */
+
+/* The static backdrop is the real design; the shader only adds to it. */
+.shader-lab-stage {
+  position: sticky;
+  top: var(--shader-lab-gutter);
+  isolation: isolate;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: calc(
+    100dvh - var(--shader-lab-bar-height) - 2 * var(--shader-lab-gutter)
+  );
+  min-height: 480px;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: var(--dixy-radius-card);
+  background:
+    radial-gradient(
+      120% 80% at 50% 0%,
+      var(--dixy-color-brand-4),
+      transparent 70%
+    ),
+    var(--dixy-color-background-canvas);
+}
+
+.shader-lab-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  animation: shader-lab-fade 600ms ease-out forwards;
+}
+
+/* Low-resolution caustics are upscaled; keep them soft. Scanlines stay crisp. */
+.shader-lab-stage[data-shader="phosphor"] .shader-lab-canvas {
+  image-rendering: pixelated;
+}
+
+@keyframes shader-lab-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+.shader-lab-stage-bar {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+.shader-lab-stage-bar .dixy-toggle-group {
+  background: var(--dixy-color-background-surface);
+  border-radius: var(--dixy-radius-control);
+  box-shadow: 0 0 0 1px var(--dixy-color-border-subtle);
+}
+
+.shader-lab-scene {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 0;
+  overflow: auto;
+  padding: 8px clamp(16px, 5vw, 64px);
+}
+
+.shader-lab-hero {
+  display: grid;
+  gap: 16px;
+  max-width: 720px;
+  width: 100%;
+}
+.shader-lab-eyebrow {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.shader-lab-display {
+  font-size: clamp(2.25rem, 5vw, 4.5rem);
+  line-height: 1;
+  margin: 0;
+  text-wrap: balance;
+}
+.shader-lab-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.shader-lab-sample {
+  width: min(100%, 400px);
+}
+.shader-lab-sample .dixy-card-content {
+  display: grid;
+  gap: 14px;
+}
+.shader-lab-field {
+  display: grid;
+  gap: 6px;
+}
+
+/* Status readout pinned to the stage, so the effect and its cost are seen together. */
+.shader-lab-hud {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--dixy-color-background-surface);
+  box-shadow: 0 0 0 1px var(--dixy-color-border-subtle);
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-caption);
+  letter-spacing: var(--dixy-font-caption-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+.shader-lab-hud-meta {
+  color: var(--dixy-color-text-tertiary);
+}
+.shader-lab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dixy-color-text-tertiary);
+}
+.shader-lab-hud[data-tone="live"] .shader-lab-dot {
+  background: var(--dixy-color-icon-success);
+  box-shadow: 0 0 0 3px
+    color-mix(in oklab, var(--dixy-color-icon-success) 25%, transparent);
+}
+.shader-lab-hud[data-tone="warn"] .shader-lab-dot {
+  background: var(--dixy-color-border-warning);
+}
+
+/* ---------- Inspector ---------- */
+
+.shader-lab-inspector {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--dixy-color-border-subtle);
+  border-radius: var(--dixy-radius-card);
+  /* The 1px gap shows this colour, giving hairline dividers between panels. */
+  background: var(--dixy-color-border-subtle);
+}
+
+.shader-lab-panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  background: var(--dixy-color-background-surface);
+}
+
+.shader-lab-section {
+  margin: 0;
+  color: var(--dixy-color-text-tertiary);
+  font: var(--dixy-font-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shader-lab-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+}
+.shader-lab-row-text,
+.shader-lab-option-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.shader-lab-strong {
+  font-weight: 600;
+}
+.shader-lab-muted {
+  color: var(--dixy-color-text-secondary);
+}
+.shader-lab-code {
+  font: var(--dixy-font-code-sm);
+  letter-spacing: var(--dixy-font-code-sm-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Shader gallery: radios presented as selectable rows. */
+.shader-lab-options {
+  display: grid;
+  gap: 4px;
+}
+.shader-lab-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--dixy-radius-control);
+  cursor: pointer;
+  transition: background-color 120ms ease-out;
+}
+.shader-lab-option:hover {
+  background: var(--dixy-color-background-subtle);
+}
+.shader-lab-option[data-selected] {
+  background: var(--dixy-color-background-selected);
+}
+.shader-lab-option .shader-lab-code {
+  color: var(--dixy-color-text-tertiary);
+}
+
+.shader-lab-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.shader-lab-speed {
+  display: grid;
+  gap: 8px;
+}
+.shader-lab-speed-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.shader-lab-tokens {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.shader-lab-token {
+  display: grid;
+  grid-template-columns: 24px 56px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+}
+.shader-lab-token dd {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shader-lab-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px
+    color-mix(in oklab, var(--dixy-color-text-primary) 15%, transparent);
+}
+
+.shader-lab-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 16px;
+  margin: 0;
+}
+.shader-lab-stats dt {
+  color: var(--dixy-color-text-tertiary);
+  font: var(--dixy-font-caption);
+}
+.shader-lab-stats dd {
+  margin: 2px 0 0;
+  font: var(--dixy-font-code-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shader-lab-canvas {
+    animation: none;
+    opacity: 1;
+  }
+  .shader-lab-option {
+    transition: none;
+  }
+}
+
+/* ---------- Narrow screens: stage on top, inspector below ---------- */
+
+@media (max-width: 900px) {
+  .shader-lab-workbench {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .shader-lab-stage {
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: min(72dvh, 640px);
+  }
+}
+
+@media (max-width: 480px) {
+  .shader-lab-back-text,
+  .shader-lab-divider,
+  .shader-lab-title .dixy-badge {
+    display: none;
+  }
+}

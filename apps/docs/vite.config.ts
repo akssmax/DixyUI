@@ -14,4 +14,33 @@ export default defineConfig({
     react({ include: /\.(jsx|tsx|mdx)$/ }),
   ],
   resolve: { dedupe: ["react", "react-dom"] },
+  environments: {
+    client: {
+      build: {
+        rolldownOptions: {
+          output: {
+            codeSplitting: {
+              groups: [
+                {
+                  // @dixy-ui/react ships one module per component, so each
+                  // page loads only what it renders. Modules most chunks
+                  // share (Theme, Button, Text, floating-ui…) would otherwise
+                  // arrive as dozens of tiny requests; keep those together.
+                  name: "dixy-common",
+                  test: (id: string) =>
+                    !id.endsWith(".css") &&
+                    /[\\/](packages[\\/]react[\\/]dist|node_modules[\\/](@base-ui|@floating-ui|tabbable|reselect|use-sync-external-store))[\\/]/.test(
+                      id,
+                    ),
+                  // Measured 4, 15, 40 and unset: 15 kept /docs/installation at 14 requests
+                  // (vs 92 with no group) without regrowing a site-wide chunk.
+                  minShareCount: 15,
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+  },
 });

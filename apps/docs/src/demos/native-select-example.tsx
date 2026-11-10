@@ -11,8 +11,8 @@ export default function NativeSelectExample({
   const visual = { size, variant, radius, material };
   return (
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
-      <label style={{ display: "grid", gap: 8 }}>
-        Workspace plan
+      <label className="dixy-field">
+        <span className="dixy-label">Workspace plan</span>
         <NativeSelect {...visual} defaultValue="personal">
           <option value="personal">Personal</option>
           <option value="team">Team</option>

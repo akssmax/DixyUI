@@ -18,13 +18,9 @@ export default function RangeCalendarExample({
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
       <RangeCalendar.Root {...visual} aria-label="Choose a date">
         <Inline>
-          <RangeCalendar.Button slot="previous" aria-label="Previous month">
-            ‹
-          </RangeCalendar.Button>
+          <RangeCalendar.Button slot="previous" aria-label="Previous month" />
           <RangeCalendar.Heading />
-          <RangeCalendar.Button slot="next" aria-label="Next month">
-            ›
-          </RangeCalendar.Button>
+          <RangeCalendar.Button slot="next" aria-label="Next month" />
         </Inline>
         <RangeCalendar.Grid>
           <RangeCalendar.GridHeader>

@@ -55,3 +55,42 @@ export const CloseGlyph = () => (
     <path d="M18 6 6 18M6 6l12 12" />
   </Glyph>
 );
+export const ArrowUpGlyph = () => (
+  <Glyph>
+    <path d="M12 19V5M5 12l7-7 7 7" />
+  </Glyph>
+);
+export const ArrowDownGlyph = () => (
+  <Glyph>
+    <path d="M12 5v14M19 12l-7 7-7-7" />
+  </Glyph>
+);
+export const StopGlyph = () => (
+  <Glyph>
+    <rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" />
+  </Glyph>
+);
+export const ChevronDownGlyph = () => (
+  <Glyph>
+    <path d="m6 9 6 6 6-6" />
+  </Glyph>
+);
+/** A lightbulb, for visible reasoning. Radiating lines read as a spinner. */
+export const SparkGlyph = () => (
+  <Glyph>
+    <path d="M9 18h6M10 21h4" />
+    <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.9V16h5v-.2c0-.8.4-1.5 1-1.9A6 6 0 0 0 12 3Z" />
+  </Glyph>
+);
+export const WrenchGlyph = () => (
+  <Glyph>
+    <path d="M14.7 6.3a4 4 0 0 0 5 5l-8.4 8.4a2.1 2.1 0 0 1-3-3l8.4-8.4a4 4 0 0 0-2-2Z" />
+    <path d="M14.7 6.3 17 4" />
+  </Glyph>
+);
+export const LinkGlyph = () => (
+  <Glyph>
+    <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
+    <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
+  </Glyph>
+);
