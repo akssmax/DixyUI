@@ -1826,3 +1826,27 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - No horizontal scroll at 375px.
   - `pnpm check` and `pnpm format:check` pass.
 - Also checked: Candy Clay, Retro OS, Phosphor Terminal, Swiss Poster and Y2K Titanium all fit with the same 13px clearance. Not tested: the other 27 starters.
+
+### 2026-11-10 — Wren: Chat and Work modes, a compact composer, phone layout
+
+- Request: make the Wren example work on phones, make the chat input smaller, and add Chat and Work modes (ChatGPT reference). Mid-way the user also flagged that the composer text sat lower than the icons, and that the page scrolled beneath the app.
+- Modes: a segmented `ToggleGroup` centred in the top bar (a three-column grid keeps it centred).
+  - Chat: "What's on your mind?", a single-row composer (field, model, a square globe toggle that keeps "Search" as its accessible name, submit) and the list of starters.
+  - Work: "What should we work on?", a taller composer with tools underneath, and three starter cards ("See what Work can do"). The cards reuse existing scripts, so their replies still show tool calls and code.
+- Alignment: the field and the tools share one row height (`--wren-row`: 40px, or 44px under `any-pointer: coarse` to match the library's touch targets). The field's padding is `(row − 1.5em) / 2`, so one line of text is centred on the icons. Measured: text and icon centres both at 420px (desktop) and 426px (phone). Three lines grow the field upward, and the tools stay on the last line.
+- Library fixes found along the way (changeset `prompt-input-refit`, patch):
+  - `PromptInput.Textarea` measured its height only when the text changed. A width change (a resize, or switching modes) left it at the wrong height. A `ResizeObserver` now re-fits when the width changes; height changes are ignored to avoid a loop.
+  - `Response` tables inherited `overflow-wrap: anywhere` from the message, so on a phone cells broke words letter by letter ("Satu rday") instead of scrolling. The table wrapper now uses `overflow-wrap: normal`.
+  - `Conversation.Content` was not positioned, so the absolutely positioned visually hidden labels inside messages were placed against the conversation root. As a reply scrolled, one sat 61px below the window and made the page itself scroll. The content is now `position: relative`. Wren's app root also uses `overflow: clip`.
+- Phones (<768px): the top bar is menu, mode switch, new chat; the title stays for screen readers only. The theme picker and appearance toggle move to the foot of the chats drawer. Assistant avatars are hidden so replies get the full width. Work cards become a swipeable, snapping row. The disclaimer is hidden, and the composer respects the bottom safe area. Below 1024px the theme picker shrinks so the top bar fits beside the sidebar.
+- Verified (in-app browser, emulated sizes):
+  - 1280×800 and 375×812: no horizontal scroll; page height equals the window with the transcript at top and bottom.
+  - At 820px the top bar fits after the picker fix (it overflowed by 10px before).
+  - Composer heights: Chat 58px, Work 138px, correct after switching both ways.
+  - Dark appearance at 375px for Work mode and a Chat conversation.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested:
+  - Real touch devices, iOS Safari's keyboard and the safe-area padding.
+  - Screen-reader announcement of the mode switch.
+  - Reduced motion (no new motion apart from scroll snapping).
+  - Starters other than Original Dixy and Candy Clay.
