@@ -13,6 +13,7 @@ import {
   Copy,
   Eye,
   Keyboard,
+  Monitor,
   Moon,
   Sun,
   Type,
@@ -34,6 +35,7 @@ import {
 } from "@dixy-ui/react";
 import { DixyMark } from "./dixy-mark";
 import { ButtonLink } from "./button-link";
+import { portfolioUrl, VisitorCount } from "./landing-meta";
 // Imported here, not in routes/index.tsx: a bare import in a route file stays
 // in the unsplit route module, which put the landing CSS on every docs page.
 import "../styles/landing.css";
@@ -762,8 +764,9 @@ export function LandingFooter({
   appearance,
   onAppearance,
 }: {
-  appearance: "light" | "dark";
-  onAppearance: (value: "light" | "dark") => void;
+  /** The reader's choice, including "system". */
+  appearance: "system" | "light" | "dark";
+  onAppearance: (value: "system" | "light" | "dark") => void;
 }) {
   return (
     <footer className="landing-footer">
@@ -875,27 +878,37 @@ export function LandingFooter({
           </nav>
         </div>
         <div className="landing-footer-bottom">
-          <Text
-            as="span"
-            size="sm"
-            tone="muted"
-            className="landing-footer-status"
-          >
-            <i aria-hidden="true" />
-            0.1 beta · on npm
-          </Text>
+          <div className="landing-footer-meta">
+            <Text
+              as="span"
+              size="sm"
+              tone="muted"
+              className="landing-footer-status"
+            >
+              <i aria-hidden="true" />
+              0.1 beta · on npm
+            </Text>
+            <VisitorCount />
+          </div>
           <Text as="span" size="sm" tone="muted">
-            © 2026 Dixy UI · Built in the open
+            © 2026 Dixy UI · Built by{" "}
+            <a className="landing-footer-author" href={portfolioUrl}>
+              Akshay Saini
+            </a>
           </Text>
           <ToggleGroup
             value={[appearance]}
             onValueChange={(value) => {
               const next = (value as string[])[0];
-              if (next === "light" || next === "dark") onAppearance(next);
+              if (next === "system" || next === "light" || next === "dark")
+                onAppearance(next);
             }}
             aria-label="Appearance"
             segmented
           >
+            <Toggle value="system" size="sm" aria-label="System">
+              <Monitor size={14} />
+            </Toggle>
             <Toggle value="light" size="sm" aria-label="Light">
               <Sun size={14} />
             </Toggle>

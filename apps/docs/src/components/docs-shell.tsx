@@ -249,7 +249,7 @@ function ThemeMenu({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const { appearance, setAppearance } = useAppAppearance();
+  const { appearancePreference, setAppearancePreference } = useAppAppearance();
   const { docsTheme, setDocsTheme, error } = useDocsTheme();
   return (
     <Popover.Root open={open} onOpenChange={setOpen}>
@@ -298,11 +298,13 @@ function ThemeMenu({
             <ToggleGroup
               segmented
               aria-label="Appearance"
-              value={[appearance]}
+              value={[appearancePreference]}
               onValueChange={(value) =>
-                value[0] && setAppearance(value[0] as "light" | "dark")
+                value[0] &&
+                setAppearancePreference(value[0] as "system" | "light" | "dark")
               }
             >
+              <Toggle value="system">System</Toggle>
               <Toggle value="light">Light</Toggle>
               <Toggle value="dark">Dark</Toggle>
             </ToggleGroup>

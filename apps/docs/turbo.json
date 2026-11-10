@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      // The Cloudflare Vite plugin writes .wrangler/deploy/config.json, which
+      // points wrangler at dist/server/wrangler.json. Without it in the cache,
+      // a cache hit restores dist/ but wrangler falls back to wrangler.jsonc
+      // and can't resolve its package entry point.
+      "outputs": ["dist/**", ".output/**", ".wrangler/deploy/**"]
+    }
+  }
+}

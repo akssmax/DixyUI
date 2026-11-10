@@ -263,7 +263,7 @@
     color: var(--dixy-input-text);
     font: var(--dixy-font-body-md);
     letter-spacing: var(--dixy-font-body-md-letter-spacing);
-    transition: border-color var(--dixy-motion-transition-feedback);
+    transition: border-color var(--dixy-motion-transition-feedback-effects);
   }
   .dixy-input::placeholder {
     color: var(--dixy-color-text-secondary);

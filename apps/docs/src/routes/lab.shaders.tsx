@@ -1,13 +1,13 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Moon, Sun } from "lucide-react";
+import { ArrowLeft, Moon, Pause, Play, RotateCcw, Sun } from "lucide-react";
 import {
   Badge,
   Button,
   Card,
-  Field,
   Heading,
-  Select,
+  Radio,
+  RadioGroup,
   Slider,
   Switch,
   Text,
@@ -28,6 +28,7 @@ import {
 } from "../lib/theme-skin-catalogue";
 import { ShaderBackdrop } from "../lab/shader-backdrop";
 import { shaderPairings } from "../lab/shader-pairings";
+import { shaderPrograms } from "../lab/shader-programs";
 import type { ShaderStatus } from "../lab/shader-runtime";
 import "../styles/shader-lab.css";
 import { HomeLink } from "../components/home-link";
@@ -36,7 +37,17 @@ import { HomeLink } from "../components/home-link";
 const labSkins = shaderPairings;
 type LabSlug = (typeof labSkins)[number]["slug"];
 
+const scenes = [
+  { value: "hero", label: "Hero" },
+  { value: "surfaces", label: "Surfaces" },
+  { value: "backdrop", label: "Backdrop" },
+] as const;
+type Scene = (typeof scenes)[number]["value"];
+
+const speedMarks = [0.25, 0.5, 1, 1.5, 2];
 const optInKey = "dixy-lab-shader";
+/** Mirrors MAX_DPR in the runtime; shown so the numbers add up. */
+const maxDpr = 1.5;
 
 export const Route = createFileRoute("/lab/shaders")({
   validateSearch: (search: Record<string, unknown>): { skin?: LabSlug } => ({
@@ -65,7 +76,7 @@ export const Route = createFileRoute("/lab/shaders")({
       {
         name: "description",
         content:
-          "Opt-in WebGL backdrops for Ocean Depths and Phosphor Terminal.",
+          "Opt-in WebGL backdrops for Dixy skins, driven by theme tokens.",
       },
     ],
     styles: [
@@ -80,21 +91,32 @@ export const Route = createFileRoute("/lab/shaders")({
   component: ShaderLab,
 });
 
-function describe(status: ShaderStatus | null, enabled: boolean) {
-  if (!enabled) return "Off · static backdrop";
-  if (!status) return "Starting…";
+type Tone = "live" | "idle" | "warn";
+
+function describe(
+  status: ShaderStatus | null,
+  enabled: boolean,
+): { text: string; tone: Tone } {
+  if (!enabled) return { text: "Off · static backdrop", tone: "idle" };
+  if (!status) return { text: "Starting…", tone: "idle" };
   switch (status.state) {
     case "running":
-      return `Running · ${status.fps} fps`;
+      return { text: `Running · ${status.fps} fps`, tone: "live" };
     case "still":
-      return "Still frame · reduced motion is on";
+      return status.reason === "paused"
+        ? { text: "Paused", tone: "idle" }
+        : { text: "Still frame · reduced motion", tone: "idle" };
     case "hidden":
-      return "Paused · off screen";
+      return { text: "Paused · off screen", tone: "idle" };
     case "unsupported":
-      return "WebGL unavailable · static backdrop";
+      return { text: "WebGL unavailable · static backdrop", tone: "warn" };
     case "lost":
-      return "Graphics context lost · waiting to restore";
+      return { text: "Context lost · waiting to restore", tone: "warn" };
   }
+}
+
+function skinName(slug: string) {
+  return skinCatalog.find((skin) => skin.slug === slug)!.name;
 }
 
 function ShaderLab() {
@@ -103,6 +125,7 @@ function ShaderLab() {
   const navigate = Route.useNavigate();
   const entry = labSkins.find((item) => item.slug === skin) ?? labSkins[0];
   const meta = skinCatalog.find((item) => item.id === id)!;
+  const program = shaderPrograms[entry.program];
 
   const [appearance, setAppearance] = useState<"light" | "dark">(
     meta.appearance,
@@ -124,6 +147,10 @@ function ShaderLab() {
     } catch {}
   }
 
+  const [scene, setScene] = useState<Scene>("hero");
+  const [speed, setSpeed] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const [restartKey, setRestartKey] = useState(0);
   const [status, setStatus] = useState<ShaderStatus | null>(null);
   useEffect(() => setStatus(null), [enabled, entry.program]);
   useEffect(() => deduplicateSkinStyles(id), [id]);
@@ -133,164 +160,348 @@ function ShaderLab() {
     [id, appearance],
   );
   const failed = status?.state === "unsupported";
+  const live = enabled && !failed;
+  const reducedMotion =
+    status?.state === "still" && status.reason === "reduced-motion";
+  const summary = describe(status, enabled);
+  const size =
+    status && (status.state === "running" || status.state === "still")
+      ? status
+      : null;
+  const tokens = program.colors[appearance];
+
+  function selectSkin(value: unknown) {
+    if (typeof value !== "string") return;
+    navigate({
+      search: { skin: value as LabSlug },
+      replace: true,
+      resetScroll: false,
+    });
+  }
 
   return (
     <Theme {...themeProps} className="shader-lab">
-      <div
-        className="shader-lab-stage"
-        data-shader={enabled && !failed ? entry.program : undefined}
-      >
-        {enabled && !failed ? (
-          <ShaderBackdrop
-            key={entry.program}
-            program={entry.program}
-            appearance={appearance}
-            tokenKey={id}
-            onStatus={setStatus}
-          />
-        ) : null}
-
-        <header className="shader-lab-bar">
+      <header className="shader-lab-bar">
+        <div className="shader-lab-title">
           <HomeLink className="shader-lab-back">
-            <ArrowLeft size={16} aria-hidden="true" /> Dixy
+            <ArrowLeft size={16} aria-hidden="true" />
+            <span className="shader-lab-back-text">Dixy</span>
           </HomeLink>
-          <Badge variant="soft">Lab · prototype</Badge>
-        </header>
+          <span className="shader-lab-divider" aria-hidden="true" />
+          <Heading as="h1" size="sm">
+            Shader lab
+          </Heading>
+          <Badge variant="soft">Prototype</Badge>
+        </div>
+        <ToggleGroup
+          aria-label="Appearance"
+          attached
+          value={[appearance]}
+          onValueChange={(value) =>
+            value[0] && setAppearance(value[0] as "light" | "dark")
+          }
+        >
+          <Toggle value="light" size="sm" variant="soft" color="neutral">
+            <Sun size={14} aria-hidden="true" /> Light
+          </Toggle>
+          <Toggle value="dark" size="sm" variant="soft" color="neutral">
+            <Moon size={14} aria-hidden="true" /> Dark
+          </Toggle>
+        </ToggleGroup>
+      </header>
 
-        <main className="shader-lab-main">
-          <Card.Root className="shader-lab-controls">
-            <Card.Content>
-              <Heading as="h1" size="sm">
-                Shader backdrops
-              </Heading>
-              <Text size="sm" tone="muted">
-                An optional WebGL layer behind a theme. Off by default, it
-                follows your theme tokens, and it freezes on one frame when
-                reduced motion is on.
-              </Text>
+      <div className="shader-lab-workbench">
+        <section
+          className="shader-lab-stage"
+          aria-label="Preview"
+          data-shader={live ? entry.program : undefined}
+          data-scene={scene}
+        >
+          {live ? (
+            <ShaderBackdrop
+              key={entry.program}
+              program={entry.program}
+              appearance={appearance}
+              tokenKey={id}
+              speed={speed}
+              paused={paused}
+              restartKey={restartKey}
+              onStatus={setStatus}
+            />
+          ) : null}
 
-              <Field.Root>
-                <Field.Label>Skin</Field.Label>
-                <Select.Root
-                  value={entry.slug}
-                  onValueChange={(value) =>
-                    value &&
-                    navigate({
-                      search: { skin: value as LabSlug },
-                      replace: true,
-                      resetScroll: false,
-                    })
-                  }
-                  items={labSkins.map((item) => ({
-                    value: item.slug,
-                    label: skinCatalog.find((s) => s.slug === item.slug)!.name,
-                  }))}
-                >
-                  <Select.Trigger size="sm">
-                    <Select.Value />
-                    <Select.Icon />
-                  </Select.Trigger>
-                  <Select.Portal>
-                    <Select.Positioner sideOffset={8}>
-                      <Select.Popup size="sm">
-                        <Select.List>
-                          {labSkins.map((item) => (
-                            <Select.Item key={item.slug} value={item.slug}>
-                              <Select.ItemText>
-                                {
-                                  skinCatalog.find((s) => s.slug === item.slug)!
-                                    .name
-                                }
-                              </Select.ItemText>
-                              <Select.ItemIndicator />
-                            </Select.Item>
-                          ))}
-                        </Select.List>
-                      </Select.Popup>
-                    </Select.Positioner>
-                  </Select.Portal>
-                </Select.Root>
-              </Field.Root>
-
-              <label className="shader-lab-row">
-                <span>
-                  <Text as="span" className="shader-lab-strong">
-                    {entry.label}
-                  </Text>
-                  <Text as="span" size="sm" tone="muted" aria-live="polite">
-                    {describe(status, enabled)}
-                  </Text>
-                </span>
-                <Switch.Root checked={enabled} onCheckedChange={toggle}>
-                  <Switch.Thumb />
-                </Switch.Root>
-              </label>
-
-              <ToggleGroup
-                aria-label="Appearance"
-                attached
-                value={[appearance]}
-                onValueChange={(value) =>
-                  value[0] && setAppearance(value[0] as "light" | "dark")
-                }
-              >
-                <Toggle value="light" size="sm" variant="soft" color="neutral">
-                  <Sun size={14} aria-hidden="true" /> Light
-                </Toggle>
-                <Toggle value="dark" size="sm" variant="soft" color="neutral">
-                  <Moon size={14} aria-hidden="true" /> Dark
-                </Toggle>
-              </ToggleGroup>
-            </Card.Content>
-          </Card.Root>
-
-          <section className="shader-lab-hero" aria-labelledby="lab-headline">
-            <Text
-              as="span"
-              size="sm"
-              tone="muted"
-              className="shader-lab-eyebrow"
+          <div className="shader-lab-stage-bar">
+            <ToggleGroup
+              aria-label="Preview content"
+              attached
+              value={[scene]}
+              onValueChange={(value) => value[0] && setScene(value[0] as Scene)}
             >
-              {meta.voice.eyebrow}
-            </Text>
-            <Heading as="h2" id="lab-headline" className="shader-lab-display">
-              {meta.voice.headline}
-            </Heading>
-            <Text size="lg">{meta.voice.body}</Text>
-            <div className="shader-lab-actions">
-              <Button size="lg">{meta.voice.primary}</Button>
-              <Button size="lg" variant="outline" color="neutral">
-                {meta.voice.secondary}
-              </Button>
+              {scenes.map((item) => (
+                <Toggle
+                  key={item.value}
+                  value={item.value}
+                  size="sm"
+                  variant="soft"
+                  color="neutral"
+                >
+                  {item.label}
+                </Toggle>
+              ))}
+            </ToggleGroup>
+          </div>
+
+          {scene === "backdrop" ? null : (
+            <div className="shader-lab-scene">
+              {scene === "hero" ? (
+                <section
+                  className="shader-lab-hero"
+                  aria-labelledby="lab-headline"
+                >
+                  <Text
+                    as="span"
+                    size="sm"
+                    tone="muted"
+                    className="shader-lab-eyebrow"
+                  >
+                    {meta.voice.eyebrow}
+                  </Text>
+                  <Heading
+                    as="h2"
+                    id="lab-headline"
+                    className="shader-lab-display"
+                  >
+                    {meta.voice.headline}
+                  </Heading>
+                  <Text size="lg">{meta.voice.body}</Text>
+                  <div className="shader-lab-actions">
+                    <Button size="lg">{meta.voice.primary}</Button>
+                    <Button size="lg" variant="outline" color="neutral">
+                      {meta.voice.secondary}
+                    </Button>
+                  </div>
+                </section>
+              ) : (
+                <Card.Root className="shader-lab-sample">
+                  <Card.Content>
+                    <Heading as="h2" size="sm">
+                      Readability check
+                    </Heading>
+                    <Text size="sm" tone="muted">
+                      Content sits on surfaces, so the shader never sits
+                      directly under body text.
+                    </Text>
+                    <label className="shader-lab-field">
+                      <Text as="span" size="sm">
+                        Callsign
+                      </Text>
+                      <TextField placeholder="Type something" />
+                    </label>
+                    <Slider.Root defaultValue={40}>
+                      <Slider.Control>
+                        <Slider.Track>
+                          <Slider.Indicator />
+                        </Slider.Track>
+                        <Slider.Thumb aria-label="Depth" />
+                      </Slider.Control>
+                    </Slider.Root>
+                    <div className="shader-lab-actions">
+                      <Button size="sm">{meta.voice.primary}</Button>
+                      <Button size="sm" variant="ghost" color="neutral">
+                        Cancel
+                      </Button>
+                    </div>
+                  </Card.Content>
+                </Card.Root>
+              )}
             </div>
+          )}
+
+          <div className="shader-lab-hud" data-tone={summary.tone}>
+            <span className="shader-lab-dot" aria-hidden="true" />
+            <span>{summary.text}</span>
+            {size ? (
+              <span className="shader-lab-hud-meta">
+                {size.width}×{size.height}
+              </span>
+            ) : null}
+          </div>
+        </section>
+
+        <aside className="shader-lab-inspector" aria-label="Shader controls">
+          <section className="shader-lab-panel">
+            <label className="shader-lab-row">
+              <span className="shader-lab-row-text">
+                <Text as="span" className="shader-lab-strong">
+                  WebGL backdrop
+                </Text>
+                <Text as="span" size="sm" tone="muted" aria-live="polite">
+                  {summary.text}
+                </Text>
+              </span>
+              <Switch.Root checked={enabled} onCheckedChange={toggle}>
+                <Switch.Thumb />
+              </Switch.Root>
+            </label>
+            <Text size="sm" tone="muted">
+              Off by default. It reads its colours from theme tokens and holds
+              one frame when reduced motion is on.
+            </Text>
           </section>
 
-          <Card.Root className="shader-lab-sample">
-            <Card.Content>
-              <Heading as="h3" size="sm">
-                Readability check
-              </Heading>
+          <section className="shader-lab-panel" aria-labelledby="lab-shader">
+            <h2 id="lab-shader" className="shader-lab-section">
+              Shader
+            </h2>
+            <RadioGroup
+              aria-labelledby="lab-shader"
+              value={entry.slug}
+              onValueChange={selectSkin}
+              className="shader-lab-options"
+            >
+              {labSkins.map((item) => (
+                <label
+                  key={item.slug}
+                  className="shader-lab-option"
+                  data-selected={item.slug === entry.slug || undefined}
+                >
+                  <Radio.Root value={item.slug} size="sm">
+                    <Radio.Indicator />
+                  </Radio.Root>
+                  <span className="shader-lab-option-text">
+                    <span className="shader-lab-strong">{item.label}</span>
+                    <Text as="span" size="sm" tone="muted">
+                      {skinName(item.slug)}
+                    </Text>
+                  </span>
+                  <code className="shader-lab-code">{item.program}</code>
+                </label>
+              ))}
+            </RadioGroup>
+          </section>
+
+          <section className="shader-lab-panel" aria-labelledby="lab-playback">
+            <h2 id="lab-playback" className="shader-lab-section">
+              Playback
+            </h2>
+            <div className="shader-lab-buttons">
+              <Button
+                size="sm"
+                variant="soft"
+                color="neutral"
+                onClick={() => setPaused((value) => !value)}
+                disabled={!live || reducedMotion}
+                aria-pressed={paused}
+              >
+                {paused ? (
+                  <Play size={14} aria-hidden="true" />
+                ) : (
+                  <Pause size={14} aria-hidden="true" />
+                )}
+                {paused ? "Play" : "Pause"}
+              </Button>
+              <Button
+                size="sm"
+                variant="soft"
+                color="neutral"
+                onClick={() => setRestartKey((value) => value + 1)}
+                disabled={!live || reducedMotion}
+              >
+                <RotateCcw size={14} aria-hidden="true" /> Restart
+              </Button>
+            </div>
+            <Slider.Root
+              value={speedMarks.indexOf(speed)}
+              min={0}
+              max={speedMarks.length - 1}
+              step={1}
+              disabled={!live || reducedMotion}
+              onValueChange={(value) =>
+                setSpeed(speedMarks[value as number] ?? 1)
+              }
+              className="shader-lab-speed"
+            >
+              <div className="shader-lab-speed-head">
+                <Slider.Label>Speed</Slider.Label>
+                <output className="shader-lab-code">{speed}×</output>
+              </div>
+              <Slider.Control>
+                <Slider.Track>
+                  <Slider.Indicator />
+                </Slider.Track>
+                <Slider.Thumb
+                  aria-label="Speed"
+                  getAriaValueText={(_, value) => `${speedMarks[value]}×`}
+                />
+              </Slider.Control>
+            </Slider.Root>
+            {reducedMotion ? (
               <Text size="sm" tone="muted">
-                Content sits on surfaces, so the shader never sits directly
-                under body text.
+                Your system asks for reduced motion, so playback controls are
+                off.
               </Text>
-              <label className="shader-lab-field">
-                <Text as="span" size="sm">
-                  Callsign
-                </Text>
-                <TextField placeholder="Type something" />
-              </label>
-              <Slider.Root defaultValue={40}>
-                <Slider.Control>
-                  <Slider.Track>
-                    <Slider.Indicator />
-                  </Slider.Track>
-                  <Slider.Thumb aria-label="Depth" />
-                </Slider.Control>
-              </Slider.Root>
-            </Card.Content>
-          </Card.Root>
-        </main>
+            ) : null}
+          </section>
+
+          <section className="shader-lab-panel" aria-labelledby="lab-tokens">
+            <h2 id="lab-tokens" className="shader-lab-section">
+              Token inputs · {appearance}
+            </h2>
+            <dl className="shader-lab-tokens">
+              {(
+                [
+                  ["deep", "uDeep", tokens.deep],
+                  ["mid", "uMid", tokens.mid],
+                  ["light", "uLight", tokens.light],
+                ] as const
+              ).map(([role, uniform, token]) => (
+                <div key={role} className="shader-lab-token">
+                  <span
+                    className="shader-lab-swatch"
+                    style={{ background: `var(${token})` }}
+                    aria-hidden="true"
+                  />
+                  <dt className="shader-lab-code">{uniform}</dt>
+                  <dd className="shader-lab-code shader-lab-muted">
+                    {token.replace("--dixy-color-", "")}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+
+          <section className="shader-lab-panel" aria-labelledby="lab-render">
+            <h2 id="lab-render" className="shader-lab-section">
+              Render
+            </h2>
+            <dl className="shader-lab-stats">
+              <div>
+                <dt>Canvas</dt>
+                <dd>{size ? `${size.width}×${size.height}` : "—"}</dd>
+              </div>
+              <div>
+                <dt>Frame rate</dt>
+                <dd>{status?.state === "running" ? `${status.fps}` : "—"}</dd>
+              </div>
+              <div>
+                <dt>Base resolution</dt>
+                <dd>{Math.round(program.resolution * 100)}%</dd>
+              </div>
+              <div>
+                <dt>Adaptive quality</dt>
+                <dd>{size ? `${Math.round(size.quality * 100)}%` : "—"}</dd>
+              </div>
+              <div>
+                <dt>Pixel ratio cap</dt>
+                <dd>{maxDpr}×</dd>
+              </div>
+              <div>
+                <dt>Context</dt>
+                <dd>WebGL 1</dd>
+              </div>
+            </dl>
+          </section>
+        </aside>
       </div>
     </Theme>
   );

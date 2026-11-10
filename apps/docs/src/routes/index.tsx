@@ -45,6 +45,7 @@ import {
   LandingFooter,
   installCommand,
 } from "../components/landing-sections";
+import { GitHubStarButton } from "../components/landing-meta";
 import { useAppAppearance } from "../components/app-appearance-provider";
 import {
   PreviewVoiceContext,
@@ -566,7 +567,12 @@ function useFitHeading(key: string) {
 }
 
 function Landing() {
-  const { appearance, setAppearance } = useAppAppearance();
+  const {
+    appearance,
+    setAppearance,
+    appearancePreference,
+    setAppearancePreference,
+  } = useAppAppearance();
   const starter = useStarter();
   const heading = useFitHeading(`${starter.preset.skin}:${appearance}`);
   // The whole page wears the chosen starter. The header and the hero picker both
@@ -645,6 +651,7 @@ function Landing() {
                 Playground
               </ButtonLink>
             </nav>
+            <GitHubStarButton />
             <IconButton
               variant="ghost"
               color="neutral"
@@ -797,7 +804,10 @@ function Landing() {
           />
         </main>
 
-        <LandingFooter appearance={appearance} onAppearance={setAppearance} />
+        <LandingFooter
+          appearance={appearancePreference}
+          onAppearance={setAppearancePreference}
+        />
       </PreviewVoiceContext.Provider>
     </Theme>
   );

@@ -1753,6 +1753,15 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Each `@dixy-ui` package now has a GitHub Actions trusted publisher on npm (`akssmax/DixyUI`, `release.yml`, `npm publish` allowed). npm marks them "pending validation" until the first OIDC publish, which must happen before 2026-11-10 10:44 UTC.
 - The release workflow no longer uses `NPM_TOKEN` or `registry-url`; `id-token: write` lets pnpm sign in through OIDC and attach provenance. To confirm on the next publish: provenance attached, then delete the `NPM_TOKEN` secret and revoke the token.
 
+### 2026-11-09 — Material finishes that read
+
+- **Cause:** every solid/soft button squashed its finish image into a 3px band (`background-size: 100% 3px`). That suited glossy's highlight but hid soft, metal and paper. On surfaces those recipes sat at 2–4% opacity.
+- **Change:** the strip sizing now applies to glossy only. Soft clay gained a broad top light, a shaded underside and a thicker inset rim. Metal and paper gained an opaque stock layer blended with `multiply` (cool steel bands; warm cream), under an irregular brushed grain or hairline fibres. Recipes carry a new `blend` field (`--dixy-material-<name>-blend`). Every finish still stays within two gradient layers and two shadows, with no `url()`, SVG filters or animation; the existing materials test enforces that.
+- **Dark mode:** `multiply` only darkens, so metal and paper carry an optional `dark` recipe, emitted under `[data-appearance="dark"]` (and reset under `[data-appearance="light"]` for nested themes). Dark metal screens dim steel bands into gunmetal with a softer bevel; dark paper screens a warm kraft stock with pale fibres.
+- **Contrast:** steel's darkest band scales the surface by about 0.85, and dark metal's brightest screened band plus grain lifts it by about 0.3. The text-contrast test's extremes went from 0.07/0.2 to 0.16 black and 0.32 white. Primary text still passes 4.5:1 on every neutral in light and dark.
+- **Verified:** in the in-app browser, all five finishes side by side as solid and soft controls on a card, in light and dark mode, plus a light theme nested in a dark one. `pnpm check` and `pnpm package:check` pass.
+- **Untested:** mobile, forced colours and reduced effects were not rechecked visually. Reduced effects and contrast preferences still strip every finish through the existing `!important` rules.
+
 ### 2026-11-09 — AI parts (`@dixy-ui/react/ai`) and the Wren example app
 
 - Why: the app showcase needed an AI app, and Dixy needed the parts to build one. The anatomy follows Vercel's AI Elements (Apache-2.0), which is itself a shadcn registry. **None of its code is ported**: it is Tailwind + Radix, and Dixy is Base UI + tokens, so each part is composed from Dixy primitives instead.
@@ -1864,6 +1873,124 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Verified: both changed scripts pass, and both still fail on an injected type error (a demo; one skin's entry, reported as `skin-checks/glass-ui.tsx`). `pnpm check` and `pnpm format:check` pass, and the workflow YAML parses.
 - Not done: Turborepo caching in CI. It would need `scripts/**` in the cache key, since the docs build runs scripts from outside the package, and the remaining build time no longer justifies the risk of stale results.
 - Not verified yet: the CI timing on GitHub; this PR's own run is the first measurement. Branches pushed without a PR no longer get CI.
+
+### 2026-11-09 — Shader lab workbench
+
+- What changed: `/lab/shaders` was a small card of controls beside a demo page. It is now a playground workbench.
+  - Top bar: back link, title, Prototype badge, Light/Dark toggle.
+  - Stage (the shader host, sticky on desktop): a Hero / Surfaces / Backdrop scene switcher, so the shader can be judged under content, on surfaces, or on its own; a status HUD (state, fps, canvas size) pinned to the corner.
+  - Inspector: on/off switch; a shader gallery (radio rows: shader, skin, program id) replacing the Select; playback (Pause/Play, Restart, speed 0.25–2× on a stepped Slider); token inputs showing the three tokens behind `uDeep` / `uMid` / `uLight` as live swatches for the current appearance; render stats (canvas, fps, base resolution, adaptive quality, pixel-ratio cap).
+- Runtime: `startShaderBackdrop` takes `speed` and `paused`, and gains `configure()` and `restart()`; changing them never rebuilds the GL program. `running` and `still` statuses now carry `width`, `height` and `quality`. After a resize while idle it re-runs `update()` so the reported size stays current. `ShaderBackdrop` forwards `speed`, `paused` and `restartKey`. The Fernpay example only reads `status.state`, so it is unaffected.
+- Why: a lab should show the cause next to the effect. Token swatches make the token → uniform path visible; the stats make the adaptive-resolution step visible; scenes test readability, which is the real acceptance bar for a backdrop.
+- Verified:
+  - `pnpm check` and Prettier pass.
+  - In-app browser (own server on :3001): Ocean caustics running with live canvas size and 80% adaptive quality; Pause holds the frame and the HUD reads "Paused"; ArrowRight ×2 on the speed thumb goes 1× → 2×; switching to Aurora updates the URL (`?skin=solar-sail`), the radio state and the token swatches; Phosphor Terminal in dark; Neon Night Market at 375px stacks stage over inspector with no horizontal overflow. No console errors.
+- Not tested: reduced-motion (the Pause/Restart/Speed controls disable and a note appears, but OS reduced motion was not toggled), screen readers, Safari/Firefox, touch devices, and 120 Hz frame rate (the in-app pane reported 29 fps and less while backgrounded).
+
+### 2026-11-09 — Exit easing is now ease-out
+
+- What changed: `motionEasings.exit` in `packages/tokens/src/motion.ts` went from `[0.4, 0, 1, 1]` (an ease-in) to `[0.23, 1, 0.32, 1]` (a strong ease-out). `motion.css` was regenerated with `scripts/generate-motion.mjs`. No component CSS changed: Dialog, AlertDialog, Drawer, Menu, ContextMenu, NavigationMenu, Select, Combobox, Autocomplete, Popover, PreviewCard, Tooltip and Toast all read the token through `--dixy-*-motion-exit-easing`. The token name and exit duration (`fast`, 120ms) stay the same, so the public API is unchanged.
+- Why: from a review of Emil Kowalski's animation rules. An ease-in exit starts slowly, so a closing popup hangs for a moment at full opacity, right when the user expects it to go. An ease-out exit starts fast and feels like the interface is responding. Motion users of `tweenTransition("exit")` get the same curve.
+- Verified:
+  - `pnpm check` passes (110 tests) and `pnpm package:check` passes.
+  - In the in-app browser (own dev server), the Motion foundation page lists the new exit curve.
+  - The exit easing of all six component families resolves to `cubic-bezier(0.23, 1, 0.32, 1)`. An open Menu popup with `data-ending-style` computes `opacity, transform` at 0.12s with the new curve.
+  - Inside `[data-motion="reduced"]` the exit still resolves to 0ms.
+- Not tested: watching the close animation visually (the pane was hidden, so animation frames didn't run), OS-level reduced-motion emulation, Safari/Firefox and touch.
+
+### 2026-11-09 — Reduced motion keeps short fades
+
+- What changed: reduced motion used to set every duration to 0ms. Now it removes movement but keeps opacity and colour changes as short fades.
+  - New tokens `--dixy-motion-effects-duration-{instant,fast,normal,deliberate,slow}`. Normally they equal `--dixy-motion-duration-*` (so a skin's speed scaling still applies). Under `[data-motion="reduced"]` and `prefers-reduced-motion: reduce` they become `min(duration, 200ms)`: 0, 120, 200, 200, 200ms. `--dixy-motion-duration-*` and `--dixy-motion-spatial-factor` still go to 0, so anything that moves stays immediate.
+  - The generator also emits `--dixy-motion-transition-{role}-effects` and, for each component phase, `--dixy-{component}-motion-{phase}-effects` and `-effects-duration`.
+  - Library CSS: 56 `opacity`/`color`/`background`/`border-color` transitions now use the effects variants. `transform`, sizes, `rotate` and height reveals are unchanged. The drawer exit's `transition-duration` is now an (opacity, transform) pair.
+  - JS helpers: `tweenTransition(role, reduced, kind = "spatial")` gains a `kind` argument; `springTransition(…, "effects", …, true)` now returns a short tween instead of 0. New exports: `motionEffectsDuration`, `reducedEffectsDuration`, `reducedEffectsMaxDuration`. Existing calls keep their old results, except effects springs under reduction.
+  - Docs: the Motion demo fades without travel under reduction. Motion foundation and component-motion copy describe the new policy.
+- Why: the Emil Kowalski review (and WCAG 2.3.3) treats reduced motion as "no movement", not "no feedback". A popup that snaps in and out gives no cue about where it came from or that it went away. A short fade does, without anything travelling. Effects follow the normal durations instead of fixed values so skins that slow motion (Holi, Neon Night Market, Studio Hardware) keep opacity and transform in step.
+- Verified:
+  - `pnpm check` passes (110 React tests; token tests extended to cover effects fades in JS and in both reduced CSS blocks) and `pnpm package:check` passes.
+  - In the in-app browser (own dev server, computed styles), reduced mode gives:
+    - menu exit, drawer exit: `opacity 0.12s, transform 0s`
+    - popover, dialog, toast: `0.2s, 0s`
+    - button: colours 0.12s, transform 0s
+    - switch thumb: transform 0s, colours 0.12s
+    - tabs indicator: all 0s
+  - System mode is unchanged. A theme scope with `--dixy-motion-duration-normal: 408ms` gives a popover `0.408s, 0.408s`.
+- Not tested:
+  - watching the fades, or clicking through the Motion demo (the pane was hidden with a 0×0 viewport, so animation frames don't run)
+  - OS-level reduced-motion emulation (covered only by the generated-CSS test)
+  - Safari/Firefox, touch, screen readers
+- Left as is: skin CSS in `packages/themes` and docs-app CSS that time opacity with `--dixy-motion-duration-*` still snap under reduction. That's safe, but they could adopt the effects tokens later.
+
+### 2026-11-10 — Faster, gated CI
+
+- What changed:
+  - `ci.yml` runs on pull requests and pushes to `main` only (it used to run on every push and every PR, so PR commits ran twice). A concurrency group cancels superseded PR runs; runs on `main` queue instead, so a production deploy is never cut off.
+  - Turbo's `.turbo/cache` is saved with `actions/cache` (key per commit, restore-keys fall back to the newest). Entries untouched for 7 days are pruned before saving. `release.yml` and the deploy job restore it but don't save.
+  - `package:check` builds tokens, react and themes through `turbo run build --filter=…` instead of `pnpm --filter … build`, so it replays the builds `pnpm check` just made.
+  - `timeout-minutes`: 20 for checks, 15 for deploy, 30 for release.
+  - The docs deploy is now the `deploy-docs` job in `ci.yml` with `needs: check`. `deploy-docs.yml` is deleted. Before, a push to `main` that failed checks still deployed. `docs/BETA_PLAN.md` now points at the new job.
+- Why: CI built the packages three or four times per push to `main`, always from a cold cache, and production deploys didn't wait for tests.
+- Verified:
+  - Both workflows parse as YAML (jobs `check`, `deploy-docs`; `release`). Edited files pass Prettier.
+  - `TURBO_FORCE=true pnpm check` passes (66s, 0 cached). `pnpm package:check` then passes with its 3 builds fully cached (13ms instead of a rebuild).
+- Not tested: the workflows haven't run on GitHub yet, so cache save/restore, the `needs` gate, the main-only cancel expression and the Cloudflare steps are unverified until the first push. No actionlint was run (not installed).
+- Found, left as is: `pnpm format:check` already fails on this branch (22 files, including this log), so CI's first step fails no matter what. Fixing it is a separate `pnpm format` change.
+
+### 2026-11-10 — Landing: GitHub star button, author credit, visitor count
+
+- What changed:
+  - Header: a "Star" link to `akssmax/DixyUI` with a live star count (`landing-meta.tsx`, `GitHubStarButton`). The count comes from the public GitHub API in the browser and is cached in `sessionStorage`; if GitHub fails, the button shows without a number.
+  - Footer: "© 2026 Dixy UI · Built by Akshay Saini", linking to https://www.akshaysaini.xyz/, and a visitor total next to the beta status.
+  - Visitor count: `recordVisit` server function (`src/lib/visitors.functions.ts`) backed by a Cloudflare KV binding `VISITORS` in `wrangler.jsonc`. A browser counts once: the server only increments when the client has no `dixy-visited` flag in `localStorage`, and the flag is written after the server confirms. A module-level guard stops StrictMode's double effect from counting twice. `cloudflare:workers` is typed minimally in `env.d.ts` and imported inside the handler, so it never reaches the client bundle.
+  - Phones (≤480px): the header keeps the Dixy mark but drops the wordmark, and gaps tighten, so brand, Docs, Playground, GitHub and the theme toggle fit at 375px. ≤360px also hides the star count. ≤640px hides the "Star" label (screen readers still get "Star Dixy UI on GitHub, N stars").
+- Why: UI kit landing pages usually show the repo and its stars. KV was chosen over a third-party counter so visitor requests stay on our Worker.
+- Verified:
+  - `pnpm check` passes. The client build has no `cloudflare:workers` or KV code; `dist/server/wrangler.json` carries the `VISITORS` binding.
+  - In the in-app browser (dev server, Miniflare KV): first visit with no flag incremented the total; reloads sent `isNew: false` and didn't increment (two read-only requests per load from StrictMode). Star count renders (repo currently has 0). Footer link points at the portfolio. Light and dark checked. At 375px the header's last item ends at 359px (no overflow); desktop layout unchanged apart from the new button.
+- Not tested: production deploy. The binding has no `id`, so `wrangler deploy` should auto-provision the namespace on first deploy; the CI token (currently "Workers Scripts: Edit") also needs "Workers KV Storage: Edit" for that. KV reads are eventually consistent (up to ~60s), so a fresh total can lag, and two simultaneous first visits can produce one increment. The counter is unauthenticated, so anyone can inflate it by clearing storage. Keyboard focus ring, reduced motion (nothing animates), Safari/Firefox and screen readers not checked.
+
+### 2026-11-10 — Merge GitHub main into local main
+
+- What changed: local `main` (shader lab workbench, exit easing, reduced-motion fades, base-components merge, gated CI with turbo cache, landing star/credit/visitors) merged with GitHub's PRs #12, #14 and #15.
+  - `ci.yml`: both sides restricted pushes to `main` and added a concurrency group. Kept the local version: `workflow_dispatch`, and runs on `main` queue instead of being cancelled, so a deploy is never cut off. The header now also lists the KV permission the visitor counter needs.
+  - `release.yml` merged cleanly: it restores the turbo cache (local) and skips checks while changesets are pending (PR #15).
+  - `BUILD_LOG.md`: kept every entry from both sides, including both CI write-ups.
+- Verified: `pnpm format:check`, `pnpm check` and `pnpm package:check --online` pass on the merge. (`--offline` failed only because the fresh checkout's store lacked a cached tarball.)
+- Not tested: the merged workflows on GitHub until this push runs them.
+
+### 2026-11-10 — dixyui.com custom domain
+
+- What changed:
+  - Cloudflare (dashboard): deleted the two parking records Cloudflare had imported from Namecheap (`A @ → 192.64.119.65`, `CNAME www → parkingpage.namecheap.com`), then attached `dixyui.com` and `www.dixyui.com` to the `dixy-ui-docs` Worker as Custom Domains.
+  - `apps/docs/wrangler.jsonc`: both hostnames listed under `routes` with `custom_domain: true`, so `wrangler deploy` keeps them attached instead of the config drifting from the dashboard.
+  - Kept: Namecheap email-forwarding MX records and SPF TXT.
+- Why: the domain's nameservers already pointed at Cloudflare and Universal SSL was active, but DNS still served Namecheap's parking page. Over HTTPS it timed out, because Full SSL mode tried HTTPS on the parking server.
+- Verified: both hostnames resolve to Cloudflare and return 200 over HTTPS with the "Dixy UI — Components with character" page. Edited config passes Prettier.
+- Not tested: a CI deploy with the new `routes`. The deploy token may need zone-level permissions (Workers Routes: Edit, Zone: Read) on dixyui.com to manage custom domains; if the next deploy fails on routes, widen the token. No www → apex redirect yet, so both hostnames serve the site.
+
+### 2026-11-10 — System appearance by default
+
+- What changed:
+  - The `dixy-appearance` cookie now stores the reader's choice: `system`, `light` or `dark`. A missing cookie means `system`, so new visitors follow their OS.
+  - `getAppPreferences` resolves `system` on the server. It uses the `Sec-CH-Prefers-Color-Scheme` client hint first (sent with `Accept-CH`, `Critical-CH` and `Vary`), then a `dixy-system-appearance` cookie the client keeps updated, then light.
+  - `AppAppearanceProvider` exposes `appearancePreference` and `setAppearancePreference` alongside the resolved `appearance`. While on `system`, it follows `prefers-color-scheme` changes live. `setAppearance(light|dark)` still exists, so the header toggles and demo apps pick an explicit appearance.
+  - The landing footer toggle is now System / Light / Dark (Monitor, Sun, Moon icons). The docs theme menu's Appearance group also has a System option.
+- Why: the site defaulted to light whatever the OS said.
+- Verified:
+  - `pnpm check` passes.
+  - In the in-app browser (dev server), with cookies cleared and the scheme emulated as dark, the server rendered `data-appearance="dark"` and System was pressed. Flipping the emulated scheme to light updated the page live.
+  - Footer Dark, header toggle and footer System each set the right cookie and pressed state. In the docs menu, keyboard focus plus Enter on Light works.
+  - At 375px the footer toggle fits with no horizontal overflow.
+- Not tested:
+  - The first visit in Safari or Firefox with a dark OS. Those browsers don't send the client hint and have no cookie yet, so that one visit paints light and switches to dark after hydration. Later visits use the cookie.
+  - `Critical-CH` retry on production Chrome, reduced motion (the switch doesn't animate), and screen readers.
+
+### 2026-11-10 — Cache the Worker deploy pointer with the docs build
+
+- What changed: `apps/docs/turbo.json` extends the root config and adds `.wrangler/deploy/**` to the docs `build` outputs.
+- Why: `deploy-docs` failed on PR #16 with "entry-point file at @tanstack/react-start/server-entry was not found". The Cloudflare Vite plugin writes `.wrangler/deploy/config.json` to point wrangler at `dist/server/wrangler.json`. The turbo-cached deploy job restored `dist/` on a cache hit but not that pointer, so wrangler read `wrangler.jsonc` and couldn't resolve its package `main`. Production deploys on `main` would have failed the same way.
+- Verified: built the docs once (cache miss), deleted `dist/` and `.wrangler/deploy`, rebuilt (cache hit) and the pointer came back. `wrangler deploy --dry-run` then resolved the built Worker with its `VISITORS` binding. `pnpm check` passes.
 
 ### 2026-11-10 — Theme audit and fix loop
 
@@ -2033,3 +2160,9 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The selected segment has no check mark, so selection still relies on fill and weight.
   - Signal isn't picked automatically for `prefers-contrast: more`.
   - Mobile width, reduced motion and screen readers.
+
+### 2026-11-10 — Merge main into feat/theme-audit
+
+- Conflicts: `lab.shaders.tsx`, where main rebuilt the shader lab header and this branch had swapped its back link for `HomeLink`. Kept main's header and made its back link a `HomeLink`. `BUILD_LOG.md` (both sides appended entries) keeps every entry, main's first.
+- Verified: `pnpm check`, `pnpm format:check`, `pnpm package:check`.
+- Theme audit after the merge: 38/38 clean.

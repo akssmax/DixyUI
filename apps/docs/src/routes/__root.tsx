@@ -146,7 +146,8 @@ export const Route = createRootRoute({
 });
 
 function RootDocument() {
-  const { appearance, previewTheme, docsTheme } = Route.useLoaderData();
+  const { appearancePreference, appearance, previewTheme, docsTheme } =
+    Route.useLoaderData();
   return (
     <html lang="en">
       <head>
@@ -154,6 +155,7 @@ function RootDocument() {
       </head>
       <body>
         <AppAppearanceProvider
+          initialAppearancePreference={appearancePreference}
           initialAppearance={appearance}
           initialPreviewTheme={previewTheme}
           initialDocsTheme={docsTheme}

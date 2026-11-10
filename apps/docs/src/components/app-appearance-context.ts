@@ -1,5 +1,8 @@
 import { createContext } from "react";
-import type { AppAppearance } from "../lib/app-appearance";
+import type {
+  AppAppearance,
+  AppearancePreference,
+} from "../lib/app-appearance";
 import type { PreviewThemeSettings } from "../lib/preview-theme";
 import type { DocsThemeSettings } from "../lib/docs-theme";
 
@@ -12,7 +15,11 @@ import type { DocsThemeSettings } from "../lib/docs-theme";
  */
 export const AppAppearanceContext = createContext<{
   appearance: AppAppearance;
+  /** Pick light or dark explicitly. */
   setAppearance: (appearance: AppAppearance) => void;
+  /** The reader's choice; `appearance` is what it resolves to. */
+  appearancePreference: AppearancePreference;
+  setAppearancePreference: (preference: AppearancePreference) => void;
   previewTheme: PreviewThemeSettings;
   setPreviewTheme: (patch: Partial<PreviewThemeSettings>) => void;
   resetPreviewTheme: () => void;

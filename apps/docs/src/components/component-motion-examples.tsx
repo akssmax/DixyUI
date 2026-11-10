@@ -150,12 +150,14 @@ export function ComponentMotionExamples() {
         presence remain independent of timing.
       </p>
       <p>
-        Reduced motion makes transitions immediate and removes decorative press,
-        scale and entrance travel. It preserves the final tab-indicator
-        location, drawer snap offset and direct pointer tracking. Swipe tracking
-        has no interpolation lag in either mode. Progress uses a separate 700ms
-        loop cadence and becomes static under reduction; it does not redefine
-        the duration limits for ordinary UI feedback.
+        Reduced motion removes movement: press, scale, entrance travel,
+        indicator slides and height reveals become immediate. Opacity and colour
+        keep a short fade (200ms or less), so state changes stay legible. It
+        preserves the final tab-indicator location, drawer snap offset and
+        direct pointer tracking. Swipe tracking has no interpolation lag in
+        either mode. Progress uses a separate 700ms loop cadence and becomes
+        static under reduction; it does not redefine the duration limits for
+        ordinary UI feedback.
       </p>
     </section>
   );

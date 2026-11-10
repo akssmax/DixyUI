@@ -9,6 +9,7 @@ export const materialRecipes = {
     depth: "none",
     image: "none",
     edge: "none",
+    blend: "normal",
   },
   glossy: {
     label: "Glossy enamel",
@@ -18,32 +19,55 @@ export const materialRecipes = {
     image:
       "linear-gradient(180deg, rgb(255 255 255 / .2), transparent 6px), linear-gradient(180deg, transparent 40%, rgb(0 0 0 / .06))",
     edge: "inset 0 1px 0 rgb(255 255 255 / .25)",
+    blend: "normal",
   },
   soft: {
     label: "Soft clay",
     finish: "soft",
     texture: "none",
     depth: "raised",
-    image: "linear-gradient(145deg, transparent 35%, rgb(0 0 0 / .04))",
-    edge: "inset 0 -2px 2px rgb(0 0 0 / .08)",
+    // A broad top light, a shaded underside and a thick inset rim read as clay.
+    image:
+      "radial-gradient(120% 90% at 30% 0%, rgb(255 255 255 / .2), transparent 65%), linear-gradient(160deg, transparent 40%, rgb(0 0 0 / .07))",
+    edge: "inset 0 2px 1px rgb(255 255 255 / .4), inset 0 -3px 5px rgb(0 0 0 / .14)",
+    blend: "normal",
   },
   metal: {
     label: "Brushed metal",
     finish: "brushed",
     texture: "lines",
     depth: "raised",
+    // Irregular brushed grain over a cool steel band (multiplied into the base
+    // colour), with a bright bevel rim, reads as machined aluminium.
     image:
-      "repeating-linear-gradient(0deg, transparent 0 2px, rgb(0 0 0 / .025) 2px 3px), linear-gradient(110deg, transparent 35%, rgb(0 0 0 / .045) 55%, transparent 75%)",
-    edge: "inset 0 1px 0 rgb(255 255 255 / .18)",
+      "repeating-linear-gradient(0deg, rgb(255 255 255 / .09) 0 .6px, transparent .6px 1.7px, rgb(0 0 0 / .05) 1.7px 2.2px, transparent 2.2px 3.1px, rgb(255 255 255 / .05) 3.1px 3.5px, transparent 3.5px 4.9px), linear-gradient(180deg, rgb(250 251 253), rgb(224 229 236) 28%, rgb(244 246 249) 52%, rgb(218 224 232) 82%, rgb(236 239 243))",
+    edge: "inset 0 1px 0 rgb(255 255 255 / .65), inset 0 -1px 0 rgb(0 0 0 / .22)",
+    blend: "normal, multiply",
+    // Multiply only darkens, so dark mode screens dim steel highlights instead.
+    dark: {
+      image:
+        "repeating-linear-gradient(0deg, rgb(255 255 255 / .06) 0 .6px, transparent .6px 1.7px, rgb(0 0 0 / .12) 1.7px 2.2px, transparent 2.2px 3.1px, rgb(255 255 255 / .035) 3.1px 3.5px, transparent 3.5px 4.9px), linear-gradient(180deg, rgb(58 63 72), rgb(14 16 20) 28%, rgb(46 51 59) 52%, rgb(8 9 12) 82%, rgb(34 38 44))",
+      edge: "inset 0 1px 0 rgb(255 255 255 / .22), inset 0 -1px 0 rgb(0 0 0 / .5)",
+      blend: "normal, screen",
+    },
   },
   paper: {
     label: "Paper",
     finish: "diffuse",
     texture: "fibers",
     depth: "none",
+    // Uneven hairline fibres over a warm stock, multiplied into the base colour.
     image:
-      "radial-gradient(ellipse at 1px 1px, rgb(0 0 0 / .045) .5px, transparent .75px)",
-    edge: "none",
+      "repeating-linear-gradient(72deg, rgb(120 90 40 / .05) 0 .5px, transparent .5px 2.3px, rgb(120 90 40 / .035) 2.3px 2.7px, transparent 2.7px 5.9px, rgb(120 90 40 / .025) 5.9px 6.2px, transparent 6.2px 9.1px), linear-gradient(160deg, rgb(253 250 242), rgb(245 238 222))",
+    edge: "inset 0 0 0 1px rgb(120 90 40 / .08)",
+    blend: "normal, multiply",
+    // A warm, faintly lifted stock with pale fibres for dark surfaces.
+    dark: {
+      image:
+        "repeating-linear-gradient(72deg, rgb(255 236 200 / .045) 0 .5px, transparent .5px 2.3px, rgb(255 236 200 / .03) 2.3px 2.7px, transparent 2.7px 5.9px, rgb(255 236 200 / .02) 5.9px 6.2px, transparent 6.2px 9.1px), linear-gradient(160deg, rgb(40 34 24), rgb(24 20 13))",
+      edge: "inset 0 0 0 1px rgb(255 236 200 / .07)",
+      blend: "normal, screen",
+    },
   },
 } as const satisfies Record<
   string,
@@ -54,6 +78,8 @@ export const materialRecipes = {
     depth: ShadowRole;
     image: string;
     edge: string;
+    blend: string;
+    dark?: { image: string; edge: string; blend: string };
   }
 >;
 

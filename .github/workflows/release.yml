@@ -18,6 +18,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,6 +28,15 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+      # Restore only: ci.yml owns saving the turbo cache. Turbo hashes every
+      # input, so a restored entry is only reused when it matches exactly.
+      - uses: actions/cache/restore@v4
+        with:
+          path: .turbo/cache
+          key: turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+            turbo-${{ runner.os }}-
       - run: pnpm install --frozen-lockfile
       # Unreleased changesets sit at the top of .changeset/ (consumed ones
       # move to .changeset/pre/). With any left, this run only opens or
