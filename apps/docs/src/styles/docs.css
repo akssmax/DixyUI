@@ -3788,3 +3788,65 @@ main,
 .code-toolbar .install-tabs .dixy-tabs-tab {
   font: var(--dixy-font-code-sm);
 }
+
+/* Changelog: one tab per package, releases newest first. */
+.changelog-tabs {
+  margin-block-start: 24px;
+}
+.changelog-latest {
+  margin-inline-start: 8px;
+  color: var(--doc-faint, var(--dixy-color-text-tertiary));
+  font: var(--dixy-font-code-sm);
+}
+.changelog-release {
+  padding-block: 20px 8px;
+  border-block-end: 1px solid var(--doc-line);
+}
+.changelog-release-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.changelog .changelog-release-head h3 {
+  margin: 0;
+  font: var(--dixy-font-code-md, var(--dixy-font-code-sm));
+  font-weight: var(--dixy-font-weight-label);
+}
+.changelog-npm,
+.changelog-commit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-code-sm);
+  text-decoration: none;
+}
+.changelog-npm:hover,
+.changelog-commit:hover {
+  color: var(--dixy-color-text-primary);
+  text-decoration: underline;
+}
+.changelog-group {
+  margin-block-start: 14px;
+}
+.changelog-group > ul {
+  margin: 8px 0 0;
+  padding-inline-start: 20px;
+}
+.changelog-group > ul > li {
+  margin-block-end: 12px;
+  overflow-wrap: anywhere;
+}
+.changelog-group > ul > li > p:first-child {
+  margin-block-start: 0;
+}
+.changelog-deps {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-body-sm);
+}
+@media (max-width: 30rem) {
+  .changelog-latest {
+    display: none;
+  }
+}

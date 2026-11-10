@@ -2352,3 +2352,22 @@ Measured on a production build served by `vite preview` (Cloudflare worker, port
   - `/playground`: a preset link inlined Retro OS, an invalid preset showed its warning, an accent change rewrote `?theme=`, and picking Living Forest loaded its CSS.
   - No new console errors. `pnpm check`, `pnpm format:check` on changed files.
 - Not tested: how long a themed reader waits for hydration on a slow network or CPU (no throttling available; the engine was in the entry before, so it shouldn't be slower). A failed engine chunk load (only reasoned through). Safari and Firefox, mobile, reduced motion.
+
+### 2026-11-10 — Changelog page on the docs site
+
+- What: `/docs/changelog`, linked under Resources. One tab per package (react, themes, tokens) with its latest version, then each release newest first. Releases show change groups (Fixes, Minor changes), each entry rendered as Markdown with a link to its commit, an npm link per version, and the workspace versions it moved to ("Uses @dixy-ui/tokens@…").
+- Why from the package changelogs: the release workflow already writes `packages/*/CHANGELOG.md` and GitHub pre-releases on every publish. Reading those files at build time means the page updates with each beta and is never hand-edited.
+- Why tabs, not one merged list: each package has its own version line. Tokens is at beta.3 while react and themes are at beta.5, so "beta.3" means different releases in different packages.
+- How:
+  - `src/lib/changelog.ts` parses the Changesets format. It drops the "Updated dependencies" boilerplate and keeps its version list.
+  - The route imports the files with `?raw`.
+  - `vite.config.ts` now limits the MDX plugin to `.mdx` (`mdExtensions: []`). It was also claiming `.md?raw` imports, which crashed the page with "markdown.split is not a function". No `.md` file was imported as a component.
+- Tests: `test/changelog.test.mjs` covers a fixture and checks that every real package changelog parses without empty releases.
+- Verified in the in-app browser:
+  - All three tabs switch, and tokens shows its own 4 releases.
+  - The server HTML includes beta.5, and the active sidebar row is Changelog.
+  - Candy Clay dark.
+  - At 375px, version labels in the tabs are hidden so the tab bar no longer scrolls (it hid 207px before). No page overflow.
+  - The installation MDX page still renders.
+  - `pnpm check`, `pnpm format:check`.
+- Not tested: release dates. Changesets doesn't write them, and the page doesn't fetch GitHub, so none are shown.

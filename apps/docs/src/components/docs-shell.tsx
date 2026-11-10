@@ -126,7 +126,10 @@ export const navigation: { title: string; items: NavItem[] }[] = [
   { title: "Components", items: componentItems },
   {
     title: "Resources",
-    items: [{ label: "Accessibility", path: "/docs/accessibility" }],
+    items: [
+      { label: "Accessibility", path: "/docs/accessibility" },
+      { label: "Changelog", path: "/docs/changelog" },
+    ],
   },
 ];
 
