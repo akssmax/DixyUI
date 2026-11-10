@@ -1902,3 +1902,30 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` passes. The client build has no `cloudflare:workers` or KV code; `dist/server/wrangler.json` carries the `VISITORS` binding.
   - In the in-app browser (dev server, Miniflare KV): first visit with no flag incremented the total; reloads sent `isNew: false` and didn't increment (two read-only requests per load from StrictMode). Star count renders (repo currently has 0). Footer link points at the portfolio. Light and dark checked. At 375px the header's last item ends at 359px (no overflow); desktop layout unchanged apart from the new button.
 - Not tested: production deploy. The binding has no `id`, so `wrangler deploy` should auto-provision the namespace on first deploy; the CI token (currently "Workers Scripts: Edit") also needs "Workers KV Storage: Edit" for that. KV reads are eventually consistent (up to ~60s), so a fresh total can lag, and two simultaneous first visits can produce one increment. The counter is unauthenticated, so anyone can inflate it by clearing storage. Keyboard focus ring, reduced motion (nothing animates), Safari/Firefox and screen readers not checked.
+
+### 2026-11-10 — dixyui.com custom domain
+
+- What changed:
+  - Cloudflare (dashboard): deleted the two parking records Cloudflare had imported from Namecheap (`A @ → 192.64.119.65`, `CNAME www → parkingpage.namecheap.com`), then attached `dixyui.com` and `www.dixyui.com` to the `dixy-ui-docs` Worker as Custom Domains.
+  - `apps/docs/wrangler.jsonc`: both hostnames listed under `routes` with `custom_domain: true`, so `wrangler deploy` keeps them attached instead of the config drifting from the dashboard.
+  - Kept: Namecheap email-forwarding MX records and SPF TXT.
+- Why: the domain's nameservers already pointed at Cloudflare and Universal SSL was active, but DNS still served Namecheap's parking page. Over HTTPS it timed out, because Full SSL mode tried HTTPS on the parking server.
+- Verified: both hostnames resolve to Cloudflare and return 200 over HTTPS with the "Dixy UI — Components with character" page. Edited config passes Prettier.
+- Not tested: a CI deploy with the new `routes`. The deploy token may need zone-level permissions (Workers Routes: Edit, Zone: Read) on dixyui.com to manage custom domains; if the next deploy fails on routes, widen the token. No www → apex redirect yet, so both hostnames serve the site.
+
+### 2026-11-10 — System appearance by default
+
+- What changed:
+  - The `dixy-appearance` cookie now stores the reader's choice: `system`, `light` or `dark`. A missing cookie means `system`, so new visitors follow their OS.
+  - `getAppPreferences` resolves `system` on the server. It uses the `Sec-CH-Prefers-Color-Scheme` client hint first (sent with `Accept-CH`, `Critical-CH` and `Vary`), then a `dixy-system-appearance` cookie the client keeps updated, then light.
+  - `AppAppearanceProvider` exposes `appearancePreference` and `setAppearancePreference` alongside the resolved `appearance`. While on `system`, it follows `prefers-color-scheme` changes live. `setAppearance(light|dark)` still exists, so the header toggles and demo apps pick an explicit appearance.
+  - The landing footer toggle is now System / Light / Dark (Monitor, Sun, Moon icons). The docs theme menu's Appearance group also has a System option.
+- Why: the site defaulted to light whatever the OS said.
+- Verified:
+  - `pnpm check` passes.
+  - In the in-app browser (dev server), with cookies cleared and the scheme emulated as dark, the server rendered `data-appearance="dark"` and System was pressed. Flipping the emulated scheme to light updated the page live.
+  - Footer Dark, header toggle and footer System each set the right cookie and pressed state. In the docs menu, keyboard focus plus Enter on Light works.
+  - At 375px the footer toggle fits with no horizontal overflow.
+- Not tested:
+  - The first visit in Safari or Firefox with a dark OS. Those browsers don't send the client hint and have no cookie yet, so that one visit paints light and switches to dark after hydration. Later visits use the cookie.
+  - `Critical-CH` retry on production Chrome, reduced motion (the switch doesn't animate), and screen readers.
