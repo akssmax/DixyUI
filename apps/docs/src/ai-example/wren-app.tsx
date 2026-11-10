@@ -12,6 +12,7 @@ import {
   CodeXml,
   Copy,
   Globe,
+  Lightbulb,
   Map as MapGlyph,
   Menu as MenuGlyph,
   Moon,
@@ -38,6 +39,7 @@ import {
   TextField,
   Toast,
   Toggle,
+  ToggleGroup,
   Tooltip,
 } from "@dixy-ui/react";
 import {
@@ -60,6 +62,39 @@ import {
 import { suggestions } from "./scripts";
 
 const suggestionIcons = [MapGlyph, CodeXml, Scale, Rocket];
+
+type Mode = "chat" | "work";
+
+/** Work mode starters: bigger tasks, shown as cards. Each prompt reuses a
+ * script from scripts.ts, so the reply still shows off the AI parts. */
+const workStarters = [
+  {
+    icon: CodeXml,
+    title: "Write a React hook",
+    description: "Draft a typed useDebouncedValue, ready to drop in",
+    prompt: "Write a useDebouncedValue hook in TypeScript",
+  },
+  {
+    icon: Scale,
+    title: "Compare UI primitives",
+    description: "Weigh Base UI against React Aria for a design system",
+    prompt: "Compare Base UI and React Aria for a design system",
+  },
+  {
+    icon: Rocket,
+    title: "Check a deploy",
+    description: "Look up the latest release and explain what failed",
+    prompt: "Check my deploy status",
+  },
+];
+
+const modeCopy: Record<Mode, { heading: string; placeholder: string }> = {
+  chat: { heading: "What’s on your mind?", placeholder: "Ask Wren anything" },
+  work: {
+    heading: "What should we work on?",
+    placeholder: "Describe a task for Wren",
+  },
+};
 
 const models = [
   { value: "swift", label: "Swift" },
@@ -145,6 +180,33 @@ function ThemePicker({ skin, skins, onSkin }: WrenAppProps) {
         </Select.Portal>
       </Select.Root>
     </Field.Root>
+  );
+}
+
+function AppearanceButton({ appearance, onAppearance }: WrenAppProps) {
+  const next = appearance === "light" ? "dark" : "light";
+  return (
+    <Tooltip.Root>
+      <Tooltip.Trigger
+        render={
+          <IconButton
+            variant="ghost"
+            color="neutral"
+            aria-label={`Switch to ${next} appearance`}
+            onClick={() => onAppearance(next)}
+          />
+        }
+      >
+        <Icon render={appearance === "light" ? <Moon /> : <Sun />} />
+      </Tooltip.Trigger>
+      <Tooltip.Portal>
+        <Tooltip.Positioner sideOffset={8}>
+          <Tooltip.Popup>
+            {appearance === "light" ? "Dark" : "Light"} appearance
+          </Tooltip.Popup>
+        </Tooltip.Positioner>
+      </Tooltip.Portal>
+    </Tooltip.Root>
   );
 }
 
@@ -263,7 +325,6 @@ function RailButton({
 }
 
 function Shell(props: WrenAppProps) {
-  const { appearance, onAppearance } = props;
   const chat = useMockChat();
   const [chats, setChats] = useState<Chat[]>(() => [
     { id: "chat-new", title: "New chat", messages: [] },
@@ -271,6 +332,7 @@ function Shell(props: WrenAppProps) {
   ]);
   const [active, setActive] = useState("chat-new");
   const [mobileNav, setMobileNav] = useState(false);
+  const [mode, setMode] = useState<Mode>("chat");
   const [collapsed, setCollapsed] = useState(false);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState("");
@@ -496,57 +558,64 @@ function Shell(props: WrenAppProps) {
                     onSelect={open}
                   />
                 </nav>
+                {/* The top bar has no room for these on a phone. */}
+                <div className="wren-mobile-settings">
+                  <ThemePicker {...props} />
+                  <AppearanceButton {...props} />
+                </div>
               </Sidebar.Mobile.Content>
             </Sidebar.Mobile.Popup>
           </Sidebar.Mobile.Viewport>
         </Sidebar.Mobile.Portal>
       </Sidebar.Mobile.Root>
 
-      <main className="wren-main" data-empty={empty || undefined}>
+      <main
+        className="wren-main"
+        data-empty={empty || undefined}
+        data-mode={mode}
+      >
         <header className="wren-topbar">
-          <IconButton
-            className="wren-only-mobile"
-            variant="ghost"
-            color="neutral"
-            aria-label="Open chats"
-            onClick={() => setMobileNav(true)}
-          >
-            <Icon render={<MenuGlyph />} />
-          </IconButton>
-          <h1 className="wren-title">{title}</h1>
-          <IconButton
-            variant="ghost"
-            color="neutral"
-            className="wren-only-mobile"
-            aria-label="New chat"
-            onClick={newChat}
-          >
-            <Icon render={<SquarePen />} />
-          </IconButton>
-          <ThemePicker {...props} />
-          <Tooltip.Root>
-            <Tooltip.Trigger
-              render={
-                <IconButton
-                  variant="ghost"
-                  color="neutral"
-                  aria-label={`Switch to ${appearance === "light" ? "dark" : "light"} appearance`}
-                  onClick={() =>
-                    onAppearance(appearance === "light" ? "dark" : "light")
-                  }
-                />
-              }
+          <div className="wren-topbar-start">
+            <IconButton
+              className="wren-only-mobile"
+              variant="ghost"
+              color="neutral"
+              aria-label="Open chats"
+              onClick={() => setMobileNav(true)}
             >
-              <Icon render={appearance === "light" ? <Moon /> : <Sun />} />
-            </Tooltip.Trigger>
-            <Tooltip.Portal>
-              <Tooltip.Positioner sideOffset={8}>
-                <Tooltip.Popup>
-                  {appearance === "light" ? "Dark" : "Light"} appearance
-                </Tooltip.Popup>
-              </Tooltip.Positioner>
-            </Tooltip.Portal>
-          </Tooltip.Root>
+              <Icon render={<MenuGlyph />} />
+            </IconButton>
+            <h1 className="wren-title">{title}</h1>
+          </div>
+          <ToggleGroup
+            segmented
+            aria-label="Mode"
+            className="wren-mode"
+            value={[mode]}
+            onValueChange={(value) => value[0] && setMode(value[0] as Mode)}
+          >
+            <Toggle value="chat" size="sm">
+              Chat
+            </Toggle>
+            <Toggle value="work" size="sm">
+              Work
+            </Toggle>
+          </ToggleGroup>
+          <div className="wren-topbar-end">
+            <IconButton
+              variant="ghost"
+              color="neutral"
+              className="wren-only-mobile"
+              aria-label="New chat"
+              onClick={newChat}
+            >
+              <Icon render={<SquarePen />} />
+            </IconButton>
+            <div className="wren-only-desktop">
+              <ThemePicker {...props} />
+              <AppearanceButton {...props} />
+            </div>
+          </div>
         </header>
 
         <Conversation.Root
@@ -563,7 +632,7 @@ function Shell(props: WrenAppProps) {
             {empty ? (
               <Conversation.EmptyState
                 className="wren-welcome"
-                title="What are we working on?"
+                title={modeCopy[mode].heading}
                 description="Wren replays scripted replies built from the Dixy AI parts."
               />
             ) : (
@@ -581,7 +650,7 @@ function Shell(props: WrenAppProps) {
           <Conversation.ScrollButton />
         </Conversation.Root>
 
-        <div className="wren-composer">
+        <div className="wren-composer" data-mode={mode}>
           <PromptInput.Root
             status={chat.status}
             onSubmit={send}
@@ -589,7 +658,7 @@ function Shell(props: WrenAppProps) {
           >
             <PromptInput.Textarea
               ref={textarea}
-              placeholder="Ask Wren anything"
+              placeholder={modeCopy[mode].placeholder}
               onKeyDown={(event) => {
                 if (event.key === "Escape" && busy) {
                   event.preventDefault();
@@ -647,7 +716,7 @@ function Shell(props: WrenAppProps) {
                   className="wren-search-toggle"
                 >
                   <Icon render={<Globe />} />
-                  Search
+                  <span className="wren-search-label">Search</span>
                 </Toggle>
               </PromptInput.Tools>
               <PromptInput.Submit />
@@ -658,7 +727,7 @@ function Shell(props: WrenAppProps) {
             Esc stops.
           </Text>
         </div>
-        {empty ? (
+        {empty && mode === "chat" ? (
           <Suggestions.Root className="wren-suggestions">
             {suggestions.map((suggestion, index) => {
               const Glyph = suggestionIcons[index % suggestionIcons.length]!;
@@ -676,6 +745,38 @@ function Shell(props: WrenAppProps) {
               );
             })}
           </Suggestions.Root>
+        ) : null}
+        {empty && mode === "work" ? (
+          <section className="wren-work" aria-labelledby={`${sidebarId}-work`}>
+            <h2 id={`${sidebarId}-work`} className="wren-work-heading">
+              <Icon render={<Lightbulb />} />
+              See what Work can do
+            </h2>
+            <Suggestions.Root
+              className="wren-work-cards"
+              aria-label="Work starters"
+            >
+              {workStarters.map(
+                ({ icon: Glyph, title, description, prompt }) => (
+                  <Suggestions.Item
+                    key={title}
+                    suggestion={prompt}
+                    onSelect={send}
+                    variant="outline"
+                    size="md"
+                    className="wren-work-card"
+                  >
+                    <span className="wren-work-card-top" aria-hidden="true">
+                      <Icon render={<Glyph />} />
+                      <span className="wren-work-try">Try</span>
+                    </span>
+                    <span className="wren-work-card-title">{title}</span>
+                    <span className="wren-work-card-text">{description}</span>
+                  </Suggestions.Item>
+                ),
+              )}
+            </Suggestions.Root>
+          </section>
         ) : null}
       </main>
     </div>

@@ -1,6 +1,6 @@
 {
   "name": "@dixy-ui/themes",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "type": "module",
   "description": "Independent 2D skins for Dixy's existing components.",
   "license": "MIT",

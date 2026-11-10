@@ -162,10 +162,25 @@ function Textarea({
   useLayoutEffect(() => {
     const element = textareaRef.current;
     if (!element) return;
-    element.style.height = "auto";
-    element.style.height = `${Math.min(element.scrollHeight, maxHeight)}px`;
-    element.style.overflowY =
-      element.scrollHeight > maxHeight ? "auto" : "hidden";
+    function fit(element: HTMLTextAreaElement) {
+      element.style.height = "auto";
+      element.style.height = `${Math.min(element.scrollHeight, maxHeight)}px`;
+      element.style.overflowY =
+        element.scrollHeight > maxHeight ? "auto" : "hidden";
+    }
+    fit(element);
+    // Text rewraps when the field's width changes (a resize, or a layout
+    // that moves the tools beside it), so measure again then. Height changes
+    // are ignored: fitting sets the height, and would loop.
+    if (typeof ResizeObserver === "undefined") return;
+    let width = element.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (element.clientWidth === width) return;
+      width = element.clientWidth;
+      fit(element);
+    });
+    observer.observe(element);
+    return () => observer.disconnect();
   }, [value, maxHeight, textareaRef]);
 
   function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {

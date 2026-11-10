@@ -867,6 +867,15 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Learning: explain why `min(control, card)` changes only the full radius mode.
 - [ ] Learning: explain how `contain: size` stops a grid item's content from sizing its row.
 
+## Wren modes and phone layout — 2026-11-10
+
+- [x] Chat and Work modes: a compact one-row composer in Chat; a taller composer and starter cards in Work. Evidence: docs/BUILD_LOG.md, 2026-11-10.
+- [x] Composer text is centred on the tools through one shared row height (desktop and coarse pointer).
+- [x] Phone layout: drawer holds the theme and appearance controls, replies use the full width, Work cards scroll sideways.
+- [x] Library: textarea re-fits on width change; response tables scroll instead of breaking words; the transcript contains its positioned descendants.
+- [ ] Test on a real phone (iOS Safari keyboard, safe area).
+- [ ] Learning: explain why an unpositioned scroll container lets absolute children stretch the page.
+
 ## AI parts and Wren example — 2026-11-09
 
 The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base UI + tokens). Evidence: docs/BUILD_LOG.md, 2026-11-09.
