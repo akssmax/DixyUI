@@ -959,3 +959,14 @@ The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base
 - [ ] Screen-reader pass on the sidebar disclosures.
 - [ ] Learning: explain why components are grouped by purpose rather than by primitive.
 - [ ] Learning: explain WCAG 2.1.4 and why Shift+R still counts as a character-key shortcut.
+
+## Beta feedback fixes (2026-11-10)
+
+- [x] Starter themes no longer position the portal scope; popups stay at their trigger (regression test in `skins.test.mjs`).
+- [x] Tabs panels stretch when the root is a flex column.
+- [x] Installation docs and agent prompt cover Tailwind v4 layer order and each theme's fonts.
+- [x] README counts and links match the catalog and dixyui.com (`readme.test.mjs`).
+- [ ] Re-test in the reporter's TanStack Start + Tailwind v4 app after the next beta publishes.
+- [ ] Check Select with the absolute positioning strategy, and vertical tabs.
+- [ ] Learning: explain containing blocks, and why a positioned zero-height portal wrapper moves absolutely positioned popups.
+- [ ] Learning: explain cascade layer order and why the first declared layer loses.

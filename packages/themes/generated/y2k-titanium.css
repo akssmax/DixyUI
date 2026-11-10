@@ -199,11 +199,9 @@
   }
 }
 @layer dixy.components {
-  .dixy-theme[data-dixy-skin="dixy/y2k-titanium"] {
+  .dixy-theme[data-dixy-skin="dixy/y2k-titanium"]:not(.dixy-portal-scope) {
     position: relative;
     isolation: isolate;
-  }
-  .dixy-theme[data-dixy-skin="dixy/y2k-titanium"]:not(.dixy-portal-scope) {
     background-color: var(--dixy-skin-ground);
     background-image: var(--dixy-skin-canvas);
   }

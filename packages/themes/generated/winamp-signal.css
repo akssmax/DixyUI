@@ -152,11 +152,9 @@
   }
 }
 @layer dixy.components {
-  .dixy-theme[data-dixy-skin="dixy/winamp-signal"] {
+  .dixy-theme[data-dixy-skin="dixy/winamp-signal"]:not(.dixy-portal-scope) {
     position: relative;
     isolation: isolate;
-  }
-  .dixy-theme[data-dixy-skin="dixy/winamp-signal"]:not(.dixy-portal-scope) {
     background-color: var(--dixy-skin-ground);
     background-image: var(--dixy-skin-canvas);
   }

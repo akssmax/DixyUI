@@ -4,6 +4,7 @@ import { skinCatalog } from "@dixy-ui/themes/catalog";
 import * as signal from "@dixy-ui/themes/signal";
 import {
   agentPrompt,
+  fontPackages,
   installCommand,
   packageManagers,
 } from "../src/lib/install.ts";
@@ -36,4 +37,32 @@ test("every catalog theme exposes the settings export the prompt names", async (
       `${skin.slug} → ${skin.symbol}Theme`,
     );
   }
+});
+
+test("the agent prompt loads the theme's fonts and covers Tailwind v4", () => {
+  const prompt = agentPrompt("npm", {
+    slug: "retro-os",
+    symbol: "retroOS",
+    name: "Retro OS",
+  });
+  assert.match(
+    prompt,
+    /npm install @fontsource-variable\/inter @fontsource\/silkscreen/,
+  );
+  assert.match(prompt, /import "@fontsource\/silkscreen";/);
+  assert.match(prompt, /@layer theme, base, dixy, components, utilities;/);
+  // Steps stay numbered 1–5 when there is a font step.
+  assert.match(prompt, /\n5\. Give the layout root/);
+});
+
+test("every starter with a web font names a package to load it", () => {
+  for (const skin of skinCatalog) {
+    const fonts = fontPackages(skin.slug);
+    if (skin.bodyFont === "system" && skin.headingFont === "system")
+      assert.deepEqual(fonts, [], skin.slug);
+    else assert.ok(fonts.length > 0, skin.slug);
+  }
+  assert.deepEqual(fontPackages("signal"), [
+    "@fontsource/atkinson-hyperlegible",
+  ]);
 });

@@ -169,11 +169,9 @@
   }
 }
 @layer dixy.components {
-  .dixy-theme[data-dixy-skin="dixy/glass-ui"] {
+  .dixy-theme[data-dixy-skin="dixy/glass-ui"]:not(.dixy-portal-scope) {
     position: relative;
     isolation: isolate;
-  }
-  .dixy-theme[data-dixy-skin="dixy/glass-ui"]:not(.dixy-portal-scope) {
     background-color: var(--dixy-skin-ground);
     background-image: var(--dixy-skin-canvas);
   }
