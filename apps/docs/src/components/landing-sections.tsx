@@ -34,6 +34,7 @@ import {
 } from "@dixy-ui/react";
 import { DixyMark } from "./dixy-mark";
 import { ButtonLink } from "./button-link";
+import { portfolioUrl, VisitorCount } from "./landing-meta";
 // Imported here, not in routes/index.tsx: a bare import in a route file stays
 // in the unsplit route module, which put the landing CSS on every docs page.
 import "../styles/landing.css";
@@ -874,17 +875,23 @@ export function LandingFooter({
           </nav>
         </div>
         <div className="landing-footer-bottom">
-          <Text
-            as="span"
-            size="sm"
-            tone="muted"
-            className="landing-footer-status"
-          >
-            <i aria-hidden="true" />
-            0.1 beta · on npm
-          </Text>
+          <div className="landing-footer-meta">
+            <Text
+              as="span"
+              size="sm"
+              tone="muted"
+              className="landing-footer-status"
+            >
+              <i aria-hidden="true" />
+              0.1 beta · on npm
+            </Text>
+            <VisitorCount />
+          </div>
           <Text as="span" size="sm" tone="muted">
-            © 2026 Dixy UI · Built in the open
+            © 2026 Dixy UI · Built by{" "}
+            <a className="landing-footer-author" href={portfolioUrl}>
+              Akshay Saini
+            </a>
           </Text>
           <ToggleGroup
             value={[appearance]}

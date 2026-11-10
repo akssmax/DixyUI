@@ -1889,3 +1889,16 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `TURBO_FORCE=true pnpm check` passes (66s, 0 cached). `pnpm package:check` then passes with its 3 builds fully cached (13ms instead of a rebuild).
 - Not tested: the workflows haven't run on GitHub yet, so cache save/restore, the `needs` gate, the main-only cancel expression and the Cloudflare steps are unverified until the first push. No actionlint was run (not installed).
 - Found, left as is: `pnpm format:check` already fails on this branch (22 files, including this log), so CI's first step fails no matter what. Fixing it is a separate `pnpm format` change.
+
+### 2026-11-10 — Landing: GitHub star button, author credit, visitor count
+
+- What changed:
+  - Header: a "Star" link to `akssmax/DixyUI` with a live star count (`landing-meta.tsx`, `GitHubStarButton`). The count comes from the public GitHub API in the browser and is cached in `sessionStorage`; if GitHub fails, the button shows without a number.
+  - Footer: "© 2026 Dixy UI · Built by Akshay Saini", linking to https://www.akshaysaini.xyz/, and a visitor total next to the beta status.
+  - Visitor count: `recordVisit` server function (`src/lib/visitors.functions.ts`) backed by a Cloudflare KV binding `VISITORS` in `wrangler.jsonc`. A browser counts once: the server only increments when the client has no `dixy-visited` flag in `localStorage`, and the flag is written after the server confirms. A module-level guard stops StrictMode's double effect from counting twice. `cloudflare:workers` is typed minimally in `env.d.ts` and imported inside the handler, so it never reaches the client bundle.
+  - Phones (≤480px): the header keeps the Dixy mark but drops the wordmark, and gaps tighten, so brand, Docs, Playground, GitHub and the theme toggle fit at 375px. ≤360px also hides the star count. ≤640px hides the "Star" label (screen readers still get "Star Dixy UI on GitHub, N stars").
+- Why: UI kit landing pages usually show the repo and its stars. KV was chosen over a third-party counter so visitor requests stay on our Worker.
+- Verified:
+  - `pnpm check` passes. The client build has no `cloudflare:workers` or KV code; `dist/server/wrangler.json` carries the `VISITORS` binding.
+  - In the in-app browser (dev server, Miniflare KV): first visit with no flag incremented the total; reloads sent `isNew: false` and didn't increment (two read-only requests per load from StrictMode). Star count renders (repo currently has 0). Footer link points at the portfolio. Light and dark checked. At 375px the header's last item ends at 359px (no overflow); desktop layout unchanged apart from the new button.
+- Not tested: production deploy. The binding has no `id`, so `wrangler deploy` should auto-provision the namespace on first deploy; the CI token (currently "Workers Scripts: Edit") also needs "Workers KV Storage: Edit" for that. KV reads are eventually consistent (up to ~60s), so a fresh total can lag, and two simultaneous first visits can produce one increment. The counter is unauthenticated, so anyone can inflate it by clearing storage. Keyboard focus ring, reduced motion (nothing animates), Safari/Firefox and screen readers not checked.

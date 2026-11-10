@@ -6,4 +6,7 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },
+  // Landing-page visitor count. No id: `wrangler deploy` provisions the
+  // namespace on first deploy and reuses it after. Local dev uses Miniflare.
+  "kv_namespaces": [{ "binding": "VISITORS" }],
 }

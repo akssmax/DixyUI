@@ -45,6 +45,7 @@ import {
   LandingFooter,
   installCommand,
 } from "../components/landing-sections";
+import { GitHubStarButton } from "../components/landing-meta";
 import { useAppAppearance } from "../components/app-appearance-provider";
 import {
   PreviewVoiceContext,
@@ -644,6 +645,7 @@ function Landing() {
                 Playground
               </ButtonLink>
             </nav>
+            <GitHubStarButton />
             <IconButton
               variant="ghost"
               color="neutral"

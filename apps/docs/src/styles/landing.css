@@ -85,6 +85,38 @@
   gap: 2px;
   margin-inline-start: auto;
 }
+/* GitHub star link: label, then the count in its own divided segment. */
+.landing .landing-github {
+  gap: 6px;
+}
+/* Phones: brand, two nav links, GitHub and the theme toggle don't fit in
+   one row. The header keeps the mark (the link is labelled "Dixy UI home")
+   and drops the wordmark; the footer still shows it. */
+@media (max-width: 480px) {
+  .landing-header-inner {
+    gap: 6px;
+  }
+  .landing-header nav {
+    gap: 0;
+  }
+  .landing-header .landing-brand strong {
+    display: none;
+  }
+}
+@media (max-width: 360px) {
+  .landing-header .landing-github-count {
+    display: none;
+  }
+}
+.landing-github-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline-start: 8px;
+  margin-inline-start: 2px;
+  border-inline-start: 1px solid var(--dixy-color-border-subtle);
+  font-variant-numeric: tabular-nums;
+}
 
 /* Hero: copy and the starter picker on the left, the live app on the right.
    The stage has no window frame and runs to the viewport's right edge. */
@@ -1305,6 +1337,24 @@
   padding-block: 16px;
   border-block-start: 1px solid var(--dixy-color-border-subtle);
 }
+.landing-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+}
+.landing .landing-footer-visitors {
+  font-variant-numeric: tabular-nums;
+}
+.landing-footer-author {
+  color: var(--dixy-color-text-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--dixy-color-border-subtle);
+  text-underline-offset: 3px;
+}
+.landing-footer-author:hover {
+  text-decoration-color: currentColor;
+}
 .landing .landing-footer-status {
   display: inline-flex;
   align-items: center;
@@ -1406,7 +1456,8 @@
 }
 
 @media (max-width: 640px) {
-  .landing-nav-wide {
+  .landing-nav-wide,
+  .landing-github-label {
     display: none;
   }
   .landing-bento {
