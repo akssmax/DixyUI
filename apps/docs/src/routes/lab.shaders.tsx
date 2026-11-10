@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, Moon, Pause, Play, RotateCcw, Sun } from "lucide-react";
 import {
@@ -31,6 +31,7 @@ import { shaderPairings } from "../lab/shader-pairings";
 import { shaderPrograms } from "../lab/shader-programs";
 import type { ShaderStatus } from "../lab/shader-runtime";
 import "../styles/shader-lab.css";
+import { HomeLink } from "../components/home-link";
 
 /** Prototype pairings. A skin gets a shader only after it is reviewed here. */
 const labSkins = shaderPairings;
@@ -182,10 +183,10 @@ function ShaderLab() {
     <Theme {...themeProps} className="shader-lab">
       <header className="shader-lab-bar">
         <div className="shader-lab-title">
-          <Link to="/" className="shader-lab-back">
+          <HomeLink className="shader-lab-back">
             <ArrowLeft size={16} aria-hidden="true" />
             <span className="shader-lab-back-text">Dixy</span>
-          </Link>
+          </HomeLink>
           <span className="shader-lab-divider" aria-hidden="true" />
           <Heading as="h1" size="sm">
             Shader lab

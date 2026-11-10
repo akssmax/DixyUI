@@ -26,6 +26,22 @@ export interface ResolvedThemeRecipe {
   canvas: string;
   /** Optional ground image for dark appearance; light canvas is used when absent. */
   darkCanvas?: string;
+  /** Optional shadow and inset for dark appearance; light values are used when absent. */
+  darkShadow?: string;
+  darkInset?: string;
+  /**
+   * With the neutral accent, solid actions use ink (step 12) instead of the
+   * mid-grey step 9: black in light, white in dark. Focus stays blue so it
+   * still reads as focus. Any other accent ignores it.
+   */
+  monoAccent?: boolean;
+  /**
+   * Light mode only: solid actions use the accent's step 11 (12 on hover and
+   * press) so white labels reach 7:1 (WCAG AAA) instead of step 9's ~5:1.
+   */
+  deepSolid?: boolean;
+  /** Optional control heights [sm, md, lg]; e.g. 44px md for large touch targets. */
+  controlHeights?: readonly [string, string, string];
   tint: readonly string[];
   parameters: ThemeDocument["recipes"]["frame"]["parameters"];
   ornament: ThemeDocument["recipes"]["frame"]["ornament"];

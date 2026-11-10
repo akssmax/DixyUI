@@ -1,4 +1,6 @@
 import { parseThemeDocument } from "./theme-schema.ts";
+import { applyThemeFix } from "./theme-fix.ts";
+import { themeFixes } from "./theme-fixes.ts";
 import type { ThemeCharacter } from "./character.ts";
 import { defaultChrome, type ThemeChrome } from "./chrome.ts";
 import {
@@ -449,8 +451,8 @@ const starterCharacters: Record<string, Omit<ThemeCharacter, "chrome">> = {
     backdrop: { pattern: "dots", intensity: 0.22, scale: 0.8 },
   },
 };
-/** Portable recipes for all eleven installed themes. */
-export const themeDocuments = [
+/** Each starter as authored, before any saved fix from the theme audit. */
+export const starterDocuments = [
   {
     schemaVersion: 2,
     id: "dixy/living-forest",
@@ -1421,3 +1423,12 @@ export const themeDocuments = [
     },
   });
 });
+
+/**
+ * Installed themes: each starter with its saved fix, if any. Fixes are small
+ * patches written by the playground's "Save as theme fix" (dev server only),
+ * so a reviewer sees exactly which values changed.
+ */
+export const themeDocuments = starterDocuments.map((document) =>
+  parseThemeDocument(applyThemeFix(document, themeFixes[document.id])),
+);

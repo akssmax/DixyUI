@@ -18,6 +18,7 @@ import { Route as DocsInstallationRouteImport } from './routes/docs.installation
 import { Route as LabControlsRouteImport } from './routes/lab.controls'
 import { Route as LabKitchenSinkRouteImport } from './routes/lab.kitchen-sink'
 import { Route as LabShadersRouteImport } from './routes/lab.shaders'
+import { Route as LabThemeAuditRouteImport } from './routes/lab.theme-audit'
 import { Route as DocsComponentsComponentRouteImport } from './routes/docs.components.$component'
 import { Route as DocsFoundationsFoundationRouteImport } from './routes/docs.foundations.$foundation'
 
@@ -66,6 +67,11 @@ const LabShadersRoute = LabShadersRouteImport.update({
   path: '/lab/shaders',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabThemeAuditRoute = LabThemeAuditRouteImport.update({
+  id: '/lab/theme-audit',
+  path: '/lab/theme-audit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DocsComponentsComponentRoute = DocsComponentsComponentRouteImport.update({
   id: '/docs/components/$component',
   path: '/docs/components/$component',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
+  '/lab/theme-audit': typeof LabThemeAuditRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
 }
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
+  '/lab/theme-audit': typeof LabThemeAuditRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
 }
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
   '/lab/shaders': typeof LabShadersRoute
+  '/lab/theme-audit': typeof LabThemeAuditRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
   '/docs/foundations/$foundation': typeof DocsFoundationsFoundationRoute
 }
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/lab/controls'
     | '/lab/kitchen-sink'
     | '/lab/shaders'
+    | '/lab/theme-audit'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
   fileRoutesByTo: FileRoutesByTo
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/lab/controls'
     | '/lab/kitchen-sink'
     | '/lab/shaders'
+    | '/lab/theme-audit'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
   id:
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/lab/controls'
     | '/lab/kitchen-sink'
     | '/lab/shaders'
+    | '/lab/theme-audit'
     | '/docs/components/$component'
     | '/docs/foundations/$foundation'
   fileRoutesById: FileRoutesById
@@ -170,6 +182,7 @@ export interface RootRouteChildren {
   LabControlsRoute: typeof LabControlsRoute
   LabKitchenSinkRoute: typeof LabKitchenSinkRoute
   LabShadersRoute: typeof LabShadersRoute
+  LabThemeAuditRoute: typeof LabThemeAuditRoute
   DocsComponentsComponentRoute: typeof DocsComponentsComponentRoute
   DocsFoundationsFoundationRoute: typeof DocsFoundationsFoundationRoute
 }
@@ -239,6 +252,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LabShadersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lab/theme-audit': {
+      id: '/lab/theme-audit'
+      path: '/lab/theme-audit'
+      fullPath: '/lab/theme-audit'
+      preLoaderRoute: typeof LabThemeAuditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/docs/components/$component': {
       id: '/docs/components/$component'
       path: '/docs/components/$component'
@@ -266,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   LabControlsRoute: LabControlsRoute,
   LabKitchenSinkRoute: LabKitchenSinkRoute,
   LabShadersRoute: LabShadersRoute,
+  LabThemeAuditRoute: LabThemeAuditRoute,
   DocsComponentsComponentRoute: DocsComponentsComponentRoute,
   DocsFoundationsFoundationRoute: DocsFoundationsFoundationRoute,
 }

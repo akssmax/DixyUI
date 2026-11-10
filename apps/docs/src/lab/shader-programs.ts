@@ -8,7 +8,15 @@
  */
 
 export type ShaderProgramId =
-  "caustics" | "phosphor" | "neonRain" | "iridescence" | "bokeh" | "aurora";
+  | "caustics"
+  | "phosphor"
+  | "neonRain"
+  | "iridescence"
+  | "bokeh"
+  | "aurora"
+  | "sunsetGrid"
+  | "menuStars"
+  | "arcadeAttract";
 
 export interface ShaderProgram {
   id: ShaderProgramId;
@@ -296,6 +304,113 @@ void main() {
 }
 `;
 
+/**
+ * Sunset Drive: a sliced sun sitting on the horizon over an endless
+ * perspective grid that rolls toward the viewer. The sun's warmth is the
+ * theme's light token mixed with a fixed amber so it reads as a sunset in
+ * any accent.
+ */
+const sunsetGrid = `${common}
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  float asp = uRes.x / uRes.y;
+  float hz = 0.4;
+  vec3 col;
+  if (uv.y > hz) {
+    float k = (uv.y - hz) / (1.0 - hz);
+    col = mix(uMid, uDeep, smoothstep(0.0, 0.85, k));
+    vec2 c = vec2(0.5, hz + 0.01);
+    vec2 d = (uv - c) * vec2(asp, 1.0);
+    float r = 0.24;
+    float len = length(d);
+    float sy = clamp((uv.y - c.y) / r, 0.0, 1.0);
+    float disc = 1.0 - smoothstep(r - 0.004, r, len);
+    // Slices widen toward the horizon and drift slowly downward.
+    float gap = mix(0.5, 0.0, smoothstep(0.0, 0.6, sy));
+    float slice = step(gap, fract(sy * 9.0 + uTime * 0.12));
+    vec3 sun = mix(mix(uLight, vec3(1.0, 0.82, 0.42), 0.55), uMid, 1.0 - sy);
+    col += uMid * exp(-len * 5.0) * 0.35;
+    col = mix(col, sun, disc * slice);
+  } else {
+    float k = (hz - uv.y) / hz;
+    float z = 1.0 / (k + 0.04);
+    vec2 g = vec2((uv.x - 0.5) * asp * z * 0.9, z * 0.6 - uTime * 0.6);
+    vec2 gf = abs(fract(g) - 0.5);
+    float lw = clamp(0.012 * z, 0.03, 0.45);
+    float line = max(1.0 - smoothstep(0.0, lw, 0.5 - gf.x), 1.0 - smoothstep(0.0, lw, 0.5 - gf.y));
+    col = mix(uDeep, uDeep * 0.85, k);
+    col = mix(col, uMid, line * smoothstep(0.0, 0.25, k) * 0.8);
+    col += uMid * exp(-k * 14.0) * 0.45;
+  }
+  float vig = smoothstep(1.5, 0.35, length(uv * 2.0 - 1.0));
+  col *= mix(0.7, 1.0, vig);
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/**
+ * Save Point: the sky behind a 1994 menu. A vertical gradient toward the
+ * window blue, ordered (Bayer) dithering so it bands like a 16-bit palette,
+ * and four-point sparkles that twinkle in place.
+ */
+const menuStars = `${common}
+float bayer(vec2 p) {
+  vec2 q = mod(floor(p), 2.0);
+  return (q.x * 2.0 + q.y * 3.0 - 4.0 * q.x * q.y) / 4.0;
+}
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  vec2 px = gl_FragCoord.xy / uScale;
+  vec3 col = mix(uDeep, uMid, smoothstep(0.0, 1.1, uv.y));
+  col += uMid * (fbm3(px / 220.0 + vec2(uTime * 0.02, 0.0)) - 0.5) * 0.25;
+
+  vec2 cell = px / 34.0;
+  vec2 id = floor(cell);
+  vec2 f = fract(cell) - 0.5;
+  float h = hash(id);
+  if (h > 0.9) {
+    vec2 o = (vec2(hash(id + 3.1), hash(id + 7.7)) - 0.5) * 0.5;
+    vec2 d = abs(f - o);
+    float tw = 0.5 + 0.5 * sin(uTime * 2.2 + h * 50.0);
+    float size = mix(0.6, 1.4, hash(id + 1.9));
+    float spark = exp(-d.x * 60.0 / size) * exp(-d.y * 9.0 / size)
+                + exp(-d.y * 60.0 / size) * exp(-d.x * 9.0 / size);
+    col = mix(col, uLight, clamp(spark * tw, 0.0, 1.0));
+  }
+  // Quantize to 12 levels per channel with a 2x2 ordered dither.
+  float levels = 12.0;
+  col = floor(col * levels + bayer(px / 2.0)) / levels;
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/**
+ * Arcade Cabinet: attract mode. Three layers of chunky pixel stars scroll
+ * down at different speeds, the marquee glows at the top, and every third
+ * device row is a scanline.
+ */
+const arcadeAttract = `${common}
+void main() {
+  vec2 uv = gl_FragCoord.xy / uRes;
+  float block = 3.0 * uScale;
+  vec2 px = floor(gl_FragCoord.xy / block);
+  vec3 col = uDeep;
+  for (int i = 0; i < 3; i++) {
+    float fi = float(i);
+    float speed = 6.0 + fi * 9.0;
+    vec2 q = vec2(px.x, px.y + floor(uTime * speed));
+    float h = hash(q + fi * 17.3);
+    float star = step(0.9975 - fi * 0.0012, h);
+    col = mix(col, fi < 1.5 ? uMid : uLight, star * (0.35 + fi * 0.3));
+  }
+  col = mix(col, uMid, exp(-(1.0 - uv.y) * 9.0) * 0.3);
+  col *= 0.82 + 0.18 * step(0.34, fract(gl_FragCoord.y / block));
+  float vig = smoothstep(1.45, 0.4, length(uv * 2.0 - 1.0));
+  col *= mix(0.6, 1.0, vig);
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
 export const shaderPrograms: Record<ShaderProgramId, ShaderProgram> = {
   caustics: {
     id: "caustics",
@@ -396,6 +511,57 @@ export const shaderPrograms: Record<ShaderProgramId, ShaderProgram> = {
         deep: "--dixy-color-background-canvas",
         mid: "--dixy-color-brand-3",
         light: "--dixy-color-brand-10",
+      },
+    },
+  },
+  sunsetGrid: {
+    id: "sunsetGrid",
+    fragment: sunsetGrid,
+    resolution: 0.75,
+    colors: {
+      light: {
+        deep: "--dixy-color-background-canvas",
+        mid: "--dixy-color-brand-8",
+        light: "--dixy-color-brand-6",
+      },
+      dark: {
+        deep: "--dixy-color-background-canvas",
+        mid: "--dixy-color-brand-9",
+        light: "--dixy-color-brand-11",
+      },
+    },
+  },
+  menuStars: {
+    id: "menuStars",
+    fragment: menuStars,
+    resolution: 0.75,
+    colors: {
+      light: {
+        deep: "--dixy-color-background-canvas",
+        mid: "--dixy-skin-surface",
+        light: "--dixy-color-brand-9",
+      },
+      dark: {
+        deep: "--dixy-color-background-canvas",
+        mid: "--dixy-skin-surface",
+        light: "--dixy-color-text-primary",
+      },
+    },
+  },
+  arcadeAttract: {
+    id: "arcadeAttract",
+    fragment: arcadeAttract,
+    resolution: 1,
+    colors: {
+      light: {
+        deep: "--dixy-color-background-canvas",
+        mid: "--dixy-color-brand-9",
+        light: "--dixy-color-brand-11",
+      },
+      dark: {
+        deep: "--dixy-color-background-canvas",
+        mid: "--dixy-color-brand-9",
+        light: "--dixy-color-text-primary",
       },
     },
   },

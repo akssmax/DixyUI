@@ -35,6 +35,7 @@ import { componentRegistry } from "../registry/components";
 import { DixyMark } from "./dixy-mark";
 import { useAppAppearance } from "./app-appearance-provider";
 import { useDocsTheme } from "./use-docs-theme";
+import { HomeLink } from "./home-link";
 
 const AppearanceContext = createContext<"light" | "dark">("light");
 export const useDocsAppearance = () => useContext(AppearanceContext);
@@ -510,13 +511,13 @@ export function DocsShell({ children }: { children: ReactNode }) {
         </a>
         <header className="topbar">
           <div className="toolbar-leading">
-            <Link to="/" className="topbar-brand" aria-label="Dixy UI home">
+            <HomeLink className="topbar-brand" aria-label="Dixy UI home">
               <DixyMark size={26} />
               <span className="wordmark">
                 dixy<span>UI</span>
               </span>
               <span className="version-label">0.1 beta</span>
-            </Link>
+            </HomeLink>
             <Button
               variant="ghost"
               color="neutral"

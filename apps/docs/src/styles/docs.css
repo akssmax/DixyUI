@@ -160,6 +160,32 @@
   src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2")
     format("woff2");
 }
+/* Signal (2026-11): Atkinson Hyperlegible, designed for low-vision readers. */
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-400-normal.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("@fontsource/atkinson-hyperlegible/files/atkinson-hyperlegible-latin-700-normal.woff2")
+    format("woff2");
+}
+/* Data themes (2026-11): IBM Plex Sans (Mainframe). */
+@font-face {
+  font-family: "IBM Plex Sans Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url("@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2")
+    format("woff2");
+}
 /* Original starters, redone (2026-11): Manrope (Prism Glass), Figtree (Forest, Atelier, Material), Cormorant Garamond (Atelier). */
 @font-face {
   font-family: "Manrope Variable";

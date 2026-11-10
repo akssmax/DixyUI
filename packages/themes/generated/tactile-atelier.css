@@ -40,6 +40,11 @@
       "Cormorant Garamond Variable", "Cormorant Garamond", "Garamond", ui-serif,
       Georgia, serif;
     --dixy-skin-edge: #d9cab3;
+    --dixy-skin-field-edge: color-mix(
+      in oklab,
+      var(--dixy-color-base-9) 50%,
+      var(--dixy-color-base-8)
+    );
 
     --dixy-skin-surface: color-mix(
       in srgb,
@@ -109,7 +114,6 @@
     --dixy-font-title-sm-weight: 500;
   }
   .dixy-theme[data-dixy-skin="dixy/tactile-atelier"][data-appearance="dark"] {
-    --dixy-skin-selected: var(--dixy-skin-finish);
     --dixy-skin-edge: #4a3a2c;
     --dixy-skin-surface: color-mix(
       in srgb,
@@ -122,6 +126,7 @@
       #2a211a
     );
   }
+
   .dixy-theme[data-dixy-skin="dixy/tactile-atelier"][data-relief="2"] {
     --dixy-skin-shadow:
       var(--dixy-skin-depth-shadow, var(--dixy-skin-authored-shadow)),
@@ -160,6 +165,7 @@
     --dixy-color-brand-12: oklch(0.255 0.056999 35);
     --dixy-color-brand-pressed: oklch(0.465 0.1425 35);
     --dixy-color-brand-on-solid: oklch(1 0 0);
+    --dixy-color-brand-focus: oklch(0.5375 0.13175 35);
   }
   .dixy-theme[data-dixy-skin="dixy/tactile-atelier"][data-appearance="dark"] {
     --dixy-color-brand-1: oklch(0.155 0.012 35);
@@ -176,6 +182,7 @@
     --dixy-color-brand-12: oklch(0.94 0.018 35);
     --dixy-color-brand-pressed: oklch(0.685 0.113999 35);
     --dixy-color-brand-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-brand-focus: oklch(0.585 0.12 35);
   }
 }
 @layer dixy.components {
@@ -290,6 +297,30 @@
     background-color: var(--dixy-skin-surface);
   }
   :is(
+      .dixy-dialog-popup,
+      .dixy-alert-dialog-popup,
+      .dixy-drawer-popup,
+      .dixy-popover-popup,
+      .dixy-preview-card-popup,
+      .dixy-tooltip-popup,
+      .dixy-select-popup,
+      .dixy-combobox-popup,
+      .dixy-autocomplete-popup,
+      .dixy-menu-popup,
+      .dixy-context-menu-popup,
+      .dixy-navigation-menu-popup
+    )[data-dixy-skin="dixy/tactile-atelier"]:not(
+      [data-dixy-material-override]
+    ):not(:where([data-dixy-material-override]) *):not(
+      [data-variant="solid"]
+    ):not([data-variant="soft"]) {
+    background-color: color-mix(
+      in srgb,
+      var(--dixy-color-background-surface-raised) 94%,
+      var(--dixy-skin-surface)
+    );
+  }
+  :is(
     .dixy-input,
     .dixy-textarea,
     .dixy-native-select,
@@ -321,7 +352,7 @@
       [data-dixy-material-override]
     ):not(:where([data-dixy-material-override]) *) {
     border-width: var(--dixy-input-border-width);
-    border-color: var(--dixy-skin-edge);
+    border-color: var(--dixy-skin-field-edge);
     background-image: var(--dixy-skin-paint);
     background-color: var(--dixy-color-background-canvas);
     background-size:
@@ -330,6 +361,45 @@
       100% 100%,
       100% 100%;
     box-shadow: var(--dixy-skin-inset);
+  }
+  /* materials.css styles [data-dixy-visual] surfaces at 0,5,0. Match the
+     skin's paint to that so its image and grain size always land together;
+     otherwise the material image is tiled at the grain size (stripes). */
+  :is(
+      .dixy-card,
+      .dixy-box,
+      .dixy-dialog-popup,
+      .dixy-alert-dialog-popup,
+      .dixy-drawer-popup,
+      .dixy-popover-popup,
+      .dixy-preview-card-popup,
+      .dixy-tooltip-popup,
+      .dixy-select-popup,
+      .dixy-combobox-popup,
+      .dixy-autocomplete-popup,
+      .dixy-menu-popup,
+      .dixy-context-menu-popup,
+      .dixy-navigation-menu-popup,
+      .dixy-toast-root,
+      .dixy-alert,
+      .dixy-list-box,
+      .dixy-calendar,
+      .dixy-range-calendar,
+      .dixy-input,
+      .dixy-textarea,
+      .dixy-native-select,
+      .dixy-select-trigger,
+      .dixy-input-group,
+      .dixy-combobox-input-group,
+      .dixy-autocomplete-input-group,
+      .dixy-number-field-group,
+      .dixy-otp-field-input
+    )[data-dixy-skin="dixy/tactile-atelier"]:not(
+      [data-dixy-material-override]
+    ):not(
+      :where([data-dixy-material-override]) *
+    )[data-dixy-visual][data-material]:not([data-disabled]) {
+    background-image: var(--dixy-skin-paint);
   }
   :is(.dixy-button)[data-dixy-skin="dixy/tactile-atelier"]:not(
       [data-dixy-material-override]
@@ -361,14 +431,19 @@
     border: 1px solid var(--dixy-skin-edge);
     box-shadow: var(--dixy-skin-inset);
   }
+  /* Selected tabs and toggles are one flat colour, lifted by edge and relief only. A gradient behind the label (thumb art, sheen, material image) splits it across two colours. :not([data-variant="line"]) also outranks materials.css (0,3,0). */
   :is(.dixy-tabs-indicator)[data-dixy-skin="dixy/tactile-atelier"]:not(
       [data-dixy-material-override]
     ):not(:where([data-dixy-material-override]) *) {
-    background-image: var(--dixy-skin-finish);
     box-shadow: var(--dixy-skin-control-relief);
     border: 1px solid var(--dixy-skin-edge);
   }
-  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised thumb (slider-knob paint in light, the raised finish in dark so its label stays readable). */
+  :is(.dixy-tabs-indicator)[data-dixy-skin="dixy/tactile-atelier"]:not(
+      [data-dixy-material-override]
+    ):not(:where([data-dixy-material-override]) *):not([data-variant="line"]) {
+    background-image: none;
+  }
+  /* Toggle groups read like tabs: a sunken track, the selected toggle a raised, flat thumb. */
   .dixy-theme[data-dixy-skin="dixy/tactile-atelier"]
     .dixy-toggle-group:is([data-attached], [data-segmented]):not(
       [data-dixy-material-override]
@@ -383,7 +458,7 @@
       [data-variant="solid"]
     )[data-pressed]:not([data-disabled]) {
     background-color: var(--dixy-color-background-surface-raised);
-    background-image: var(--dixy-skin-selected, var(--dixy-skin-thumb));
+    background-image: none;
     box-shadow: var(--dixy-skin-control-relief);
     border-color: var(--dixy-skin-edge);
     color: var(--dixy-color-text-primary);

@@ -1991,3 +1991,178 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - What changed: `apps/docs/turbo.json` extends the root config and adds `.wrangler/deploy/**` to the docs `build` outputs.
 - Why: `deploy-docs` failed on PR #16 with "entry-point file at @tanstack/react-start/server-entry was not found". The Cloudflare Vite plugin writes `.wrangler/deploy/config.json` to point wrangler at `dist/server/wrangler.json`. The turbo-cached deploy job restored `dist/` on a cache hit but not that pointer, so wrangler read `wrangler.jsonc` and couldn't resolve its package `main`. Production deploys on `main` would have failed the same way.
 - Verified: built the docs once (cache miss), deleted `dist/` and `.wrangler/deploy`, rebuilt (cache hit) and the pointer came back. `wrangler deploy --dry-run` then resolved the built Worker with its `VISITORS` binding. `pnpm check` passes.
+
+### 2026-11-10 — Theme audit and fix loop
+
+- Request: a faster way to fix theme bugs, built so an agent can review and fix them rather than someone clicking through the playground.
+- What changed:
+  - `/lab/theme-audit` renders every built-in theme on one specimen in light and dark. It measures four things in the browser:
+    - text contrast: 4.5:1, or 3:1 for large text
+    - focus: a visible change, and a ring of at least 3:1
+    - target size: 24×24, reported as a warning
+    - content past the card or clipped labels
+  - The report is on `window.__dixyThemeAudit`, and `<html data-audit-status="done">` marks when it's finished. A dev-only Vite middleware writes the report to `.dixy/theme-audit.json`; it accepts same-origin JSON posts only.
+  - `pnpm themes:fix <slug> '<json patch>'` (plus `--show`, `--reset` and `--list`):
+    - validates the patch with the theme schema
+    - stores the smallest diff over the starter in `packages/themes/src/theme-fixes.ts`
+    - rebuilds `@dixy-ui/themes` in about 2 seconds
+  - `documents.ts` now exports `starterDocuments` (as authored); `themeDocuments` is those starters with their fixes applied.
+  - The project skill `.claude/skills/theme-audit` describes the loop: audit, triage, fix, re-audit. AGENTS.md points Codex to it.
+- How it measures:
+  - Colours are resolved through a 1×1 canvas, so oklch and `color-mix` values are measured as rendered.
+  - Backgrounds are composited up the ancestor chain. When a gradient or texture sits behind text, the result is marked approximate.
+  - Focus is measured by mirroring every `:focus`/`:focus-visible` rule onto `[data-audit-focus]`. Calling `focus()` from a script doesn't match `:focus-visible` in Chrome, and nothing matches while the window is in the background (the first run reported every focus check as unverifiable).
+- Useful failures:
+  - The first overflow check compared the specimen's scroll width and flagged 42 specimens. Every one was an ornament canvas bleeding past the card on purpose. The check now measures only the audited elements against the card edge.
+- First run, 31 themes × 2 appearances: 29 clean, 10 failures.
+  - Brutalist Concrete (light, its default appearance): focus ring 2.81:1 (amber `brand-8` #9e7600 on #d6d4cf).
+  - Winamp Signal (light): focus ring 2.99:1 (lime #618d25 on #dee2dd).
+  - Both rings are `--dixy-color-border-focus` = accent step 8, which is too light for amber and lime on grey surfaces. A theme fix can only swap the accent; a trial patch to orange gave 2.91:1, then I reset it. The proper fix is in the token generator or a focus-colour option for themes, so I left both as findings.
+- Verified:
+  - Negative test: injected styles produced each failure — contrast 1.36:1 and 1.55:1, no focus change, a 14×14 target and a clipped badge.
+  - The `themes:fix` round trip changed the measured result after a reload, and `--reset` left no diff.
+  - `node --test` covers patch merge, diff round-trip and the installed themes matching starters plus fixes.
+  - Page at 1280px and 375px with no horizontal scroll.
+  - `pnpm check` and `pnpm format:check` pass. `package:check` passes with the verify step run `--online`; the local offline store was missing rolldown.
+- Not tested:
+  - The docs page in dark appearance.
+  - Ornaments drawn over text.
+  - Hover, pressed and disabled states.
+  - Real keyboard focus order.
+  - Screen readers.
+
+### 2026-11-10 — Field edges, solid overlays, Candy Clay dark glow
+
+- Request: audit the themes for what to improve; then fix field borders. Mid-way, two reports from the deployed playground: popovers and combobox lists were see-through on a glass material, and Candy Clay glowed too much in dark mode.
+- Audit addition: a `boundary` check (WCAG 1.4.11). A field's border or fill must reach 3:1 against the surface around it.
+  - Before: 46 failures across 25 themes. Glass UI light 1.01:1, Prism Glass light 1.01:1, Ocean Depths light 1.03:1; in the screenshots, the field could barely be seen.
+  - Cause: `compile-css.ts` gave fields `--dixy-skin-edge`, the decorative material edge (translucent white on glass materials).
+- Fix: fields use `--dixy-skin-field-edge`, a 50% oklab mix of `base-9` and `base-8`. I measured the candidates in the browser on every theme and appearance:
+
+  | Candidate        | Lowest ratio      |
+  | ---------------- | ----------------- |
+  | `border-default` | 2.66:1 (5 misses) |
+  | 25% mix          | 2.98:1            |
+  | 50% mix          | 3.35:1            |
+  | `base-9`         | 4.25:1            |
+
+  The 50% mix is the lightest one that passes everywhere with some margin.
+
+- After: 0 boundary failures. 29 of 31 themes are clean; the only failures left are the two known focus rings (Brutalist Concrete, Winamp Signal).
+- Overlays: the Liquid glass material (Glass UI) paints surfaces 45% white with no backdrop blur, so popovers showed the content behind them sharply. Overlay popups now mix in the opaque raised surface: 94% opaque without blur, 72% with blur. The Glass UI popover measured 0.97 alpha, up from 0.45, and the screenshot shows nothing behind it.
+- Candy Clay dark: materials can now set `darkShadow` and `darkInset`. In dark mode, Candy Clay replaces the pink halo and white highlight (which read as a glow on a dark canvas) with a dark drop shadow. The screenshot shows no halo, and the clay cushion is kept.
+- Verified: full audit (31 themes × 2 appearances), `pnpm check`, `pnpm format:check` and `skins:check`. Screenshots: Glass UI, Ocean Depths, Candy Clay, and the Glass UI popover in the playground.
+- Not tested:
+  - The deployed site on a phone; the new CSS only reaches it after a release.
+  - Combobox, menu and dialog popups individually (the change uses the same selector list as popovers).
+  - Hover, invalid and disabled field states.
+  - Slider and progress tracks and tab lists, which still use the decorative edge.
+
+### 2026-11-10 — Focus rings, notched corners, Holi clouds
+
+- Focus rings: `border.focus` was `brand-8`.
+  - In light mode, step 8 measures 3.85–4.4:1 against white in every family. Amber and lime were not the outliers (green is 3.85:1).
+  - Brutalist Concrete and Winamp Signal failed because their light surfaces are mid-grey (#d6d4cf, #dee2dd). The earlier note blaming the amber and lime palettes was wrong.
+  - Fix: every family gets a derived `focus` step from `focusColor()` in `packages/tokens/src/color.ts`, following the same pattern as `pressed` and `on-solid`. In light mode it is step 8 mixed 30% toward step 11 in OKLab; in dark mode it is step 8.
+  - Measured on every theme's real surfaces in light mode:
+
+    | Mix          | Lowest ratio |
+    | ------------ | ------------ |
+    | step 8 alone | 2.81:1       |
+    | 80%          | 3.23:1       |
+    | 70%          | 3.48:1       |
+    | 50%          | 4.05:1       |
+
+    70% keeps a margin while the ring still reads as the accent.
+
+  - A token test checks that every family's light focus colour reaches at least 4.4:1 against white (lowest is green at 4.81:1), and that the dark one reaches at least 3:1 against step 2.
+  - Full audit: 31 of 31 themes clean, 0 failures.
+- Notched corners (Y2K Titanium, Swiss Poster, Orbital HUD, Freighter): `clip-path` removed the border along with the corner, so the diagonal had no line.
+  - Fix: `corner-shape: bevel` with a 10px radius where supported. This draws the border along the bevel and keeps outer shadows. Other browsers keep the clip-path, plus an `::after` overlay that redraws the four diagonals in `--dixy-skin-edge` at the frame width, inside the clip.
+  - Verified in Chrome 152 at 4× zoom on Y2K Titanium: the border follows the bevel.
+- Holi Colours: the corner powder clouds were blurred radial fills cut off square by the ornament canvas, so I removed them. Every style now draws the speckle dust; "Soft haze" draws it fainter. Screenshot checked.
+- Verified: full audit, `pnpm check`, `pnpm format:check` and `pnpm package:check` (passed without the `--online` workaround this time).
+- Not tested:
+  - The notched-corner fallback in a browser without `corner-shape` (Safari, Firefox).
+  - Dark mode screenshots of the notched themes.
+  - The playground's custom-seed path with a grey canvas.
+
+### 2026-11-10 — Sunset Drive, Save Point, Arcade Cabinet, and the material stripe bug
+
+- New themes, chosen from the HTML mocks in `docs/mocks/`:
+  - **Sunset Drive**: pink accent and mauve neutral on a glossy material. Its `sunset` frame paints a striped sun above a top corner and a perspective grid below the card.
+  - **Save Point**: yellow accent and slate neutral. Its `menu` frame paints a blinking ▶ cursor, corner sparkles and a "FILE 1" label.
+  - **Arcade Cabinet**: red accent with square corners and a scanline backdrop. Its `marquee` frame paints chasing bulbs and a "1UP" / "INSERT COIN" credit line.
+  - Each theme has a material, frame recipe, organic settings (4 styles), painter, React ornament entry, three package exports, and a `verify-package` entry.
+- Character tests require each starter's chrome and control/motion/backdrop signature to be unique. The first drafts reused Living Forest's, Riso Zine's, Sumi Ink's and Phosphor Terminal's. Changes:
+  - Sunset Drive gets a tinted well.
+  - Save Point gets double edges with a tinted well.
+  - Arcade Cabinet gets an LCD well and snappy motion.
+- Stripe bug: with `materials.css` loaded (playground, shader lab, audit), the material's `[data-dixy-visual][data-material]` rule (specificity 0,5,0) beat the skin's surface rule (0,3,0) for `background-image`, but the skin's `background-size` still applied. The glossy image's 6px highlight was tiled every 4px.
+  - All 11 glossy themes were affected; it only showed clearly on dark Sunset Drive. Matte, soft, metal and paper themes also lost their skin paint the same way, without visible stripes.
+  - Fix: a skin rule for surfaces and fields at 0,6,0 that sets `--dixy-skin-paint`, so the image and its size always come from the same place. Checked: no themed card in the audit still uses a material image.
+- Shader lab: `sunsetGrid` (sliced sun and scrolling perspective grid), `menuStars` (dithered gradient with four-point sparkles) and `arcadeAttract` (three layers of pixel stars with scanlines). Screenshots of all three in dark, and Sunset Drive in light; no console errors.
+- Verified: full audit 34 of 34 clean in light and dark, `pnpm check`, `pnpm format:check`, `pnpm package:check`.
+- Not tested:
+  - Mobile width and reduced motion for the new ornaments and shaders.
+  - Keyboard focus beyond what the audit measures.
+  - Light mode screenshots of the Save Point and Arcade shaders.
+- Fonts reuse faces already in the library (Tilt Neon, Figtree, Silkscreen, VT323), not the mocks' exact fonts.
+
+### 2026-11-10 — Flat selected states for tabs and segments, audited
+
+- Reported: on ANSI Panes the home page's Light/Dark control showed a pressed segment half blue, half cream.
+- Cause: a pressed toggle used `var(--dixy-skin-selected, var(--dixy-skin-thumb))`, and `--dixy-skin-selected` was only set in dark mode. In light mode every pressed segment wore its theme's switch-thumb artwork: splits, hazard stripes, a conic rainbow, flags. Filled tab indicators used the material sheen, and `materials.css` (0,3,0) could override the skin's indicator image too.
+- Fix: in `compile-css.ts`, selected toggles and filled tab indicators have `background-image: none`. They are raised by edge and relief only. The indicator rule adds `:not([data-variant="line"])` so it outranks `materials.css`. `--dixy-skin-selected` is removed (nothing else read it).
+- Audit: the specimen gains line tabs, segmented tabs and a segmented toggle group. New roles: `tab`, `tab-selected`, `tab-filled`, `tab-filled-selected`, `segment`, `segment-selected`.
+  - Selected labels are measured against the flat fill and every colour stop in the fill's image (for tabs, the indicator, but only when it sits behind the label, so a line underline is skipped).
+  - A stop under 4.5:1 is a failure. A readable but split fill (stops more than 1.5:1 apart) is a warning.
+  - First run had false failures on every theme because the line indicator was treated as the fill; fixed with the overlap test.
+- Before the fix, light only: 12 failures and 12 split-fill warnings (24 of 34 themes, ANSI Panes included). With finish instead of thumb, dark still had 7 failures and 24 warnings from sheen. After the flat fill: 34 of 34 clean in light and dark.
+- Screenshots: ANSI Panes, Freighter and Glass UI tabs and segments in light and dark.
+- Verified: `pnpm check`, `pnpm format:check`, `pnpm package:check`.
+- Not tested: hover and pressed (mouse-down) states of tabs, keyboard focus moving between tabs, vertical tabs.
+
+### 2026-11-10 — Ledger, Mainframe and Dispatch: themes for data-heavy apps
+
+- Why: the catalogue had almost nothing for dense product screens. These come from the mocks in `docs/mocks/theme-suggestions.html` (Ledger) and `docs/mocks/theme-data-heavy.html` (Mainframe and Dispatch, in the spirit of large enterprise and app design systems). Each has its own name, colours and open fonts.
+- First themes with `frame: "none"`: no ornament and no `/react` entry. Package exports are the settings module and CSS only. `verify-package` gains a plain-skin pass: each one type-checks and bundles on its own with no ornament renderer in the output.
+- Ledger: jade on gray, Inter body, IBM Plex Mono headings, tabular numerals, faint ruled columns on the canvas, double-rule chrome with a ruled paper well.
+- Mainframe: blue on neutral, radius none, square shape, no depth. The material draws flat grey layers (#f4f4f4 canvas, white cards; #161616/#262626 in dark) with no shadow or inset. Headings are weight 300 in IBM Plex Sans.
+- Dispatch: neutral accent with the new `monoAccent` material flag. With `[data-accent="neutral"]`, the skin maps brand 9/10/11, pressed and on-solid to neutral 12/11/1, and focus to blue. Solid buttons, switches and checkboxes are black in light and white in dark. Pill shape, Inter weight 800 headings.
+- New font `plexSans`: added to `themeFonts`, `themeFontPackages`, the schema font list, a docs `@font-face`, and `@fontsource-variable/ibm-plex-sans` 5.2.8 in the docs app. Checked in the browser that it loads, at weight 300.
+- Uniqueness tests: Ledger's first signature (standard/snappy/none) matched Tokyo Transit, so Ledger uses `weighted` motion.
+- Sizes (gzip): Ledger 3.0 KB, Mainframe 3.5 KB, Dispatch 3.3 KB, all under the 5 KB budget.
+- Verified:
+  - Audit: 37 of 37 clean in light and dark.
+  - Specimen screenshots of all three in both appearances.
+  - `pnpm check`, `pnpm format:check` and `pnpm package:check`.
+- Not tested:
+  - The mock's data screens (tables, KPIs, side nav) built with real components.
+  - Compact density: Mainframe's 40px rows and Ledger's tight spacing need a density step the library doesn't have yet.
+  - Mobile width and reduced motion.
+
+### 2026-11-10 — Signal: an accessibility-first theme
+
+- Why: the industry map (`docs/mocks/theme-industry-map.html`) showed government, healthcare and education as thin. Signal is the AAA-leaning theme from `docs/mocks/theme-suggestions.html`.
+- Theme: blue on neutral, Atkinson Hyperlegible for body and headings (weight 700), 2px edges, no depth, native scrollbars, stroke-2 icons, plain voice ("Save changes", "Cancel"). Frame none, so settings and CSS only.
+- New material `signal-contrast`: black edges in light and white in dark, no shadows. It sets two new flags:
+  - `deepSolid` moves light-mode solid actions to brand 11/12. With step 9 the solid button was 5.23:1.
+  - `controlHeights` sets `--dixy-size-control-*` and `--dixy-height-*` to 44/48/56px. Segmented tracks read the size variables, so both are needed.
+- New focus style `halo`: a 3px outline plus an 8px yellow-9 ring. The first version set `box-shadow` normally. Buttons showed it only after routing it through the relief variables, and text fields still showed `none`: the matte material rule sets field `box-shadow` at 0,5,0, above the focus rule's 0,4,0. The halo's `box-shadow` is now `!important` and the variable routing is gone. Checked with real keyboard focus (Tab) on the Soft button and the text field: both compute `0 0 0 8px` yellow.
+- New font `atkinson`: `themeFonts`, `themeFontPackages`, the schema enum, a docs `@font-face` (400 and 700), and `@fontsource/atkinson-hyperlegible` 5.2.6 in the docs app.
+- Home logo: the top-nav logo on docs, playground and lab pages now links to `/?starter=<slug>` for the current skin (`HomeLink`), so returning home no longer resets the theme picked there.
+- Size (gzip): Signal 2.8 KB, under the 5 KB budget.
+- Measured: lowest text contrast is 7.69:1 in light (soft button) and 8.69:1 in dark. Buttons 44px, fields 48px.
+- Verified: audit clean for Signal in light and dark (full run below); specimen screenshots; halo on button and field with keyboard focus.
+- Not tested or not met:
+  - Segments and tabs are 38px and the switch 24px, below the 44px AAA target size (2.5.5). Those components don't read the control-size variables.
+  - The selected segment has no check mark, so selection still relies on fill and weight.
+  - Signal isn't picked automatically for `prefers-contrast: more`.
+  - Mobile width, reduced motion and screen readers.
+
+### 2026-11-10 — Merge main into feat/theme-audit
+
+- Conflicts: `lab.shaders.tsx`, where main rebuilt the shader lab header and this branch had swapped its back link for `HomeLink`. Kept main's header and made its back link a `HomeLink`. `BUILD_LOG.md` (both sides appended entries) keeps every entry, main's first.
+- Verified: `pnpm check`, `pnpm format:check`, `pnpm package:check`.
+- Theme audit after the merge: 38/38 clean.

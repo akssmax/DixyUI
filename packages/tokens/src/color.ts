@@ -312,6 +312,35 @@ export function actionColors(palette: ColorScale, appearance: ColorAppearance) {
     foreground: candidates[0]!.foreground,
   };
 }
+/**
+ * Focus ring colour. Step 8 is about 4:1 against white, which drops under
+ * 3:1 on mid-grey light surfaces (Brutalist Concrete measured 2.81:1). In
+ * light mode the ring leans 30% toward step 11 in OKLab, which kept every
+ * built-in theme at or above 3.48:1; dark mode already clears 3:1 at step 8.
+ */
+export function focusColor(
+  palette: ColorScale,
+  appearance: ColorAppearance,
+): Oklch {
+  if (appearance === "dark") return palette[8];
+  const lab = ([l, c, h]: Oklch) => [
+    l,
+    c * Math.cos((h * Math.PI) / 180),
+    c * Math.sin((h * Math.PI) / 180),
+  ];
+  const [l1, a1, b1] = lab(palette[8]);
+  const [l2, a2, b2] = lab(palette[11]);
+  const t = 0.3;
+  const [l, a, b] = [
+    l1! + (l2! - l1!) * t,
+    a1! + (a2! - a1!) * t,
+    b1! + (b2! - b1!) * t,
+  ];
+  const c = Math.hypot(a, b);
+  const h =
+    c < 1e-4 ? palette[8][2] : ((Math.atan2(b, a) * 180) / Math.PI + 360) % 360;
+  return gamutMap([l, c, h]);
+}
 /** Seed-based brand palette; unsafe seeds are rejected rather than silently claiming accessible output. */
 export function createColorPalette(seed: Oklch): ColorPalette {
   const [l, c, h] = gamutMap(seed);
@@ -338,6 +367,9 @@ export function colorThemeVariables(
     ),
     "--dixy-color-brand-pressed": toOklch(action.pressed),
     "--dixy-color-brand-on-solid": toOklch(action.foreground),
+    "--dixy-color-brand-focus": toOklch(
+      focusColor(palette[appearance], appearance),
+    ),
   };
 }
 export type ColorReference =
@@ -347,7 +379,8 @@ export type ColorReference =
   | "black"
   | `${OverlayFamily}.a${ColorStep}`
   | `${ColorFamily | "brand" | "base"}.pressed`
-  | `${ColorFamily | "brand" | "base"}.on-solid`;
+  | `${ColorFamily | "brand" | "base"}.on-solid`
+  | `${ColorFamily | "brand" | "base"}.focus`;
 const role = (light: ColorReference, dark: ColorReference = light) => ({
   light,
   dark,
@@ -419,7 +452,7 @@ export const semanticColors = {
   "border.subtle": role("base.6"),
   "border.default": role("base.8"),
   "border.strong": role("base.9", "base.8"),
-  "border.focus": role("brand.8"),
+  "border.focus": role("brand.focus"),
   ...actionRoles("primary", "brand"),
   ...actionRoles("secondary", "base"),
   ...actionRoles("destructive", "red"),
@@ -482,5 +515,6 @@ export function resolveColor(
     ][appearance];
   if (step === "pressed") return actionColors(palette, appearance).pressed;
   if (step === "on-solid") return actionColors(palette, appearance).foreground;
+  if (step === "focus") return focusColor(palette, appearance);
   return palette[Number(step) as ColorStep];
 }

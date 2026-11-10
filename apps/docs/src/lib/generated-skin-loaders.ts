@@ -33,6 +33,13 @@ import { papelPicado } from "@dixy-ui/themes/papel-picado";
 import { holiColours } from "@dixy-ui/themes/holi-colours";
 import { yuleKnit } from "@dixy-ui/themes/yule-knit";
 import { glassUI } from "@dixy-ui/themes/glass-ui";
+import { sunsetDrive } from "@dixy-ui/themes/sunset-drive";
+import { savePoint } from "@dixy-ui/themes/save-point";
+import { arcadeCabinet } from "@dixy-ui/themes/arcade-cabinet";
+import { ledger } from "@dixy-ui/themes/ledger";
+import { mainframe } from "@dixy-ui/themes/mainframe";
+import { dispatch } from "@dixy-ui/themes/dispatch";
+import { signal } from "@dixy-ui/themes/signal";
 export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/living-forest": livingForest,
   "dixy/retro-os": retroOS,
@@ -65,6 +72,13 @@ export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/holi-colours": holiColours,
   "dixy/yule-knit": yuleKnit,
   "dixy/glass-ui": glassUI,
+  "dixy/sunset-drive": sunsetDrive,
+  "dixy/save-point": savePoint,
+  "dixy/arcade-cabinet": arcadeCabinet,
+  "dixy/ledger": ledger,
+  "dixy/mainframe": mainframe,
+  "dixy/dispatch": dispatch,
+  "dixy/signal": signal,
 };
 export const ornamentRenderers: Record<
   string,
@@ -120,6 +134,11 @@ export const ornamentRenderers: Record<
   "dixy/holi-colours": lazy(() => import("@dixy-ui/themes/holi-colours/react")),
   "dixy/yule-knit": lazy(() => import("@dixy-ui/themes/yule-knit/react")),
   "dixy/glass-ui": lazy(() => import("@dixy-ui/themes/glass-ui/react")),
+  "dixy/sunset-drive": lazy(() => import("@dixy-ui/themes/sunset-drive/react")),
+  "dixy/save-point": lazy(() => import("@dixy-ui/themes/save-point/react")),
+  "dixy/arcade-cabinet": lazy(
+    () => import("@dixy-ui/themes/arcade-cabinet/react"),
+  ),
 };
 export const frameOrnamentRenderers: Record<
   string,
@@ -156,6 +175,9 @@ export const frameOrnamentRenderers: Record<
   gulal: lazy(() => import("@dixy-ui/themes/holi-colours/react")),
   knit: lazy(() => import("@dixy-ui/themes/yule-knit/react")),
   liquid: lazy(() => import("@dixy-ui/themes/glass-ui/react")),
+  sunset: lazy(() => import("@dixy-ui/themes/sunset-drive/react")),
+  menu: lazy(() => import("@dixy-ui/themes/save-point/react")),
+  marquee: lazy(() => import("@dixy-ui/themes/arcade-cabinet/react")),
 };
 export const skinCSSLoaders: Readonly<
   Record<string, () => Promise<{ default: string }>>
@@ -202,4 +224,12 @@ export const skinCSSLoaders: Readonly<
   "dixy/holi-colours": () => import("@dixy-ui/themes/holi-colours.css?inline"),
   "dixy/yule-knit": () => import("@dixy-ui/themes/yule-knit.css?inline"),
   "dixy/glass-ui": () => import("@dixy-ui/themes/glass-ui.css?inline"),
+  "dixy/sunset-drive": () => import("@dixy-ui/themes/sunset-drive.css?inline"),
+  "dixy/save-point": () => import("@dixy-ui/themes/save-point.css?inline"),
+  "dixy/arcade-cabinet": () =>
+    import("@dixy-ui/themes/arcade-cabinet.css?inline"),
+  "dixy/ledger": () => import("@dixy-ui/themes/ledger.css?inline"),
+  "dixy/mainframe": () => import("@dixy-ui/themes/mainframe.css?inline"),
+  "dixy/dispatch": () => import("@dixy-ui/themes/dispatch.css?inline"),
+  "dixy/signal": () => import("@dixy-ui/themes/signal.css?inline"),
 };

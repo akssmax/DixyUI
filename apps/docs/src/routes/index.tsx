@@ -66,6 +66,7 @@ import {
   prepareSkin,
 } from "../lib/theme-skin-catalogue";
 import { componentRegistry } from "../registry/components";
+import { HomeLink } from "../components/home-link";
 
 /** The URL carries the starter's slug ("living-forest"); the app keys skins by id. */
 function starterIdFromSlug(slug: string | undefined) {
@@ -607,12 +608,12 @@ function Landing() {
         </a>
         <header className="landing-header">
           <Container className="landing-header-inner">
-            <Link to="/" className="landing-brand" aria-label="Dixy UI home">
+            <HomeLink className="landing-brand" aria-label="Dixy UI home">
               <DixyMark size={24} />
               <strong>
                 dixy<span>UI</span>
               </strong>
-            </Link>
+            </HomeLink>
             <nav aria-label="Primary">
               <ButtonLink
                 to="/docs/installation"

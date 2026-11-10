@@ -129,7 +129,9 @@
             "jetbrains",
             "manrope",
             "figtree",
-            "cormorant"
+            "cormorant",
+            "plexSans",
+            "atkinson"
           ]
         },
         "headingFont": {
@@ -157,7 +159,9 @@
             "jetbrains",
             "manrope",
             "figtree",
-            "cormorant"
+            "cormorant",
+            "plexSans",
+            "atkinson"
           ]
         },
         "border": { "enum": [1, 2] },
@@ -228,7 +232,14 @@
                 "fiesta-paper",
                 "powder-wash",
                 "wool",
-                "liquid-glass"
+                "liquid-glass",
+                "sunset-neon",
+                "ledger-ruled",
+                "layer-grid",
+                "mono-ink",
+                "signal-contrast",
+                "menu-window",
+                "arcade-bezel"
               ]
             },
             "version": { "enum": [1] },
@@ -343,7 +354,10 @@
                 "picado",
                 "gulal",
                 "knit",
-                "liquid"
+                "liquid",
+                "sunset",
+                "menu",
+                "marquee"
               ]
             },
             "version": { "enum": [1] },
@@ -455,7 +469,19 @@
                     "Specular rim",
                     "Refraction",
                     "Light catch",
-                    "Clear"
+                    "Clear",
+                    "Sun and grid",
+                    "Sun only",
+                    "Grid only",
+                    "Bare coast",
+                    "Cursor and stars",
+                    "Cursor only",
+                    "Stars only",
+                    "Plain window",
+                    "Bulbs and credits",
+                    "Bulbs only",
+                    "Credits only",
+                    "Dark cabinet"
                   ]
                 },
                 "canopy": {
@@ -679,7 +705,9 @@
         "details": {
           "type": "object",
           "properties": {
-            "focus": { "enum": ["ring", "double", "dashed", "glow", "offset"] },
+            "focus": {
+              "enum": ["ring", "double", "dashed", "glow", "offset", "halo"]
+            },
             "divider": {
               "enum": ["line", "dashed", "dotted", "double", "groove"]
             },

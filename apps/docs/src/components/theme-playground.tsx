@@ -139,6 +139,7 @@ export {
   inspectorTabIds,
   previewSceneIds,
 } from "../lib/route-search";
+import { HomeLink } from "./home-link";
 
 /* One question per tab: which theme, how it looks, how it behaves, how to take it. */
 const inspectorTabs = [
@@ -701,12 +702,12 @@ export function ThemePlayground({
         Skip to theme editor
       </a>
       <header className="theme-site-header">
-        <Link to="/" className="theme-site-brand" aria-label="Dixy UI home">
+        <HomeLink className="theme-site-brand" aria-label="Dixy UI home">
           <DixyMark size={26} />
           <strong>
             dixy<span>UI</span>
           </strong>
-        </Link>
+        </HomeLink>
         <span className="theme-site-divider" />
         <span className="theme-site-title">Theme playground</span>
         <nav aria-label="Playground navigation">

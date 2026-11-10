@@ -232,9 +232,20 @@ function cornerCSS(style: CornerStyle, frame: string) {
       return "";
     case "pixel":
       return `${frame} { border-radius:0; --dixy-chrome-bar-radius:0px; }`;
-    case "notched":
-      // Clip-path also clips outer shadows, so notched windows lean on inset relief.
-      return `${frame} { border-radius:0; --dixy-chrome-bar-radius:0px; clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px); }`;
+    case "notched": {
+      // corner-shape draws the border along the bevel (and keeps outer
+      // shadows). Without it, clip-path cuts the corners off — border and
+      // all — so an overlay redraws the four diagonals in the edge colour.
+      const w = "var(--dixy-skin-frame-width,1px)";
+      const line = (to: string) =>
+        `linear-gradient(${to},transparent 50%,var(--dixy-skin-edge) 50% calc(50% + ${w}),transparent calc(50% + ${w}))`;
+      return `${frame} { border-radius:0; --dixy-chrome-bar-radius:0px; }
+  @supports (corner-shape:bevel) { ${frame} { border-radius:10px; corner-shape:bevel; } }
+  @supports not (corner-shape:bevel) {
+    ${frame} { clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px),0 10px); }
+    ${frame}::after { content:""; position:absolute; inset:calc(${w} * -1); pointer-events:none; z-index:1; background:${line("to bottom right")} top left/10px 10px no-repeat,${line("to bottom left")} top right/10px 10px no-repeat,${line("to top right")} bottom left/10px 10px no-repeat,${line("to top left")} bottom right/10px 10px no-repeat; }
+  }`;
+    }
     case "round":
       return `${frame} { border-radius:16px; --dixy-chrome-bar-radius:13px; }`;
   }
