@@ -1827,6 +1827,44 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` and `pnpm format:check` pass.
 - Also checked: Candy Clay, Retro OS, Phosphor Terminal, Swiss Poster and Y2K Titanium all fit with the same 13px clearance. Not tested: the other 27 starters.
 
+### 2026-11-10 — Wren: Chat and Work modes, a compact composer, phone layout
+
+- Request: make the Wren example work on phones, make the chat input smaller, and add Chat and Work modes (ChatGPT reference). Mid-way the user also flagged that the composer text sat lower than the icons, and that the page scrolled beneath the app.
+- Modes: a segmented `ToggleGroup` centred in the top bar (a three-column grid keeps it centred).
+  - Chat: "What's on your mind?", a single-row composer (field, model, a square globe toggle that keeps "Search" as its accessible name, submit) and the list of starters.
+  - Work: "What should we work on?", a taller composer with tools underneath, and three starter cards ("See what Work can do"). The cards reuse existing scripts, so their replies still show tool calls and code.
+- Alignment: the field and the tools share one row height (`--wren-row`: 40px, or 44px under `any-pointer: coarse` to match the library's touch targets). The field's padding is `(row − 1.5em) / 2`, so one line of text is centred on the icons. Measured: text and icon centres both at 420px (desktop) and 426px (phone). Three lines grow the field upward, and the tools stay on the last line.
+- Library fixes found along the way (changeset `prompt-input-refit`, patch):
+  - `PromptInput.Textarea` measured its height only when the text changed. A width change (a resize, or switching modes) left it at the wrong height. A `ResizeObserver` now re-fits when the width changes; height changes are ignored to avoid a loop.
+  - `Response` tables inherited `overflow-wrap: anywhere` from the message, so on a phone cells broke words letter by letter ("Satu rday") instead of scrolling. The table wrapper now uses `overflow-wrap: normal`.
+  - `Conversation.Content` was not positioned, so the absolutely positioned visually hidden labels inside messages were placed against the conversation root. As a reply scrolled, one sat 61px below the window and made the page itself scroll. The content is now `position: relative`. Wren's app root also uses `overflow: clip`.
+- Phones (<768px): the top bar is menu, mode switch, new chat; the title stays for screen readers only. The theme picker and appearance toggle move to the foot of the chats drawer. Assistant avatars are hidden so replies get the full width. Work cards become a swipeable, snapping row. The disclaimer is hidden, and the composer respects the bottom safe area. Below 1024px the theme picker shrinks so the top bar fits beside the sidebar.
+- Verified (in-app browser, emulated sizes):
+  - 1280×800 and 375×812: no horizontal scroll; page height equals the window with the transcript at top and bottom.
+  - At 820px the top bar fits after the picker fix (it overflowed by 10px before).
+  - Composer heights: Chat 58px, Work 138px, correct after switching both ways.
+  - Dark appearance at 375px for Work mode and a Chat conversation.
+  - `pnpm check` and `pnpm package:check` pass.
+- Not tested:
+  - Real touch devices, iOS Safari's keyboard and the safe-area padding.
+  - Screen-reader announcement of the mode switch.
+  - Reduced motion (no new motion apart from scroll snapping).
+  - Starters other than Original Dixy and Candy Clay.
+
+### 2026-11-10 — Faster CI and releases
+
+- Request: merging felt slow. A CI run took 5–7 minutes and a release three full runs in a row (~20 minutes).
+- Measured from PR #14's run: `pnpm check` 188s, `package:check --online` 173s. Locally, two scripts dominated:
+  - `check-examples.mjs` (inside the docs build): 40s. It type-checked 1,624 examples in batches of 16, building a new TypeScript program per batch. Batches of 1,024 take 5s. Peak memory drops from 1.9 GB to 1.2 GB, because each program kept its predecessor alive through `oldProgram`.
+  - `verify-package.mjs`: 57s, of which 35s was one `tsc` run per skin (30 runs). The skins are now type-checked together, one module per skin, in a single `tsc` run. Each skin is still bundled on its own to prove the others stay out. Now 28s.
+  - The rebuild at the start of `package:check` (9s) and network access (`--online` vs `--offline` made no difference) were not the problem.
+- Workflows:
+  - CI runs on pushes to `main` and on pull requests, instead of on every push plus every PR, which checked each PR commit twice. A newer PR commit cancels the older run.
+  - Release skips its checks when unreleased changesets remain, because then it only updates the "Version packages" PR and publishes nothing. The run that publishes still runs every check.
+- Verified: both changed scripts pass, and both still fail on an injected type error (a demo; one skin's entry, reported as `skin-checks/glass-ui.tsx`). `pnpm check` and `pnpm format:check` pass, and the workflow YAML parses.
+- Not done: Turborepo caching in CI. It would need `scripts/**` in the cache key, since the docs build runs scripts from outside the package, and the remaining build time no longer justifies the risk of stale results.
+- Not verified yet: the CI timing on GitHub; this PR's own run is the first measurement. Branches pushed without a PR no longer get CI.
+
 ### 2026-11-09 — Shader lab workbench
 
 - What changed: `/lab/shaders` was a small card of controls beside a demo page. It is now a playground workbench.
@@ -1902,3 +1940,12 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - `pnpm check` passes. The client build has no `cloudflare:workers` or KV code; `dist/server/wrangler.json` carries the `VISITORS` binding.
   - In the in-app browser (dev server, Miniflare KV): first visit with no flag incremented the total; reloads sent `isNew: false` and didn't increment (two read-only requests per load from StrictMode). Star count renders (repo currently has 0). Footer link points at the portfolio. Light and dark checked. At 375px the header's last item ends at 359px (no overflow); desktop layout unchanged apart from the new button.
 - Not tested: production deploy. The binding has no `id`, so `wrangler deploy` should auto-provision the namespace on first deploy; the CI token (currently "Workers Scripts: Edit") also needs "Workers KV Storage: Edit" for that. KV reads are eventually consistent (up to ~60s), so a fresh total can lag, and two simultaneous first visits can produce one increment. The counter is unauthenticated, so anyone can inflate it by clearing storage. Keyboard focus ring, reduced motion (nothing animates), Safari/Firefox and screen readers not checked.
+
+### 2026-11-10 — Merge GitHub main into local main
+
+- What changed: local `main` (shader lab workbench, exit easing, reduced-motion fades, base-components merge, gated CI with turbo cache, landing star/credit/visitors) merged with GitHub's PRs #12, #14 and #15.
+  - `ci.yml`: both sides restricted pushes to `main` and added a concurrency group. Kept the local version: `workflow_dispatch`, and runs on `main` queue instead of being cancelled, so a deploy is never cut off. The header now also lists the KV permission the visitor counter needs.
+  - `release.yml` merged cleanly: it restores the turbo cache (local) and skips checks while changesets are pending (PR #15).
+  - `BUILD_LOG.md`: kept every entry from both sides, including both CI write-ups.
+- Verified: `pnpm format:check`, `pnpm check` and `pnpm package:check --online` pass on the merge. (`--offline` failed only because the fresh checkout's store lacked a cached tarball.)
+- Not tested: the merged workflows on GitHub until this push runs them.

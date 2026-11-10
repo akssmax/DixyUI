@@ -2,8 +2,8 @@ name: Quality checks
 # Runs on pull requests and on pushes to main. The docs deploy is a second
 # job that only starts once every check has passed, so a broken main never
 # reaches production. Needs repository secrets CLOUDFLARE_API_TOKEN
-# (Workers Scripts: Edit) and CLOUDFLARE_ACCOUNT_ID; until they exist, the
-# deploy steps are skipped.
+# (Workers Scripts: Edit, Workers KV Storage: Edit) and CLOUDFLARE_ACCOUNT_ID;
+# until they exist, the deploy steps are skipped.
 on:
   push:
     branches: [main]

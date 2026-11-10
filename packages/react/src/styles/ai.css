@@ -13,6 +13,10 @@
     font: var(--dixy-font-body-md);
   }
   .dixy-conversation-content {
+    /* Contains absolutely positioned descendants, such as visually hidden
+     * labels, so they scroll and clip with the transcript instead of
+     * stretching the page below it. */
+    position: relative;
     flex: 1;
     min-block-size: 0;
     display: flex;
@@ -188,6 +192,9 @@
   .dixy-response-table {
     max-inline-size: 100%;
     overflow-x: auto;
+    /* The message breaks long words anywhere; in a table that squeezes
+     * cells to a letter wide instead of letting the wrapper scroll. */
+    overflow-wrap: normal;
     border: 1px solid var(--dixy-color-border-subtle);
     border-radius: min(var(--dixy-radius-card), 12px);
   }
