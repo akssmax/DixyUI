@@ -1976,3 +1976,9 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Not tested:
   - The first visit in Safari or Firefox with a dark OS. Those browsers don't send the client hint and have no cookie yet, so that one visit paints light and switches to dark after hydration. Later visits use the cookie.
   - `Critical-CH` retry on production Chrome, reduced motion (the switch doesn't animate), and screen readers.
+
+### 2026-11-10 — Cache the Worker deploy pointer with the docs build
+
+- What changed: `apps/docs/turbo.json` extends the root config and adds `.wrangler/deploy/**` to the docs `build` outputs.
+- Why: `deploy-docs` failed on PR #16 with "entry-point file at @tanstack/react-start/server-entry was not found". The Cloudflare Vite plugin writes `.wrangler/deploy/config.json` to point wrangler at `dist/server/wrangler.json`. The turbo-cached deploy job restored `dist/` on a cache hit but not that pointer, so wrangler read `wrangler.jsonc` and couldn't resolve its package `main`. Production deploys on `main` would have failed the same way.
+- Verified: built the docs once (cache miss), deleted `dist/` and `.wrangler/deploy`, rebuilt (cache hit) and the pointer came back. `wrangler deploy --dry-run` then resolved the built Worker with its `VISITORS` binding. `pnpm check` passes.
