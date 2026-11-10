@@ -714,7 +714,8 @@
     border-radius: var(--dixy-radius-control);
     font-variant-numeric: tabular-nums;
     cursor: pointer;
-    transition: background-color var(--dixy-field-motion-feedback-effects, 120ms);
+    transition: background-color
+      var(--dixy-field-motion-feedback-effects, 120ms);
   }
   .dixy-aria-calendarcell[data-hovered]:not([data-selected], [data-disabled]) {
     background: var(--dixy-color-background-subtle);
