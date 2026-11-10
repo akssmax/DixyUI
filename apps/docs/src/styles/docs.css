@@ -961,34 +961,63 @@ svg {
   letter-spacing: var(--dixy-font-code-sm-letter-spacing);
 }
 .nav-group {
-  margin-bottom: 22px;
+  margin-bottom: 14px;
 }
 .nav-group .docs-disclosure-trigger {
-  min-height: 28px;
+  width: 100%;
+  min-height: 30px;
   list-style: none;
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 9px 9px;
-  color: var(--doc-muted);
+  gap: 6px;
+  padding: 0 9px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dixy-text);
+  text-align: left;
 
   font: var(--dixy-font-label-sm);
   letter-spacing: var(--dixy-font-label-sm-letter-spacing);
 }
+.nav-group .docs-disclosure-trigger:hover {
+  background: var(--doc-line);
+}
 .nav-group .docs-disclosure-trigger::-webkit-details-marker {
   display: none;
 }
+.nav-group .docs-disclosure-trigger svg {
+  flex: none;
+  color: var(--doc-muted);
+  transition: transform var(--dixy-duration-fast, 120ms) ease;
+}
 .nav-group .docs-disclosure-trigger[data-panel-open] svg {
   transform: rotate(90deg);
+}
+.nav-group .nav-count {
+  margin-right: 0;
+}
+/* The tree guide: one hairline under each group ties its rows to the header. */
+.nav-tree {
+  margin: 2px 0 0 15px;
+  padding-left: 8px;
+  border-left: 1px solid var(--doc-line);
+}
+.nav-tree .nav-subgroup + .nav-subgroup {
+  margin-top: 8px;
+}
+.nav-tree .nav-subheading {
+  padding: 6px 9px 3px;
 }
 .nav-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 9px 11px;
+  min-height: 30px;
+  padding: 4px 9px;
   border-radius: 6px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
   text-decoration: none;
   color: var(--dixy-text-muted);
 
@@ -1003,6 +1032,11 @@ svg {
   background: color-mix(in srgb, var(--dixy-accent) 14%, transparent);
   color: var(--dixy-accent-text);
   font-weight: var(--dixy-font-weight-label);
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-group .docs-disclosure-trigger svg {
+    transition: none;
+  }
 }
 .base-credit {
   display: flex;
@@ -1589,64 +1623,6 @@ svg {
 
   font: var(--dixy-font-body-sm);
   letter-spacing: var(--dixy-font-body-sm-letter-spacing);
-}
-.learning-callout {
-  background: var(--doc-violet-soft);
-  padding: 26px;
-  border-radius: 10px;
-}
-.learning-label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--doc-violet-text);
-
-  font: var(--dixy-font-code-sm);
-  letter-spacing: var(--dixy-font-code-sm-letter-spacing);
-}
-.learning-callout h2 {
-  margin: 14px 0 10px;
-
-  font: var(--dixy-font-heading-sm);
-  letter-spacing: var(--dixy-font-heading-sm-letter-spacing);
-}
-.learning-callout p {
-  overflow-wrap: anywhere;
-  color: var(--doc-muted);
-
-  font: var(--dixy-font-body-md);
-  letter-spacing: var(--dixy-font-body-md-letter-spacing);
-}
-.token-reference {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 18px;
-  color: var(--doc-muted);
-  flex-wrap: wrap;
-
-  font: var(--dixy-font-caption);
-  letter-spacing: var(--dixy-font-caption-letter-spacing);
-}
-.token-reference code {
-  color: var(--doc-violet-text);
-  padding: 5px 7px;
-  border: 1px solid color-mix(in srgb, var(--doc-violet-text) 20%, transparent);
-  border-radius: 4px;
-
-  font: var(--dixy-font-code-sm);
-  letter-spacing: var(--dixy-font-code-sm-letter-spacing);
-}
-.learning-callout > a {
-  color: var(--doc-violet-text);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-  text-decoration: none;
-
-  font: var(--dixy-font-label-md);
-  letter-spacing: var(--dixy-font-label-md-letter-spacing);
 }
 .source-disclosure {
   border: 1px solid var(--doc-line);
@@ -2867,13 +2843,6 @@ svg {
   .source-path {
     display: none;
   }
-  .learning-callout {
-    padding: 22px;
-  }
-  .learning-callout h2 {
-    font: var(--dixy-font-heading-sm);
-    letter-spacing: var(--dixy-font-heading-sm-letter-spacing);
-  }
   .site-footer {
     margin-inline: 23px;
   }
@@ -4050,4 +4019,17 @@ main,
 }
 .docs-disclosure-trigger:focus-visible {
   outline-offset: -2px;
+}
+
+/* Package-manager tabs sit in the code block toolbar, in place of the filename. */
+.code-toolbar .install-tabs {
+  align-self: stretch;
+  margin-inline-start: -13px;
+}
+.code-toolbar .install-tabs .dixy-tabs-list {
+  block-size: 100%;
+  border-block-end: 0;
+}
+.code-toolbar .install-tabs .dixy-tabs-tab {
+  font: var(--dixy-font-code-sm);
 }

@@ -2166,3 +2166,89 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Conflicts: `lab.shaders.tsx`, where main rebuilt the shader lab header and this branch had swapped its back link for `HomeLink`. Kept main's header and made its back link a `HomeLink`. `BUILD_LOG.md` (both sides appended entries) keeps every entry, main's first.
 - Verified: `pnpm check`, `pnpm format:check`, `pnpm package:check`.
 - Theme audit after the merge: 38/38 clean.
+
+### 2026-11-10 — Install commands for every package manager, and a prompt for coding agents
+
+- Why: the site showed only `pnpm add`. Most people use npm, yarn or bun, and many now set libraries up through a coding agent.
+- `apps/docs/src/lib/install.ts`:
+  - `installCommand(manager)` returns `pnpm add`, `npm install`, `yarn add` or `bun add`.
+  - `agentPrompt(manager, theme)` returns a short setup prompt: install, the two stylesheet imports, wrap in `Theme` with the chosen theme's settings, the overlay layout rule, and five rules (public entry points only, compose parts, don't restyle internals, keep accessible names, use CSS variables).
+  - `usePackageManager()` keeps one choice per visitor in `localStorage`, guarded for blocked storage, and shares it between every block on the page (`useSyncExternalStore`; the server renders pnpm).
+- The prompt names the theme the visitor has picked: the landing starter on the homepage, the docs theme on the installation page. Its settings export is `${symbol}Theme` from the catalog. A test imports every catalog theme to make sure that export exists.
+- Homepage hero: first built as a tab bar, a read-only field, a copy button and a "Copy for agents" button. That read as bloated, so three simpler layouts were mocked (`docs/mocks/hero-install.html`, untracked) and option A was chosen: one command line. The package manager as a small native `<select>` inside the command, the rest of the command, and a copy icon. Below it, one muted line: "Using a coding agent? Copy the setup prompt · Beta on npm…", which replaces the separate beta note. The box uses the theme's field variables (`--dixy-input-border`, `--dixy-input-radius`, `--dixy-input-background`), so it matches each theme's text fields. The command truncates with an ellipsis on narrow screens; copy always copies all of it.
+- Homepage closing terminal: the same choice as tabs in its title bar.
+- Installation page: a tabbed install block (`InstallCommand`, tabs in the `CodeBlock` toolbar) and a new "Set up with a coding agent" section showing the full prompt. A short note says why pnpm is the default (from version 10 it blocks dependency install scripts unless allowed, and its strict layout blocks undeclared imports) and that Dixy has no install scripts.
+- `CodeBlock` gains `toolbar` (replaces the filename) and `copyLabel`.
+- Verified in the in-app browser:
+  - Hero (option A), Tokyo Transit: choosing npm in the picker changed the command to `npm install …`, updated the closing terminal and was saved; copy produced the full npm command; the prompt link produced the prompt with npm and Tokyo Transit. Keyboard focus on the picker shows a 2px focus ring. Checked in dark (Tokyo Transit) and at 375px with Signal (no horizontal scroll).
+  - First version: switching to bun updated the hero field and the terminal together, and the choice survived a reload and carried over to the installation page. Keyboard Enter on a tab works.
+  - "Copy for agents" copied the prompt with `bun add` and `signalTheme` when the Signal starter was selected; the installation page prompt used Tokyo Transit, the docs theme.
+  - At 375px: the hero command and copy button share a row with the agent button below, all four terminal tabs fit, and there's no horizontal scroll.
+  - Server HTML for both pages includes the new blocks.
+  - `pnpm check`, `pnpm format:check`, and `apps/docs/test/install.test.mjs`.
+- Not tested: dark appearance of the installation block (the docs theme in use was light), screen-reader announcements of the copy status, the real clipboard (the test replaced `writeText`), reduced motion.
+- Not done yet (planned next): `llms.txt` and `llms-full.txt`, then an MCP server once the API is stable.
+
+### 2026-11-10 — Dot grid behind the Original Dixy hero
+
+- What: a faint 22px dot grid behind the landing hero, drawn only while Original Dixy is selected (`data-original` on `.landing-hero`). Starter themes bring their own surfaces and get nothing extra. Dots use the theme's primary text colour at 20%, fading out toward the edges with a radial mask. Hidden in forced-colours mode.
+- Chosen from `docs/mocks/original-brand.html` (untracked), which also compared brand colours. The brand stays purple for now; branding is deferred.
+- Verified in the in-app browser: light and dark with Original Dixy; Retro OS has no grid; no horizontal scroll. `pnpm check`, `pnpm format:check`.
+- Not tested: mobile width with the grid, Safari.
+
+### 2026-11-10 — Keyboard shortcut for the shuffle button
+
+- What: Shift+R picks a random starter on the homepage. The shuffle icon button has a tooltip, "Shuffle starter ⇧ R" (or "Shift R"), and `aria-keyshortcuts="Shift+R"`. Alt+S was tried first and replaced at the user's request.
+- How: the handler matches `event.code === "KeyR"` with Shift and no Alt, Ctrl or Meta. It ignores repeats, already-handled events, and focus in inputs, textareas, selects and editable content.
+- Accessibility: Shift is not a modifier under WCAG 2.1.4 (Level A), because Shift+R just types a capital R. That makes this a character-key shortcut, which needs a way to turn it off or remap it. Ignoring it inside fields is not enough. Fixed the same day with a footer switch (next entry).
+- Verified in the in-app browser: Shift+R changed Art Deco to Blueprint; Shift+R with focus on the package-manager select did nothing; the old Alt+S no longer fires; keyboard focus on the button opened the tooltip with ⇧ R. `pnpm check`, `pnpm format:check`.
+- Not tested: Windows and Linux, screen-reader announcement of `aria-keyshortcuts`, touch devices (the tooltip doesn't help there, but the button works), non-QWERTY layouts (`event.code` follows the physical key).
+
+### 2026-11-10 — Remove "The thinking behind it" from component pages
+
+- What: the purple "The thinking behind it / Build it. Then understand it." callout (lesson text plus "A token to follow") is gone from every component page, with its `design-notes` scroll-spy entry and its CSS. The `lesson` field stays in the registry because the page still uses it elsewhere.
+- Verified: the Button page HTML no longer contains the block; type check, `pnpm check`, `pnpm format:check`.
+
+### 2026-11-10 — Docs sidebar review and two layout mocks
+
+- Reviewed the shadcn/ui and HeroUI component docs in the in-app browser:
+  - shadcn: a short "Sections" list, then one flat A–Z list of components; "On this page" on the right.
+  - HeroUI: section tabs (Getting Started, Components, Releases, Migration) choose what the sidebar lists; components are one A–Z list with New/Updated badges and an overview page.
+- Problems in Dixy's sidebar today: "Content" holds 44 unrelated items; Button sits alone in "Actions" after AI; "Layout" has only Grid; lists aren't alphabetical; names mix styles (DateField, Text Field, NativeSelect, ListBox); rows are about 58px tall in some themes.
+- Mock: `docs/mocks/docs-sidebar.html` (untracked), with both layouts on the same regrouping of all 96 components (checked: none missing or duplicated).
+  - A, grouped tree: Get started, Foundations (Look / Feel), Components under ten purpose headings, Resources, all collapsible.
+  - B, section tabs: Guides / Foundations / Components / Themes switch the list; components default to A–Z with purpose chips and an "All components" page.
+- Not decided: which layout, the new pages it proposes (Set up with an agent, Themes, Changelog), and mobile behaviour.
+
+### 2026-11-10 — Docs sidebar becomes a grouped tree (layout A)
+
+- What: the user chose layout A from `docs/mocks/docs-sidebar.html`.
+  - Get started: Introduction, Installation, Theming and Theme playground (moved from Foundations and Resources).
+  - Foundations: split into Look (Color to Materials) and Feel (Motion, Emotion, Haptics). Folded by default, and open on its own pages.
+  - Components: ten purpose groups in a fixed order (Actions, Forms, Date & time, Navigation, Overlays, Feedback, Data display, Layout & disclosure, Text & code, AI), A–Z inside each. All 96 registry categories were rewritten to match.
+  - Resources: Accessibility.
+- How: group headers are disclosures with the chevron on the left. A hairline guide joins each group's rows, and rows are 30px. Open groups are tracked in state; a group opens when you navigate into it. While the filter has text every group is forced open and counts show matches, then the previous folding comes back. Nav labels split camel case ("DateField" becomes "Date Field"), and so does the breadcrumb, which reads from the nav. Page headings still use the registry title.
+- Knock-on: the component-page eyebrow and the theme gallery's category filter show the new groups. The catalogue tests now use "Forms" and "Layout & disclosure".
+- Not built: the mock's proposed pages (Set up with an agent, Themes, Changelog).
+- Verified in the in-app browser:
+  - Date Picker page: Foundations folded, active row 30px, ten subheadings in order.
+  - Filter "color" opened Foundations and showed Color and Color Picker; clearing it re-folded Foundations.
+  - Mobile drawer on Motion: Foundations open with Look and Feel, Motion active.
+  - Arcade Cabinet in dark mode on the Button page.
+  - No horizontal scroll. `pnpm check`, `pnpm format:check`.
+- Not tested: screen-reader announcement of the disclosures, reduced motion (the chevron transition is turned off by a media query, but this wasn't emulated), every theme.
+
+### 2026-11-10 — Footer switch turns keyboard shortcuts off (WCAG 2.1.4)
+
+- What: a "Keyboard shortcuts" Dixy `Switch` sits beside the appearance toggle in the landing footer. Off stops Shift+R, drops `aria-keyshortcuts` from the shuffle button, and removes the keys from its tooltip.
+- How: `apps/docs/src/lib/shortcuts.ts` holds a `useSyncExternalStore` store, like the package-manager choice. It saves `dixy-shortcuts=off` in localStorage, with every read and write guarded, and the server renders "on". The keydown listener is only attached while shortcuts are on.
+- Why the footer: tooltips can't hold controls, and a switch in the hero would add the clutter we just removed. The footer already holds the site-wide appearance setting.
+- Bug found while testing: wrapping the switch in a `<label>` named Base UI's hidden input, not the visible `role="switch"` element, which had no accessible name. Fixed with `aria-labelledby` on the root.
+- Verified in the in-app browser:
+  - On: Shift+R changed the starter.
+  - Off: Shift+R did nothing and `aria-keyshortcuts` was gone.
+  - Off survived a reload.
+  - Space on the focused switch turned it back on and cleared the stored value.
+  - The name reads "Keyboard shortcuts"; no horizontal scroll.
+  - `pnpm check`, `pnpm format:check`.
+- Not tested: screen readers, mobile footer layout, dark mode for the switch. Remapping isn't offered; turning the shortcut off satisfies 2.1.4 on its own.

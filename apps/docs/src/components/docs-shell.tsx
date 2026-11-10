@@ -46,48 +46,93 @@ interface NavItem {
   category?: string;
 }
 
-const componentItems: NavItem[] = Object.entries(componentRegistry).map(
-  ([slug, entry]) => ({
-    label: entry.title,
+// Fixed reading order for component groups: from what people build first
+// (actions, forms) to the specialised (AI). Unknown categories sort last.
+const componentOrder = [
+  "Actions",
+  "Forms",
+  "Date & time",
+  "Navigation",
+  "Overlays",
+  "Feedback",
+  "Data display",
+  "Layout & disclosure",
+  "Text & code",
+  "AI",
+];
+const rank = (category = "") => {
+  const index = componentOrder.indexOf(category);
+  return index === -1 ? componentOrder.length : index;
+};
+// Registry titles mix "DateField" and "Date Field"; the nav reads as words.
+const navLabel = (title: string) => title.replace(/([a-z])([A-Z])/g, "$1 $2");
+
+const componentItems: NavItem[] = Object.entries(componentRegistry)
+  .map(([slug, entry]) => ({
+    label: navLabel(entry.title),
     path: `/docs/components/${slug}`,
     category: entry.category,
-  }),
-);
+  }))
+  .sort(
+    (a, b) =>
+      rank(a.category) - rank(b.category) || a.label.localeCompare(b.label),
+  );
+
+const look = "Look";
+const feel = "Feel";
 
 export const navigation: { title: string; items: NavItem[] }[] = [
   {
-    title: "Start here",
+    title: "Get started",
     items: [
       { label: "Introduction", path: "/" },
       { label: "Installation", path: "/docs/installation" },
+      { label: "Theming", path: "/docs/foundations/theming" },
+      { label: "Theme playground", path: "/playground" },
     ],
   },
   {
     title: "Foundations",
     items: [
-      { label: "Theming", path: "/docs/foundations/theming" },
-      { label: "Color", path: "/docs/foundations/color" },
-      { label: "Typography", path: "/docs/foundations/typography" },
-      { label: "Icons", path: "/docs/foundations/icons" },
-      { label: "Spacing", path: "/docs/foundations/spacing" },
-      { label: "Sizing & layout", path: "/docs/foundations/sizing-layout" },
-      { label: "Radius, border & shadow", path: "/docs/foundations/surfaces" },
-      { label: "Shape", path: "/docs/foundations/shape" },
-      { label: "Materials", path: "/docs/foundations/materials" },
-      { label: "Emotion", path: "/docs/foundations/emotion" },
-      { label: "Haptics", path: "/docs/foundations/haptics" },
-      { label: "Motion", path: "/docs/foundations/motion" },
+      { label: "Color", path: "/docs/foundations/color", category: look },
+      {
+        label: "Typography",
+        path: "/docs/foundations/typography",
+        category: look,
+      },
+      { label: "Icons", path: "/docs/foundations/icons", category: look },
+      { label: "Spacing", path: "/docs/foundations/spacing", category: look },
+      {
+        label: "Sizing & layout",
+        path: "/docs/foundations/sizing-layout",
+        category: look,
+      },
+      {
+        label: "Radius, border & shadow",
+        path: "/docs/foundations/surfaces",
+        category: look,
+      },
+      { label: "Shape", path: "/docs/foundations/shape", category: look },
+      {
+        label: "Materials",
+        path: "/docs/foundations/materials",
+        category: look,
+      },
+      { label: "Motion", path: "/docs/foundations/motion", category: feel },
+      { label: "Emotion", path: "/docs/foundations/emotion", category: feel },
+      { label: "Haptics", path: "/docs/foundations/haptics", category: feel },
     ],
   },
   { title: "Components", items: componentItems },
   {
     title: "Resources",
-    items: [
-      { label: "Accessibility", path: "/docs/accessibility" },
-      { label: "Theme playground", path: "/playground" },
-    ],
+    items: [{ label: "Accessibility", path: "/docs/accessibility" }],
   },
 ];
+
+// Foundations starts folded so components sit higher; it opens when you are on
+// one of its pages. Every other group starts open.
+const foldedByDefault = new Set(["Foundations"]);
 
 const original = {
   id: "none",
@@ -153,11 +198,39 @@ function Navigation({
   const pathname = useLocation({ select: (location) => location.pathname });
   const { docsTheme } = useAppAppearance();
   const [query, setQuery] = useState("");
+  const filtering = query.trim() !== "";
   const match = (item: NavItem) =>
     item.label.toLowerCase().includes(query.trim().toLowerCase());
   const groups = navigation
     .map((group) => ({ ...group, visible: group.items.filter(match) }))
     .filter((group) => group.visible.length > 0);
+  const activeGroup = navigation.find((group) =>
+    group.items.some((item) => item.path === pathname),
+  )?.title;
+  const [open, setOpen] = useState(
+    () =>
+      new Set(
+        navigation
+          .map((group) => group.title)
+          .filter(
+            (title) => !foldedByDefault.has(title) || title === activeGroup,
+          ),
+      ),
+  );
+  // Navigating into a folded group (from search or a link) unfolds it.
+  useEffect(() => {
+    if (activeGroup)
+      setOpen((current) =>
+        current.has(activeGroup) ? current : new Set(current).add(activeGroup),
+      );
+  }, [activeGroup]);
+  const toggle = (title: string, next: boolean) =>
+    setOpen((current) => {
+      const copy = new Set(current);
+      if (next) copy.add(title);
+      else copy.delete(title);
+      return copy;
+    });
   return (
     <>
       <label className="nav-filter">
@@ -175,18 +248,24 @@ function Navigation({
         {groups.map((group) => (
           <DocsDisclosure
             key={group.title}
-            defaultOpen
+            // While filtering every match stays visible, whatever was folded.
+            open={filtering || open.has(group.title)}
+            onOpenChange={(next) => {
+              if (!filtering) toggle(group.title, next);
+            }}
             className="nav-group"
             summary={
               <>
+                <ChevronRight size={12} aria-hidden="true" />
                 {group.title}
-                <span className="nav-count">{group.items.length}</span>
-                <ChevronRight size={12} />
+                <span className="nav-count">
+                  {filtering ? group.visible.length : group.items.length}
+                </span>
               </>
             }
           >
-            <div>
-              {group.title === "Components" ? (
+            <div className="nav-tree">
+              {group.visible.some((item) => item.category) ? (
                 [...new Set(group.visible.map((item) => item.category))].map(
                   (category) => (
                     <div key={category} className="nav-subgroup">

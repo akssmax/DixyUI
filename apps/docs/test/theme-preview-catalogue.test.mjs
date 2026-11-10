@@ -51,11 +51,13 @@ test("search finds compound members and combines with the selected category", ()
     themePreviewEntries.length,
   );
   assert.deepEqual(
-    filterThemePreviews("Radio", "Inputs").map((entry) => entry.slug),
+    filterThemePreviews("Radio", "Forms").map((entry) => entry.slug),
     ["radio-group"],
   );
   assert.deepEqual(
-    filterThemePreviews(" Inline ", "Layout").map((entry) => entry.slug),
+    filterThemePreviews(" Inline ", "Layout & disclosure").map(
+      (entry) => entry.slug,
+    ),
     ["layout"],
   );
   assert.deepEqual(

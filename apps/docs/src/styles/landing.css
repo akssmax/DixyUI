@@ -137,6 +137,30 @@
   min-block-size: max(calc(98svh - 60px), 640px);
   padding: clamp(24px, 4vh, 48px) 0 clamp(24px, 4vh, 48px) var(--landing-inset);
 }
+/* Original Dixy only: a faint dot grid behind the hero, fading out toward the
+   edges. Starter themes bring their own surfaces, so they don't get it. */
+.landing-hero[data-original] {
+  position: relative;
+  isolation: isolate;
+}
+.landing-hero[data-original]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(
+    color-mix(in oklab, var(--dixy-color-text-primary) 20%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 22px 22px;
+  mask-image: radial-gradient(80% 75% at 35% 40%, #000 35%, transparent 85%);
+}
+@media (forced-colors: active) {
+  .landing-hero[data-original]::before {
+    display: none;
+  }
+}
 .landing-hero-copy {
   display: grid;
   /* A 0 minimum, so the longest headline word can't widen the column. */
@@ -203,17 +227,91 @@
   text-decoration: none;
 }
 .landing-install {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  inline-size: min(100%, 26rem);
+  display: grid;
+  gap: 10px;
+  inline-size: min(100%, 34rem);
   margin-block-start: 8px;
 }
-.landing-install .dixy-input {
-  flex: 1;
+/* One command line, drawn like the theme's text field. */
+.landing-command {
+  display: flex;
+  align-items: center;
+  gap: 2px;
   min-inline-size: 0;
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 13px;
+  min-block-size: 44px;
+  padding: 4px 4px 4px 6px;
+  border: var(--dixy-input-border-width, 1px) solid
+    var(--dixy-input-border, var(--dixy-color-border-default));
+  border-radius: var(--dixy-input-radius, 10px);
+  background: var(--dixy-input-background, var(--dixy-color-background-subtle));
+  font:
+    14px/1.4 "JetBrains Mono",
+    ui-monospace,
+    monospace;
+}
+.landing-command-manager {
+  flex: none;
+  appearance: none;
+  padding: 3px 20px 3px 6px;
+  border: 0;
+  border-radius: 6px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%23888' stroke-width='1.5'%3E%3Cpath d='M1 1l4 4 4-4'/%3E%3C/svg%3E")
+      no-repeat right 6px center,
+    color-mix(in oklab, var(--dixy-accent) 12%, transparent);
+  color: var(--dixy-color-text-action, var(--dixy-accent));
+  font:
+    600 14px/1.4 "JetBrains Mono",
+    ui-monospace,
+    monospace;
+  cursor: pointer;
+}
+.landing-command-manager:focus-visible {
+  outline: 2px solid var(--dixy-color-brand-focus, var(--dixy-accent));
+  outline-offset: 2px;
+}
+.landing-command-text {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  margin-inline-start: 6px;
+  overflow: hidden;
+  color: var(--dixy-color-text-primary);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  user-select: all;
+}
+.landing-command-divider {
+  flex: none;
+  inline-size: 1px;
+  block-size: 20px;
+  margin-inline: 4px;
+  background: var(--dixy-color-border-default);
+}
+.landing-command > .dixy-icon-button {
+  flex: none;
+}
+.landing-install-note {
+  margin: 0;
+}
+.landing-install-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--dixy-color-text-primary);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--dixy-color-border-default);
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.landing-install-link:hover {
+  text-decoration-color: currentColor;
+}
+.landing-install-link:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid var(--dixy-color-brand-focus, var(--dixy-accent));
+  outline-offset: 2px;
 }
 
 /* Sections */
@@ -1221,6 +1319,25 @@
   border-radius: 50%;
   background: rgb(255 255 255 / 0.2);
 }
+/* Package-manager tabs in the terminal bar: quiet text on the dark glass. */
+.landing-term-tabs .dixy-tabs-list {
+  border-block-end: 0;
+}
+.landing .landing-term-tabs .dixy-tabs-tab {
+  color: rgb(255 255 255 / 0.6);
+  font: 500 12px var(--dixy-font-mono, ui-monospace, monospace);
+}
+.landing .landing-term-tabs .dixy-tabs-tab[data-active] {
+  color: #fff;
+}
+@media (max-width: 30rem) {
+  .landing-term-dots {
+    display: none;
+  }
+  .landing .landing-term-tabs .dixy-tabs-tab {
+    padding-inline: 8px;
+  }
+}
 .landing .landing-term-copy {
   margin-inline-start: auto;
   color: rgb(255 255 255 / 0.8);
@@ -1336,6 +1453,18 @@
   margin-block-start: 48px;
   padding-block: 16px;
   border-block-start: 1px solid var(--dixy-color-border-subtle);
+}
+.landing-footer-settings {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+.landing-footer-setting {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
 }
 .landing-footer-meta {
   display: flex;
@@ -1495,4 +1624,15 @@
   .landing-cta {
     border-radius: var(--dixy-radius-xl, 20px);
   }
+}
+
+/* Shuffle tooltip: the label, then the shortcut keys. */
+.landing-shortcut-tip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.landing-shortcut-keys {
+  display: inline-flex;
+  gap: 2px;
 }

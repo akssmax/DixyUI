@@ -20,7 +20,6 @@ import {
   Code2,
   Eye,
   Fingerprint,
-  Lightbulb,
   Moon,
   RotateCcw,
   Sun,
@@ -237,7 +236,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
           "api-reference",
           "styling-tokens",
           "accessibility",
-          "design-notes",
           "source",
         ];
         const current = ids
@@ -842,19 +840,6 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
             screen-reader, contrast, and zoom validation remain part of the
             release checklist.
           </p>
-        </section>
-        <section id="design-notes" className="doc-section">
-          <div className="learning-callout">
-            <div className="learning-label">
-              <Lightbulb size={15} />
-              THE THINKING BEHIND IT
-            </div>
-            <h2>Build it. Then understand it.</h2>
-            <p>{entry.lesson}</p>
-            <div className="token-reference">
-              A token to follow<code>{entry.token}</code>
-            </div>
-          </div>
         </section>
         <section id="source" className="doc-section">
           <div className="section-heading">

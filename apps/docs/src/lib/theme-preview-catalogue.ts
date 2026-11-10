@@ -52,7 +52,7 @@ export const themePreviewEntries: readonly ThemePreviewEntry[] = [
   {
     slug: "layout",
     title: "Box, Shape & layout",
-    category: "Layout",
+    category: "Layout & disclosure",
     description:
       "Surfaces, decorative artwork, shared gutters and flexible layouts.",
     coveredExports: ["Box", "Shape", "Container", "Stack", "Inline"],
