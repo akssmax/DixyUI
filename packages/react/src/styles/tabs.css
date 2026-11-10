@@ -253,6 +253,10 @@
     display: none;
   }
   .dixy-tabs-panel {
+    /* The root keeps align-items: start so the list stays compact. Panels
+       stretch anyway, so they still fill the root when an app makes it a
+       flex column. */
+    align-self: stretch;
     min-inline-size: 0;
     overflow-wrap: anywhere;
     padding: var(--dixy-spacing-inset-sm);

@@ -1,4 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
+import { themeFontPackages } from "@dixy-ui/themes/foundations";
 
 /** Package managers the docs show install commands for. pnpm is the default. */
 export const packageManagers = ["pnpm", "npm", "yarn", "bun"] as const;
@@ -18,6 +20,26 @@ export function installCommand(
   return `${manager} ${verb} ${packages.join(" ")}`;
 }
 
+/**
+ * The @fontsource packages a starter's body and heading fonts come from.
+ * Themes name their fonts but don't bundle them, so apps install these.
+ * Empty for system-font themes.
+ */
+export function fontPackages(slug: string): string[] {
+  const skin = skinCatalog.find((entry) => entry.slug === slug);
+  if (!skin) return [];
+  const names = [skin.bodyFont, skin.headingFont] as const;
+  return [
+    ...new Set(
+      names
+        .map(
+          (font) => themeFontPackages[font as keyof typeof themeFontPackages],
+        )
+        .filter((pkg): pkg is string => Boolean(pkg)),
+    ),
+  ];
+}
+
 /** The theme a prompt should use: its package slug and catalog symbol. */
 export type PromptTheme = { slug: string; symbol: string; name: string };
 
@@ -31,6 +53,14 @@ export function agentPrompt(
   theme: PromptTheme = { slug: "signal", symbol: "signal", name: "Signal" },
 ) {
   const settings = `${theme.symbol}Theme`;
+  const fonts = fontPackages(theme.slug);
+  const fontStep = fonts.length
+    ? `
+3. Load the theme's fonts (themes name them but don't bundle them):
+   ${installCommand(manager, fonts)}
+${fonts.map((pkg) => `   import "${pkg}";`).join("\n")}`
+    : "";
+  const n = fonts.length ? 1 : 0;
   return `Set up Dixy UI (React component library, public beta) in this project.
 
 1. Install: ${installCommand(manager)}
@@ -38,11 +68,17 @@ export function agentPrompt(
 2. At the app root, import the stylesheets once, library first:
    import "@dixy-ui/react/styles.css";
    import "@dixy-ui/themes/${theme.slug}.css";
-3. Wrap the app in Theme with the ${theme.name} theme settings:
+   If the project uses Tailwind CSS v4, import them from the main CSS file
+   instead, after a layer order that puts Dixy above Tailwind's reset:
+   @layer theme, base, dixy, components, utilities;
+   @import "tailwindcss";
+   @import "@dixy-ui/react/styles.css";
+   @import "@dixy-ui/themes/${theme.slug}.css";${fontStep}
+${3 + n}. Wrap the app in Theme with the ${theme.name} theme settings:
    import { Theme } from "@dixy-ui/react";
    import { ${settings} } from "@dixy-ui/themes/${theme.slug}";
    <Theme {...${settings}}>{children}</Theme>
-4. Give the layout root \`isolation: isolate\` and keep \`body\` position: relative, so dialogs and popovers layer correctly.
+${4 + n}. Give the layout root \`isolation: isolate\` and keep \`body\` position: relative, so dialogs and popovers layer correctly.
 
 Rules:
 - Import only from public entry points (@dixy-ui/react, @dixy-ui/themes/<slug>), never from src or dist paths.

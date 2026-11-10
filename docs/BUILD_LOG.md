@@ -2252,3 +2252,37 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The name reads "Keyboard shortcuts"; no horizontal scroll.
   - `pnpm check`, `pnpm format:check`.
 - Not tested: screen readers, mobile footer layout, dark mode for the switch. Remapping isn't offered; turning the shortcut off satisfies 2.1.4 on its own.
+
+### 2026-11-10 — Fixes from the first outside beta test
+
+The user moved a TanStack Start + Tailwind v4 dashboard from shadcn to Dixy (Retro OS, `@dixy-ui/react@0.1.0-beta.3`), and their agent filed five issues. All five were confirmed in source.
+
+- **DIXY-1, popups open a page height away (High).**
+  - Cause: `compile-css.ts` gave every starter `${theme} { position:relative; isolation:isolate; }`. That selector also matches `ThemeScope`'s `.dixy-portal-scope`, a zero-height div at the end of `<body>`, which then became the containing block for absolutely positioned popups.
+  - Fix: the rule now uses `:not(.dixy-portal-scope)`, the same exclusion the background rule already had. A `skins.test.mjs` check fails if any generated theme positions, isolates, transforms, filters or contains a bare theme root.
+  - Budget: a CSS comment pushed Freighter over the 5 KB gzip skin budget, so the explanation moved to a source comment. Freighter is now 5,062 bytes.
+  - Reproduced in the in-app browser on `/lab/kitchen-sink` (14,604px tall) with "Workspace details" (Popover, absolute strategy) near the bottom. Old rule: popup top at 15,061px in the viewport, about 14,600px below the trigger. New CSS: 457px, 8px under the trigger. The portal scope computes `static` with `ledger.css` loaded and its skin attribute set.
+  - Select in its default align-with-trigger mode uses `position: fixed`, so it wasn't affected here. The reporter's Select probably fell back to the absolute strategy.
+- **DIXY-2, Tailwind v4's reset wipes Dixy borders (Medium).**
+  - Cause: when Dixy's CSS loads first, `dixy` is declared before Tailwind's `base` layer, and earlier layers lose.
+  - Fix: the installation page gains "With Tailwind CSS v4", which declares `@layer theme, base, dixy, components, utilities;` before importing Tailwind and Dixy from the same CSS file. The agent prompt covers this too.
+  - Verified with a real Tailwind 4.1 CLI build, in a scratch folder outside the repo. Dixy first: `.dixy-select-trigger` computed `0px` border and a transparent background. Documented order: `1px solid` with its background, and Tailwind utilities (`p-4`) and the reset still apply.
+- **DIXY-3, Tabs panels shrink (Medium).**
+  - Dixy's own grid layout already stretched panels. The bug only appears when an app makes the root a flex column, because the root's `align-items: start` then works on the inline axis.
+  - Fix: `.dixy-tabs-panel { align-self: stretch; }`.
+  - In the browser with the root as a flex column: panel 312px of a 332px root before, 332px after.
+- **DIXY-4, theme fonts undocumented (Low).**
+  - Fix: `fontPackages(slug)` derives the `@fontsource` packages from the catalog's body and heading fonts via `themeFontPackages`. The installation page's new "Load the theme's fonts" section shows them for the theme the visitor is wearing, and the agent prompt gains a font step.
+  - Tests cover every starter that has web fonts, and Signal.
+- **DIXY-5, counts and links (Low).**
+  - READMEs said 32 starters and linked the old workers.dev domain. They now say 38 and link dixyui.com.
+  - The root README's component table is regenerated from the registry: 96 components in ten groups.
+  - The landing page counted Original Dixy as a starter (39). It now uses the catalog count (38), matching the package.
+  - `readme.test.mjs` fails if a README count drifts from the catalog or links the old domain.
+- Checks: `pnpm check`, `pnpm format:check`, `pnpm package:check`. Changeset `beta-feedback-fixes` (patch, react and themes).
+- Not tested:
+  - The reporter's exact app.
+  - Select with the absolute positioning strategy.
+  - Tooltip, Menu, Drawer and the other portaled components one by one; Popover covers the shared mechanism.
+  - Vertical tabs after the `align-self` change.
+  - The Tailwind snippet inside a Vite app (only the CLI build was checked).
