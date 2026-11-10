@@ -20,6 +20,7 @@
     --dixy-color-neutral-12: oklch(0.235 0 0);
     --dixy-color-neutral-pressed: oklch(0.425 0 0);
     --dixy-color-neutral-on-solid: oklch(1 0 0);
+    --dixy-color-neutral-focus: oklch(0.5445 0 0);
     --dixy-color-slate-1: oklch(0.99 0.004685 260);
     --dixy-color-slate-2: oklch(0.975 0.00825 260);
     --dixy-color-slate-3: oklch(0.948 0.0105 260);
@@ -34,6 +35,7 @@
     --dixy-color-slate-12: oklch(0.235 0.025 260);
     --dixy-color-slate-pressed: oklch(0.425 0.02375 260);
     --dixy-color-slate-on-solid: oklch(1 0 0);
+    --dixy-color-slate-focus: oklch(0.5445 0.026274 260);
     --dixy-color-gray-1: oklch(0.99 0.0015 270);
     --dixy-color-gray-2: oklch(0.975 0.00198 270);
     --dixy-color-gray-3: oklch(0.948 0.00252 270);
@@ -48,6 +50,7 @@
     --dixy-color-gray-12: oklch(0.235 0.006 270);
     --dixy-color-gray-pressed: oklch(0.425 0.0057 270);
     --dixy-color-gray-on-solid: oklch(1 0 0);
+    --dixy-color-gray-focus: oklch(0.5445 0.006306 270);
     --dixy-color-zinc-1: oklch(0.99 0.00225 285);
     --dixy-color-zinc-2: oklch(0.975 0.00297 285);
     --dixy-color-zinc-3: oklch(0.948 0.003779 285);
@@ -62,6 +65,7 @@
     --dixy-color-zinc-12: oklch(0.235 0.009 285);
     --dixy-color-zinc-pressed: oklch(0.425 0.008549 285);
     --dixy-color-zinc-on-solid: oklch(1 0 0);
+    --dixy-color-zinc-focus: oklch(0.5445 0.009458 285);
     --dixy-color-stone-1: oklch(0.99 0.004 70);
     --dixy-color-stone-2: oklch(0.975 0.00528 70);
     --dixy-color-stone-3: oklch(0.948 0.00672 70);
@@ -76,6 +80,7 @@
     --dixy-color-stone-12: oklch(0.235 0.016 70);
     --dixy-color-stone-pressed: oklch(0.425 0.0152 70);
     --dixy-color-stone-on-solid: oklch(1 0 0);
+    --dixy-color-stone-focus: oklch(0.5445 0.016815 70);
     --dixy-color-taupe-1: oklch(0.99 0.006 65);
     --dixy-color-taupe-2: oklch(0.975 0.00792 65);
     --dixy-color-taupe-3: oklch(0.948 0.01008 65);
@@ -90,6 +95,7 @@
     --dixy-color-taupe-12: oklch(0.235 0.024 65);
     --dixy-color-taupe-pressed: oklch(0.425 0.0228 65);
     --dixy-color-taupe-on-solid: oklch(1 0 0);
+    --dixy-color-taupe-focus: oklch(0.5445 0.025224 65);
     --dixy-color-mauve-1: oklch(0.99 0.0055 325);
     --dixy-color-mauve-2: oklch(0.975 0.00726 325);
     --dixy-color-mauve-3: oklch(0.948 0.00924 325);
@@ -104,6 +110,7 @@
     --dixy-color-mauve-12: oklch(0.235 0.022 325);
     --dixy-color-mauve-pressed: oklch(0.425 0.0209 325);
     --dixy-color-mauve-on-solid: oklch(1 0 0);
+    --dixy-color-mauve-focus: oklch(0.5445 0.023121 325);
     --dixy-color-mist-1: oklch(0.99 0.005 205);
     --dixy-color-mist-2: oklch(0.975 0.0066 205);
     --dixy-color-mist-3: oklch(0.948 0.0084 205);
@@ -118,6 +125,7 @@
     --dixy-color-mist-12: oklch(0.235 0.02 205);
     --dixy-color-mist-pressed: oklch(0.425 0.019 205);
     --dixy-color-mist-on-solid: oklch(1 0 0);
+    --dixy-color-mist-focus: oklch(0.5445 0.02102 205);
     --dixy-color-olive-1: oklch(0.99 0.0055 110);
     --dixy-color-olive-2: oklch(0.975 0.00726 110);
     --dixy-color-olive-3: oklch(0.948 0.00924 110);
@@ -132,6 +140,7 @@
     --dixy-color-olive-12: oklch(0.235 0.022 110);
     --dixy-color-olive-pressed: oklch(0.425 0.0209 110);
     --dixy-color-olive-on-solid: oklch(1 0 0);
+    --dixy-color-olive-focus: oklch(0.5445 0.023121 110);
     --dixy-color-sage-1: oklch(0.99 0.005 155);
     --dixy-color-sage-2: oklch(0.975 0.0066 155);
     --dixy-color-sage-3: oklch(0.948 0.0084 155);
@@ -146,6 +155,7 @@
     --dixy-color-sage-12: oklch(0.235 0.02 155);
     --dixy-color-sage-pressed: oklch(0.425 0.019 155);
     --dixy-color-sage-on-solid: oklch(1 0 0);
+    --dixy-color-sage-focus: oklch(0.5445 0.02102 155);
     --dixy-color-sand-1: oklch(0.99 0.00325 85);
     --dixy-color-sand-2: oklch(0.975 0.00429 85);
     --dixy-color-sand-3: oklch(0.948 0.00546 85);
@@ -160,6 +170,7 @@
     --dixy-color-sand-12: oklch(0.235 0.013 85);
     --dixy-color-sand-pressed: oklch(0.425 0.012349 85);
     --dixy-color-sand-on-solid: oklch(1 0 0);
+    --dixy-color-sand-focus: oklch(0.5445 0.013662 85);
     --dixy-color-tomato-1: oklch(0.995 0.002 35);
     --dixy-color-tomato-2: oklch(0.98 0.008 35);
     --dixy-color-tomato-3: oklch(0.954 0.022 35);
@@ -174,6 +185,7 @@
     --dixy-color-tomato-12: oklch(0.255 0.0722 35);
     --dixy-color-tomato-pressed: oklch(0.475 0.166631 35);
     --dixy-color-tomato-on-solid: oklch(1 0 0);
+    --dixy-color-tomato-focus: oklch(0.5375 0.14075 35);
     --dixy-color-red-1: oklch(0.995 0.002 25);
     --dixy-color-red-2: oklch(0.98 0.008 25);
     --dixy-color-red-3: oklch(0.954 0.022 25);
@@ -188,6 +200,7 @@
     --dixy-color-red-12: oklch(0.255 0.0722 25);
     --dixy-color-red-pressed: oklch(0.47 0.1805 25);
     --dixy-color-red-on-solid: oklch(1 0 0);
+    --dixy-color-red-focus: oklch(0.5375 0.14075 25);
     --dixy-color-ruby-1: oklch(0.995 0.002 355);
     --dixy-color-ruby-2: oklch(0.98 0.008 355);
     --dixy-color-ruby-3: oklch(0.954 0.022 355);
@@ -202,6 +215,7 @@
     --dixy-color-ruby-12: oklch(0.255 0.0684 355);
     --dixy-color-ruby-pressed: oklch(0.47 0.170999 355);
     --dixy-color-ruby-on-solid: oklch(1 0 0);
+    --dixy-color-ruby-focus: oklch(0.5375 0.1385 355);
     --dixy-color-crimson-1: oklch(0.995 0.002 10);
     --dixy-color-crimson-2: oklch(0.98 0.008 10);
     --dixy-color-crimson-3: oklch(0.954 0.022 10);
@@ -216,6 +230,7 @@
     --dixy-color-crimson-12: oklch(0.255 0.0722 10);
     --dixy-color-crimson-pressed: oklch(0.465 0.1805 10);
     --dixy-color-crimson-on-solid: oklch(1 0 0);
+    --dixy-color-crimson-focus: oklch(0.5375 0.14075 10);
     --dixy-color-rose-1: oklch(0.995 0.002 15);
     --dixy-color-rose-2: oklch(0.98 0.008 15);
     --dixy-color-rose-3: oklch(0.954 0.022 15);
@@ -230,6 +245,7 @@
     --dixy-color-rose-12: oklch(0.255 0.076 15);
     --dixy-color-rose-pressed: oklch(0.475 0.189903 15);
     --dixy-color-rose-on-solid: oklch(1 0 0);
+    --dixy-color-rose-focus: oklch(0.5375 0.143 15);
     --dixy-color-pink-1: oklch(0.995 0.002 350);
     --dixy-color-pink-2: oklch(0.98 0.008 350);
     --dixy-color-pink-3: oklch(0.954 0.022 350);
@@ -244,6 +260,7 @@
     --dixy-color-pink-12: oklch(0.255 0.0722 350);
     --dixy-color-pink-pressed: oklch(0.475 0.1805 350);
     --dixy-color-pink-on-solid: oklch(1 0 0);
+    --dixy-color-pink-focus: oklch(0.5375 0.14075 350);
     --dixy-color-fuchsia-1: oklch(0.995 0.002 330);
     --dixy-color-fuchsia-2: oklch(0.98 0.008 330);
     --dixy-color-fuchsia-3: oklch(0.954 0.022 330);
@@ -258,6 +275,7 @@
     --dixy-color-fuchsia-12: oklch(0.255 0.076 330);
     --dixy-color-fuchsia-pressed: oklch(0.475 0.19 330);
     --dixy-color-fuchsia-on-solid: oklch(1 0 0);
+    --dixy-color-fuchsia-focus: oklch(0.5375 0.143 330);
     --dixy-color-plum-1: oklch(0.995 0.002 315);
     --dixy-color-plum-2: oklch(0.98 0.008 315);
     --dixy-color-plum-3: oklch(0.954 0.022 315);
@@ -272,6 +290,7 @@
     --dixy-color-plum-12: oklch(0.255 0.0684 315);
     --dixy-color-plum-pressed: oklch(0.455 0.170999 315);
     --dixy-color-plum-on-solid: oklch(1 0 0);
+    --dixy-color-plum-focus: oklch(0.5375 0.1385 315);
     --dixy-color-purple-1: oklch(0.995 0.002 305);
     --dixy-color-purple-2: oklch(0.98 0.008 305);
     --dixy-color-purple-3: oklch(0.954 0.022 305);
@@ -286,6 +305,7 @@
     --dixy-color-purple-12: oklch(0.255 0.076 305);
     --dixy-color-purple-pressed: oklch(0.48 0.19 305);
     --dixy-color-purple-on-solid: oklch(1 0 0);
+    --dixy-color-purple-focus: oklch(0.5375 0.143 305);
     --dixy-color-violet-1: oklch(0.995 0.002 292);
     --dixy-color-violet-2: oklch(0.98 0.008 292);
     --dixy-color-violet-3: oklch(0.954 0.022 292);
@@ -300,6 +320,7 @@
     --dixy-color-violet-12: oklch(0.255 0.076 292);
     --dixy-color-violet-pressed: oklch(0.475 0.19 292);
     --dixy-color-violet-on-solid: oklch(1 0 0);
+    --dixy-color-violet-focus: oklch(0.5375 0.143 292);
     --dixy-color-iris-1: oklch(0.995 0.002 280);
     --dixy-color-iris-2: oklch(0.98 0.008 280);
     --dixy-color-iris-3: oklch(0.954 0.022 280);
@@ -314,6 +335,7 @@
     --dixy-color-iris-12: oklch(0.255 0.076 280);
     --dixy-color-iris-pressed: oklch(0.475 0.19 280);
     --dixy-color-iris-on-solid: oklch(1 0 0);
+    --dixy-color-iris-focus: oklch(0.5375 0.143 280);
     --dixy-color-indigo-1: oklch(0.995 0.002 270);
     --dixy-color-indigo-2: oklch(0.98 0.008 270);
     --dixy-color-indigo-3: oklch(0.954 0.021671 270);
@@ -328,6 +350,7 @@
     --dixy-color-indigo-12: oklch(0.255 0.076 270);
     --dixy-color-indigo-pressed: oklch(0.475 0.19 270);
     --dixy-color-indigo-on-solid: oklch(1 0 0);
+    --dixy-color-indigo-focus: oklch(0.5375 0.143 270);
     --dixy-color-blue-1: oklch(0.995 0.002 260);
     --dixy-color-blue-2: oklch(0.98 0.008 260);
     --dixy-color-blue-3: oklch(0.954 0.021856 260);
@@ -342,6 +365,7 @@
     --dixy-color-blue-12: oklch(0.255 0.0722 260);
     --dixy-color-blue-pressed: oklch(0.475 0.1805 260);
     --dixy-color-blue-on-solid: oklch(1 0 0);
+    --dixy-color-blue-focus: oklch(0.5375 0.14075 260);
     --dixy-color-sky-1: oklch(0.995 0.002 230);
     --dixy-color-sky-2: oklch(0.98 0.008 230);
     --dixy-color-sky-3: oklch(0.954 0.022 230);
@@ -356,6 +380,7 @@
     --dixy-color-sky-12: oklch(0.255 0.0456 230);
     --dixy-color-sky-pressed: oklch(0.735 0.113999 230);
     --dixy-color-sky-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-sky-focus: oklch(0.5375 0.10711 230);
     --dixy-color-cyan-1: oklch(0.995 0.002 210);
     --dixy-color-cyan-2: oklch(0.98 0.008 210);
     --dixy-color-cyan-3: oklch(0.954 0.022 210);
@@ -370,6 +395,7 @@
     --dixy-color-cyan-12: oklch(0.255 0.044104 210);
     --dixy-color-cyan-pressed: oklch(0.455 0.078692 210);
     --dixy-color-cyan-on-solid: oklch(1 0 0);
+    --dixy-color-cyan-focus: oklch(0.5375 0.09296 210);
     --dixy-color-teal-1: oklch(0.995 0.002 185);
     --dixy-color-teal-2: oklch(0.98 0.008 185);
     --dixy-color-teal-3: oklch(0.954 0.022 185);
@@ -384,6 +410,7 @@
     --dixy-color-teal-12: oklch(0.255 0.044939 185);
     --dixy-color-teal-pressed: oklch(0.435 0.076658 185);
     --dixy-color-teal-on-solid: oklch(1 0 0);
+    --dixy-color-teal-focus: oklch(0.5375 0.09472 185);
     --dixy-color-emerald-1: oklch(0.995 0.002 165);
     --dixy-color-emerald-2: oklch(0.98 0.008 165);
     --dixy-color-emerald-3: oklch(0.954 0.022 165);
@@ -398,6 +425,7 @@
     --dixy-color-emerald-12: oklch(0.255 0.0532 165);
     --dixy-color-emerald-pressed: oklch(0.425 0.089353 165);
     --dixy-color-emerald-on-solid: oklch(1 0 0);
+    --dixy-color-emerald-focus: oklch(0.5375 0.113004 165);
     --dixy-color-jade-1: oklch(0.995 0.002 160);
     --dixy-color-jade-2: oklch(0.98 0.008 160);
     --dixy-color-jade-3: oklch(0.954 0.022 160);
@@ -412,6 +440,7 @@
     --dixy-color-jade-12: oklch(0.255 0.0532 160);
     --dixy-color-jade-pressed: oklch(0.425 0.096143 160);
     --dixy-color-jade-on-solid: oklch(1 0 0);
+    --dixy-color-jade-focus: oklch(0.5375 0.121592 160);
     --dixy-color-green-1: oklch(0.995 0.002 155);
     --dixy-color-green-2: oklch(0.98 0.008 155);
     --dixy-color-green-3: oklch(0.954 0.022 155);
@@ -426,6 +455,7 @@
     --dixy-color-green-12: oklch(0.255 0.0532 155);
     --dixy-color-green-pressed: oklch(0.425 0.105069 155);
     --dixy-color-green-on-solid: oklch(1 0 0);
+    --dixy-color-green-focus: oklch(0.5375 0.128779 155);
     --dixy-color-grass-1: oklch(0.995 0.002 140);
     --dixy-color-grass-2: oklch(0.98 0.008 140);
     --dixy-color-grass-3: oklch(0.954 0.022 140);
@@ -440,6 +470,7 @@
     --dixy-color-grass-12: oklch(0.255 0.0532 140);
     --dixy-color-grass-pressed: oklch(0.425 0.133 140);
     --dixy-color-grass-on-solid: oklch(1 0 0);
+    --dixy-color-grass-focus: oklch(0.5375 0.1295 140);
     --dixy-color-lime-1: oklch(0.995 0.002 130);
     --dixy-color-lime-2: oklch(0.98 0.008 130);
     --dixy-color-lime-3: oklch(0.954 0.022 130);
@@ -454,6 +485,7 @@
     --dixy-color-lime-12: oklch(0.255 0.0684 130);
     --dixy-color-lime-pressed: oklch(0.735 0.170999 130);
     --dixy-color-lime-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-lime-focus: oklch(0.5375 0.131508 130);
     --dixy-color-mint-1: oklch(0.995 0.002 170);
     --dixy-color-mint-2: oklch(0.98 0.008 170);
     --dixy-color-mint-3: oklch(0.954 0.022 170);
@@ -468,6 +500,7 @@
     --dixy-color-mint-12: oklch(0.255 0.0456 170);
     --dixy-color-mint-pressed: oklch(0.735 0.113999 170);
     --dixy-color-mint-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-mint-focus: oklch(0.5375 0.106407 170);
     --dixy-color-yellow-1: oklch(0.995 0.002 102);
     --dixy-color-yellow-2: oklch(0.98 0.008 102);
     --dixy-color-yellow-3: oklch(0.954 0.022 102);
@@ -482,6 +515,7 @@
     --dixy-color-yellow-12: oklch(0.255 0.0534 102);
     --dixy-color-yellow-pressed: oklch(0.755 0.158093 102);
     --dixy-color-yellow-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-yellow-focus: oklch(0.5375 0.11255 102);
     --dixy-color-amber-1: oklch(0.995 0.002 85);
     --dixy-color-amber-2: oklch(0.98 0.008 85);
     --dixy-color-amber-3: oklch(0.954 0.022 85);
@@ -496,6 +530,7 @@
     --dixy-color-amber-12: oklch(0.255 0.052265 85);
     --dixy-color-amber-pressed: oklch(0.735 0.150636 85);
     --dixy-color-amber-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-amber-focus: oklch(0.5375 0.110159 85);
     --dixy-color-orange-1: oklch(0.995 0.002 50);
     --dixy-color-orange-2: oklch(0.98 0.008 50);
     --dixy-color-orange-3: oklch(0.954 0.022 50);
@@ -510,6 +545,7 @@
     --dixy-color-orange-12: oklch(0.255 0.067419 50);
     --dixy-color-orange-pressed: oklch(0.475 0.125576 50);
     --dixy-color-orange-on-solid: oklch(1 0 0);
+    --dixy-color-orange-focus: oklch(0.5375 0.130914 50);
     --dixy-color-brown-1: oklch(0.995 0.002 60);
     --dixy-color-brown-2: oklch(0.98 0.008 60);
     --dixy-color-brown-3: oklch(0.954 0.022 60);
@@ -524,6 +560,7 @@
     --dixy-color-brown-12: oklch(0.255 0.0304 60);
     --dixy-color-brown-pressed: oklch(0.415 0.076 60);
     --dixy-color-brown-on-solid: oklch(1 0 0);
+    --dixy-color-brown-focus: oklch(0.5375 0.074 60);
     --dixy-color-bronze-1: oklch(0.995 0.002 55);
     --dixy-color-bronze-2: oklch(0.98 0.008 55);
     --dixy-color-bronze-3: oklch(0.954 0.022 55);
@@ -538,6 +575,7 @@
     --dixy-color-bronze-12: oklch(0.255 0.0304 55);
     --dixy-color-bronze-pressed: oklch(0.475 0.076 55);
     --dixy-color-bronze-on-solid: oklch(1 0 0);
+    --dixy-color-bronze-focus: oklch(0.5375 0.074 55);
     --dixy-color-gold-1: oklch(0.995 0.002 80);
     --dixy-color-gold-2: oklch(0.98 0.008 80);
     --dixy-color-gold-3: oklch(0.954 0.022 80);
@@ -552,6 +590,7 @@
     --dixy-color-gold-12: oklch(0.255 0.038 80);
     --dixy-color-gold-pressed: oklch(0.475 0.095 80);
     --dixy-color-gold-on-solid: oklch(1 0 0);
+    --dixy-color-gold-focus: oklch(0.5375 0.092499 80);
     --dixy-color-mode-background-overlay: var(--dixy-color-black-a8);
     --dixy-color-mode-background-surface-raised: var(--dixy-color-white);
     --dixy-color-mode-background-surface-sunken: var(--dixy-color-base-3);
@@ -597,6 +636,7 @@
     --dixy-color-brand-12: var(--dixy-color-blue-12);
     --dixy-color-brand-pressed: var(--dixy-color-blue-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-blue-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-blue-focus);
     --dixy-color-base-1: var(--dixy-color-neutral-1);
     --dixy-color-base-2: var(--dixy-color-neutral-2);
     --dixy-color-base-3: var(--dixy-color-neutral-3);
@@ -611,6 +651,7 @@
     --dixy-color-base-12: var(--dixy-color-neutral-12);
     --dixy-color-base-pressed: var(--dixy-color-neutral-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-neutral-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-neutral-focus);
     --dixy-color-background-overlay: var(--dixy-color-mode-background-overlay);
     --dixy-color-background-overlay-subtle: var(--dixy-color-black-a4);
     --dixy-color-background-overlay-strong: var(--dixy-color-black-a10);
@@ -640,7 +681,7 @@
     --dixy-color-border-subtle: var(--dixy-color-base-6);
     --dixy-color-border-default: var(--dixy-color-base-8);
     --dixy-color-border-strong: var(--dixy-color-mode-border-strong);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -764,6 +805,7 @@
     --dixy-color-neutral-12: oklch(0.95 0 0);
     --dixy-color-neutral-pressed: oklch(0.785 0 0);
     --dixy-color-neutral-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-neutral-focus: oklch(0.56 0 0);
     --dixy-color-slate-1: oklch(0.145 0.01675 260);
     --dixy-color-slate-2: oklch(0.19 0.01875 260);
     --dixy-color-slate-3: oklch(0.235 0.02075 260);
@@ -778,6 +820,7 @@
     --dixy-color-slate-12: oklch(0.95 0.0125 260);
     --dixy-color-slate-pressed: oklch(0.785 0.02375 260);
     --dixy-color-slate-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-slate-focus: oklch(0.56 0.027 260);
     --dixy-color-gray-1: oklch(0.145 0.00402 270);
     --dixy-color-gray-2: oklch(0.19 0.0045 270);
     --dixy-color-gray-3: oklch(0.235 0.00498 270);
@@ -792,6 +835,7 @@
     --dixy-color-gray-12: oklch(0.95 0.003 270);
     --dixy-color-gray-pressed: oklch(0.785 0.0057 270);
     --dixy-color-gray-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-gray-focus: oklch(0.56 0.00648 270);
     --dixy-color-zinc-1: oklch(0.145 0.00603 285);
     --dixy-color-zinc-2: oklch(0.19 0.006749 285);
     --dixy-color-zinc-3: oklch(0.235 0.007469 285);
@@ -806,6 +850,7 @@
     --dixy-color-zinc-12: oklch(0.95 0.0045 285);
     --dixy-color-zinc-pressed: oklch(0.785 0.008549 285);
     --dixy-color-zinc-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-zinc-focus: oklch(0.56 0.00972 285);
     --dixy-color-stone-1: oklch(0.145 0.01072 70);
     --dixy-color-stone-2: oklch(0.19 0.012 70);
     --dixy-color-stone-3: oklch(0.235 0.01328 70);
@@ -820,6 +865,7 @@
     --dixy-color-stone-12: oklch(0.95 0.008 70);
     --dixy-color-stone-pressed: oklch(0.785 0.0152 70);
     --dixy-color-stone-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-stone-focus: oklch(0.56 0.01728 70);
     --dixy-color-taupe-1: oklch(0.145 0.01608 65);
     --dixy-color-taupe-2: oklch(0.19 0.018 65);
     --dixy-color-taupe-3: oklch(0.235 0.01992 65);
@@ -834,6 +880,7 @@
     --dixy-color-taupe-12: oklch(0.95 0.012 65);
     --dixy-color-taupe-pressed: oklch(0.785 0.0228 65);
     --dixy-color-taupe-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-taupe-focus: oklch(0.56 0.02592 65);
     --dixy-color-mauve-1: oklch(0.145 0.01474 325);
     --dixy-color-mauve-2: oklch(0.19 0.0165 325);
     --dixy-color-mauve-3: oklch(0.235 0.01826 325);
@@ -848,6 +895,7 @@
     --dixy-color-mauve-12: oklch(0.95 0.011 325);
     --dixy-color-mauve-pressed: oklch(0.785 0.0209 325);
     --dixy-color-mauve-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-mauve-focus: oklch(0.56 0.02376 325);
     --dixy-color-mist-1: oklch(0.145 0.0134 205);
     --dixy-color-mist-2: oklch(0.19 0.015 205);
     --dixy-color-mist-3: oklch(0.235 0.0166 205);
@@ -862,6 +910,7 @@
     --dixy-color-mist-12: oklch(0.95 0.01 205);
     --dixy-color-mist-pressed: oklch(0.785 0.019 205);
     --dixy-color-mist-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-mist-focus: oklch(0.56 0.0216 205);
     --dixy-color-olive-1: oklch(0.145 0.01474 110);
     --dixy-color-olive-2: oklch(0.19 0.0165 110);
     --dixy-color-olive-3: oklch(0.235 0.01826 110);
@@ -876,6 +925,7 @@
     --dixy-color-olive-12: oklch(0.95 0.011 110);
     --dixy-color-olive-pressed: oklch(0.785 0.0209 110);
     --dixy-color-olive-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-olive-focus: oklch(0.56 0.02376 110);
     --dixy-color-sage-1: oklch(0.145 0.0134 155);
     --dixy-color-sage-2: oklch(0.19 0.015 155);
     --dixy-color-sage-3: oklch(0.235 0.0166 155);
@@ -890,6 +940,7 @@
     --dixy-color-sage-12: oklch(0.95 0.01 155);
     --dixy-color-sage-pressed: oklch(0.785 0.019 155);
     --dixy-color-sage-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-sage-focus: oklch(0.56 0.0216 155);
     --dixy-color-sand-1: oklch(0.145 0.00871 85);
     --dixy-color-sand-2: oklch(0.19 0.00975 85);
     --dixy-color-sand-3: oklch(0.235 0.01079 85);
@@ -904,6 +955,7 @@
     --dixy-color-sand-12: oklch(0.95 0.0065 85);
     --dixy-color-sand-pressed: oklch(0.785 0.012349 85);
     --dixy-color-sand-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-sand-focus: oklch(0.56 0.01404 85);
     --dixy-color-tomato-1: oklch(0.155 0.012 35);
     --dixy-color-tomato-2: oklch(0.185 0.02 35);
     --dixy-color-tomato-3: oklch(0.235 0.04 35);
@@ -918,6 +970,7 @@
     --dixy-color-tomato-12: oklch(0.94 0.0225 35);
     --dixy-color-tomato-pressed: oklch(0.705 0.1425 35);
     --dixy-color-tomato-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-tomato-focus: oklch(0.585 0.12 35);
     --dixy-color-red-1: oklch(0.155 0.012 25);
     --dixy-color-red-2: oklch(0.185 0.02 25);
     --dixy-color-red-3: oklch(0.235 0.04 25);
@@ -932,6 +985,7 @@
     --dixy-color-red-12: oklch(0.94 0.0225 25);
     --dixy-color-red-pressed: oklch(0.705 0.1425 25);
     --dixy-color-red-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-red-focus: oklch(0.585 0.12 25);
     --dixy-color-ruby-1: oklch(0.155 0.012 355);
     --dixy-color-ruby-2: oklch(0.185 0.02 355);
     --dixy-color-ruby-3: oklch(0.235 0.04 355);
@@ -946,6 +1000,7 @@
     --dixy-color-ruby-12: oklch(0.94 0.0225 355);
     --dixy-color-ruby-pressed: oklch(0.705 0.1425 355);
     --dixy-color-ruby-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-ruby-focus: oklch(0.585 0.12 355);
     --dixy-color-crimson-1: oklch(0.155 0.012 10);
     --dixy-color-crimson-2: oklch(0.185 0.02 10);
     --dixy-color-crimson-3: oklch(0.235 0.04 10);
@@ -960,6 +1015,7 @@
     --dixy-color-crimson-12: oklch(0.94 0.0225 10);
     --dixy-color-crimson-pressed: oklch(0.705 0.1425 10);
     --dixy-color-crimson-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-crimson-focus: oklch(0.585 0.12 10);
     --dixy-color-rose-1: oklch(0.155 0.012 15);
     --dixy-color-rose-2: oklch(0.185 0.02 15);
     --dixy-color-rose-3: oklch(0.235 0.04 15);
@@ -974,6 +1030,7 @@
     --dixy-color-rose-12: oklch(0.94 0.0225 15);
     --dixy-color-rose-pressed: oklch(0.705 0.1425 15);
     --dixy-color-rose-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-rose-focus: oklch(0.585 0.12 15);
     --dixy-color-pink-1: oklch(0.155 0.012 350);
     --dixy-color-pink-2: oklch(0.185 0.02 350);
     --dixy-color-pink-3: oklch(0.235 0.04 350);
@@ -988,6 +1045,7 @@
     --dixy-color-pink-12: oklch(0.94 0.0225 350);
     --dixy-color-pink-pressed: oklch(0.705 0.1425 350);
     --dixy-color-pink-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-pink-focus: oklch(0.585 0.12 350);
     --dixy-color-fuchsia-1: oklch(0.155 0.012 330);
     --dixy-color-fuchsia-2: oklch(0.185 0.02 330);
     --dixy-color-fuchsia-3: oklch(0.235 0.04 330);
@@ -1002,6 +1060,7 @@
     --dixy-color-fuchsia-12: oklch(0.94 0.0225 330);
     --dixy-color-fuchsia-pressed: oklch(0.705 0.1425 330);
     --dixy-color-fuchsia-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-fuchsia-focus: oklch(0.585 0.12 330);
     --dixy-color-plum-1: oklch(0.155 0.012 315);
     --dixy-color-plum-2: oklch(0.185 0.02 315);
     --dixy-color-plum-3: oklch(0.235 0.04 315);
@@ -1016,6 +1075,7 @@
     --dixy-color-plum-12: oklch(0.94 0.0225 315);
     --dixy-color-plum-pressed: oklch(0.705 0.1425 315);
     --dixy-color-plum-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-plum-focus: oklch(0.585 0.12 315);
     --dixy-color-purple-1: oklch(0.155 0.012 305);
     --dixy-color-purple-2: oklch(0.185 0.02 305);
     --dixy-color-purple-3: oklch(0.235 0.04 305);
@@ -1030,6 +1090,7 @@
     --dixy-color-purple-12: oklch(0.94 0.0225 305);
     --dixy-color-purple-pressed: oklch(0.705 0.1425 305);
     --dixy-color-purple-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-purple-focus: oklch(0.585 0.12 305);
     --dixy-color-violet-1: oklch(0.155 0.012 292);
     --dixy-color-violet-2: oklch(0.185 0.02 292);
     --dixy-color-violet-3: oklch(0.235 0.04 292);
@@ -1044,6 +1105,7 @@
     --dixy-color-violet-12: oklch(0.94 0.0225 292);
     --dixy-color-violet-pressed: oklch(0.705 0.139375 292);
     --dixy-color-violet-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-violet-focus: oklch(0.585 0.12 292);
     --dixy-color-iris-1: oklch(0.155 0.012 280);
     --dixy-color-iris-2: oklch(0.185 0.02 280);
     --dixy-color-iris-3: oklch(0.235 0.04 280);
@@ -1058,6 +1120,7 @@
     --dixy-color-iris-12: oklch(0.94 0.0225 280);
     --dixy-color-iris-pressed: oklch(0.705 0.129776 280);
     --dixy-color-iris-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-iris-focus: oklch(0.585 0.12 280);
     --dixy-color-indigo-1: oklch(0.155 0.012 270);
     --dixy-color-indigo-2: oklch(0.185 0.02 270);
     --dixy-color-indigo-3: oklch(0.235 0.04 270);
@@ -1072,6 +1135,7 @@
     --dixy-color-indigo-12: oklch(0.94 0.0225 270);
     --dixy-color-indigo-pressed: oklch(0.705 0.126727 270);
     --dixy-color-indigo-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-indigo-focus: oklch(0.585 0.12 270);
     --dixy-color-blue-1: oklch(0.155 0.012 260);
     --dixy-color-blue-2: oklch(0.185 0.02 260);
     --dixy-color-blue-3: oklch(0.235 0.04 260);
@@ -1086,6 +1150,7 @@
     --dixy-color-blue-12: oklch(0.94 0.0225 260);
     --dixy-color-blue-pressed: oklch(0.705 0.12761 260);
     --dixy-color-blue-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-blue-focus: oklch(0.585 0.12 260);
     --dixy-color-sky-1: oklch(0.155 0.012 230);
     --dixy-color-sky-2: oklch(0.185 0.02 230);
     --dixy-color-sky-3: oklch(0.235 0.04 230);
@@ -1100,6 +1165,7 @@
     --dixy-color-sky-12: oklch(0.94 0.018 230);
     --dixy-color-sky-pressed: oklch(0.795 0.100659 230);
     --dixy-color-sky-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-sky-focus: oklch(0.585 0.116575 230);
     --dixy-color-cyan-1: oklch(0.155 0.012 210);
     --dixy-color-cyan-2: oklch(0.185 0.02 210);
     --dixy-color-cyan-3: oklch(0.235 0.04 210);
@@ -1114,6 +1180,7 @@
     --dixy-color-cyan-12: oklch(0.94 0.0195 210);
     --dixy-color-cyan-pressed: oklch(0.705 0.121582 210);
     --dixy-color-cyan-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-cyan-focus: oklch(0.585 0.101175 210);
     --dixy-color-teal-1: oklch(0.155 0.012 185);
     --dixy-color-teal-2: oklch(0.185 0.02 185);
     --dixy-color-teal-3: oklch(0.235 0.04 185);
@@ -1128,6 +1195,7 @@
     --dixy-color-teal-12: oklch(0.94 0.018 185);
     --dixy-color-teal-pressed: oklch(0.705 0.113999 185);
     --dixy-color-teal-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-teal-focus: oklch(0.585 0.103091 185);
     --dixy-color-emerald-1: oklch(0.155 0.012 165);
     --dixy-color-emerald-2: oklch(0.185 0.02 165);
     --dixy-color-emerald-3: oklch(0.235 0.04 165);
@@ -1142,6 +1210,7 @@
     --dixy-color-emerald-12: oklch(0.94 0.021 165);
     --dixy-color-emerald-pressed: oklch(0.705 0.133 165);
     --dixy-color-emerald-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-emerald-focus: oklch(0.585 0.12 165);
     --dixy-color-jade-1: oklch(0.155 0.012 160);
     --dixy-color-jade-2: oklch(0.185 0.02 160);
     --dixy-color-jade-3: oklch(0.235 0.04 160);
@@ -1156,6 +1225,7 @@
     --dixy-color-jade-12: oklch(0.94 0.021 160);
     --dixy-color-jade-pressed: oklch(0.705 0.133 160);
     --dixy-color-jade-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-jade-focus: oklch(0.585 0.12 160);
     --dixy-color-green-1: oklch(0.155 0.012 155);
     --dixy-color-green-2: oklch(0.185 0.02 155);
     --dixy-color-green-3: oklch(0.235 0.04 155);
@@ -1170,6 +1240,7 @@
     --dixy-color-green-12: oklch(0.94 0.021 155);
     --dixy-color-green-pressed: oklch(0.705 0.133 155);
     --dixy-color-green-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-green-focus: oklch(0.585 0.12 155);
     --dixy-color-grass-1: oklch(0.155 0.012 140);
     --dixy-color-grass-2: oklch(0.185 0.02 140);
     --dixy-color-grass-3: oklch(0.235 0.04 140);
@@ -1184,6 +1255,7 @@
     --dixy-color-grass-12: oklch(0.94 0.021 140);
     --dixy-color-grass-pressed: oklch(0.705 0.133 140);
     --dixy-color-grass-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-grass-focus: oklch(0.585 0.12 140);
     --dixy-color-lime-1: oklch(0.155 0.012 130);
     --dixy-color-lime-2: oklch(0.185 0.02 130);
     --dixy-color-lime-3: oklch(0.235 0.04 130);
@@ -1198,6 +1270,7 @@
     --dixy-color-lime-12: oklch(0.94 0.0225 130);
     --dixy-color-lime-pressed: oklch(0.795 0.1425 130);
     --dixy-color-lime-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-lime-focus: oklch(0.585 0.12 130);
     --dixy-color-mint-1: oklch(0.155 0.012 170);
     --dixy-color-mint-2: oklch(0.185 0.02 170);
     --dixy-color-mint-3: oklch(0.235 0.04 170);
@@ -1212,6 +1285,7 @@
     --dixy-color-mint-12: oklch(0.94 0.018 170);
     --dixy-color-mint-pressed: oklch(0.795 0.113999 170);
     --dixy-color-mint-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-mint-focus: oklch(0.585 0.115811 170);
     --dixy-color-yellow-1: oklch(0.155 0.012 102);
     --dixy-color-yellow-2: oklch(0.185 0.02 102);
     --dixy-color-yellow-3: oklch(0.235 0.04 102);
@@ -1226,6 +1300,7 @@
     --dixy-color-yellow-12: oklch(0.94 0.0225 102);
     --dixy-color-yellow-pressed: oklch(0.815 0.1425 102);
     --dixy-color-yellow-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-yellow-focus: oklch(0.585 0.12 102);
     --dixy-color-amber-1: oklch(0.155 0.012 85);
     --dixy-color-amber-2: oklch(0.185 0.02 85);
     --dixy-color-amber-3: oklch(0.235 0.04 85);
@@ -1240,6 +1315,7 @@
     --dixy-color-amber-12: oklch(0.94 0.0225 85);
     --dixy-color-amber-pressed: oklch(0.795 0.1425 85);
     --dixy-color-amber-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-amber-focus: oklch(0.585 0.119894 85);
     --dixy-color-orange-1: oklch(0.155 0.012 50);
     --dixy-color-orange-2: oklch(0.185 0.02 50);
     --dixy-color-orange-3: oklch(0.235 0.04 50);
@@ -1254,6 +1330,7 @@
     --dixy-color-orange-12: oklch(0.94 0.0225 50);
     --dixy-color-orange-pressed: oklch(0.705 0.1425 50);
     --dixy-color-orange-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-orange-focus: oklch(0.585 0.12 50);
     --dixy-color-brown-1: oklch(0.155 0.012 60);
     --dixy-color-brown-2: oklch(0.185 0.02 60);
     --dixy-color-brown-3: oklch(0.235 0.04 60);
@@ -1268,6 +1345,7 @@
     --dixy-color-brown-12: oklch(0.94 0.012 60);
     --dixy-color-brown-pressed: oklch(0.705 0.076 60);
     --dixy-color-brown-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-brown-focus: oklch(0.585 0.08 60);
     --dixy-color-bronze-1: oklch(0.155 0.012 55);
     --dixy-color-bronze-2: oklch(0.185 0.02 55);
     --dixy-color-bronze-3: oklch(0.235 0.04 55);
@@ -1282,6 +1360,7 @@
     --dixy-color-bronze-12: oklch(0.94 0.012 55);
     --dixy-color-bronze-pressed: oklch(0.705 0.076 55);
     --dixy-color-bronze-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-bronze-focus: oklch(0.585 0.08 55);
     --dixy-color-gold-1: oklch(0.155 0.012 80);
     --dixy-color-gold-2: oklch(0.185 0.02 80);
     --dixy-color-gold-3: oklch(0.235 0.04 80);
@@ -1296,6 +1375,7 @@
     --dixy-color-gold-12: oklch(0.94 0.015 80);
     --dixy-color-gold-pressed: oklch(0.705 0.095 80);
     --dixy-color-gold-on-solid: oklch(0.13 0.005 270);
+    --dixy-color-gold-focus: oklch(0.585 0.1 80);
     --dixy-color-mode-background-overlay: var(--dixy-color-black-a9);
     --dixy-color-mode-background-surface-raised: var(--dixy-color-base-3);
     --dixy-color-mode-background-surface-sunken: var(--dixy-color-base-1);
@@ -1341,6 +1421,7 @@
     --dixy-color-brand-12: var(--dixy-color-blue-12);
     --dixy-color-brand-pressed: var(--dixy-color-blue-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-blue-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-blue-focus);
     --dixy-color-base-1: var(--dixy-color-neutral-1);
     --dixy-color-base-2: var(--dixy-color-neutral-2);
     --dixy-color-base-3: var(--dixy-color-neutral-3);
@@ -1355,6 +1436,7 @@
     --dixy-color-base-12: var(--dixy-color-neutral-12);
     --dixy-color-base-pressed: var(--dixy-color-neutral-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-neutral-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-neutral-focus);
     --dixy-color-background-overlay: var(--dixy-color-mode-background-overlay);
     --dixy-color-background-overlay-subtle: var(--dixy-color-black-a4);
     --dixy-color-background-overlay-strong: var(--dixy-color-black-a10);
@@ -1384,7 +1466,7 @@
     --dixy-color-border-subtle: var(--dixy-color-base-6);
     --dixy-color-border-default: var(--dixy-color-base-8);
     --dixy-color-border-strong: var(--dixy-color-mode-border-strong);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1504,10 +1586,11 @@
     --dixy-color-brand-12: var(--dixy-color-neutral-12);
     --dixy-color-brand-pressed: var(--dixy-color-neutral-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-neutral-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-neutral-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1555,10 +1638,11 @@
     --dixy-color-brand-12: var(--dixy-color-slate-12);
     --dixy-color-brand-pressed: var(--dixy-color-slate-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-slate-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-slate-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1606,10 +1690,11 @@
     --dixy-color-brand-12: var(--dixy-color-gray-12);
     --dixy-color-brand-pressed: var(--dixy-color-gray-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-gray-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-gray-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1657,10 +1742,11 @@
     --dixy-color-brand-12: var(--dixy-color-zinc-12);
     --dixy-color-brand-pressed: var(--dixy-color-zinc-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-zinc-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-zinc-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1708,10 +1794,11 @@
     --dixy-color-brand-12: var(--dixy-color-stone-12);
     --dixy-color-brand-pressed: var(--dixy-color-stone-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-stone-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-stone-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1759,10 +1846,11 @@
     --dixy-color-brand-12: var(--dixy-color-taupe-12);
     --dixy-color-brand-pressed: var(--dixy-color-taupe-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-taupe-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-taupe-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1810,10 +1898,11 @@
     --dixy-color-brand-12: var(--dixy-color-mauve-12);
     --dixy-color-brand-pressed: var(--dixy-color-mauve-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-mauve-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-mauve-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1861,10 +1950,11 @@
     --dixy-color-brand-12: var(--dixy-color-mist-12);
     --dixy-color-brand-pressed: var(--dixy-color-mist-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-mist-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-mist-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1912,10 +2002,11 @@
     --dixy-color-brand-12: var(--dixy-color-olive-12);
     --dixy-color-brand-pressed: var(--dixy-color-olive-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-olive-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-olive-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -1963,10 +2054,11 @@
     --dixy-color-brand-12: var(--dixy-color-sage-12);
     --dixy-color-brand-pressed: var(--dixy-color-sage-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-sage-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-sage-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2014,10 +2106,11 @@
     --dixy-color-brand-12: var(--dixy-color-sand-12);
     --dixy-color-brand-pressed: var(--dixy-color-sand-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-sand-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-sand-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2065,10 +2158,11 @@
     --dixy-color-brand-12: var(--dixy-color-tomato-12);
     --dixy-color-brand-pressed: var(--dixy-color-tomato-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-tomato-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-tomato-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2116,10 +2210,11 @@
     --dixy-color-brand-12: var(--dixy-color-red-12);
     --dixy-color-brand-pressed: var(--dixy-color-red-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-red-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-red-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2167,10 +2262,11 @@
     --dixy-color-brand-12: var(--dixy-color-ruby-12);
     --dixy-color-brand-pressed: var(--dixy-color-ruby-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-ruby-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-ruby-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2218,10 +2314,11 @@
     --dixy-color-brand-12: var(--dixy-color-crimson-12);
     --dixy-color-brand-pressed: var(--dixy-color-crimson-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-crimson-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-crimson-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2269,10 +2366,11 @@
     --dixy-color-brand-12: var(--dixy-color-rose-12);
     --dixy-color-brand-pressed: var(--dixy-color-rose-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-rose-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-rose-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2320,10 +2418,11 @@
     --dixy-color-brand-12: var(--dixy-color-pink-12);
     --dixy-color-brand-pressed: var(--dixy-color-pink-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-pink-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-pink-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2371,10 +2470,11 @@
     --dixy-color-brand-12: var(--dixy-color-fuchsia-12);
     --dixy-color-brand-pressed: var(--dixy-color-fuchsia-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-fuchsia-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-fuchsia-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2422,10 +2522,11 @@
     --dixy-color-brand-12: var(--dixy-color-plum-12);
     --dixy-color-brand-pressed: var(--dixy-color-plum-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-plum-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-plum-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2473,10 +2574,11 @@
     --dixy-color-brand-12: var(--dixy-color-purple-12);
     --dixy-color-brand-pressed: var(--dixy-color-purple-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-purple-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-purple-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2524,10 +2626,11 @@
     --dixy-color-brand-12: var(--dixy-color-violet-12);
     --dixy-color-brand-pressed: var(--dixy-color-violet-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-violet-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-violet-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2575,10 +2678,11 @@
     --dixy-color-brand-12: var(--dixy-color-iris-12);
     --dixy-color-brand-pressed: var(--dixy-color-iris-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-iris-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-iris-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2626,10 +2730,11 @@
     --dixy-color-brand-12: var(--dixy-color-indigo-12);
     --dixy-color-brand-pressed: var(--dixy-color-indigo-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-indigo-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-indigo-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2677,10 +2782,11 @@
     --dixy-color-brand-12: var(--dixy-color-blue-12);
     --dixy-color-brand-pressed: var(--dixy-color-blue-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-blue-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-blue-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2728,10 +2834,11 @@
     --dixy-color-brand-12: var(--dixy-color-sky-12);
     --dixy-color-brand-pressed: var(--dixy-color-sky-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-sky-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-sky-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2779,10 +2886,11 @@
     --dixy-color-brand-12: var(--dixy-color-cyan-12);
     --dixy-color-brand-pressed: var(--dixy-color-cyan-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-cyan-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-cyan-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2830,10 +2938,11 @@
     --dixy-color-brand-12: var(--dixy-color-teal-12);
     --dixy-color-brand-pressed: var(--dixy-color-teal-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-teal-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-teal-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2881,10 +2990,11 @@
     --dixy-color-brand-12: var(--dixy-color-emerald-12);
     --dixy-color-brand-pressed: var(--dixy-color-emerald-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-emerald-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-emerald-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2932,10 +3042,11 @@
     --dixy-color-brand-12: var(--dixy-color-jade-12);
     --dixy-color-brand-pressed: var(--dixy-color-jade-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-jade-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-jade-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -2983,10 +3094,11 @@
     --dixy-color-brand-12: var(--dixy-color-green-12);
     --dixy-color-brand-pressed: var(--dixy-color-green-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-green-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-green-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3034,10 +3146,11 @@
     --dixy-color-brand-12: var(--dixy-color-grass-12);
     --dixy-color-brand-pressed: var(--dixy-color-grass-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-grass-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-grass-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3085,10 +3198,11 @@
     --dixy-color-brand-12: var(--dixy-color-lime-12);
     --dixy-color-brand-pressed: var(--dixy-color-lime-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-lime-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-lime-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3136,10 +3250,11 @@
     --dixy-color-brand-12: var(--dixy-color-mint-12);
     --dixy-color-brand-pressed: var(--dixy-color-mint-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-mint-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-mint-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3187,10 +3302,11 @@
     --dixy-color-brand-12: var(--dixy-color-yellow-12);
     --dixy-color-brand-pressed: var(--dixy-color-yellow-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-yellow-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-yellow-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3238,10 +3354,11 @@
     --dixy-color-brand-12: var(--dixy-color-amber-12);
     --dixy-color-brand-pressed: var(--dixy-color-amber-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-amber-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-amber-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3289,10 +3406,11 @@
     --dixy-color-brand-12: var(--dixy-color-orange-12);
     --dixy-color-brand-pressed: var(--dixy-color-orange-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-orange-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-orange-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3340,10 +3458,11 @@
     --dixy-color-brand-12: var(--dixy-color-brown-12);
     --dixy-color-brand-pressed: var(--dixy-color-brown-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-brown-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-brown-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3391,10 +3510,11 @@
     --dixy-color-brand-12: var(--dixy-color-bronze-12);
     --dixy-color-brand-pressed: var(--dixy-color-bronze-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-bronze-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-bronze-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3442,10 +3562,11 @@
     --dixy-color-brand-12: var(--dixy-color-gold-12);
     --dixy-color-brand-pressed: var(--dixy-color-gold-pressed);
     --dixy-color-brand-on-solid: var(--dixy-color-gold-on-solid);
+    --dixy-color-brand-focus: var(--dixy-color-gold-focus);
     --dixy-color-background-selected: var(--dixy-color-brand-5);
     --dixy-color-text-link: var(--dixy-color-brand-11);
     --dixy-color-text-selected: var(--dixy-color-brand-11);
-    --dixy-color-border-focus: var(--dixy-color-brand-8);
+    --dixy-color-border-focus: var(--dixy-color-brand-focus);
     --dixy-color-background-action-primary: var(--dixy-color-brand-9);
     --dixy-color-background-action-primary-hover: var(--dixy-color-brand-10);
     --dixy-color-background-action-primary-pressed: var(
@@ -3493,6 +3614,7 @@
     --dixy-color-base-12: var(--dixy-color-neutral-12);
     --dixy-color-base-pressed: var(--dixy-color-neutral-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-neutral-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-neutral-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3561,6 +3683,7 @@
     --dixy-color-base-12: var(--dixy-color-slate-12);
     --dixy-color-base-pressed: var(--dixy-color-slate-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-slate-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-slate-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3629,6 +3752,7 @@
     --dixy-color-base-12: var(--dixy-color-gray-12);
     --dixy-color-base-pressed: var(--dixy-color-gray-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-gray-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-gray-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3697,6 +3821,7 @@
     --dixy-color-base-12: var(--dixy-color-zinc-12);
     --dixy-color-base-pressed: var(--dixy-color-zinc-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-zinc-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-zinc-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3765,6 +3890,7 @@
     --dixy-color-base-12: var(--dixy-color-stone-12);
     --dixy-color-base-pressed: var(--dixy-color-stone-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-stone-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-stone-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3833,6 +3959,7 @@
     --dixy-color-base-12: var(--dixy-color-taupe-12);
     --dixy-color-base-pressed: var(--dixy-color-taupe-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-taupe-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-taupe-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3901,6 +4028,7 @@
     --dixy-color-base-12: var(--dixy-color-mauve-12);
     --dixy-color-base-pressed: var(--dixy-color-mauve-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-mauve-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-mauve-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -3969,6 +4097,7 @@
     --dixy-color-base-12: var(--dixy-color-mist-12);
     --dixy-color-base-pressed: var(--dixy-color-mist-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-mist-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-mist-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -4037,6 +4166,7 @@
     --dixy-color-base-12: var(--dixy-color-olive-12);
     --dixy-color-base-pressed: var(--dixy-color-olive-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-olive-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-olive-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -4105,6 +4235,7 @@
     --dixy-color-base-12: var(--dixy-color-sage-12);
     --dixy-color-base-pressed: var(--dixy-color-sage-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-sage-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-sage-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(
@@ -4173,6 +4304,7 @@
     --dixy-color-base-12: var(--dixy-color-sand-12);
     --dixy-color-base-pressed: var(--dixy-color-sand-pressed);
     --dixy-color-base-on-solid: var(--dixy-color-sand-on-solid);
+    --dixy-color-base-focus: var(--dixy-color-sand-focus);
     --dixy-color-background-canvas: var(--dixy-color-base-1);
     --dixy-color-background-surface: var(--dixy-color-base-2);
     --dixy-color-background-surface-raised: var(

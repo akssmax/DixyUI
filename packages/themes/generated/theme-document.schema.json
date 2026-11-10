@@ -228,7 +228,10 @@
                 "fiesta-paper",
                 "powder-wash",
                 "wool",
-                "liquid-glass"
+                "liquid-glass",
+                "sunset-neon",
+                "menu-window",
+                "arcade-bezel"
               ]
             },
             "version": { "enum": [1] },
@@ -343,7 +346,10 @@
                 "picado",
                 "gulal",
                 "knit",
-                "liquid"
+                "liquid",
+                "sunset",
+                "menu",
+                "marquee"
               ]
             },
             "version": { "enum": [1] },
@@ -455,7 +461,19 @@
                     "Specular rim",
                     "Refraction",
                     "Light catch",
-                    "Clear"
+                    "Clear",
+                    "Sun and grid",
+                    "Sun only",
+                    "Grid only",
+                    "Bare coast",
+                    "Cursor and stars",
+                    "Cursor only",
+                    "Stars only",
+                    "Plain window",
+                    "Bulbs and credits",
+                    "Bulbs only",
+                    "Credits only",
+                    "Dark cabinet"
                   ]
                 },
                 "canopy": {

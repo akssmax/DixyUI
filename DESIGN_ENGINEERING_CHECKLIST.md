@@ -864,6 +864,29 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Learning: explain why `min(control, card)` changes only the full radius mode.
 - [ ] Learning: explain how `contain: size` stops a grid item's content from sizing its row.
 
+## Theme audit and fix loop — 2026-11-10
+
+- [x] `/lab/theme-audit` measures contrast, focus, target size and overflow for every theme in light and dark. Evidence: docs/BUILD_LOG.md, 2026-11-10.
+- [x] `pnpm themes:fix` stores schema-checked patches over starters and rebuilds; covered by `packages/themes/test/theme-fix.test.mjs`.
+- [x] Negative test: each check fails on injected bad styles.
+- [x] Field boundary check (WCAG 1.4.11) added; fields get `--dixy-skin-field-edge` (≥3.35:1 on every theme), 46 failures → 0. Evidence: docs/BUILD_LOG.md, "Field edges, solid overlays".
+- [x] Overlay popups mix in the opaque raised surface (94%, or 72% with blur); Glass UI popover 0.45 → 0.97 alpha.
+- [x] Materials accept `darkShadow`/`darkInset`; Candy Clay dark has no pink halo.
+- [ ] Give tracks, tab lists and segmented groups the same 3:1 edge (they still use the decorative edge).
+- [ ] Learning: explain WCAG 1.4.11 non-text contrast and why a decorative edge can't double as a field boundary.
+- [x] Focus rings use a derived `focus` step (light: step 8 → 30% toward 11); 31/31 themes clean, token test guards ≥4.4:1 vs white. The cause was grey surfaces, not the amber/lime palettes.
+- [x] Notched corners keep their border via `corner-shape: bevel`, with a clip-path + diagonal overlay fallback.
+- [x] Holi Colours corner clouds removed (they were clipped square); speckle dust kept.
+- [ ] Check the notched-corner fallback in Safari and Firefox.
+- [x] Sunset Drive, Save Point and Arcade Cabinet themes with painters, ornament entries and package exports; audit 34/34 clean.
+- [x] Shader lab pairings for the three new themes (sunsetGrid, menuStars, arcadeAttract).
+- [x] Skin paint outranks `materials.css` on surfaces and fields (fixes glossy stripes on 11 themes).
+- [ ] Check the new ornaments and shaders at mobile width and with reduced motion.
+- [ ] Load the mocks' exact fonts for the game themes, or confirm the substitutes.
+- [ ] Learning: explain how selector specificity let one property of a rule win while another lost.
+- [ ] Extend the audit to hover, pressed and disabled states and to ornaments over text.
+- [ ] Learning: explain why `focus()` from a script doesn't match `:focus-visible`, and how the audit measures focus styles instead.
+
 ## Wren modes and phone layout — 2026-11-10
 
 - [x] Chat and Work modes: a compact one-row composer in Chat; a taller composer and starter cards in Work. Evidence: docs/BUILD_LOG.md, 2026-11-10.

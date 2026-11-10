@@ -80,6 +80,12 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
       ? `blur(${m.backdropBlur}px) saturate(${m.backdropSaturate}%)`
       : "";
   const borderStyle = m.frame === "rails" ? "ridge" : "solid";
+  // Overlays float over unrelated content, so a translucent material tint
+  // alone leaves them unreadable. Mix in the opaque raised surface: mostly
+  // opaque when the material blurs what is behind it, nearly solid when not.
+  // Fields get their own edge: WCAG 1.4.11 needs 3:1 around them, and the
+  // decorative material edge (white on glass) can be nearly invisible.
+  // Base 8/9 at 50% measured >= 3.35:1 on every built-in theme.
   // Character rules sit after material rules and carry the theme ancestor, so they win over paint defaults.
   const C = (parts: string, state = "") =>
     `${theme} :is(${parts})[data-dixy-skin="${m.id}"]${state}`;
@@ -89,6 +95,7 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   ${theme} {
     ${style}
     --dixy-skin-edge:${m.edge};
+    --dixy-skin-field-edge:color-mix(in oklab,var(--dixy-color-base-9) 50%,var(--dixy-color-base-8));
     ${ornamentVariables}
     ${colors("light")}
     ${m.inkTint ? `--dixy-color-text-primary:color-mix(in srgb,var(--dixy-color-base-12) ${100 - m.inkTint * 100}%,${m.tint[1]});` : ""}
@@ -116,7 +123,7 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
     --dixy-skin-mark-opacity:1;
     ${characterTokenCSS(m.character)}
   }
-  ${theme}[data-appearance="dark"] { ${colors("dark")} --dixy-skin-selected:var(--dixy-skin-finish); ${m.inkTint ? `--dixy-color-text-primary:color-mix(in srgb,var(--dixy-color-base-12) ${100 - m.inkTint * 100}%,${m.tint[0]});` : ""} --dixy-skin-edge:${m.darkEdge}; ${m.darkCanvas ? `--dixy-skin-canvas:${m.darkCanvas};` : ""} --dixy-skin-surface:color-mix(in srgb,var(--dixy-color-background-surface-raised) ${m.darkSurfaceMix}%,${m.tint[1]}); --dixy-skin-ground:color-mix(in srgb,var(--dixy-color-background-canvas) 65%,${m.tint[1]}); }
+  ${theme}[data-appearance="dark"] { ${colors("dark")} --dixy-skin-selected:var(--dixy-skin-finish); ${m.inkTint ? `--dixy-color-text-primary:color-mix(in srgb,var(--dixy-color-base-12) ${100 - m.inkTint * 100}%,${m.tint[0]});` : ""} --dixy-skin-edge:${m.darkEdge}; ${m.darkShadow ? `--dixy-skin-authored-shadow:${m.darkShadow};` : ""} ${m.darkInset ? `--dixy-skin-inset:${m.darkInset};` : ""} ${m.darkCanvas ? `--dixy-skin-canvas:${m.darkCanvas};` : ""} --dixy-skin-surface:color-mix(in srgb,var(--dixy-color-background-surface-raised) ${m.darkSurfaceMix}%,${m.tint[1]}); --dixy-skin-ground:color-mix(in srgb,var(--dixy-color-background-canvas) 65%,${m.tint[1]}); }
   ${theme}[data-relief="2"] { --dixy-skin-shadow:var(--dixy-skin-depth-shadow,var(--dixy-skin-authored-shadow)),0 10px 18px #0002; }
   ${theme}[data-relief="0"],${theme}[data-effects="reduced"] { --dixy-skin-shadow:none; --dixy-skin-inset:none; --dixy-skin-control-edge:none; --dixy-skin-panel-relief:none; --dixy-skin-control-relief:none; }
   ${theme}[data-effects="reduced"] { --dixy-skin-paint:none; --dixy-skin-finish:none; --dixy-skin-canvas:none; --dixy-skin-thumb:none; --dixy-skin-mark-opacity:0; }
@@ -131,9 +138,14 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   ${S(".dixy-card,.dixy-dialog-popup")} { padding:var(--dixy-skin-card-inset); border:${frameWidth}px ${borderStyle} var(--dixy-skin-edge); }
   ${own(surfaces)} { background-image:var(--dixy-skin-paint); background-size:var(--dixy-skin-grain-size) var(--dixy-skin-grain-size),100% 100%,100% 100%,100% 100%; box-shadow:var(--dixy-skin-panel-relief); }
   ${own(surfaces, ':not([data-variant="solid"]):not([data-variant="soft"])')} { background-color:var(--dixy-skin-surface); }
+  ${own(overlays, ':not([data-variant="solid"]):not([data-variant="soft"])')} { background-color:color-mix(in srgb,var(--dixy-color-background-surface-raised) ${glass ? 72 : 94}%,var(--dixy-skin-surface)); }
   ${S(fields)} { border-radius:calc(var(--dixy-radius-control) * ${p.cornerScale}); }
   ${S(".dixy-textarea")} { border-radius:calc(min(var(--dixy-radius-control), var(--dixy-radius-card)) * ${p.cornerScale}); }
-  ${own(fields)} { border-width:var(--dixy-input-border-width); border-color:var(--dixy-skin-edge); background-image:var(--dixy-skin-paint); background-color:var(--dixy-color-background-canvas); background-size:var(--dixy-skin-grain-size) var(--dixy-skin-grain-size),100% 100%,100% 100%,100% 100%; box-shadow:var(--dixy-skin-inset); }
+  ${own(fields)} { border-width:var(--dixy-input-border-width); border-color:var(--dixy-skin-field-edge); background-image:var(--dixy-skin-paint); background-color:var(--dixy-color-background-canvas); background-size:var(--dixy-skin-grain-size) var(--dixy-skin-grain-size),100% 100%,100% 100%,100% 100%; box-shadow:var(--dixy-skin-inset); }
+  /* materials.css styles [data-dixy-visual] surfaces at 0,5,0. Match the
+     skin's paint to that so its image and grain size always land together;
+     otherwise the material image is tiled at the grain size (stripes). */
+  ${own(`${surfaces},${fields}`, "[data-dixy-visual][data-material]:not([data-disabled])")} { background-image:var(--dixy-skin-paint); }
   ${own(".dixy-button", actions)} { border-width:var(--dixy-button-border-width); border-color:var(--dixy-skin-edge); border-radius:calc(var(--dixy-shape-control) * ${p.cornerScale}); background-image:var(--dixy-skin-finish); box-shadow:var(--dixy-skin-control-relief); }
   ${m.tintActions ? `${own(".dixy-button", '[data-variant="solid"][data-color="accent"]:not([data-disabled])')} { background-color:var(--dixy-skin-surface); color:var(--dixy-color-text-action-primary); }` : ""}
   ${own(".dixy-button", actions + ":active")} { box-shadow:var(--dixy-skin-inset); }

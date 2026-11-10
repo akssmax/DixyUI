@@ -32,6 +32,9 @@ export const framePrefixes = {
   gulal: "holi",
   knit: "yule",
   liquid: "glass",
+  sunset: "sunset",
+  menu: "savepoint",
+  marquee: "arcade",
 } as const;
 /** Frame code owns trim/geometry only. It never paints an input or action surface. */
 export function frameStyles(m: ResolvedThemeRecipe, theme: string): string {
@@ -125,6 +128,9 @@ export function frameStyles(m: ResolvedThemeRecipe, theme: string): string {
   details.gulal = `@keyframes dixy-holi-detail { from { opacity:.5; } to { opacity:1; } }`;
   details.knit = `@keyframes dixy-yule-detail { from { opacity:.5; } to { opacity:1; } }`;
   details.liquid = `@keyframes dixy-glass-detail { from { opacity:.5; } to { opacity:1; } }`;
+  details.sunset = `@keyframes dixy-sunset-detail { from { opacity:.5; } to { opacity:1; } }`;
+  details.menu = `@keyframes dixy-savepoint-detail { from { opacity:.5; } to { opacity:1; } }`;
+  details.marquee = `@keyframes dixy-arcade-detail { from { opacity:.5; } to { opacity:1; } }`;
   // Scope every legacy ornament selector as well, so two custom frames can coexist.
   const scoped = details[m.frame].replace(
     /(^|[}\n])([ \t]*)(\.dixy-[^{]+)\{/g,

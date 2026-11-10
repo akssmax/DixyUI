@@ -13,6 +13,7 @@ import {
   semanticColors,
   toOklch,
   actionColors,
+  focusColor,
   colorReference,
 } from "../packages/tokens/src/color.ts";
 import { componentColors } from "../packages/react/src/tokens/component-colors.ts";
@@ -57,6 +58,7 @@ const binding = (axis, family) => [
   ]),
   [`color-${axis}-pressed`, `var(--dixy-color-${family}-pressed)`],
   [`color-${axis}-on-solid`, `var(--dixy-color-${family}-on-solid)`],
+  [`color-${axis}-focus`, `var(--dixy-color-${family}-focus)`],
 ];
 const shared = (mode) => [...roles(mode), ...aliases];
 const modeCss = ["light", "dark"]
@@ -70,6 +72,10 @@ const modeCss = ["light", "dark"]
         ]),
         [`color-${family}-pressed`, toOklch(action.pressed)],
         [`color-${family}-on-solid`, toOklch(action.foreground)],
+        [
+          `color-${family}-focus`,
+          toOklch(focusColor(colorPalettes[family][mode], mode)),
+        ],
       ];
     });
     return block(

@@ -1522,41 +1522,10 @@ export const paintGulal: OrganicPainter = (
       tier = tierOf(w, h),
       seed = s.seed + index * 41,
       inks = [colors.a, colors.b, colors.c, colors.d],
-      drift = playing ? clock * (s.motion / 200) : 0,
       haze = s.style === "Soft haze",
       corners = cornersOf(w, h),
       at = choose(index, s.seed, 1, 4),
       ink = choose(index, s.seed, 2, 4);
-    // A powder cloud pushed outward from a corner. Its radius stops before the
-    // content box, so the soft edge is never sliced by the frame clip.
-    const cloud = (k: number, color: string, scale: number) => {
-      const [x, y, sx, sy] = corners[k],
-        base = (18 + s.scale * 0.9) * scale,
-        ox = Math.sin(drift + k) * 2,
-        oy = Math.cos(drift * 0.8 + k) * 2;
-      for (let j = 0; j < 5; j++) {
-        const jx =
-            x -
-            sx * (6 + rand(seed + k * 7 + j) * 10) +
-            ox +
-            (rand(seed + k + j * 3) - 0.5) * base * 0.6,
-          jy = y - sy * (6 + rand(seed + k * 7 + j + 3) * 10) + oy,
-          r = Math.min(
-            base * (0.6 + rand(seed + j) * 0.4),
-            room(jx, jy, w, h, limits) - 1,
-          );
-        if (r < 4) continue;
-        const g = ctx.createRadialGradient(jx, jy, 0, jx, jy, r);
-        g.addColorStop(0, color);
-        g.addColorStop(1, "transparent");
-        ctx.globalAlpha = haze ? 0.28 : 0.5;
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(jx, jy, r, 0, tau);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-    };
     // Dry powder thrown along an edge, thinning away from its corner.
     const speckle = (k: number, color: string, count: number) => {
       const [x, y, sx, sy] = corners[k];
@@ -1567,7 +1536,7 @@ export const paintGulal: OrganicPainter = (
           px = edge ? x + sx * along : x - sx * off,
           py = edge ? y - sy * off : y + sy * along;
         if (room(px, py, w, h, limits) < 2) continue;
-        ctx.globalAlpha = 0.5 + rand(seed + i + 2) * 0.45;
+        ctx.globalAlpha = (haze ? 0.3 : 0.5) + rand(seed + i + 2) * 0.45;
         dot(
           ctx,
           px,
@@ -1578,24 +1547,15 @@ export const paintGulal: OrganicPainter = (
       }
       ctx.globalAlpha = 1;
     };
-    const count = Math.round((shown / 100) * 40);
+    // Corner powder clouds were removed: their blur was cut square by the
+    // ornament canvas. Every style now throws dry powder; haze is fainter.
+    const count = Math.round((shown / 100) * 40) * (haze ? 0.6 : 1);
     if (tier === "hero") {
-      if (s.style !== "Speckle dust") {
-        cloud(at, inks[ink], 1.1);
-        cloud((at + 2) % 4, inks[(ink + 2) % 4], 0.9);
-      }
-      if (!haze) {
-        speckle(at, inks[ink], count);
-        speckle((at + 2) % 4, inks[(ink + 2) % 4], count);
-        speckle((at + 1) % 4, inks[(ink + 1) % 4], count / 3);
-      }
-    } else if (tier === "card") {
-      if (s.style !== "Speckle dust") cloud(at, inks[ink], 0.85);
-      if (!haze) speckle(at, inks[ink], count * 0.7);
-    } else {
-      if (s.style !== "Speckle dust") cloud(at, inks[ink], 0.6);
-      if (!haze) speckle(at, inks[ink], count * 0.4);
-    }
+      speckle(at, inks[ink], count);
+      speckle((at + 2) % 4, inks[(ink + 2) % 4], count);
+      speckle((at + 1) % 4, inks[(ink + 1) % 4], count / 3);
+    } else if (tier === "card") speckle(at, inks[ink], count * 0.7);
+    else speckle(at, inks[ink], count * 0.4);
   });
 
 /* ───────────────────────── Yule Knit ───────────────────────── */
@@ -1820,6 +1780,194 @@ export const paintLiquid: OrganicPainter = (
     ctx.globalAlpha = 1;
   });
 
+/* ───────────────────────── Sunset Drive ───────────────────────── */
+
+/** A striped sun setting behind the top edge and a horizon grid under the card. */
+export const paintSunset: OrganicPainter = (
+  ctx,
+  _p,
+  w,
+  h,
+  settings,
+  colors,
+  clock,
+  playing,
+  index,
+  limits,
+  shown = settings.density,
+) =>
+  framed(ctx, w, h, limits, () => {
+    const s = paintState(settings),
+      tier = tierOf(w, h),
+      right = choose(index, s.seed, 1, 2) === 0,
+      t = playing ? clock * (s.motion / 100) : 0,
+      sun = s.style === "Sun and grid" || s.style === "Sun only",
+      grid = s.style === "Sun and grid" || s.style === "Grid only";
+    if (sun) {
+      const r =
+          tier === "hero"
+            ? Math.min(30, 22 + s.scale * 0.35)
+            : tier === "card"
+              ? Math.min(27, 18 + s.scale * 0.3)
+              : 14,
+        cx = right ? w - r - 26 : r + 26,
+        cy = -2;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(cx - r - 14, -40, r * 2 + 28, 40 + cy);
+      ctx.clip();
+      const g = ctx.createLinearGradient(0, cy - r, 0, cy);
+      g.addColorStop(0, colors.b);
+      g.addColorStop(1, colors.a);
+      glow(ctx, colors.a, 10);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, Math.PI, tau);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      // Gaps widen toward the horizon, the classic sliced sun.
+      for (let i = 1; i <= 4; i++) {
+        const y = cy - (r * i) / 5;
+        ctx.clearRect(
+          cx - r - 1,
+          y - (5 - i) * 0.45 - 0.6,
+          r * 2 + 2,
+          (5 - i) * 0.9 + 0.6,
+        );
+      }
+      ctx.restore();
+    }
+    if (grid && tier !== "small") {
+      const half = tier === "card",
+        x0 = half && right ? w * 0.45 : 0,
+        x1 = half && !right ? w * 0.55 : w,
+        depth = 24,
+        top = h + 4,
+        phase = (t * 0.5) % 1,
+        vx = (x0 + x1) / 2;
+      ctx.strokeStyle = colors.a;
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 5; i++) {
+        const k = (i + phase) / 5,
+          y = top + depth * k * k;
+        ctx.globalAlpha = 0.12 + 0.4 * k;
+        ctx.beginPath();
+        ctx.moveTo(x0, y);
+        ctx.lineTo(x1, y);
+        ctx.stroke();
+      }
+      const cols = Math.max(4, Math.round((x1 - x0) / (40 - shown * 0.15)));
+      ctx.globalAlpha = 0.3;
+      for (let i = 0; i <= cols; i++) {
+        const x = x0 + ((x1 - x0) * i) / cols;
+        ctx.beginPath();
+        ctx.moveTo(vx + (x - vx) * 0.6, top);
+        ctx.lineTo(vx + (x - vx) * 1.3, top + depth);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    }
+  });
+
+/* ───────────────────────── Save Point ───────────────────────── */
+
+const pixelFont = (size: number) =>
+  `400 ${size}px "Silkscreen", "VT323", ui-monospace, monospace`;
+
+/** A blinking menu cursor beside the window and a sparkle on one corner. */
+export const paintMenuCursor: OrganicPainter = (
+  ctx,
+  _p,
+  w,
+  h,
+  settings,
+  colors,
+  clock,
+  playing,
+  index,
+  limits,
+) =>
+  framed(ctx, w, h, limits, () => {
+    const s = paintState(settings),
+      tier = tierOf(w, h),
+      at = choose(index, s.seed, 1, 4),
+      cursor = s.style === "Cursor and stars" || s.style === "Cursor only",
+      stars = s.style === "Cursor and stars" || s.style === "Stars only",
+      blink = !playing || s.motion === 0 || clock % 1 < 0.6;
+    if (cursor && blink && tier !== "small") {
+      const y = Math.min(h - 14, limits.top + 12),
+        x = -6,
+        size = 6 + s.scale * 0.12;
+      ctx.beginPath();
+      ctx.moveTo(x - size * 1.6, y - size);
+      ctx.lineTo(x, y);
+      ctx.lineTo(x - size * 1.6, y + size);
+      ctx.closePath();
+      ctx.fillStyle = colors.b;
+      ctx.fill();
+      ctx.strokeStyle = colors.d;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    if (stars) {
+      const corners = cornersOf(w, h),
+        picks = tier === "hero" ? [at, (at + 2) % 4] : [at];
+      for (const [n, k] of picks.entries()) {
+        const [x, y, sx, sy] = corners[k],
+          twinkle = playing ? 0.55 + 0.45 * Math.sin(clock * 3 + n * 2) : 1,
+          r = (tier === "small" ? 4 : 5) + s.scale * 0.12;
+        ctx.globalAlpha = twinkle;
+        ctx.fillStyle = colors.c;
+        star(ctx, x - sx * 9, y - sy * 9, r, r * 0.28, 4);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+    }
+    if (tier === "hero" && s.style !== "Plain window")
+      label(ctx, "FILE 1", w - 4, -12, pixelFont(9), colors.d, "right");
+  });
+
+/* ───────────────────────── Arcade Cabinet ───────────────────────── */
+
+/** Chasing marquee bulbs over the top edge and credits under the card. */
+export const paintMarquee: OrganicPainter = (
+  ctx,
+  _p,
+  w,
+  h,
+  settings,
+  colors,
+  clock,
+  playing,
+  _index,
+  limits,
+  shown = settings.density,
+) =>
+  framed(ctx, w, h, limits, () => {
+    const s = paintState(settings),
+      tier = tierOf(w, h),
+      bulbs = s.style === "Bulbs and credits" || s.style === "Bulbs only",
+      credits = s.style === "Bulbs and credits" || s.style === "Credits only";
+    if (bulbs) {
+      const gap = 18 - shown * 0.05,
+        n = Math.max(3, Math.floor((w - 16) / gap)),
+        step =
+          playing && s.motion > 0 ? Math.floor(clock * (2 + s.motion / 25)) : 0;
+      for (let i = 0; i <= n; i++) {
+        const x = 8 + ((w - 16) * i) / n,
+          lit = (i + step) % 3 === 0;
+        if (lit) glow(ctx, colors.b, 6);
+        dot(ctx, x, -8, lit ? 2.4 : 1.8, lit ? colors.b : colors.d);
+        ctx.shadowBlur = 0;
+      }
+    }
+    if (credits && tier !== "small") {
+      label(ctx, "1UP 004200", 0, h + 15, pixelFont(9), colors.a);
+      if (tier === "hero" && (!playing || s.motion === 0 || clock % 1.2 < 0.8))
+        label(ctx, "INSERT COIN", w, h + 15, pixelFont(9), colors.b, "right");
+    }
+  });
+
 export const launchPainters = {
   crt: paintPhosphor,
   panes: paintPanes,
@@ -1836,4 +1984,7 @@ export const launchPainters = {
   gulal: paintGulal,
   knit: paintKnit,
   liquid: paintLiquid,
+  sunset: paintSunset,
+  menu: paintMenuCursor,
+  marquee: paintMarquee,
 } as const;

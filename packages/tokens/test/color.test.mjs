@@ -12,6 +12,7 @@ import {
   semanticColors,
   resolveColor,
   actionColors,
+  focusColor,
   contrastRatio,
   isInSrgb,
   toOklch,
@@ -190,7 +191,7 @@ test("custom seeds are deterministic, gamut-mapped and reject invalid input", ()
           4.5,
           `custom/${mode}/${state}`,
         );
-      assert.equal(Object.keys(colorThemeVariables(palette, mode)).length, 14);
+      assert.equal(Object.keys(colorThemeVariables(palette, mode)).length, 15);
     }
   }
   for (const seed of [
@@ -229,4 +230,20 @@ test("zero-chroma custom seeds remain achromatic and unsafe action seeds are rej
     () => createColorPalette([0.59, 0.14, 155]),
     /common 4.5:1 foreground/,
   );
+});
+
+test("focus rings stay at 3:1 on mid-grey light surfaces and against dark ones", () => {
+  // 4.4:1 against white is what 3:1 needs on a light-grey surface such as
+  // Brutalist Concrete's #d6d4cf; step 8 alone was under that for every family.
+  const white = [1, 0, 0];
+  for (const family of colorFamilies) {
+    const light = colorPalettes[family].light;
+    minimum(focusColor(light, "light"), white, 4.4, `${family}/light/focus`);
+    const dark = colorPalettes[family].dark;
+    minimum(focusColor(dark, "dark"), dark[2], 3, `${family}/dark/focus`);
+    assert.deepEqual(
+      resolveColor(`${family}.focus`, "light"),
+      focusColor(light, "light"),
+    );
+  }
 });

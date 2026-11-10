@@ -32,6 +32,11 @@
     --dixy-font-title-sm-family:
       "Archivo Black", "Arial Black", ui-sans-serif, sans-serif;
     --dixy-skin-edge: #2a2a2a;
+    --dixy-skin-field-edge: color-mix(
+      in oklab,
+      var(--dixy-color-base-9) 50%,
+      var(--dixy-color-base-8)
+    );
     --dixy-organic-density: 40;
     --dixy-organic-cornerDensity: 70;
     --dixy-organic-canopyDepth: 30;
@@ -274,6 +279,28 @@
     background-color: var(--dixy-skin-surface);
   }
   :is(
+      .dixy-dialog-popup,
+      .dixy-alert-dialog-popup,
+      .dixy-drawer-popup,
+      .dixy-popover-popup,
+      .dixy-preview-card-popup,
+      .dixy-tooltip-popup,
+      .dixy-select-popup,
+      .dixy-combobox-popup,
+      .dixy-autocomplete-popup,
+      .dixy-menu-popup,
+      .dixy-context-menu-popup,
+      .dixy-navigation-menu-popup
+    )[data-dixy-skin="dixy/riso-zine"]:not([data-dixy-material-override]):not(
+      :where([data-dixy-material-override]) *
+    ):not([data-variant="solid"]):not([data-variant="soft"]) {
+    background-color: color-mix(
+      in srgb,
+      var(--dixy-color-background-surface-raised) 94%,
+      var(--dixy-skin-surface)
+    );
+  }
+  :is(
     .dixy-input,
     .dixy-textarea,
     .dixy-native-select,
@@ -305,7 +332,7 @@
       :where([data-dixy-material-override]) *
     ) {
     border-width: var(--dixy-input-border-width);
-    border-color: var(--dixy-skin-edge);
+    border-color: var(--dixy-skin-field-edge);
     background-image: var(--dixy-skin-paint);
     background-color: var(--dixy-color-background-canvas);
     background-size:
@@ -314,6 +341,43 @@
       100% 100%,
       100% 100%;
     box-shadow: var(--dixy-skin-inset);
+  }
+  /* materials.css styles [data-dixy-visual] surfaces at 0,5,0. Match the
+     skin's paint to that so its image and grain size always land together;
+     otherwise the material image is tiled at the grain size (stripes). */
+  :is(
+      .dixy-card,
+      .dixy-box,
+      .dixy-dialog-popup,
+      .dixy-alert-dialog-popup,
+      .dixy-drawer-popup,
+      .dixy-popover-popup,
+      .dixy-preview-card-popup,
+      .dixy-tooltip-popup,
+      .dixy-select-popup,
+      .dixy-combobox-popup,
+      .dixy-autocomplete-popup,
+      .dixy-menu-popup,
+      .dixy-context-menu-popup,
+      .dixy-navigation-menu-popup,
+      .dixy-toast-root,
+      .dixy-alert,
+      .dixy-list-box,
+      .dixy-calendar,
+      .dixy-range-calendar,
+      .dixy-input,
+      .dixy-textarea,
+      .dixy-native-select,
+      .dixy-select-trigger,
+      .dixy-input-group,
+      .dixy-combobox-input-group,
+      .dixy-autocomplete-input-group,
+      .dixy-number-field-group,
+      .dixy-otp-field-input
+    )[data-dixy-skin="dixy/riso-zine"]:not([data-dixy-material-override]):not(
+      :where([data-dixy-material-override]) *
+    )[data-dixy-visual][data-material]:not([data-disabled]) {
+    background-image: var(--dixy-skin-paint);
   }
   :is(.dixy-button)[data-dixy-skin="dixy/riso-zine"]:not(
       [data-dixy-material-override]

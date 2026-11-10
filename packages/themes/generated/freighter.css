@@ -31,6 +31,11 @@
     --dixy-font-title-sm-family:
       "Archivo Black", "Arial Black", ui-sans-serif, sans-serif;
     --dixy-skin-edge: #9b9a94;
+    --dixy-skin-field-edge: color-mix(
+      in oklab,
+      var(--dixy-color-base-9) 50%,
+      var(--dixy-color-base-8)
+    );
     --dixy-organic-density: 50;
     --dixy-organic-cornerDensity: 70;
     --dixy-organic-canopyDepth: 40;
@@ -280,6 +285,28 @@
     background-color: var(--dixy-skin-surface);
   }
   :is(
+      .dixy-dialog-popup,
+      .dixy-alert-dialog-popup,
+      .dixy-drawer-popup,
+      .dixy-popover-popup,
+      .dixy-preview-card-popup,
+      .dixy-tooltip-popup,
+      .dixy-select-popup,
+      .dixy-combobox-popup,
+      .dixy-autocomplete-popup,
+      .dixy-menu-popup,
+      .dixy-context-menu-popup,
+      .dixy-navigation-menu-popup
+    )[data-dixy-skin="dixy/freighter"]:not([data-dixy-material-override]):not(
+      :where([data-dixy-material-override]) *
+    ):not([data-variant="solid"]):not([data-variant="soft"]) {
+    background-color: color-mix(
+      in srgb,
+      var(--dixy-color-background-surface-raised) 94%,
+      var(--dixy-skin-surface)
+    );
+  }
+  :is(
     .dixy-input,
     .dixy-textarea,
     .dixy-native-select,
@@ -311,7 +338,7 @@
       :where([data-dixy-material-override]) *
     ) {
     border-width: var(--dixy-input-border-width);
-    border-color: var(--dixy-skin-edge);
+    border-color: var(--dixy-skin-field-edge);
     background-image: var(--dixy-skin-paint);
     background-color: var(--dixy-color-background-canvas);
     background-size:
@@ -320,6 +347,43 @@
       100% 100%,
       100% 100%;
     box-shadow: var(--dixy-skin-inset);
+  }
+  /* materials.css styles [data-dixy-visual] surfaces at 0,5,0. Match the
+     skin's paint to that so its image and grain size always land together;
+     otherwise the material image is tiled at the grain size (stripes). */
+  :is(
+      .dixy-card,
+      .dixy-box,
+      .dixy-dialog-popup,
+      .dixy-alert-dialog-popup,
+      .dixy-drawer-popup,
+      .dixy-popover-popup,
+      .dixy-preview-card-popup,
+      .dixy-tooltip-popup,
+      .dixy-select-popup,
+      .dixy-combobox-popup,
+      .dixy-autocomplete-popup,
+      .dixy-menu-popup,
+      .dixy-context-menu-popup,
+      .dixy-navigation-menu-popup,
+      .dixy-toast-root,
+      .dixy-alert,
+      .dixy-list-box,
+      .dixy-calendar,
+      .dixy-range-calendar,
+      .dixy-input,
+      .dixy-textarea,
+      .dixy-native-select,
+      .dixy-select-trigger,
+      .dixy-input-group,
+      .dixy-combobox-input-group,
+      .dixy-autocomplete-input-group,
+      .dixy-number-field-group,
+      .dixy-otp-field-input
+    )[data-dixy-skin="dixy/freighter"]:not([data-dixy-material-override]):not(
+      :where([data-dixy-material-override]) *
+    )[data-dixy-visual][data-material]:not([data-disabled]) {
+    background-image: var(--dixy-skin-paint);
   }
   :is(.dixy-button)[data-dixy-skin="dixy/freighter"]:not(
       [data-dixy-material-override]
@@ -834,16 +898,72 @@
     :is(.dixy-card, .dixy-dialog-popup)[data-dixy-skin="dixy/freighter"] {
     border-radius: 0;
     --dixy-chrome-bar-radius: 0px;
-    clip-path: polygon(
-      10px 0,
-      calc(100% - 10px) 0,
-      100% 10px,
-      100% calc(100% - 10px),
-      calc(100% - 10px) 100%,
-      10px 100%,
-      0 calc(100% - 10px),
-      0 10px
-    );
+  }
+  @supports (corner-shape: bevel) {
+    .dixy-theme[data-dixy-skin="dixy/freighter"]
+      :is(.dixy-card, .dixy-dialog-popup)[data-dixy-skin="dixy/freighter"] {
+      border-radius: 10px;
+      corner-shape: bevel;
+    }
+  }
+  @supports not (corner-shape: bevel) {
+    .dixy-theme[data-dixy-skin="dixy/freighter"]
+      :is(.dixy-card, .dixy-dialog-popup)[data-dixy-skin="dixy/freighter"] {
+      clip-path: polygon(
+        10px 0,
+        calc(100% - 10px) 0,
+        100% 10px,
+        100% calc(100% - 10px),
+        calc(100% - 10px) 100%,
+        10px 100%,
+        0 calc(100% - 10px),
+        0 10px
+      );
+    }
+    .dixy-theme[data-dixy-skin="dixy/freighter"]
+      :is(
+        .dixy-card,
+        .dixy-dialog-popup
+      )[data-dixy-skin="dixy/freighter"]::after {
+      content: "";
+      position: absolute;
+      inset: calc(var(--dixy-skin-frame-width, 1px) * -1);
+      pointer-events: none;
+      z-index: 1;
+      background:
+        linear-gradient(
+            to bottom right,
+            transparent 50%,
+            var(--dixy-skin-edge) 50%
+              calc(50% + var(--dixy-skin-frame-width, 1px)),
+            transparent calc(50% + var(--dixy-skin-frame-width, 1px))
+          )
+          top left/10px 10px no-repeat,
+        linear-gradient(
+            to bottom left,
+            transparent 50%,
+            var(--dixy-skin-edge) 50%
+              calc(50% + var(--dixy-skin-frame-width, 1px)),
+            transparent calc(50% + var(--dixy-skin-frame-width, 1px))
+          )
+          top right/10px 10px no-repeat,
+        linear-gradient(
+            to top right,
+            transparent 50%,
+            var(--dixy-skin-edge) 50%
+              calc(50% + var(--dixy-skin-frame-width, 1px)),
+            transparent calc(50% + var(--dixy-skin-frame-width, 1px))
+          )
+          bottom left/10px 10px no-repeat,
+        linear-gradient(
+            to top left,
+            transparent 50%,
+            var(--dixy-skin-edge) 50%
+              calc(50% + var(--dixy-skin-frame-width, 1px)),
+            transparent calc(50% + var(--dixy-skin-frame-width, 1px))
+          )
+          bottom right/10px 10px no-repeat;
+    }
   }
   .dixy-theme[data-dixy-skin="dixy/freighter"]
     :is(.dixy-card)[data-dixy-skin="dixy/freighter"]

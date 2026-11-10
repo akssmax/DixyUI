@@ -10,5 +10,6 @@ Dixy is a React component library and a design engineering learning project.
 - Maintain DESIGN_ENGINEERING_CHECKLIST.md and docs/BUILD_LOG.md with evidence. Implementation completion does not establish the user's mastery; leave personal learning items unchecked unless the user confirms them.
 - Run pnpm check for implementation changes. Run pnpm package:check when changing public exports, declarations, CSS or packaging.
 - Verify relevant desktop, mobile, keyboard, light/dark and reduced-motion behavior. Record untested cases honestly.
+- To review or fix built-in themes, follow `.claude/skills/theme-audit/SKILL.md`: audit at `/lab/theme-audit`, patch with `pnpm themes:fix`, re-audit.
 - Do not use TinyFish or add a TinyFish integration.
 - Use Codex's in-app browser for visual and interaction testing; do not launch a separate Chrome instance.

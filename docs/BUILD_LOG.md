@@ -1864,3 +1864,120 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
 - Verified: both changed scripts pass, and both still fail on an injected type error (a demo; one skin's entry, reported as `skin-checks/glass-ui.tsx`). `pnpm check` and `pnpm format:check` pass, and the workflow YAML parses.
 - Not done: Turborepo caching in CI. It would need `scripts/**` in the cache key, since the docs build runs scripts from outside the package, and the remaining build time no longer justifies the risk of stale results.
 - Not verified yet: the CI timing on GitHub; this PR's own run is the first measurement. Branches pushed without a PR no longer get CI.
+
+### 2026-11-10 — Theme audit and fix loop
+
+- Request: a faster way to fix theme bugs, built so an agent can review and fix them rather than someone clicking through the playground.
+- What changed:
+  - `/lab/theme-audit` renders every built-in theme on one specimen in light and dark. It measures four things in the browser:
+    - text contrast: 4.5:1, or 3:1 for large text
+    - focus: a visible change, and a ring of at least 3:1
+    - target size: 24×24, reported as a warning
+    - content past the card or clipped labels
+  - The report is on `window.__dixyThemeAudit`, and `<html data-audit-status="done">` marks when it's finished. A dev-only Vite middleware writes the report to `.dixy/theme-audit.json`; it accepts same-origin JSON posts only.
+  - `pnpm themes:fix <slug> '<json patch>'` (plus `--show`, `--reset` and `--list`):
+    - validates the patch with the theme schema
+    - stores the smallest diff over the starter in `packages/themes/src/theme-fixes.ts`
+    - rebuilds `@dixy-ui/themes` in about 2 seconds
+  - `documents.ts` now exports `starterDocuments` (as authored); `themeDocuments` is those starters with their fixes applied.
+  - The project skill `.claude/skills/theme-audit` describes the loop: audit, triage, fix, re-audit. AGENTS.md points Codex to it.
+- How it measures:
+  - Colours are resolved through a 1×1 canvas, so oklch and `color-mix` values are measured as rendered.
+  - Backgrounds are composited up the ancestor chain. When a gradient or texture sits behind text, the result is marked approximate.
+  - Focus is measured by mirroring every `:focus`/`:focus-visible` rule onto `[data-audit-focus]`. Calling `focus()` from a script doesn't match `:focus-visible` in Chrome, and nothing matches while the window is in the background (the first run reported every focus check as unverifiable).
+- Useful failures:
+  - The first overflow check compared the specimen's scroll width and flagged 42 specimens. Every one was an ornament canvas bleeding past the card on purpose. The check now measures only the audited elements against the card edge.
+- First run, 31 themes × 2 appearances: 29 clean, 10 failures.
+  - Brutalist Concrete (light, its default appearance): focus ring 2.81:1 (amber `brand-8` #9e7600 on #d6d4cf).
+  - Winamp Signal (light): focus ring 2.99:1 (lime #618d25 on #dee2dd).
+  - Both rings are `--dixy-color-border-focus` = accent step 8, which is too light for amber and lime on grey surfaces. A theme fix can only swap the accent; a trial patch to orange gave 2.91:1, then I reset it. The proper fix is in the token generator or a focus-colour option for themes, so I left both as findings.
+- Verified:
+  - Negative test: injected styles produced each failure — contrast 1.36:1 and 1.55:1, no focus change, a 14×14 target and a clipped badge.
+  - The `themes:fix` round trip changed the measured result after a reload, and `--reset` left no diff.
+  - `node --test` covers patch merge, diff round-trip and the installed themes matching starters plus fixes.
+  - Page at 1280px and 375px with no horizontal scroll.
+  - `pnpm check` and `pnpm format:check` pass. `package:check` passes with the verify step run `--online`; the local offline store was missing rolldown.
+- Not tested:
+  - The docs page in dark appearance.
+  - Ornaments drawn over text.
+  - Hover, pressed and disabled states.
+  - Real keyboard focus order.
+  - Screen readers.
+
+### 2026-11-10 — Field edges, solid overlays, Candy Clay dark glow
+
+- Request: audit the themes for what to improve; then fix field borders. Mid-way, two reports from the deployed playground: popovers and combobox lists were see-through on a glass material, and Candy Clay glowed too much in dark mode.
+- Audit addition: a `boundary` check (WCAG 1.4.11). A field's border or fill must reach 3:1 against the surface around it.
+  - Before: 46 failures across 25 themes. Glass UI light 1.01:1, Prism Glass light 1.01:1, Ocean Depths light 1.03:1; in the screenshots, the field could barely be seen.
+  - Cause: `compile-css.ts` gave fields `--dixy-skin-edge`, the decorative material edge (translucent white on glass materials).
+- Fix: fields use `--dixy-skin-field-edge`, a 50% oklab mix of `base-9` and `base-8`. I measured the candidates in the browser on every theme and appearance:
+
+  | Candidate        | Lowest ratio      |
+  | ---------------- | ----------------- |
+  | `border-default` | 2.66:1 (5 misses) |
+  | 25% mix          | 2.98:1            |
+  | 50% mix          | 3.35:1            |
+  | `base-9`         | 4.25:1            |
+
+  The 50% mix is the lightest one that passes everywhere with some margin.
+
+- After: 0 boundary failures. 29 of 31 themes are clean; the only failures left are the two known focus rings (Brutalist Concrete, Winamp Signal).
+- Overlays: the Liquid glass material (Glass UI) paints surfaces 45% white with no backdrop blur, so popovers showed the content behind them sharply. Overlay popups now mix in the opaque raised surface: 94% opaque without blur, 72% with blur. The Glass UI popover measured 0.97 alpha, up from 0.45, and the screenshot shows nothing behind it.
+- Candy Clay dark: materials can now set `darkShadow` and `darkInset`. In dark mode, Candy Clay replaces the pink halo and white highlight (which read as a glow on a dark canvas) with a dark drop shadow. The screenshot shows no halo, and the clay cushion is kept.
+- Verified: full audit (31 themes × 2 appearances), `pnpm check`, `pnpm format:check` and `skins:check`. Screenshots: Glass UI, Ocean Depths, Candy Clay, and the Glass UI popover in the playground.
+- Not tested:
+  - The deployed site on a phone; the new CSS only reaches it after a release.
+  - Combobox, menu and dialog popups individually (the change uses the same selector list as popovers).
+  - Hover, invalid and disabled field states.
+  - Slider and progress tracks and tab lists, which still use the decorative edge.
+
+### 2026-11-10 — Focus rings, notched corners, Holi clouds
+
+- Focus rings: `border.focus` was `brand-8`.
+  - In light mode, step 8 measures 3.85–4.4:1 against white in every family. Amber and lime were not the outliers (green is 3.85:1).
+  - Brutalist Concrete and Winamp Signal failed because their light surfaces are mid-grey (#d6d4cf, #dee2dd). The earlier note blaming the amber and lime palettes was wrong.
+  - Fix: every family gets a derived `focus` step from `focusColor()` in `packages/tokens/src/color.ts`, following the same pattern as `pressed` and `on-solid`. In light mode it is step 8 mixed 30% toward step 11 in OKLab; in dark mode it is step 8.
+  - Measured on every theme's real surfaces in light mode:
+
+    | Mix          | Lowest ratio |
+    | ------------ | ------------ |
+    | step 8 alone | 2.81:1       |
+    | 80%          | 3.23:1       |
+    | 70%          | 3.48:1       |
+    | 50%          | 4.05:1       |
+
+    70% keeps a margin while the ring still reads as the accent.
+
+  - A token test checks that every family's light focus colour reaches at least 4.4:1 against white (lowest is green at 4.81:1), and that the dark one reaches at least 3:1 against step 2.
+  - Full audit: 31 of 31 themes clean, 0 failures.
+- Notched corners (Y2K Titanium, Swiss Poster, Orbital HUD, Freighter): `clip-path` removed the border along with the corner, so the diagonal had no line.
+  - Fix: `corner-shape: bevel` with a 10px radius where supported. This draws the border along the bevel and keeps outer shadows. Other browsers keep the clip-path, plus an `::after` overlay that redraws the four diagonals in `--dixy-skin-edge` at the frame width, inside the clip.
+  - Verified in Chrome 152 at 4× zoom on Y2K Titanium: the border follows the bevel.
+- Holi Colours: the corner powder clouds were blurred radial fills cut off square by the ornament canvas, so I removed them. Every style now draws the speckle dust; "Soft haze" draws it fainter. Screenshot checked.
+- Verified: full audit, `pnpm check`, `pnpm format:check` and `pnpm package:check` (passed without the `--online` workaround this time).
+- Not tested:
+  - The notched-corner fallback in a browser without `corner-shape` (Safari, Firefox).
+  - Dark mode screenshots of the notched themes.
+  - The playground's custom-seed path with a grey canvas.
+
+### 2026-11-10 — Sunset Drive, Save Point, Arcade Cabinet, and the material stripe bug
+
+- New themes, chosen from the HTML mocks in `docs/mocks/`:
+  - **Sunset Drive**: pink accent and mauve neutral on a glossy material. Its `sunset` frame paints a striped sun above a top corner and a perspective grid below the card.
+  - **Save Point**: yellow accent and slate neutral. Its `menu` frame paints a blinking ▶ cursor, corner sparkles and a "FILE 1" label.
+  - **Arcade Cabinet**: red accent with square corners and a scanline backdrop. Its `marquee` frame paints chasing bulbs and a "1UP" / "INSERT COIN" credit line.
+  - Each theme has a material, frame recipe, organic settings (4 styles), painter, React ornament entry, three package exports, and a `verify-package` entry.
+- Character tests require each starter's chrome and control/motion/backdrop signature to be unique. The first drafts reused Living Forest's, Riso Zine's, Sumi Ink's and Phosphor Terminal's. Changes:
+  - Sunset Drive gets a tinted well.
+  - Save Point gets double edges with a tinted well.
+  - Arcade Cabinet gets an LCD well and snappy motion.
+- Stripe bug: with `materials.css` loaded (playground, shader lab, audit), the material's `[data-dixy-visual][data-material]` rule (specificity 0,5,0) beat the skin's surface rule (0,3,0) for `background-image`, but the skin's `background-size` still applied. The glossy image's 6px highlight was tiled every 4px.
+  - All 11 glossy themes were affected; it only showed clearly on dark Sunset Drive. Matte, soft, metal and paper themes also lost their skin paint the same way, without visible stripes.
+  - Fix: a skin rule for surfaces and fields at 0,6,0 that sets `--dixy-skin-paint`, so the image and its size always come from the same place. Checked: no themed card in the audit still uses a material image.
+- Shader lab: `sunsetGrid` (sliced sun and scrolling perspective grid), `menuStars` (dithered gradient with four-point sparkles) and `arcadeAttract` (three layers of pixel stars with scanlines). Screenshots of all three in dark, and Sunset Drive in light; no console errors.
+- Verified: full audit 34 of 34 clean in light and dark, `pnpm check`, `pnpm format:check`, `pnpm package:check`.
+- Not tested:
+  - Mobile width and reduced motion for the new ornaments and shaders.
+  - Keyboard focus beyond what the audit measures.
+  - Light mode screenshots of the Save Point and Arcade shaders.
+- Fonts reuse faces already in the library (Tilt Neon, Figtree, Silkscreen, VT323), not the mocks' exact fonts.

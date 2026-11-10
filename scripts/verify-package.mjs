@@ -274,6 +274,14 @@ try {
     ["holi-colours", "HoliOrnament", "holi-ornament", "holiColoursTheme"],
     ["yule-knit", "YuleOrnament", "yule-ornament", "yuleKnitTheme"],
     ["glass-ui", "GlassOrnament", "glass-ornament", "glassUITheme"],
+    ["sunset-drive", "SunsetOrnament", "sunset-ornament", "sunsetDriveTheme"],
+    ["save-point", "SavePointOrnament", "savepoint-ornament", "savePointTheme"],
+    [
+      "arcade-cabinet",
+      "ArcadeOrnament",
+      "arcade-ornament",
+      "arcadeCabinetTheme",
+    ],
   ];
   const rendererPresent = (runtime, prefix) => {
     const token = prefix.split("-")[0];

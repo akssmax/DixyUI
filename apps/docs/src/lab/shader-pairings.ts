@@ -12,6 +12,9 @@ export const shaderPairings = [
   },
   { slug: "diwali-lights", program: "bokeh", label: "Lamp bokeh" },
   { slug: "solar-sail", program: "aurora", label: "Aurora and stars" },
+  { slug: "sunset-drive", program: "sunsetGrid", label: "Sunset grid" },
+  { slug: "save-point", program: "menuStars", label: "Menu sky" },
+  { slug: "arcade-cabinet", program: "arcadeAttract", label: "Attract mode" },
 ] as const satisfies readonly {
   slug: string;
   program: ShaderProgramId;

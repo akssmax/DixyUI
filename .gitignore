@@ -17,3 +17,6 @@ test-results/
 .wrangler/
 .dev.vars*
 !.dev.vars.example
+
+# Theme audit report (pnpm dev, /lab/theme-audit)
+.dixy/

@@ -26,6 +26,9 @@ export interface ResolvedThemeRecipe {
   canvas: string;
   /** Optional ground image for dark appearance; light canvas is used when absent. */
   darkCanvas?: string;
+  /** Optional shadow and inset for dark appearance; light values are used when absent. */
+  darkShadow?: string;
+  darkInset?: string;
   tint: readonly string[];
   parameters: ThemeDocument["recipes"]["frame"]["parameters"];
   ornament: ThemeDocument["recipes"]["frame"]["ornament"];

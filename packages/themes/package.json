@@ -322,6 +322,33 @@
     "./glass-ui/react": {
       "types": "./dist/glass/ornament.d.ts",
       "import": "./dist/glass/ornament.js"
+    },
+    "./sunset-drive": {
+      "types": "./dist/skins/sunset-drive.d.ts",
+      "import": "./dist/skins/sunset-drive.js"
+    },
+    "./sunset-drive.css": "./dist/sunset-drive.css",
+    "./sunset-drive/react": {
+      "types": "./dist/sunset/ornament.d.ts",
+      "import": "./dist/sunset/ornament.js"
+    },
+    "./save-point": {
+      "types": "./dist/skins/save-point.d.ts",
+      "import": "./dist/skins/save-point.js"
+    },
+    "./save-point.css": "./dist/save-point.css",
+    "./save-point/react": {
+      "types": "./dist/savepoint/ornament.d.ts",
+      "import": "./dist/savepoint/ornament.js"
+    },
+    "./arcade-cabinet": {
+      "types": "./dist/skins/arcade-cabinet.d.ts",
+      "import": "./dist/skins/arcade-cabinet.js"
+    },
+    "./arcade-cabinet.css": "./dist/arcade-cabinet.css",
+    "./arcade-cabinet/react": {
+      "types": "./dist/arcade/ornament.d.ts",
+      "import": "./dist/arcade/ornament.js"
     }
   },
   "scripts": {

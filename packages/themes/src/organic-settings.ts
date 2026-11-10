@@ -418,6 +418,55 @@ export const organicFrameRecipes = freezeData({
     light: ["#ffffff", "#9fc4ff", "#ffc2e2", "#0a1a33"],
     dark: ["#ffffff", "#6ea8ff", "#d68cff", "#e8f0ff"],
   },
+  // 2027 game frames. Painters live in organic-paint-launch.ts.
+  sunset: {
+    label: "Sunset grid",
+    styles: ["Sun and grid", "Sun only", "Grid only", "Bare coast"],
+    defaults: {
+      density: 55,
+      cornerDensity: 50,
+      canopyDepth: 40,
+      variation: 30,
+      scale: 22,
+      stemWeight: 30,
+      motion: 45,
+      seed: 86,
+    },
+    light: ["#e63d8f", "#ff8a3d", "#7a3fd1", "#3a1452"],
+    dark: ["#ff4fa3", "#ffb347", "#b06bff", "#fff3f8"],
+  },
+  menu: {
+    label: "Menu window",
+    styles: ["Cursor and stars", "Cursor only", "Stars only", "Plain window"],
+    defaults: {
+      density: 50,
+      cornerDensity: 50,
+      canopyDepth: 30,
+      variation: 20,
+      scale: 18,
+      stemWeight: 30,
+      motion: 40,
+      seed: 94,
+    },
+    light: ["#2b44b8", "#d9a400", "#7d8fe0", "#16237e"],
+    dark: ["#fff3a8", "#ffe066", "#9fb2ff", "#e9edff"],
+  },
+  marquee: {
+    label: "Arcade marquee",
+    styles: ["Bulbs and credits", "Bulbs only", "Credits only", "Dark cabinet"],
+    defaults: {
+      density: 55,
+      cornerDensity: 50,
+      canopyDepth: 30,
+      variation: 20,
+      scale: 18,
+      stemWeight: 30,
+      motion: 50,
+      seed: 81,
+    },
+    light: ["#d0121c", "#d9a400", "#1a1a1a", "#8a8a9a"],
+    dark: ["#ff3b3b", "#ffd400", "#f4f4f4", "#4a4a5e"],
+  },
 } as const);
 export type OrganicFrame = keyof typeof organicFrameRecipes;
 export function isOrganicFrame(frame: string): frame is OrganicFrame {
