@@ -56,7 +56,7 @@ const references = [
     "Motion accessibility",
     "https://motion.dev/docs/react-accessibility",
     "MotionConfig suppresses transform/layout motion; other effects need explicit policy.",
-    "Use one Theme preference, a live OS subscription, zero-duration recipes and explicit loop cancellation.",
+    "Use one Theme preference, a live OS subscription, zero-duration movement with short effect fades, and explicit loop cancellation.",
   ],
 ] as const;
 
@@ -188,9 +188,9 @@ export default function MotionFoundation() {
       <p>
         The preview follows your OS setting even when the reduced-motion preview
         is unchecked. Change targets rapidly to feel spring continuity.
-        Switching to reduced motion snaps an active visual to its current
-        target; controls remain usable. Reset restores the controls and clears
-        example state.
+        Switching to reduced motion snaps an active visual to its current target
+        and keeps only short fades; controls remain usable. Reset restores the
+        controls and clears example state.
       </p>
       <CodeBlock code={code} filename="motion-example.tsx" collapsible />
       <ComponentMotionExamples />
@@ -332,7 +332,8 @@ export default function MotionFoundation() {
         Physical springs do not promise a fixed duration; inspect how quickly
         the content becomes usable and how long any residual movement lasts. Use
         a timing recipe when an exact deadline matters. Reduced motion takes
-        priority over every range and becomes immediate.
+        priority over every range: movement becomes immediate, and opacity or
+        colour changes keep a fade of 200ms or less.
       </p>
       <h3>The frequency principle</h3>
       <p>

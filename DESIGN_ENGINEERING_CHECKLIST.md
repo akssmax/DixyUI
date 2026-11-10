@@ -297,6 +297,8 @@ No additional component-library dependency is needed: Base UI is already install
 - [x] Run `pnpm check` and `pnpm package:check`; typecheck 22 Motion configurations within 268 complete examples.
 - [x] Codex in-app browser: normal/reduced previews, spring/effects behavior, stagger, keyboard, RTL, desktop/320/390px, light/dark and a production smoke test.
 - [ ] Actual OS reduced-motion media emulation, clipboard byte equivalence, manual screen-reader/forced-colors/zoom/touch and durable visual regression review.
+- [x] 2026-11-09: exit easing changed from ease-in to ease-out (`0.23, 1, 0.32, 1`) for all presence exits; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Close animation not reviewed visually.
+- [x] 2026-11-09: reduced motion keeps effects fades (opacity/colour, 200ms or less) through `--dixy-motion-effects-duration-*` while movement stays 0ms; `pnpm check`, `pnpm package:check` and computed-style checks in the in-app browser. Fades not watched; OS media emulation not run.
 
 Personal motion learning remains separate:
 
@@ -786,6 +788,7 @@ Verification for this pass:
 
 - [x] Opt-in WebGL backdrop on `/lab/shaders` for Ocean Depths and Phosphor Terminal, driven by theme tokens, with reduced-motion still frame, off-screen pause and static fallback. Evidence: docs/BUILD_LOG.md, 2026-11-09.
 - [x] Four more pairings (Neon Night Market, Prism Glass, Diwali Lights, Solar Sail); uncapped display-rate loop with adaptive resolution; every shader ≤0.1 ms/frame on Apple M5. Evidence: docs/BUILD_LOG.md, 2026-11-09.
+- [x] `/lab/shaders` rebuilt as a workbench: pinned preview stage with scene switcher and status HUD, inspector with shader gallery, pause/restart/speed, token-input swatches and render stats. Evidence: docs/BUILD_LOG.md, 2026-11-09 ("Shader lab workbench").
 - [ ] Measure real frame rate (120 Hz) and battery cost on a low-end laptop and a phone; test Safari and Firefox.
 - [ ] Decide whether shaders graduate into `@dixy-ui/themes` as an `effects: "shader"` option behind a separate lazy export (needs `pnpm package:check`).
 - [ ] Learning: explain how a fragment shader runs per pixel, why the runtime keeps a single WebGL context, and how token colours reach the GPU as uniforms.

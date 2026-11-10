@@ -128,12 +128,12 @@ function RecipePreview({
               <m.div
                 key={`panel-${reducedMotion}`}
                 className="motion-presence-panel"
-                initial={reducedMotion ? false : { opacity: 0, x: travel }}
+                initial={{ opacity: 0, x: travel }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{
                   opacity: 0,
                   x: travel,
-                  transition: tweenTransition("exit", reducedMotion),
+                  transition: tweenTransition("exit", reducedMotion, "effects"),
                 }}
                 transition={{ x: spatial, opacity: effects }}
                 style={panelStyle}
@@ -166,11 +166,15 @@ function RecipePreview({
                 ].map((label, index) => (
                   <m.li
                     key={label}
-                    initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: reducedMotion ? 0 : 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{
                       opacity: 0,
-                      transition: tweenTransition("exit", reducedMotion),
+                      transition: tweenTransition(
+                        "exit",
+                        reducedMotion,
+                        "effects",
+                      ),
                     }}
                     transition={{
                       y: {
@@ -205,7 +209,7 @@ function RecipePreview({
       </Inline>
       <Text role="status" size="sm" tone="muted">
         {reducedMotion
-          ? "Reduced motion: immediate changes."
+          ? "Reduced motion: short fades, no movement."
           : "Motion follows your system preference."}{" "}
         {recipe === "retarget"
           ? `Target: ${active ? "end" : "start"}.`
