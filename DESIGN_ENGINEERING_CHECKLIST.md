@@ -934,3 +934,15 @@ The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base
 - [ ] Learning: explain why Send/Stop is one button and why empty input uses `focusableWhenDisabled`.
 - [ ] Learning: explain what `completeMarkdown` repairs and why only the last block is re-parsed.
 - [ ] Learning: explain why the sidebar toggle and composer must stay the same DOM element across layout changes.
+- [x] Install commands for pnpm, npm, yarn and bun, with the choice kept per visitor and shared across the page.
+- [x] "Copy for agents" setup prompt that names the visitor's theme; tested against every catalog export.
+- [ ] Publish `llms.txt` and `llms-full.txt` generated from the API metadata.
+- [ ] Decide on an MCP server once the API is stable.
+- [ ] Learning: explain why `useSyncExternalStore` with a server snapshot avoids a hydration mismatch for a stored preference.
+- [x] Shift+R shuffles the homepage starter; tooltip shows the shortcut.
+- [x] Footer "Keyboard shortcuts" switch turns Shift+R off, kept per visitor (WCAG 2.1.4).
+- [ ] Check the shuffle shortcut on Windows and Linux browsers.
+- [x] Docs sidebar is a grouped tree: Get started, Foundations (Look/Feel), ten component purpose groups A–Z, Resources; collapsible, opens while filtering.
+- [ ] Screen-reader pass on the sidebar disclosures.
+- [ ] Learning: explain why components are grouped by purpose rather than by primitive.
+- [ ] Learning: explain WCAG 2.1.4 and why Shift+R still counts as a character-key shortcut.

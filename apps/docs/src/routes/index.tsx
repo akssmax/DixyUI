@@ -25,15 +25,25 @@ import {
   Container,
   Heading,
   IconButton,
+  Kbd,
   Select,
   Slider,
   Text,
-  TextField,
   Theme,
   Toggle,
   ToggleGroup,
+  Tooltip,
 } from "@dixy-ui/react";
 import { DixyMark } from "../components/dixy-mark";
+import { useShortcutsEnabled } from "../lib/shortcuts";
+import {
+  agentPrompt,
+  installCommand,
+  packageManagers,
+  usePackageManager,
+  type PackageManager,
+  type PromptTheme,
+} from "../lib/install";
 import { CodeBlock } from "../components/code-block";
 import { ButtonAnchor, ButtonLink } from "../components/button-link";
 import { LandingWindow } from "../components/landing-window";
@@ -43,7 +53,6 @@ import {
   ProofStrip,
   CtaSection,
   LandingFooter,
-  installCommand,
 } from "../components/landing-sections";
 import { GitHubStarButton } from "../components/landing-meta";
 import { useAppAppearance } from "../components/app-appearance-provider";
@@ -190,40 +199,76 @@ function swatchStyle(swatches: readonly string[]) {
   } as CSSProperties;
 }
 
-function InstallCommand() {
-  const [copied, setCopied] = useState<"idle" | "done" | "failed">("idle");
+/**
+ * One quiet command line: the package manager is a small picker at the start of
+ * the command, copy sits at the end, and the agent prompt is a text link below.
+ */
+function InstallCommand({ theme }: { theme?: PromptTheme }) {
+  const [manager, setManager] = usePackageManager();
+  const command = installCommand(manager);
+  const [copied, setCopied] = useState<
+    "idle" | "command" | "prompt" | "failed"
+  >("idle");
   useEffect(() => {
     if (copied === "idle") return;
     const timer = window.setTimeout(() => setCopied("idle"), 1800);
     return () => window.clearTimeout(timer);
   }, [copied]);
+  const copy = (text: string, what: "command" | "prompt") =>
+    navigator.clipboard
+      .writeText(text)
+      .then(() => setCopied(what))
+      .catch(() => setCopied("failed"));
   return (
     <div className="landing-install">
-      <TextField
-        readOnly
-        value={installCommand}
-        aria-label="Install command"
-        onFocus={(event) => event.currentTarget.select()}
-      />
-      <IconButton
-        variant="outline"
-        color="neutral"
-        aria-label="Copy install command"
-        onClick={() =>
-          navigator.clipboard
-            .writeText(installCommand)
-            .then(() => setCopied("done"))
-            .catch(() => setCopied("failed"))
-        }
-      >
-        {copied === "done" ? <Check size={16} /> : <Copy size={16} />}
-      </IconButton>
+      <div className="landing-command">
+        <select
+          className="landing-command-manager"
+          aria-label="Package manager"
+          value={manager}
+          onChange={(event) =>
+            setManager(event.currentTarget.value as PackageManager)
+          }
+        >
+          {packageManagers.map((name) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </select>
+        <code className="landing-command-text">
+          {command.slice(manager.length + 1)}
+        </code>
+        <span className="landing-command-divider" aria-hidden="true" />
+        <IconButton
+          size="sm"
+          variant="ghost"
+          color="neutral"
+          aria-label="Copy install command"
+          onClick={() => copy(command, "command")}
+        >
+          {copied === "command" ? <Check size={15} /> : <Copy size={15} />}
+        </IconButton>
+      </div>
+      <Text size="sm" tone="muted" className="landing-install-note">
+        Using a coding agent?{" "}
+        <button
+          type="button"
+          className="landing-install-link"
+          onClick={() => copy(agentPrompt(manager, theme), "prompt")}
+        >
+          {copied === "prompt" ? "Prompt copied" : "Copy the setup prompt"}
+        </button>
+        {" · "}Beta on npm. APIs may still change before 1.0.
+      </Text>
       <span className="sr-only" role="status">
-        {copied === "done"
+        {copied === "command"
           ? "Install command copied."
-          : copied === "failed"
-            ? "Copy failed. Select the command to copy it."
-            : ""}
+          : copied === "prompt"
+            ? "Setup prompt for coding agents copied."
+            : copied === "failed"
+              ? "Copy failed. Select the command to copy it."
+              : ""}
       </span>
     </div>
   );
@@ -274,6 +319,52 @@ const quickStarters = quickStarterIds
   .map((id) => starters.find((s) => s.id === id))
   .filter((s) => s !== undefined);
 
+/**
+ * Shift+R shuffles the starter ("R" for random). It matches the physical key,
+ * so it works on any keyboard layout, and it never fires while typing in a
+ * field. Shift+R types a capital R, so WCAG 2.1.4 counts it as a character-key
+ * shortcut: the footer's "Keyboard shortcuts" switch turns it off.
+ */
+function useShuffleShortcut(shuffle: () => void, enabled: boolean) {
+  const latest = useRef(shuffle);
+  useEffect(() => {
+    latest.current = shuffle;
+  });
+  useEffect(() => {
+    if (!enabled) return;
+    const listener = (event: KeyboardEvent) => {
+      if (
+        event.code !== "KeyR" ||
+        !event.shiftKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.repeat ||
+        event.defaultPrevented
+      )
+        return;
+      const target = event.target as HTMLElement | null;
+      if (target?.closest("input, textarea, select, [contenteditable='true']"))
+        return;
+      event.preventDefault();
+      latest.current();
+    };
+    window.addEventListener("keydown", listener);
+    return () => window.removeEventListener("keydown", listener);
+  }, [enabled]);
+}
+
+/** Rendered only inside the open tooltip, so reading the platform is client-only. */
+function ShuffleKeys() {
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform);
+  return (
+    <span className="landing-shortcut-keys">
+      <Kbd>{mac ? "⇧" : "Shift"}</Kbd>
+      <Kbd>R</Kbd>
+    </span>
+  );
+}
+
 /** Lives in the hero's copy column: the quickest way to restyle the page. */
 function StarterPicker({
   preset,
@@ -289,6 +380,8 @@ function StarterPicker({
     const others = starters.filter((s) => s.id !== current);
     onSelect(others[Math.floor(Math.random() * others.length)]!.id);
   }
+  const [shortcuts] = useShortcutsEnabled();
+  useShuffleShortcut(shuffle, shortcuts);
   return (
     <div
       className="landing-picker"
@@ -380,15 +473,29 @@ function StarterPicker({
             Dark
           </Toggle>
         </ToggleGroup>
-        <IconButton
-          size="sm"
-          variant="ghost"
-          color="neutral"
-          aria-label="Shuffle starter theme"
-          onClick={shuffle}
-        >
-          <Shuffle size={15} />
-        </IconButton>
+        <Tooltip.Root>
+          <Tooltip.Trigger
+            render={
+              <IconButton
+                size="sm"
+                variant="ghost"
+                color="neutral"
+                aria-label="Shuffle starter theme"
+                aria-keyshortcuts={shortcuts ? "Shift+R" : undefined}
+                onClick={shuffle}
+              />
+            }
+          >
+            <Shuffle size={15} />
+          </Tooltip.Trigger>
+          <Tooltip.Portal>
+            <Tooltip.Positioner side="bottom" sideOffset={8}>
+              <Tooltip.Popup className="landing-shortcut-tip">
+                Shuffle starter {shortcuts && <ShuffleKeys />}
+              </Tooltip.Popup>
+            </Tooltip.Positioner>
+          </Tooltip.Portal>
+        </Tooltip.Root>
         <ButtonLink
           to="/playground"
           search={{ theme: serializeThemePreset({ ...preset, appearance }) }}
@@ -582,6 +689,16 @@ function Landing() {
     [starter.preset, appearance],
   );
   const voice = previewVoice(starter.preset.skin);
+  const promptSkin = skinCatalog.find(
+    (skin) => skin.id === starter.preset.skin,
+  );
+  const promptTheme = promptSkin
+    ? {
+        slug: promptSkin.slug,
+        symbol: promptSkin.symbol,
+        name: promptSkin.name,
+      }
+    : undefined;
   const componentCount = Object.keys(componentRegistry).length;
   const featured = featuredComponents.filter((slug) =>
     Object.hasOwn(componentRegistry, slug),
@@ -667,7 +784,11 @@ function Landing() {
         </header>
 
         <main id="landing-main" tabIndex={-1}>
-          <section className="landing-hero" aria-labelledby="hero-heading">
+          <section
+            className="landing-hero"
+            aria-labelledby="hero-heading"
+            data-original={activeStarter === original || undefined}
+          >
             <div className="landing-hero-copy">
               <Badge variant="soft" className="landing-pill">
                 0.1 beta · Now on npm
@@ -698,10 +819,7 @@ function Landing() {
                   See it in real apps
                 </ButtonAnchor>
               </div>
-              <InstallCommand />
-              <Text size="sm" tone="muted">
-                Beta on npm. APIs may still change before 1.0.
-              </Text>
+              <InstallCommand theme={promptTheme} />
               <StarterPicker {...studio} />
             </div>
             <LandingWindow />

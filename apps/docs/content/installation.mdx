@@ -1,4 +1,5 @@
 import { CodeBlock } from "../src/components/code-block";
+import { AgentPrompt, InstallCommand } from "../src/components/install-command";
 
 <div className="page-eyebrow">GETTING STARTED</div>
 
@@ -10,15 +11,17 @@ Dixy is in public beta. APIs may still change between `0.x` releases; every chan
 
 ## Install
 
-<CodeBlock
-  language="shellscript"
-  filename="terminal"
-  code={
-    "pnpm add @dixy-ui/react@beta\n# optional: extra visual skins\npnpm add @dixy-ui/themes@beta"
-  }
-/>
+<InstallCommand packages={["@dixy-ui/react@beta", "@dixy-ui/themes@beta"]} />
 
-`react` and `react-dom` 19 are peer dependencies. `motion` 14 is optional and only needed for `@dixy-ui/react/motion`.
+`@dixy-ui/themes` is optional: it adds the starter themes. `react` and `react-dom` 19 are peer dependencies. `motion` 14 is optional and only needed for `@dixy-ui/react/motion`.
+
+Any package manager works; Dixy has no install scripts. pnpm is our default: from version 10 it blocks dependency install scripts unless you allow them, and stops packages from importing dependencies they didn't declare.
+
+## Set up with a coding agent
+
+Paste this into Claude Code, Cursor, Codex or another coding agent to install Dixy and wire it into your app. It uses the package manager and the theme you have selected on this site.
+
+<AgentPrompt />
 
 ## Import through the public API
 

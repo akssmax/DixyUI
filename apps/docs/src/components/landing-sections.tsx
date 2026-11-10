@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   type CSSProperties,
@@ -29,21 +30,22 @@ import {
   Heading,
   IconButton,
   Kbd,
+  Switch,
   Text,
   Toggle,
   ToggleGroup,
 } from "@dixy-ui/react";
 import { DixyMark } from "./dixy-mark";
+import { useShortcutsEnabled } from "../lib/shortcuts";
 import { ButtonLink } from "./button-link";
 import { portfolioUrl, VisitorCount } from "./landing-meta";
 // Imported here, not in routes/index.tsx: a bare import in a route file stays
 // in the unsplit route module, which put the landing CSS on every docs page.
 import "../styles/landing.css";
 import { HomeLink } from "./home-link";
+import { PackageManagerTabs } from "./install-command";
+import { installCommand, usePackageManager } from "../lib/install";
 
-/** Published on npm under the beta dist-tag. */
-export const installCommand =
-  "pnpm add @dixy-ui/react@beta @dixy-ui/themes@beta";
 export const npmUrl = "https://www.npmjs.com/package/@dixy-ui/react";
 export const repoUrl = "https://github.com/akssmax/DixyUI";
 
@@ -659,6 +661,8 @@ export function CtaSection({
   playgroundSearch: { theme: string };
 }) {
   const [copied, copy] = useCopy();
+  const [manager] = usePackageManager();
+  const command = installCommand(manager);
   return (
     <Container
       as="section"
@@ -705,14 +709,17 @@ export function CtaSection({
                 <i />
                 <i />
               </span>
-              <span>terminal</span>
+              <PackageManagerTabs
+                label="Package manager for the install command"
+                className="landing-term-tabs"
+              />
               <IconButton
                 size="sm"
                 variant="ghost"
                 color="neutral"
                 aria-label="Copy install command"
                 className="landing-term-copy"
-                onClick={() => copy(installCommand)}
+                onClick={() => copy(command)}
               >
                 {copied === "done" ? <Check size={14} /> : <Copy size={14} />}
               </IconButton>
@@ -727,7 +734,7 @@ export function CtaSection({
             <pre>
               <code>
                 <span className="landing-term-dim">$ </span>
-                {installCommand}
+                {command}
                 {"\n"}
                 <span className="landing-term-ok">✓ 2 packages added</span>
                 {"\n\n"}
@@ -768,6 +775,8 @@ export function LandingFooter({
   appearance: "system" | "light" | "dark";
   onAppearance: (value: "system" | "light" | "dark") => void;
 }) {
+  const [shortcuts, setShortcuts] = useShortcutsEnabled();
+  const shortcutsLabel = useId();
   return (
     <footer className="landing-footer">
       <Container className="landing-footer-inner">
@@ -896,26 +905,43 @@ export function LandingFooter({
               Akshay Saini
             </a>
           </Text>
-          <ToggleGroup
-            value={[appearance]}
-            onValueChange={(value) => {
-              const next = (value as string[])[0];
-              if (next === "system" || next === "light" || next === "dark")
-                onAppearance(next);
-            }}
-            aria-label="Appearance"
-            segmented
-          >
-            <Toggle value="system" size="sm" aria-label="System">
-              <Monitor size={14} />
-            </Toggle>
-            <Toggle value="light" size="sm" aria-label="Light">
-              <Sun size={14} />
-            </Toggle>
-            <Toggle value="dark" size="sm" aria-label="Dark">
-              <Moon size={14} />
-            </Toggle>
-          </ToggleGroup>
+          <div className="landing-footer-settings">
+            {/* WCAG 2.1.4: Shift+R (shuffle) is a character-key shortcut, so
+                people must be able to switch it off. */}
+            <label className="landing-footer-setting">
+              <Text as="span" size="sm" tone="muted" id={shortcutsLabel}>
+                Keyboard shortcuts
+              </Text>
+              <Switch.Root
+                size="sm"
+                aria-labelledby={shortcutsLabel}
+                checked={shortcuts}
+                onCheckedChange={setShortcuts}
+              >
+                <Switch.Thumb />
+              </Switch.Root>
+            </label>
+            <ToggleGroup
+              value={[appearance]}
+              onValueChange={(value) => {
+                const next = (value as string[])[0];
+                if (next === "system" || next === "light" || next === "dark")
+                  onAppearance(next);
+              }}
+              aria-label="Appearance"
+              segmented
+            >
+              <Toggle value="system" size="sm" aria-label="System">
+                <Monitor size={14} />
+              </Toggle>
+              <Toggle value="light" size="sm" aria-label="Light">
+                <Sun size={14} />
+              </Toggle>
+              <Toggle value="dark" size="sm" aria-label="Dark">
+                <Moon size={14} />
+              </Toggle>
+            </ToggleGroup>
+          </div>
         </div>
       </Container>
       <div className="landing-wordmark" aria-hidden="true">

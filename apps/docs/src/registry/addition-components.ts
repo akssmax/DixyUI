@@ -3,7 +3,7 @@ export const additionComponentRegistry = {
   "button-group": {
     exportName: "ButtonGroup",
     title: "Button Group",
-    category: "Content",
+    category: "Actions",
     description: "Related actions, connected or separated.",
     detail:
       "Group ordinary buttons without changing their Tab order. Root supplies size, treatment, color and material defaults; explicit Button props override them. Use Toolbar when roving focus is intended.",
@@ -70,7 +70,7 @@ export const additionComponentRegistry = {
   "avatar-group": {
     exportName: "AvatarGroup",
     title: "Avatar Group",
-    category: "Content",
+    category: "Data display",
     description: "A team, in one compact frame.",
     detail:
       "Root overlaps Avatar instances and supplies their visual defaults. Count is passive text unless it performs a real action; give meaningful image/fallback names without repeating a nearby visible name.",
@@ -127,7 +127,7 @@ export const additionComponentRegistry = {
   card: {
     exportName: "Card",
     title: "Card",
-    category: "Content",
+    category: "Data display",
     description: "A clear frame for related content.",
     detail:
       'Compose Header, Title, Description, Content and Footer inside a section. Set Title as="h4" when the surrounding heading hierarchy requires it. Put actual actions in Button or Link; the entire card is not automatically interactive.',
@@ -184,7 +184,7 @@ export const additionComponentRegistry = {
   alert: {
     exportName: "Alert",
     title: "Alert",
-    category: "Content",
+    category: "Feedback",
     description: "A message that deserves attention.",
     detail:
       'Static alerts remain ordinary content. Add role="status" for a dynamically inserted polite announcement, or role="alert" for urgent feedback. Title and Description provide structure; do not announce decorative examples automatically.',
@@ -241,7 +241,7 @@ export const additionComponentRegistry = {
   badge: {
     exportName: "Badge",
     title: "Badge",
-    category: "Content",
+    category: "Data display",
     description: "A compact piece of status.",
     detail:
       "Badge is passive inline status text. Include an understandable word or icon label so color is not the only signal. Use a real Button or Link for an actionable badge.",
@@ -292,7 +292,7 @@ export const additionComponentRegistry = {
   chip: {
     exportName: "Chip",
     title: "Chip",
-    category: "Content",
+    category: "Data display",
     description: "A small, readable label.",
     detail:
       "Chip is passive text for a category or attribute. Use TagGroup for removable or selectable collections, where focus and removal behavior belong to the collection primitive.",
@@ -349,7 +349,7 @@ export const additionComponentRegistry = {
   kbd: {
     exportName: "Kbd",
     title: "Kbd",
-    category: "Content",
+    category: "Data display",
     description: "Make the shortcut visible.",
     detail:
       "Kbd uses the native kbd element for key names. It describes a shortcut; it does not register one or create another focus stop.",
@@ -388,7 +388,7 @@ export const additionComponentRegistry = {
   textarea: {
     exportName: "Textarea",
     title: "Textarea",
-    category: "Inputs",
+    category: "Forms",
     description: "Room for more than one line.",
     detail:
       "Native multiline editing, selection, form values and resizing remain intact. Wrap the control in a label, or connect a separate label using id/htmlFor. Field validation composition requires explicit label/error relationships for this native control.",
@@ -442,7 +442,7 @@ export const additionComponentRegistry = {
   "input-group": {
     exportName: "InputGroup",
     title: "Input Group",
-    category: "Inputs",
+    category: "Forms",
     description: "One input, with useful context.",
     detail:
       "Root arranges Input or Textarea with Addon and Button parts. Field owns the input label and help/error relationships. Keep addons out of the editable value and give icon-only actions an accessible name.",
@@ -495,7 +495,7 @@ export const additionComponentRegistry = {
   link: {
     exportName: "Link",
     title: "Link",
-    category: "Content",
+    category: "Actions",
     description: "A clear route to the next place.",
     detail:
       "React Aria preserves anchor semantics, keyboard activation, disabled behavior and render composition. Use href for a destination; use Button for an action that does not navigate.",
@@ -534,7 +534,7 @@ export const additionComponentRegistry = {
   skeleton: {
     exportName: "Skeleton",
     title: "Skeleton",
-    category: "Content",
+    category: "Feedback",
     description: "Reserve the shape while content loads.",
     detail:
       "The placeholder is static and hidden from assistive technology. Announce loading once on the owning region rather than repeating a live message for each skeleton.",
@@ -567,7 +567,7 @@ export const additionComponentRegistry = {
   spinner: {
     exportName: "Spinner",
     title: "Spinner",
-    category: "Content",
+    category: "Feedback",
     description: "A named loading state.",
     detail:
       "Spinner exposes one status label and hides its decorative mark. Reduced motion stops rotation. Remove the spinner when work finishes and avoid mounting decorative loading loops.",
@@ -606,7 +606,7 @@ export const additionComponentRegistry = {
   empty: {
     exportName: "Empty",
     title: "Empty State",
-    category: "Content",
+    category: "Feedback",
     description: "A useful next step when nothing is here.",
     detail:
       "Title explains the empty state, Description supplies context, and Content contains a genuine next action. Empty content is not an error announcement by default.",
@@ -651,7 +651,7 @@ export const additionComponentRegistry = {
   breadcrumbs: {
     exportName: "Breadcrumbs",
     title: "Breadcrumbs",
-    category: "Content",
+    category: "Navigation",
     description: "Keep the current place in view.",
     detail:
       "React Aria owns the breadcrumb collection and current-item semantics. Give the navigation a name, use real destinations, and omit href for the current item.",
@@ -684,7 +684,7 @@ export const additionComponentRegistry = {
   pagination: {
     exportName: "Pagination",
     title: "Pagination",
-    category: "Content",
+    category: "Navigation",
     description: "Move through a defined set of pages.",
     detail:
       'Root is a named navigation landmark. List and Item preserve list structure; Link represents a destination and aria-current="page" identifies the current page. The application owns page state and data loading.',
@@ -728,7 +728,7 @@ export const additionComponentRegistry = {
   command: {
     exportName: "Command",
     title: "Command",
-    category: "Content",
+    category: "Navigation",
     description: "Find an action without searching the whole interface.",
     detail:
       "Base UI Combobox owns filtering, highlighted options and selection. Command.Root defaults to inline, logically open and automatic highlighting, following Base UI’s inline-list contract. Compose the same command surface inside Command.Dialog for modal focus containment and return focus.",
@@ -765,7 +765,7 @@ export const additionComponentRegistry = {
   "list-box": {
     exportName: "ListBox",
     title: "ListBox",
-    category: "Content",
+    category: "Data display",
     description: "A visible collection of choices.",
     detail:
       "React Aria owns single/multiple selection, disabled keys, typeahead and focus. Item IDs identify selection keys; textValue supplies text for complex item content. Keep generic item values and render functions intact.",
@@ -819,7 +819,7 @@ export const additionComponentRegistry = {
   "tag-group": {
     exportName: "TagGroup",
     title: "TagGroup",
-    category: "Content",
+    category: "Data display",
     description: "Labels that can be selected or removed.",
     detail:
       'React Aria owns the tag collection, selection and focus recovery after removal. Give the group a Label and use Remove with slot="remove". Update the owning items in onRemove; the primitive does not delete application data itself.',
@@ -861,7 +861,7 @@ export const additionComponentRegistry = {
   "search-field": {
     exportName: "SearchField",
     title: "Search Field",
-    category: "Inputs",
+    category: "Forms",
     description: "An editable query, with a way to clear it.",
     detail:
       "React Aria owns the query, clear action, validation and submission events. Label names the field; Description and Error keep their slots. Keep controlled value and onChange paired; the application owns search results.",
@@ -903,7 +903,7 @@ export const additionComponentRegistry = {
   table: {
     exportName: "Table",
     title: "Table",
-    category: "Content",
+    category: "Data display",
     description: "Rows and columns with native meaning.",
     detail:
       "Use a caption, column header scope and row headers where appropriate. This is a native table, not an interactive grid. Use DataTable when collection selection, cell navigation or sorting behavior is required.",
@@ -936,7 +936,7 @@ export const additionComponentRegistry = {
   "data-table": {
     exportName: "DataTable",
     title: "DataTable",
-    category: "Content",
+    category: "Data display",
     description: "A table with collection behavior.",
     detail:
       "React Aria owns table/grid navigation, selection, column sorting requests and optional column resizing. The application sorts, filters and paginates its data; onSortChange alone does not reorder rows. Header, Body, Column, Row and Cell retain their generic collection contracts.",
@@ -978,7 +978,7 @@ export const additionComponentRegistry = {
   sidebar: {
     exportName: "Sidebar",
     title: "Sidebar",
-    category: "Content",
+    category: "Navigation",
     description: "Navigation that can make room.",
     detail:
       "Compose Base UI Collapsible Root, Trigger and Panel with a semantic aside and named nav. Mobile exposes the existing Drawer family for modal composition. Keep the trigger outside the panel so closed content remains reachable.",
@@ -1020,7 +1020,7 @@ export const additionComponentRegistry = {
   item: {
     exportName: "Item",
     title: "Item",
-    category: "Content",
+    category: "Data display",
     description: "One clear row of related content.",
     detail:
       "Media, Content and Actions arrange a list or settings row without assigning a false interactive role. Title accepts an appropriate heading level. Use real controls for actions.",
@@ -1053,7 +1053,7 @@ export const additionComponentRegistry = {
   "aspect-ratio": {
     exportName: "AspectRatio",
     title: "AspectRatio",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "A predictable frame for media.",
     detail:
       "Ratio is a positive width divided by height. Image/video content fills the frame without changing its intrinsic meaning. Supply alternative text on the media itself.",
@@ -1086,7 +1086,7 @@ export const additionComponentRegistry = {
   resizable: {
     exportName: "Resizable",
     title: "Resizable Panels",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "Adjust the workspace without losing the keyboard.",
     detail:
       "Root owns the start-panel percentage and bounds. Use exactly one start Panel, one named Handle and one end Panel. The separator supports pointer capture and immediate keyboard resizing; controlled value changes remain with the application.",
@@ -1123,7 +1123,7 @@ export const additionComponentRegistry = {
   carousel: {
     exportName: "Carousel",
     title: "Carousel",
-    category: "Content",
+    category: "Data display",
     description: "A sequence the reader controls.",
     detail:
       "Native horizontal scrolling and snap points remain available. Previous and Next expose boundaries, and each Item needs a slide name. There is no automatic rotation or background timer; Root announces slide changes.",
@@ -1162,7 +1162,7 @@ export const additionComponentRegistry = {
   chart: {
     exportName: "Chart",
     title: "Chart",
-    category: "Content",
+    category: "Data display",
     description: "A small bar chart, with its data intact.",
     detail:
       "This lightweight SVG recipe accepts finite nonnegative values. The caption names the chart, and View chart data exposes a native table with every value. Complex series, axes, interactions and chart types remain separate future extensions.",
@@ -1200,7 +1200,7 @@ export const additionComponentRegistry = {
   "progress-circle": {
     exportName: "ProgressCircle",
     title: "ProgressCircle",
-    category: "Content",
+    category: "Feedback",
     description: "Progress, in a compact ring.",
     detail:
       "Provide an accessible name and a positive maximum. Values are clamped to the range; omitting value creates an indeterminate state without aria-valuenow. Progress is information, not another keyboard stop.",
@@ -1239,7 +1239,7 @@ export const additionComponentRegistry = {
   "scroll-shadow": {
     exportName: "ScrollShadow",
     title: "ScrollShadow",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "Show when the content continues.",
     detail:
       "A focusable native scroll region uses local/scroll background attachments to reveal edge shadows as overflow moves. No scroll listener, animation loop or blur is required. Give the region an accessible name.",
@@ -1277,7 +1277,7 @@ export const additionComponentRegistry = {
   calendar: {
     exportName: "Calendar",
     title: "Calendar",
-    category: "Content",
+    category: "Date & time",
     description: "Choose a date with a familiar grid.",
     detail:
       "React Aria owns date navigation, selection, bounds, unavailable dates and calendar systems. Root retains typed date values and render callbacks; Grid and Cell retain collection relationships. Use LocaleProvider for an explicit locale and match the intended writing direction.",
@@ -1332,7 +1332,7 @@ export const additionComponentRegistry = {
   "range-calendar": {
     exportName: "RangeCalendar",
     title: "RangeCalendar",
-    category: "Content",
+    category: "Date & time",
     description: "Choose the beginning and the end.",
     detail:
       "React Aria owns range selection, date navigation and unavailable-date rules. Value and onChange use typed start/end dates. Use LocaleProvider for the intended locale and calendar system.",
@@ -1386,7 +1386,7 @@ export const additionComponentRegistry = {
   "date-field": {
     exportName: "DateField",
     title: "DateField",
-    category: "Inputs",
+    category: "Date & time",
     description: "A date, edited one segment at a time.",
     detail:
       "React Aria owns localized segments, parsing, validation and typed date values. Input renders Segment parts; Label, description and error remain associated with the root. Use LocaleProvider for a chosen locale; no hand-written date parser is added.",
@@ -1428,7 +1428,7 @@ export const additionComponentRegistry = {
   "time-field": {
     exportName: "TimeField",
     title: "TimeField",
-    category: "Inputs",
+    category: "Date & time",
     description: "Time editing that follows the locale.",
     detail:
       "React Aria owns typed time values, hour cycles, segment editing and validation. Input renders Segment parts. Pair value with onChange and use LocaleProvider to choose the format; time-zone conversion remains an application concern.",
@@ -1470,7 +1470,7 @@ export const additionComponentRegistry = {
   "date-picker": {
     exportName: "DatePicker",
     title: "DatePicker",
-    category: "Inputs",
+    category: "Date & time",
     description: "Edit a date or choose it from the calendar.",
     detail:
       "React Aria owns the segmented field, open state, calendar selection, validation and focus restoration. Name Popover with aria-label and use its Button and Popover parts within the root; the portaled surface restores Dixy theme tokens. Values use @internationalized/date, re-exported through Dixy.",
@@ -1513,7 +1513,7 @@ export const additionComponentRegistry = {
   "date-range-picker": {
     exportName: "DateRangePicker",
     title: "DateRangePicker",
-    category: "Inputs",
+    category: "Date & time",
     description: "Two dates, one connected choice.",
     detail:
       "Use start/end Input slots inside Group and a RangeCalendar inside Popover. React Aria owns the range, validation, open state and focus behavior. Keep the segmented field and calendar connected to the same Root.",
@@ -1556,7 +1556,7 @@ export const additionComponentRegistry = {
   "native-select": {
     exportName: "NativeSelect",
     title: "NativeSelect",
-    category: "Inputs",
+    category: "Forms",
     description: "The platform\u2019s own choice control.",
     detail:
       "The native select keeps option semantics, keyboard behavior, form values and the platform picker. Visual size is sm/md/lg; disabled and multiple remain native props. Label the control with a wrapping label or explicit id/htmlFor.",
@@ -1613,7 +1613,7 @@ export const additionComponentRegistry = {
   "color-picker": {
     exportName: "ColorPicker",
     title: "ColorPicker",
-    category: "Inputs",
+    category: "Forms",
     description: "Edit color without inventing its interaction.",
     detail:
       "React Aria owns Color values, color-space conversion, two-dimensional area input, sliders and editable fields. Area and Slider need Thumb parts; Field supplies an accessible text alternative. Root can be controlled with value/onChange, and Swatch displays the same shared value.",
@@ -1649,7 +1649,7 @@ export const additionComponentRegistry = {
   grid: {
     exportName: "Grid",
     title: "Grid",
-    category: "Layout",
+    category: "Layout & disclosure",
     description: "Columns that fit the space they are given.",
     detail:
       "Grid places children in equal columns, or fits as many columns as minColumnWidth allows. The minimum is clamped with min(…, 100%), so one column never overflows a narrow parent. Gaps use the stack spacing scale and follow Theme density.",
@@ -1694,7 +1694,7 @@ export const additionComponentRegistry = {
   "visually-hidden": {
     exportName: "VisuallyHidden",
     title: "Visually Hidden",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "Heard by assistive tech, unseen on screen.",
     detail:
       "VisuallyHidden clips content to a 1px box while keeping it in the accessibility tree. With focusable, it reappears while something inside it has focus: the skip-link pattern.",
@@ -1726,7 +1726,7 @@ export const additionComponentRegistry = {
   code: {
     exportName: "Code",
     title: "Code",
-    category: "Content",
+    category: "Text & code",
     description: "Inline code that reads at any size.",
     detail:
       "Code is a native code element on a soft, token-driven surface. Its size is relative (em), so it scales with surrounding body text or headings.",
@@ -1771,7 +1771,7 @@ export const additionComponentRegistry = {
   blockquote: {
     exportName: "Blockquote",
     title: "Blockquote",
-    category: "Content",
+    category: "Text & code",
     description: "Give a quotation its own voice.",
     detail:
       "A native blockquote with a semantic leading rule. Put attribution in a figcaption beside it, not inside the quotation.",
@@ -1810,7 +1810,7 @@ export const additionComponentRegistry = {
   snippet: {
     exportName: "Snippet",
     title: "Snippet",
-    category: "Content",
+    category: "Text & code",
     description: "A command, ready to copy.",
     detail:
       "Snippet shows code or a command with a copy button. A prompt symbol can lead each line without being copied or announced. The result is announced through a polite status region, and failure is reported, not hidden.",
@@ -1880,7 +1880,7 @@ export const additionComponentRegistry = {
   "password-field": {
     exportName: "PasswordField",
     title: "Password Field",
-    category: "Inputs",
+    category: "Forms",
     description: "Check what you typed, then hide it again.",
     detail:
       "PasswordField is a Base UI Input with a show/hide toggle. Inside Field.Root, Label, Description and Error keep their relationships. Visibility can be controlled with visible/onVisibleChange.",
@@ -1942,7 +1942,7 @@ export const additionComponentRegistry = {
   "data-list": {
     exportName: "DataList",
     title: "Data List",
-    category: "Content",
+    category: "Data display",
     description: "Labels and values, neatly paired.",
     detail:
       "DataList is a native description list. Items use CSS subgrid, so every label column aligns across rows without fixed widths.",
@@ -1981,7 +1981,7 @@ export const additionComponentRegistry = {
   user: {
     exportName: "User",
     title: "User",
-    category: "Content",
+    category: "Data display",
     description: "A face and a name, together.",
     detail:
       "User pairs an Avatar with a name and an optional description. Initials are derived from a string name. The avatar is aria-hidden because the visible name already identifies the person.",
@@ -2026,7 +2026,7 @@ export const additionComponentRegistry = {
   image: {
     exportName: "Image",
     title: "Image",
-    category: "Content",
+    category: "Data display",
     description: "Pictures that load gracefully.",
     detail:
       "Image is a native img with lazy loading, a placeholder surface, one fallback source and a data-status of loading, loaded or error. The reveal fade is skipped under reduced motion.",

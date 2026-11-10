@@ -70,7 +70,7 @@ export const componentRegistry = {
   },
   "text-field": {
     title: "Text Field",
-    category: "Inputs",
+    category: "Forms",
     description: "Room for a thought to take shape.",
     detail:
       "TextField is the styled input; Field owns label, description and validation relationships. Native editing, autocomplete, refs and value callbacks remain with Base UI. Use Field.Control for the lower-level input contract.",
@@ -188,7 +188,7 @@ export const componentRegistry = {
   },
   icon: {
     title: "Icon",
-    category: "Content",
+    category: "Text & code",
     description: "One contract. Your choice of character.",
     detail:
       "Consistent size, semantic color and accessible naming for the SVG icons you already use. Keep each pack’s artwork and install only what your application needs.",
@@ -237,7 +237,7 @@ export const componentRegistry = {
   },
   typography: {
     title: "Typography",
-    category: "Content",
+    category: "Text & code",
     description: "Give every word its own weight.",
     detail:
       "Expressive headings. Comfortable reading. A small type system that separates visual hierarchy from semantic meaning.",

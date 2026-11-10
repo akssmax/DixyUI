@@ -1,5 +1,5 @@
 import { Button } from "@dixy-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Check, Copy, ChevronDown } from "lucide-react";
 
 export function CodeBlock({
@@ -8,12 +8,17 @@ export function CodeBlock({
   filename = "example.tsx",
   collapsible = false,
   collapsedLines = 15,
+  toolbar,
+  copyLabel = "Copy code",
 }: {
   code: string;
   language?: string;
   filename?: string;
   collapsible?: boolean;
   collapsedLines?: number;
+  /** Replaces the filename at the start of the toolbar (for example tabs). */
+  toolbar?: ReactNode;
+  copyLabel?: string;
 }) {
   const [html, setHtml] = useState("");
   const [copied, setCopied] = useState(false);
@@ -70,13 +75,13 @@ export function CodeBlock({
   return (
     <div ref={container} className="code-block">
       <div className="code-toolbar">
-        <span>{filename}</span>
+        {toolbar ?? <span>{filename}</span>}
         <Button
           variant="ghost"
           color="neutral"
           size="sm"
           onClick={copy}
-          aria-label="Copy code"
+          aria-label={copyLabel}
         >
           {copied ? <Check size={13} /> : <Copy size={13} />}
           {copied ? "Copied" : "Copy"}

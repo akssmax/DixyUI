@@ -2,7 +2,7 @@
 export const baseComponentRegistry = {
   checkbox: {
     title: "Checkbox",
-    category: "Inputs",
+    category: "Forms",
     description: "A clear choice, with room for a mixed state.",
     detail:
       "Centered check and mixed marks, with three sizes, semantic colors, custom artwork and static materials. The labeled root owns the interaction.",
@@ -74,7 +74,7 @@ export const baseComponentRegistry = {
   },
   switch: {
     title: "Switch",
-    category: "Inputs",
+    category: "Forms",
     description: "A setting that changes immediately.",
     detail:
       "An immediate on/off setting with three sizes, semantic colors, custom thumb icons and static materials. Keep its label stable as the thumb changes position.",
@@ -299,7 +299,7 @@ export const baseComponentRegistry = {
   },
   accordion: {
     title: "Accordion",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "A little structure for a longer story.",
     detail:
       "Root owns expanded values. Header preserves heading semantics; Trigger is the only disclosure control. Put panel padding on an inner container so measured block-size motion does not clip content.",
@@ -412,7 +412,7 @@ export const baseComponentRegistry = {
   },
   autocomplete: {
     title: "Autocomplete",
-    category: "Inputs",
+    category: "Forms",
     description: "Suggestions that leave room for your own words.",
     detail:
       "Base UI Autocomplete supports text suggestions; it is not the same contract as HeroUI’s selection-based Autocomplete. Preserve editable text, label the clear action and keep results/empty states inside the popup.",
@@ -476,7 +476,7 @@ export const baseComponentRegistry = {
   },
   avatar: {
     title: "Avatar",
-    category: "Content",
+    category: "Data display",
     description: "A recognizable face, with a dependable fallback.",
     detail:
       "Root controls the frame; Image and Fallback share it. A failed image reveals the fallback. Supply a useful alternative name, or make redundant artwork decorative when visible text already identifies the person.",
@@ -536,7 +536,7 @@ export const baseComponentRegistry = {
   },
   "checkbox-group": {
     title: "Checkbox Group",
-    category: "Inputs",
+    category: "Forms",
     description: "Independent choices, one coherent group.",
     detail:
       "CheckboxGroup coordinates a collection of values. Name the group separately from each checkbox and preserve native form serialization.",
@@ -580,7 +580,7 @@ export const baseComponentRegistry = {
   },
   collapsible: {
     title: "Collapsible",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "Details when you need them.",
     detail:
       "Root owns open state; Trigger exposes expansion and controls Panel. Panel height and presence remain Base UI owned. Use a heading around the trigger when the content needs a section heading.",
@@ -628,7 +628,7 @@ export const baseComponentRegistry = {
   },
   combobox: {
     title: "Combobox",
-    category: "Inputs",
+    category: "Forms",
     description: "Find a choice without losing your place.",
     detail:
       "Root retains generic item/value inference, filtering and selection. Name the input, trigger and clear control. Put popup-only empty/status content inside Popup and provide itemToStringLabel for object-valued items.",
@@ -822,7 +822,7 @@ export const baseComponentRegistry = {
   },
   fieldset: {
     title: "Fieldset",
-    category: "Inputs",
+    category: "Forms",
     description: "Related fields, clearly introduced.",
     detail:
       "Use Legend to name related fields. Disabled state belongs on Fieldset.Root; each Field owns its name and validation. The fieldset surface is optional.",
@@ -876,7 +876,7 @@ export const baseComponentRegistry = {
   },
   form: {
     title: "Form",
-    category: "Inputs",
+    category: "Forms",
     description: "A complete path from input to feedback.",
     detail:
       "Form remains a native form and keeps Base UI validation. Field names connect server errors to controls. gap changes spacing only; it does not replace submit handling or error recovery.",
@@ -1032,7 +1032,7 @@ export const baseComponentRegistry = {
   },
   meter: {
     title: "Meter",
-    category: "Content",
+    category: "Feedback",
     description: "A measurement with meaningful bounds.",
     detail:
       "Meter describes a measurement within a known range, rather than task completion. Name the measurement and retain numeric semantics; semantic color supplements the actual value.",
@@ -1141,7 +1141,7 @@ export const baseComponentRegistry = {
   },
   "number-field": {
     title: "Number Field",
-    category: "Inputs",
+    category: "Forms",
     description: "A number, with considered ways to adjust it.",
     detail:
       "Root owns numeric parsing, formatting, bounds and scrubbing. Name increment/decrement actions and associate the input label. Input and steppers share one frame; direct scrubbing has no added interpolation.",
@@ -1201,7 +1201,7 @@ export const baseComponentRegistry = {
   },
   "otp-field": {
     title: "OTP Field",
-    category: "Inputs",
+    category: "Forms",
     description: "One code, a sequence of focused slots.",
     detail:
       "Root owns length, validation, paste and value. Label the overall code and later digit inputs. Use a unique ID per instance and allow native autofill/paste; do not announce every keystroke as an error.",
@@ -1376,7 +1376,7 @@ export const baseComponentRegistry = {
   },
   progress: {
     title: "Progress",
-    category: "Content",
+    category: "Feedback",
     description: "Make real work visible.",
     detail:
       "Use a determinate value for measured work and null when progress is unknown. Keep an accessible name. This pass uses a static indeterminate fill rather than adding a decorative continuous animation.",
@@ -1436,7 +1436,7 @@ export const baseComponentRegistry = {
   },
   "radio-group": {
     title: "Radio Group",
-    category: "Inputs",
+    category: "Forms",
     description: "One clear answer from a set of choices.",
     detail:
       "RadioGroup owns the selected value and native radio navigation. Each labeled Radio.Root owns its visual settings. The group orientation controls layout; radios remain circular and unchecked choices stay neutral.",
@@ -1500,7 +1500,7 @@ export const baseComponentRegistry = {
   },
   "scroll-area": {
     title: "Scroll Area",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "Native scrolling, a considered frame.",
     detail:
       "The viewport owns native scrolling and its accessible name. Add the corresponding scrollbar for each overflowing axis. Preserve native keyboard scrolling and visible viewport focus; visual size adjusts scrollbar thickness.",
@@ -1553,7 +1553,7 @@ export const baseComponentRegistry = {
   },
   select: {
     title: "Select",
-    category: "Inputs",
+    category: "Forms",
     description: "A familiar choice, precisely presented.",
     detail:
       "Root owns value, multiple and disabled state. Trigger owns control visuals; Popup independently owns portaled list visuals. ItemText provides option text. Keep clear actions beside the trigger rather than nesting another button inside it.",
@@ -1628,7 +1628,7 @@ export const baseComponentRegistry = {
   },
   separator: {
     title: "Separator",
-    category: "Content",
+    category: "Layout & disclosure",
     description: "A quiet boundary between related things.",
     detail:
       "Use semantic separation only when it communicates structure. Decorative lines should not add unnecessary announcements.",
@@ -1665,7 +1665,7 @@ export const baseComponentRegistry = {
   },
   slider: {
     title: "Slider",
-    category: "Inputs",
+    category: "Forms",
     description: "Adjust a value along a meaningful range.",
     detail:
       "Root preserves scalar/array value inference. Label each thumb separately for a range. Control owns pointer interaction; thumb and fill positioning follow Base UI immediately, including RTL and vertical use.",
@@ -1736,7 +1736,7 @@ export const baseComponentRegistry = {
   },
   toast: {
     title: "Toast",
-    category: "Overlays",
+    category: "Feedback",
     description: "Useful feedback that does not interrupt the task.",
     detail:
       "Provider and manager own queue, timing and announcements. Root renders each toast record; do not add a second live region. Dismiss has a stable accessible name, and long-lived actionable messages need appropriate timeout behavior.",
@@ -1796,7 +1796,7 @@ export const baseComponentRegistry = {
   },
   toggle: {
     title: "Toggle",
-    category: "Inputs",
+    category: "Actions",
     description: "A button that remembers its state.",
     detail:
       "Toggle is a single pressed-state button. Keep its accessible label stable and use it for persistent formatting or modes, rather than a momentary action.",
@@ -1862,7 +1862,7 @@ export const baseComponentRegistry = {
   },
   "toggle-group": {
     title: "Toggle Group",
-    category: "Inputs",
+    category: "Actions",
     description: "Related states, held together.",
     detail:
       "ToggleGroup owns selection and roving focus. Toggle owns size, emphasis, color, radius and finish. attached connects borders; it does not turn the group into a ButtonGroup. segmented draws a sunken track with a raised thumb on the pressed toggle, for compact exclusive choices.",
@@ -1999,7 +1999,7 @@ export const baseComponentRegistry = {
   },
   field: {
     title: "Field",
-    category: "Inputs",
+    category: "Forms",
     description: "The relationship around an input.",
     detail:
       "Field connects labels, controls, help and errors. TextField adds the richer input visuals; Field.Control remains the low-level input contract. Horizontal layout keeps help and errors with the control.",
