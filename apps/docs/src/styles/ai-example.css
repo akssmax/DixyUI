@@ -5,6 +5,8 @@
 .wren-app {
   --wren-column: 760px;
   block-size: 100dvh;
+  /* An app screen: only the transcript and sidebar list scroll. */
+  overflow: clip;
   background: var(--dixy-color-background-canvas);
   color: var(--dixy-color-text-primary);
 }
@@ -180,13 +182,26 @@
   min-inline-size: 0;
   min-block-size: 0;
 }
+/* Three columns keep the mode switch centred whatever the ends hold. */
 .wren-topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: var(--dixy-spacing-inline-sm);
   min-block-size: 56px;
   padding-inline: var(--dixy-spacing-inset-md);
   border-block-end: 1px solid var(--dixy-color-border-subtle);
+}
+.wren-topbar-start,
+.wren-topbar-end,
+.wren-only-desktop {
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-xs);
+  min-inline-size: 0;
+}
+.wren-topbar-end {
+  justify-content: flex-end;
 }
 .wren-title {
   flex: 1;
@@ -248,6 +263,119 @@
   color: var(--dixy-color-text-primary);
 }
 
+/* Chat mode: one compact row, like a search field. Tools sit at the end and
+ * stay on the last line when a long message grows the field. */
+.wren-composer[data-mode="chat"] .dixy-prompt-input {
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 4px;
+  padding: 6px 6px 6px 8px;
+  border-radius: var(--dixy-radius-overlay);
+}
+/* The field and the tools share one row height, and the field's padding
+ * centres a single line in it, so text lines up with the icons. */
+.wren-composer[data-mode="chat"] {
+  --wren-row: 2.5rem;
+}
+@media (any-pointer: coarse) {
+  /* Touch targets grow the submit button to 44px. */
+  .wren-composer[data-mode="chat"] {
+    --wren-row: 2.75rem;
+  }
+}
+.wren-composer[data-mode="chat"] .dixy-prompt-input-textarea {
+  flex: 1;
+  min-inline-size: 0;
+  min-block-size: var(--wren-row);
+  padding-block: calc((var(--wren-row) - 1.5em) / 2);
+}
+.wren-composer[data-mode="chat"] .dixy-prompt-input-footer {
+  flex: none;
+  block-size: var(--wren-row);
+}
+.wren-composer[data-mode="chat"] .dixy-prompt-input-tools {
+  flex: none;
+  flex-wrap: nowrap;
+}
+/* The globe keeps "Search" as its accessible name. */
+.wren-composer[data-mode="chat"] .wren-search-label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.wren-composer[data-mode="chat"] .wren-search-toggle {
+  aspect-ratio: 1;
+  padding-inline: 0;
+  justify-content: center;
+}
+.wren-composer[data-mode="chat"] .wren-model-trigger {
+  padding-inline: 8px 6px;
+}
+/* Work mode: room for a brief, tools underneath. */
+.wren-composer[data-mode="work"] .dixy-prompt-input-textarea {
+  min-block-size: 4.5rem;
+}
+
+.wren-work {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  gap: var(--dixy-spacing-stack-sm);
+  inline-size: min(100% - 2 * var(--dixy-spacing-inset-md), var(--wren-column));
+  margin-inline: auto;
+  padding-block-start: var(--dixy-spacing-stack-md);
+}
+.wren-work-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding-inline: 4px;
+  font: var(--dixy-font-label-md);
+}
+.wren-work-heading .dixy-icon {
+  color: var(--dixy-color-icon-warning);
+}
+.wren-work-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--dixy-spacing-inline-sm);
+}
+.dixy-button.dixy-suggestion.wren-work-card[data-size] {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 4px;
+  block-size: 100%;
+  padding: 12px 14px 14px;
+  border-radius: var(--dixy-radius-card);
+  background: var(--dixy-color-background-surface);
+  font-weight: inherit;
+}
+.wren-work-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: 6px;
+}
+.wren-work-try {
+  padding: 2px 10px;
+  border: var(--dixy-border-default);
+  border-radius: var(--dixy-radius-control);
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-label-sm);
+}
+.wren-work-card-title {
+  font: var(--dixy-font-label-md);
+}
+.wren-work-card-text {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-body-sm);
+}
+
 .wren-composer {
   display: flex;
   flex-direction: column;
@@ -296,9 +424,86 @@
   .wren-only-mobile {
     display: inline-flex;
   }
-  .wren-title {
-    text-align: center;
+  .wren-only-desktop {
+    display: none;
   }
+  .wren-topbar {
+    min-block-size: 52px;
+    padding-inline: var(--dixy-spacing-inset-xs);
+  }
+  /* The switch takes the middle; the title stays for screen readers. */
+  .wren-title {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .wren-conversation .dixy-conversation-content {
+    padding-block: var(--dixy-spacing-inset-md);
+  }
+  .wren-welcome .dixy-conversation-empty-title {
+    font: var(--dixy-font-title-md);
+  }
+  /* On a phone the reply gets the full width, as in most chat apps. */
+  .wren-conversation .dixy-message > .dixy-message-avatar {
+    display: none;
+  }
+  .wren-conversation .dixy-message > :not(.dixy-message-avatar) {
+    grid-column: 1 / -1;
+  }
+  /* Cards become a swipeable row so the composer stays in view. */
+  .wren-work-cards {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: min(78%, 260px);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * var(--dixy-spacing-inset-md));
+    padding-inline: var(--dixy-spacing-inset-md);
+    scroll-padding-inline: var(--dixy-spacing-inset-md);
+  }
+  .wren-work-cards .dixy-suggestion {
+    scroll-snap-align: start;
+  }
+  .wren-composer {
+    padding-block-end: max(
+      var(--dixy-spacing-inset-sm),
+      env(safe-area-inset-bottom)
+    );
+  }
+  .wren-disclaimer {
+    display: none;
+  }
+}
+/* Settings sit at the foot of the drawer, like the desktop sidebar footer. */
+.wren-mobile-nav {
+  display: flex;
+  flex-direction: column;
+}
+.wren-mobile-nav .dixy-drawer-content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-block-size: 0;
+}
+.wren-mobile-settings {
+  display: flex;
+  align-items: center;
+  gap: var(--dixy-spacing-inline-sm);
+  margin-block-start: auto;
+  padding-block-start: var(--dixy-spacing-stack-md);
+  border-block-start: 1px solid var(--dixy-color-border-subtle);
+}
+.wren-mobile-settings .wren-theme-picker {
+  flex: 1;
+}
+.wren-mobile-settings .dixy-select-trigger {
+  inline-size: 100%;
+  max-inline-size: none;
 }
 
 .wren-theme-picker {
@@ -307,7 +512,7 @@
 .wren-theme-picker .dixy-select-trigger {
   min-inline-size: 10rem;
 }
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .wren-theme-picker .dixy-select-trigger {
     min-inline-size: 0;
     max-inline-size: 9rem;
