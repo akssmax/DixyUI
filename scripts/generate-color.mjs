@@ -15,6 +15,7 @@ import {
   actionColors,
   focusColor,
   colorReference,
+  chartSeriesFamilies,
 } from "../packages/tokens/src/color.ts";
 import { componentColors } from "../packages/react/src/tokens/component-colors.ts";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -122,6 +123,13 @@ const axisRules = (axis, attribute, families) =>
           ),
         ),
         ...aliases,
+        // Chart series 2–6 avoid the accent's hue; step 9 in both modes.
+        ...(axis === "brand"
+          ? chartSeriesFamilies(family).map((companion, index) => [
+              `color-chart-${index + 2}`,
+              `var(--dixy-color-${companion}-9)`,
+            ])
+          : []),
       ]),
     )
     .join("");

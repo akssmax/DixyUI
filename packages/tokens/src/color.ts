@@ -462,8 +462,58 @@ export const semanticColors = {
   ...statusRoles("warning", "amber"),
   ...statusRoles("information", "blue"),
   ...statusRoles("discovery", "purple"),
+  /*
+   * Categorical data-viz series. Series 1 follows the theme's accent; light
+   * mode uses the focus mix because bright accents (amber, lime, sky, mint,
+   * yellow) measure ~1.5:1 at step 9. Series 2–6 are step-9 companions picked
+   * per accent (chartSeriesFamilies), every one ≥3:1 against canvas, surface
+   * and raised surfaces (WCAG 1.4.11 non-text contrast).
+   */
+  "chart.1": role("brand.focus", "brand.9"),
+  // Series 2–6 shown for the default blue accent; each data-accent rule
+  // rebinds them through chartSeriesFamilies so no series repeats the accent.
+  "chart.2": role("orange.9"),
+  "chart.3": role("teal.9"),
+  "chart.4": role("crimson.9"),
+  "chart.5": role("grass.9"),
+  "chart.6": role("gold.9"),
+  "chart.grid": role("base.6"),
+  "chart.axis": role("base.11"),
+  "chart.cursor": role("base.4"),
 } as const;
 export type SemanticColor = keyof typeof semanticColors;
+/** Companion hues for chart series 2–6, in preference order. */
+export const chartCompanionFamilies = [
+  "orange",
+  "teal",
+  "violet",
+  "crimson",
+  "grass",
+  "gold",
+  "blue",
+  "pink",
+  "cyan",
+] as const satisfies readonly ColorFamily[];
+const hueGap = (a: number, b: number) => {
+  const gap = Math.abs(a - b) % 360;
+  return Math.min(gap, 360 - gap);
+};
+/**
+ * Families for chart series 2–6 under an accent. Series 1 is the accent, so
+ * companions within 35° of its hue are skipped; near-grey accents keep the
+ * first five. Every pair in the resulting six is at least 30° apart.
+ */
+export function chartSeriesFamilies(accent: ColorFamily): ColorFamily[] {
+  const [, chroma, hue] = colorPalettes[accent].light[9];
+  const picked: ColorFamily[] = [];
+  for (const family of chartCompanionFamilies) {
+    if (picked.length === 5) break;
+    if (chroma >= 0.05 && hueGap(hue, colorPalettes[family].light[9][2]) < 35)
+      continue;
+    picked.push(family);
+  }
+  return picked;
+}
 export const colorThemePersonalities = {
   minimal: { accentColor: "blue", neutralColor: "neutral", overrides: {} },
   expressive: { accentColor: "purple", neutralColor: "mauve", overrides: {} },

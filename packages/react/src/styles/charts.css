@@ -1,0 +1,227 @@
+/*
+ * @dixy-ui/react/charts.css: styles for Chart parts and the Recharts SVG
+ * inside them. Load after styles.css; it uses only Dixy tokens, so Theme,
+ * skins and light/dark restyle every chart.
+ */
+@layer dixy.components {
+  .dixy-charts {
+    margin: 0;
+    min-inline-size: 0;
+    display: grid;
+    gap: var(--dixy-spacing-stack-md);
+    color: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-charts-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--dixy-spacing-stack-sm) var(--dixy-spacing-inline-md);
+  }
+  /* A hidden caption leaves the toggle alone at the end of the row. */
+  .dixy-charts-header:has(> .dixy-charts-caption[data-hidden]) {
+    justify-content: flex-end;
+  }
+  /* The caption wraps its own text so the toggle can stay top-right; the
+   * toggle drops below only when the caption would get narrower than 12rem. */
+  .dixy-charts-header > .dixy-charts-caption {
+    flex: 1 1 12rem;
+    min-inline-size: 0;
+  }
+  .dixy-charts-view {
+    flex: none;
+  }
+  .dixy-charts-table {
+    min-inline-size: 0;
+    overflow-x: auto;
+  }
+  .dixy-charts-caption {
+    display: grid;
+    gap: var(--dixy-spacing-stack-xs);
+  }
+  .dixy-charts-caption[data-hidden] {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .dixy-charts-label {
+    font: var(--dixy-font-heading-sm);
+  }
+  .dixy-charts-description {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-charts-plot {
+    position: relative;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+  .dixy-charts-skeleton {
+    position: absolute;
+    inset: 0;
+  }
+  .dixy-charts-empty {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    color: var(--dixy-color-text-secondary);
+    border: 1px dashed var(--dixy-color-border-subtle);
+    border-radius: var(--dixy-radius-card);
+  }
+
+  /* Recharts SVG: grid, axes, cursor and focus ------------------------- */
+  .dixy-charts .recharts-cartesian-grid line,
+  .dixy-charts .recharts-polar-grid line,
+  .dixy-charts .recharts-polar-grid polygon,
+  .dixy-charts .recharts-polar-grid circle {
+    stroke: var(--dixy-color-chart-grid);
+  }
+  .dixy-charts .recharts-cartesian-axis-tick text,
+  .dixy-charts .recharts-polar-angle-axis-tick text,
+  .dixy-charts .recharts-polar-radius-axis-tick text,
+  .dixy-charts .recharts-label {
+    fill: var(--dixy-color-chart-axis);
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-charts .recharts-cartesian-axis-line,
+  .dixy-charts .recharts-cartesian-axis-tick-line {
+    stroke: var(--dixy-color-chart-grid);
+  }
+  .dixy-charts .recharts-rectangle.recharts-tooltip-cursor {
+    fill: var(--dixy-color-chart-cursor);
+  }
+  .dixy-charts .recharts-curve.recharts-tooltip-cursor {
+    stroke: var(--dixy-color-chart-axis);
+  }
+  .dixy-charts .recharts-dot[stroke="#fff"],
+  .dixy-charts .recharts-active-dot circle {
+    stroke: var(--dixy-color-background-surface);
+  }
+  .dixy-charts .recharts-sector,
+  .dixy-charts .recharts-pie-sector path {
+    stroke: var(--dixy-color-background-surface);
+  }
+  .dixy-charts .recharts-surface,
+  .dixy-charts .recharts-wrapper {
+    outline: none;
+  }
+  /* accessibilityLayer makes the chart focusable; arrow keys move the tooltip. */
+  .dixy-charts .recharts-wrapper:has(.recharts-surface:focus-visible),
+  .dixy-charts .recharts-wrapper:focus-visible {
+    outline: 2px solid var(--dixy-color-border-focus);
+    outline-offset: 2px;
+    border-radius: var(--dixy-radius-control);
+  }
+
+  /* Tooltip ------------------------------------------------------------- */
+  .dixy-charts-tooltip {
+    min-inline-size: 8rem;
+    display: grid;
+    gap: var(--dixy-spacing-stack-xs);
+    padding: var(--dixy-spacing-inset-sm) var(--dixy-spacing-inset-md);
+    color: var(--dixy-color-text-primary);
+    background: var(--dixy-color-background-surface-raised);
+    border: 1px solid var(--dixy-color-border-subtle);
+    border-radius: var(--dixy-radius-overlay);
+    box-shadow: var(--dixy-shadow-floating);
+    font: var(--dixy-font-body-sm);
+  }
+  .dixy-charts-tooltip-label {
+    font-weight: 600;
+  }
+  .dixy-charts-tooltip-list,
+  .dixy-charts-legend {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dixy-charts-tooltip-list {
+    display: grid;
+    gap: var(--dixy-spacing-stack-xs);
+  }
+  .dixy-charts-tooltip-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-sm);
+  }
+  .dixy-charts-tooltip-name {
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-charts-tooltip-value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .dixy-charts-swatch {
+    inline-size: 0.625rem;
+    block-size: 0.625rem;
+    border-radius: 2px;
+    flex: none;
+  }
+  .dixy-charts-swatch[data-indicator="line"] {
+    inline-size: 0.25rem;
+    block-size: 1rem;
+  }
+  .dixy-charts-swatch[data-indicator="dashed"] {
+    inline-size: 0.75rem;
+    block-size: 0;
+    border-block-start: 2px dashed currentColor;
+    color: inherit;
+    background: none !important;
+  }
+
+  /* Legend -------------------------------------------------------------- */
+  .dixy-charts-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--dixy-spacing-inline-sm) var(--dixy-spacing-inline-md);
+    padding-block-start: var(--dixy-spacing-stack-sm);
+  }
+  .dixy-charts-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-spacing-inline-xs);
+    color: var(--dixy-color-text-secondary);
+  }
+  .dixy-charts-legend-item[data-inactive] {
+    opacity: 0.5;
+  }
+  .dixy-charts-legend-icon {
+    display: inline-flex;
+    color: var(--dixy-color-icon-secondary);
+  }
+
+  /* Data table ---------------------------------------------------------- */
+  .dixy-charts-data summary {
+    cursor: pointer;
+    color: var(--dixy-color-text-link);
+    inline-size: fit-content;
+    border-radius: var(--dixy-radius-control);
+  }
+  .dixy-charts-data summary:focus-visible {
+    outline: 2px solid var(--dixy-color-border-focus);
+    outline-offset: 2px;
+  }
+  .dixy-charts-data[open] summary {
+    margin-block-end: var(--dixy-spacing-stack-sm);
+  }
+  .dixy-charts-data td {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (forced-colors: active) {
+    .dixy-charts-swatch {
+      forced-color-adjust: none;
+      outline: 1px solid CanvasText;
+    }
+    .dixy-charts-tooltip {
+      border-color: CanvasText;
+    }
+  }
+}

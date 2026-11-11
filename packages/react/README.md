@@ -125,6 +125,40 @@ MotionConfig suppresses transform/layout animations, so custom opacity, color, s
 
 Legacy duration/ease aliases still resolve; component rules now consume the explicit `--dixy-motion-transition-*` recipes. Override the motion namespace for new timing customizations. Reduced-motion rendering intentionally removes geometry changes and spinner animation.
 
+## Optional charts
+
+`@dixy-ui/react/charts` dresses [Recharts](https://recharts.org) in Dixy, following the shadcn/ui approach: you compose Recharts primitives, and Dixy adds a series config, themed colors, tooltip, legend, loading/empty states and an accessible data table. Install the optional peer `recharts` (3.10+) and load `charts.css` after the core styles:
+
+```tsx
+import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis } from "recharts";
+import { Chart, seriesColor, type ChartConfig } from "@dixy-ui/react/charts";
+import "@dixy-ui/react/charts.css";
+
+const config = {
+  desktop: { label: "Desktop" }, // --dixy-color-chart-1 (the accent)
+  mobile: { label: "Mobile" }, // --dixy-color-chart-2
+} satisfies ChartConfig;
+
+<Chart.Root
+  config={config}
+  label="Visitors by device"
+  table={<Chart.DataTable data={data} labelKey="month" />}
+>
+  <BarChart data={data} accessibilityLayer>
+    <CartesianGrid vertical={false} />
+    <XAxis dataKey="month" />
+    <Tooltip content={<Chart.TooltipContent />} />
+    <Legend content={<Chart.LegendContent />} />
+    <Bar dataKey="desktop" fill={seriesColor("desktop")} />
+    <Bar dataKey="mobile" fill={seriesColor("mobile")} />
+  </BarChart>
+</Chart.Root>;
+```
+
+Series take `--dixy-color-chart-1` … `6` in config order unless `color` sets a palette index, any CSS color or `{ light, dark }`. Series 1 is the theme accent; series 2–6 are picked per accent so none repeats its hue. Every series is at least 3:1 against canvas and surfaces. Root names the Recharts svg from its caption.
+
+Tables are optional. Give every chart a one-sentence `description` with the takeaway; that is the text alternative for a simple chart. Add `table={<Chart.DataTable … />}` only when readers need the values: the default `tableDisplay="disclosure"` puts it behind "View chart data" (reports, public content), and `tableDisplay="toggle"` adds a Chart | Table switch to the header (analytical views; `view`, `defaultView` and `onViewChange` control it). The core `Chart` (a dependency-free bar recipe) is unchanged.
+
 ## Base UI coverage
 
 Dixy styles all 37 documented component families in `@base-ui/react@1.9.0`. Import compound families such as `Checkbox`, `Switch`, `Tabs`, `Tooltip`, `Select`, `Combobox`, `Menu`, `Drawer` and `Toast` from `@dixy-ui/react`. Use their Base UI part names (`Root`, `Trigger`, `Popup`, and so on). All public parts and helpers are retained. Input is exposed as `TextField`; `Field.Control` is also available with the input recipe.

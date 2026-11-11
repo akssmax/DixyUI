@@ -3767,5 +3767,230 @@
       "description": "Section heading.",
       "default": "—"
     }
+  ],
+  "ChartRootProps": [
+    {
+      "name": "config",
+      "type": "{ [x: string]: ChartSeriesConfig; }",
+      "required": true,
+      "description": "Series labels and colors, keyed by data key.",
+      "default": "—"
+    },
+    {
+      "name": "label",
+      "type": "ReactNode",
+      "required": true,
+      "description": "Visible caption and the figure's accessible name.",
+      "default": "—"
+    },
+    {
+      "name": "description",
+      "type": "ReactNode",
+      "required": false,
+      "description": "One sentence with the takeaway, e.g. \"Desktop visits peaked in February\nat 305.\" It describes the figure and the chart, and is the text\nalternative for simple charts; add a table when readers need the values.",
+      "default": "—"
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Hide the caption visually while keeping it as the accessible name.",
+      "default": "—"
+    },
+    {
+      "name": "status",
+      "type": "\"loading\" | \"ready\" | \"empty\" | undefined",
+      "required": false,
+      "description": "ready renders the chart; loading a skeleton; empty the empty message.",
+      "default": "ready"
+    },
+    {
+      "name": "emptyMessage",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Shown when status is empty.",
+      "default": "No data to show"
+    },
+    {
+      "name": "aspectRatio",
+      "type": "CSSProperties[\"aspectRatio\"]",
+      "required": false,
+      "description": "Plot box aspect ratio; any CSS aspect-ratio value.",
+      "default": "16 / 9"
+    },
+    {
+      "name": "children",
+      "type": "ReactElement",
+      "required": true,
+      "description": "One Recharts chart element, e.g. `<BarChart>`.",
+      "default": "—"
+    },
+    {
+      "name": "table",
+      "type": "ReactNode",
+      "required": false,
+      "description": "An alternative view of the data, typically Chart.DataTable. Optional.",
+      "default": "—"
+    },
+    {
+      "name": "tableDisplay",
+      "type": "ChartTableDisplay | undefined",
+      "required": false,
+      "description": "disclosure shows the table behind \"View chart data\" under the plot;\ntoggle adds a Chart | Table switch to the header and swaps the plot for\nthe table.",
+      "default": "disclosure"
+    },
+    {
+      "name": "view",
+      "type": "ChartView | undefined",
+      "required": false,
+      "description": "Controlled view when tableDisplay is toggle.",
+      "default": "—"
+    },
+    {
+      "name": "defaultView",
+      "type": "ChartView | undefined",
+      "required": false,
+      "description": "Initial view when uncontrolled.",
+      "default": "chart"
+    },
+    {
+      "name": "onViewChange",
+      "type": "((view: ChartView) => void) | undefined",
+      "required": false,
+      "description": "Called when the reader switches between chart and table.",
+      "default": "—"
+    },
+    {
+      "name": "viewLabels",
+      "type": "{ group?: string; chart?: ReactNode; table?: ReactNode; } | undefined",
+      "required": false,
+      "description": "Toggle text.",
+      "default": "{ group: \"View\", chart: \"Chart\", table: \"Table\" }"
+    }
+  ],
+  "ChartTooltipContentProps": [
+    {
+      "name": "active",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Supplied by Recharts.",
+      "default": "—"
+    },
+    {
+      "name": "payload",
+      "type": "readonly ChartTooltipItem[] | undefined",
+      "required": false,
+      "description": "Supplied by Recharts.",
+      "default": "—"
+    },
+    {
+      "name": "label",
+      "type": "unknown",
+      "required": false,
+      "description": "Supplied by Recharts: the category under the cursor.",
+      "default": "—"
+    },
+    {
+      "name": "indicator",
+      "type": "\"line\" | \"dot\" | \"dashed\" | undefined",
+      "required": false,
+      "description": "Swatch shape.",
+      "default": "dot"
+    },
+    {
+      "name": "hideLabel",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Hide the category heading.",
+      "default": "false"
+    },
+    {
+      "name": "labelFormatter",
+      "type": "((label: unknown) => ReactNode) | undefined",
+      "required": false,
+      "description": "Format the category heading.",
+      "default": "—"
+    },
+    {
+      "name": "valueFormatter",
+      "type": "((value: unknown, key: string) => ReactNode) | undefined",
+      "required": false,
+      "description": "Format each value.",
+      "default": "locale number formatting"
+    },
+    {
+      "name": "nameKey",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Read the series key from this row field instead, for pie and radial charts.",
+      "default": "—"
+    }
+  ],
+  "ChartLegendContentProps": [
+    {
+      "name": "payload",
+      "type": "readonly ChartLegendItem[] | undefined",
+      "required": false,
+      "description": "Supplied by Recharts.",
+      "default": "—"
+    },
+    {
+      "name": "hideIcon",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Hide icons from config and always show swatches.",
+      "default": "false"
+    },
+    {
+      "name": "nameKey",
+      "type": "\"value\" | undefined",
+      "required": false,
+      "description": "Read the series key from the legend item's value, for pie charts.",
+      "default": "—"
+    }
+  ],
+  "ChartDataTableProps": [
+    {
+      "name": "data",
+      "type": "readonly Row[]",
+      "required": true,
+      "description": "The rows passed to the chart.",
+      "default": "—"
+    },
+    {
+      "name": "labelKey",
+      "type": "string",
+      "required": true,
+      "description": "Field that names each row, e.g. \"month\".",
+      "default": "—"
+    },
+    {
+      "name": "labelHeading",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Heading for the label column.",
+      "default": "Category"
+    },
+    {
+      "name": "keys",
+      "type": "readonly string[] | undefined",
+      "required": false,
+      "description": "Columns to show.",
+      "default": "every config key"
+    },
+    {
+      "name": "summary",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Disclosure text; unused when Root's tableDisplay is toggle.",
+      "default": "View chart data"
+    },
+    {
+      "name": "valueFormatter",
+      "type": "((value: unknown, key: string) => ReactNode) | undefined",
+      "required": false,
+      "description": "Format each value.",
+      "default": "locale number formatting"
+    }
   ]
 }

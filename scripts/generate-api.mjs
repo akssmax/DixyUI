@@ -24,6 +24,12 @@ const sources = [
     .sort()
     .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
     .map((name) => `ai/${name}`),
+  // The optional @dixy-ui/react/charts entry.
+  ...fs
+    .readdirSync(path.join(root, "packages/react/src/charts"))
+    .sort()
+    .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
+    .map((name) => `charts/${name}`),
 ];
 const configPath = path.join(root, "packages/react/tsconfig.json");
 function generate() {

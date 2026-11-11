@@ -976,3 +976,24 @@ The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base
 - [x] `/docs/changelog` renders each package's CHANGELOG.md, newest first, with commit and npm links.
 - [ ] Show release dates (from GitHub releases or the version commit).
 - [ ] Learning: explain why each package keeps its own version line in a Changesets monorepo.
+
+## Charts entry — 2026-11-11
+
+Recharts, dressed in Dixy, following the shadcn/ui charts approach. Evidence: docs/BUILD_LOG.md, 2026-11-11.
+
+- [x] Optional `@dixy-ui/react/charts` entry and `charts.css`; Recharts is an optional peer and stays out of core bundles (tree-shaking and package checks).
+- [x] `Chart.Root` config → `--dixy-series-<key>`, caption naming the figure and the Recharts svg, loading and empty states, data-table slot.
+- [x] `Chart.TooltipContent` (dot, line or dashed indicator; formatters) and `Chart.LegendContent` (config order, icons).
+- [x] Chart tokens: series 1 = accent, series 2–6 picked per accent; ≥3:1 on every surface for all accents × neutrals × light/dark.
+- [x] Docs page with bar, line, area and pie, plus prop controls (type, indicator, status, data table, legend, grid).
+- [x] Data table is optional: none by default in docs, `tableDisplay` disclosure (reports) or toggle (Chart | Table switch for analytical views).
+- [x] Description guidance: a one-sentence takeaway is the default text alternative.
+- [ ] Decide whether the chart/table switch should keep the figure height steady.
+- [ ] Learning: explain when a chart needs a data table, and which display fits dashboards, reports and analytics.
+- [ ] Packed consumer test importing `@dixy-ui/react/charts` with `recharts` installed.
+- [ ] OS reduced-motion check of Recharts animation; screen-reader pass on the keyboard tooltip; forced colors; touch; RTL.
+- [ ] Theme-audit coverage for chart marks (the audit page doesn't render a chart yet).
+- [ ] Decide whether to deprecate the core `Chart` bar recipe in favour of the charts entry.
+- [ ] Learning: explain why shadcn and Dixy style Recharts instead of wrapping it, and what the config adds.
+- [ ] Learning: explain why series 2–6 are chosen per accent instead of using a fixed palette.
+- [ ] Learning: explain why `light-dark()` works here and what it depends on (`color-scheme` per Theme).

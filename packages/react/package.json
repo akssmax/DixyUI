@@ -46,7 +46,12 @@
       "types": "./dist/ai.d.ts",
       "import": "./dist/ai.js"
     },
-    "./ai.css": "./dist/ai.css"
+    "./ai.css": "./dist/ai.css",
+    "./charts": {
+      "types": "./dist/charts.d.ts",
+      "import": "./dist/charts.js"
+    },
+    "./charts.css": "./dist/charts.css"
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
@@ -66,7 +71,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.0.0",
-    "remark-gfm": "^4.0.0"
+    "remark-gfm": "^4.0.0",
+    "recharts": "^3.10.0"
   },
   "devDependencies": {
     "@dixy-ui/typescript-config": "workspace:*",
@@ -80,7 +86,9 @@
     "motion": "14.2.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "react-is": "19.3.0",
     "react-markdown": "10.1.0",
+    "recharts": "3.10.1",
     "remark-gfm": "4.0.1",
     "typescript": "5.9.3",
     "vite": "8.3.4",
@@ -94,6 +102,9 @@
       "optional": true
     },
     "remark-gfm": {
+      "optional": true
+    },
+    "recharts": {
       "optional": true
     }
   }

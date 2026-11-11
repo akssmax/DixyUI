@@ -65,6 +65,7 @@ export const componentIndex = {
   "resizable": { title: "Resizable Panels", category: "Layout & disclosure" },
   "carousel": { title: "Carousel", category: "Data display" },
   "chart": { title: "Chart", category: "Data display" },
+  "charts": { title: "Charts", category: "Data display" },
   "progress-circle": { title: "ProgressCircle", category: "Feedback" },
   "scroll-shadow": { title: "ScrollShadow", category: "Layout & disclosure" },
   "calendar": { title: "Calendar", category: "Date & time" },
