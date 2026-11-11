@@ -106,6 +106,46 @@
   .dixy-charts .recharts-pie-sector path {
     stroke: var(--dixy-color-background-surface);
   }
+  /* Unfilled remainder of radial bars and bar backgrounds. */
+  .dixy-charts .recharts-radial-bar-background-sector,
+  .dixy-charts .recharts-bar-background-rectangle path {
+    fill: var(--dixy-color-chart-track);
+    stroke: none;
+  }
+  .dixy-charts .recharts-pie-label-line {
+    stroke: var(--dixy-color-chart-axis);
+  }
+
+  /* Labels: values written on marks (LabelList, Pie label, radial labels).
+   * Outside a mark they use primary text; tabular figures keep columns. */
+  .dixy-charts .recharts-label-list text,
+  .dixy-charts .recharts-pie-label-text,
+  .dixy-charts .recharts-radial-bar-label {
+    fill: var(--dixy-color-text-primary);
+    font: var(--dixy-font-body-sm);
+    font-variant-numeric: tabular-nums;
+  }
+  /*
+   * Inside a filled mark, e.g. <LabelList position="insideTop"
+   * className="dixy-charts-label-inside" />. Palette series are lighter in
+   * dark mode, so the label flips: white in light (≥4.5:1 on every series),
+   * ink in dark (≥8:1). Custom series colors need their own check.
+   */
+  .dixy-charts text.dixy-charts-label-inside,
+  .dixy-charts .dixy-charts-label-inside text {
+    fill: light-dark(var(--dixy-color-white), var(--dixy-color-ink));
+  }
+  /* Center text in a donut or radial chart, set on <tspan> or <text>. */
+  .dixy-charts .dixy-charts-center-value {
+    fill: var(--dixy-color-text-primary);
+    font: var(--dixy-font-heading-md);
+    font-variant-numeric: tabular-nums;
+  }
+  .dixy-charts .dixy-charts-center-label {
+    fill: var(--dixy-color-text-secondary);
+    font: var(--dixy-font-body-sm);
+  }
+
   .dixy-charts .recharts-surface,
   .dixy-charts .recharts-wrapper {
     outline: none;

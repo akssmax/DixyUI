@@ -21,4 +21,5 @@ export {
   type ChartLegendContentProps,
   type ChartLegendItem,
   type ChartDataTableProps,
+  type ChartGradientProps,
 } from "./charts/chart";

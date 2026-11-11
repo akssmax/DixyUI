@@ -21,6 +21,7 @@ import {
   color,
   semanticColor,
   chartSeriesFamilies,
+  colorConstants,
 } from "../dist/index.js";
 const modes = ["light", "dark"];
 const minimum = (fg, bg, ratio, label) =>
@@ -189,6 +190,27 @@ test("chart series stay 3:1 against every surface and axis text stays readable",
           );
         }
       }
+});
+
+test("labels inside chart marks read at 4.5:1: white in light, ink in dark", () => {
+  const label = { light: colorConstants.white, dark: colorConstants.ink };
+  for (const mode of modes)
+    for (const accent of colorFamilies) {
+      const fills = [
+        resolveColor(semanticColors["chart.1"][mode], mode, accent),
+        ...chartSeriesFamilies(accent).map((family) =>
+          resolveColor(`${family}.9`, mode),
+        ),
+      ];
+      fills.forEach((fill, index) =>
+        minimum(
+          label[mode],
+          fill,
+          4.5,
+          `${mode}/${accent}/inside label on chart.${index + 1}`,
+        ),
+      );
+    }
 });
 
 test("chart companions never repeat the accent's hue and stay 30° apart", () => {

@@ -3943,9 +3943,9 @@
     },
     {
       "name": "nameKey",
-      "type": "\"value\" | undefined",
+      "type": "string | undefined",
       "required": false,
-      "description": "Read the series key from the legend item's value, for pie charts.",
+      "description": "Where the series key comes from. \"value\" reads the legend item's value\n(pie charts); any other key reads that field of the item's data row\n(radial bars, whose rows carry their own fill). Defaults to the dataKey.",
       "default": "—"
     }
   ],
@@ -3991,6 +3991,43 @@
       "required": false,
       "description": "Format each value.",
       "default": "locale number formatting"
+    }
+  ],
+  "ChartGradientProps": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "description": "Referenced from a mark as `fill=\"url(#<id>)\"`. Unique per page.",
+      "default": "—"
+    },
+    {
+      "name": "series",
+      "type": "string",
+      "required": true,
+      "description": "Config key whose color the gradient fades.",
+      "default": "—"
+    },
+    {
+      "name": "from",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Opacity at the start.",
+      "default": "0.8"
+    },
+    {
+      "name": "to",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Opacity at the end.",
+      "default": "0.1"
+    },
+    {
+      "name": "direction",
+      "type": "\"horizontal\" | \"vertical\" | undefined",
+      "required": false,
+      "description": "vertical fades top to bottom; horizontal left to right.",
+      "default": "vertical"
     }
   ]
 }

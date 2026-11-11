@@ -2443,3 +2443,32 @@ Measured on a production build served by `vite preview` (Cloudflare worker, port
 
 - `pnpm check` and `pnpm package:check` pass. In a fresh worktree `verify-package.mjs` first needed `--online` to fill its offline pnpm store.
 - Not tested: Ocean Depths and the other No-frame skins in the browser (covered by the CSS test only); reduced motion (nothing animates when hidden); Safari and Firefox; a packed consumer measuring layout (the package verifier type-checks and SSR-renders skin entries but does no layout).
+
+### 2026-11-11 — Chart gallery: 25 recipes, radar and radial, Chart.Gradient, chart.track
+
+- Request: more chart types, like shadcn's gallery (first batch).
+- Library (`@dixy-ui/react/charts`):
+  - `Chart.Gradient` renders `<defs><linearGradient>` from a series color (`from`/`to` opacity, vertical or horizontal). Gradient fills then follow the theme and accent instead of hard-coded hex.
+  - `Chart.LegendContent` `nameKey` widened from `"value"` to any key. `"value"` keeps the pie behavior; any other key reads that field of the item's data row. Radial bar legends carry the row and a `name` field, not a dataKey, so without this they rendered swatches with no text.
+  - `charts.css`:
+    - Radial and bar backgrounds use `chart.track`; pie leader lines use `chart.axis`.
+    - Label lists use `text.primary` with tabular numbers.
+    - Opt-in classes: `dixy-charts-label-inside` (labels inside marks) and `dixy-charts-center-value` / `-label` (donut and gauge centers).
+- Tokens: `chart.track` = `base.4`, the unfilled part of radial bars and gauges.
+- Inside labels: white fails in dark mode (1.56–2.48:1 on the dark series). They use `light-dark(white, ink)` instead. The ink side measures ≥8.12:1. A token test checks ≥4.5:1 for every accent × mode × series fill.
+- Docs: the charts page's examples section is now a gallery.
+  - 25 self-contained recipes: Area 4, Bar 8, Line 4, Pie 3, Radar 3, Radial 3.
+  - A "Chart type" ToggleGroup filters the groups.
+  - Each card loads when scrolled near and shows its source, which follows the preview theme.
+- Recharts 3.10 gotchas found in the browser:
+  1. `<Label position="center">` inside a `Pie` gets the cartesian view box, which has no `cx`, so a custom center label renders nothing. The fix is to omit `position`.
+  2. A stacked `RadialBar` takes its angle domain from the largest single value, so the second series falls off the arc. The fix is `<PolarAngleAxis type="number" domain={[0, total]} />`.
+- Tests: 13 chart tests (the new ones cover the gradient and legend `nameKey`) and 35 token tests. `pnpm check` and `pnpm package:check` pass.
+- Verified in the in-app browser (dark preview, 1440px and 375px):
+  - All 25 recipes render marks.
+  - Center labels: donut 925, progress 72%, half ring 354.
+  - The half ring has both series; radial legend names are in config order.
+  - Inside labels and the track resolve to the dark tokens.
+  - No console errors.
+  - No horizontal overflow at 375px; the filter wraps to two rows and works with arrow keys and Enter.
+- Not tested: the browser pane was hidden, so rAF and IntersectionObserver were paused. Recipes were mounted by setting card state, with reduced motion forced through `matchMedia`, so entrance animation and scroll-triggered loading weren't observed. Light mode was checked by the contrast test only, not visually. Screen readers, forced colors, touch tooltips and RTL weren't tested either.

@@ -480,6 +480,8 @@ export const semanticColors = {
   "chart.grid": role("base.6"),
   "chart.axis": role("base.11"),
   "chart.cursor": role("base.4"),
+  // The unfilled remainder of radial bars and gauges.
+  "chart.track": role("base.4"),
 } as const;
 export type SemanticColor = keyof typeof semanticColors;
 /** Companion hues for chart series 2–6, in preference order. */

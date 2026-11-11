@@ -157,6 +157,25 @@ it("legend content follows config order, uses config labels and marks inactive s
   );
 });
 
+it("legend nameKey reads the series key from each item's data row", () => {
+  // Radial bar legends carry the row, not a series dataKey.
+  render(
+    inChart(
+      <Chart.LegendContent
+        nameKey="series"
+        payload={[
+          { value: undefined, payload: { series: "mobile", visitors: 9 } },
+          { value: undefined, payload: { series: "desktop", visitors: 4 } },
+        ]}
+      />,
+    ),
+  );
+  expect(screen.getAllByRole("listitem").map((li) => li.textContent)).toEqual([
+    "Desktop",
+    "Mobile",
+  ]);
+});
+
 it("data table exposes every value behind a native disclosure and passes axe", async () => {
   const user = userEvent.setup();
   const { container } = render(
@@ -281,4 +300,31 @@ it("controlled view follows the prop; the toggle hides while loading", () => {
   );
   expect(screen.queryByRole("group", { name: "View" })).toBeNull();
   expect(screen.queryByRole("table")).toBeNull();
+});
+
+it("gradient fades the series color with style stops, vertical or horizontal", () => {
+  const { container, rerender } = render(
+    <svg>
+      <Chart.Gradient id="fill-desktop" series="desktop" />
+    </svg>,
+  );
+  const gradient = container.querySelector("linearGradient#fill-desktop")!;
+  expect(gradient).toHaveAttribute("y2", "1");
+  expect(gradient).toHaveAttribute("x2", "0");
+  const stops = [...gradient.querySelectorAll("stop")];
+  expect(stops.map((stop) => stop.style.stopOpacity)).toEqual(["0.8", "0.1"]);
+  expect(stops[0]!.style.stopColor).toBe("var(--dixy-series-desktop)");
+  rerender(
+    <svg>
+      <Chart.Gradient
+        id="fill-desktop"
+        series="desktop"
+        direction="horizontal"
+        from={1}
+        to={0}
+      />
+    </svg>,
+  );
+  expect(container.querySelector("linearGradient")).toHaveAttribute("x2", "1");
+  expect(container.querySelector("linearGradient")).toHaveAttribute("y2", "0");
 });

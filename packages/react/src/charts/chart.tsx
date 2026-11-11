@@ -316,14 +316,20 @@ export interface ChartLegendItem {
   value?: unknown;
   color?: string;
   inactive?: boolean;
+  /** The data row behind the item, for pie and radial bar legends. */
+  payload?: unknown;
 }
 export interface ChartLegendContentProps {
   /** Supplied by Recharts. */
   payload?: readonly ChartLegendItem[];
   /** Hide icons from config and always show swatches. @default false */
   hideIcon?: boolean;
-  /** Read the series key from the legend item's value, for pie charts. */
-  nameKey?: "value";
+  /**
+   * Where the series key comes from. "value" reads the legend item's value
+   * (pie charts); any other key reads that field of the item's data row
+   * (radial bars, whose rows carry their own fill). Defaults to the dataKey.
+   */
+  nameKey?: string;
 }
 function LegendContent({
   payload,
@@ -332,10 +338,14 @@ function LegendContent({
 }: ChartLegendContentProps) {
   const config = useChartConfig();
   if (!payload?.length) return null;
-  const keyOfItem = (item: ChartLegendItem) =>
-    nameKey === "value"
-      ? String(item.value ?? "")
-      : String(item.dataKey ?? item.value ?? "");
+  const keyOfItem = (item: ChartLegendItem) => {
+    if (nameKey === "value") return String(item.value ?? "");
+    if (nameKey) {
+      const row = item.payload as Record<string, unknown> | undefined;
+      return String(row?.[nameKey] ?? item.value ?? "");
+    }
+    return String(item.dataKey ?? item.value ?? "");
+  };
   // Recharts sorts legend items by name; follow the config order instead so
   // the legend matches the data table and the order series were declared.
   const order = Object.keys(config);
@@ -439,6 +449,48 @@ function DataTable({
   );
 }
 
+export interface ChartGradientProps {
+  /** Referenced from a mark as `fill="url(#<id>)"`. Unique per page. */
+  id: string;
+  /** Config key whose color the gradient fades. */
+  series: string;
+  /** Opacity at the start. @default 0.8 */
+  from?: number;
+  /** Opacity at the end. @default 0.1 */
+  to?: number;
+  /** vertical fades top to bottom; horizontal left to right. @default vertical */
+  direction?: "vertical" | "horizontal";
+}
+/**
+ * A linear gradient in a series color, for area and bar fills. Render it as
+ * a direct child of the Recharts chart; it follows Theme and appearance.
+ */
+function Gradient({
+  id,
+  series,
+  from = 0.8,
+  to = 0.1,
+  direction = "vertical",
+}: ChartGradientProps) {
+  const color = seriesColor(series);
+  return (
+    <defs>
+      <linearGradient
+        id={id}
+        x1="0"
+        y1="0"
+        x2={direction === "horizontal" ? "1" : "0"}
+        y2={direction === "vertical" ? "1" : "0"}
+      >
+        {/* style, not attributes: var() in a presentation attribute is not
+            resolved by every engine. */}
+        <stop offset="5%" style={{ stopColor: color, stopOpacity: from }} />
+        <stop offset="95%" style={{ stopColor: color, stopOpacity: to }} />
+      </linearGradient>
+    </defs>
+  );
+}
+
 /**
  * Recharts, dressed in Dixy. Compose one Recharts chart inside Root;
  * Root maps config to `--dixy-series-<key>` and the content parts read it.
@@ -448,4 +500,5 @@ export const Chart = /* @__PURE__ */ (() => ({
   TooltipContent,
   LegendContent,
   DataTable,
+  Gradient,
 }))();

@@ -996,4 +996,10 @@ Recharts, dressed in Dixy, following the shadcn/ui charts approach. Evidence: do
 - [ ] Decide whether to deprecate the core `Chart` bar recipe in favour of the charts entry.
 - [ ] Learning: explain why shadcn and Dixy style Recharts instead of wrapping it, and what the config adds.
 - [ ] Learning: explain why series 2–6 are chosen per accent instead of using a fixed palette.
+- [x] Chart gallery: 25 recipes across area, bar, line, pie, radar and radial, filterable by type, each with source.
+- [x] `Chart.Gradient`, `chart.track` token, label/center-text classes; inside labels ≥4.5:1 in light and dark (token test).
+- [x] `Chart.LegendContent` `nameKey` reads any row field (radial bar legends).
+- [ ] Visual light-mode and entrance-animation pass of the gallery with the browser pane visible.
+- [ ] Learning: explain why inside labels flip to ink in dark mode instead of staying white.
+- [ ] Learning: explain how angle domains turn a radial bar into a share of a goal.
 - [ ] Learning: explain why `light-dark()` works here and what it depends on (`color-scheme` per Theme).
