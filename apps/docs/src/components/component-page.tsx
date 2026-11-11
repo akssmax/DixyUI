@@ -56,6 +56,7 @@ const sourceFiles = import.meta.glob(
 const SwitchComparisons = lazy(() => import("./switch-comparisons"));
 const CheckboxComparisons = lazy(() => import("./checkbox-comparisons"));
 const TabsComparisons = lazy(() => import("./tabs-comparisons"));
+const ChartGallery = lazy(() => import("./chart-gallery"));
 const FamilyComparisons = lazy(() => import("./family-comparisons"));
 
 class PreviewBoundary extends Component<
@@ -601,7 +602,9 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
             <h2>
               {slug === "button"
                 ? "A spectrum of emphasis"
-                : "Details that make a difference"}
+                : slug === "charts"
+                  ? "Chart gallery"
+                  : "Details that make a difference"}
             </h2>
             <span className="section-caption">Examples & states</span>
           </div>
@@ -650,6 +653,10 @@ export function ComponentPage({ slug }: { slug: ComponentSlug }) {
           ) : slug === "tabs" ? (
             <Suspense fallback={<p>Loading tab comparisons…</p>}>
               <TabsComparisons />
+            </Suspense>
+          ) : slug === "charts" ? (
+            <Suspense fallback={<p>Loading chart gallery…</p>}>
+              <ChartGallery />
             </Suspense>
           ) : "composition" in entry ? (
             <Suspense fallback={<p>Loading component comparisons…</p>}>

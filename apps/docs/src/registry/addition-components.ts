@@ -1211,6 +1211,7 @@ export const additionComponentRegistry = {
       "ChartTooltipContentProps",
       "ChartLegendContentProps",
       "ChartDataTableProps",
+      "ChartGradientProps",
     ],
     source: "charts/chart.tsx",
     load: () => import("../demos/charts-example"),

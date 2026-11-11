@@ -778,6 +778,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1573,6 +1574,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3907,6 +3909,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3979,6 +3982,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4051,6 +4055,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4123,6 +4128,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4195,6 +4201,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4267,6 +4274,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4339,6 +4347,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4411,6 +4420,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4483,6 +4493,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4555,6 +4566,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4627,6 +4639,7 @@
     --dixy-color-chart-grid: var(--dixy-color-base-6);
     --dixy-color-chart-axis: var(--dixy-color-base-11);
     --dixy-color-chart-cursor: var(--dixy-color-base-4);
+    --dixy-color-chart-track: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);

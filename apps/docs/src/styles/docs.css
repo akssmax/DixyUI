@@ -1270,6 +1270,53 @@ svg {
   font: var(--dixy-font-title-lg);
   margin-block: 0 var(--dixy-spacing-stack-sm);
 }
+/* Chart gallery: grouped recipe cards, two columns where they fit. */
+.chart-gallery {
+  display: grid;
+  gap: var(--dixy-spacing-stack-xl);
+}
+.chart-gallery-filter {
+  flex-wrap: wrap;
+}
+.chart-gallery-group {
+  display: grid;
+  gap: var(--dixy-spacing-stack-md);
+}
+.chart-gallery-group > h3 {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dixy-spacing-inline-sm);
+  margin: 0;
+}
+.chart-gallery-count {
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+.chart-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: var(--dixy-spacing-stack-lg);
+}
+.chart-recipe {
+  display: grid;
+  align-content: start;
+  gap: var(--dixy-spacing-stack-xs);
+  min-inline-size: 0;
+}
+.chart-recipe > h4 {
+  margin: 0;
+}
+.chart-recipe > .section-description {
+  margin: 0 0 var(--dixy-spacing-stack-xs);
+}
+.chart-recipe .component-comparison-preview {
+  min-block-size: 18rem;
+}
+.chart-recipe .component-comparison-preview > * {
+  inline-size: 100%;
+}
+
 .component-comparison-card {
   overflow: hidden;
   border: 1px solid var(--doc-line);

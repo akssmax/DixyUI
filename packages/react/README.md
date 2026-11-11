@@ -159,6 +159,14 @@ Series take `--dixy-color-chart-1` … `6` in config order unless `color` sets a
 
 Tables are optional. Give every chart a one-sentence `description` with the takeaway; that is the text alternative for a simple chart. Add `table={<Chart.DataTable … />}` only when readers need the values: the default `tableDisplay="disclosure"` puts it behind "View chart data" (reports, public content), and `tableDisplay="toggle"` adds a Chart | Table switch to the header (analytical views; `view`, `defaultView` and `onViewChange` control it). The core `Chart` (a dependency-free bar recipe) is unchanged.
 
+More recipes (area, bar, line, pie, radar, radial) are in the docs gallery. Helpers for them:
+
+- `<Chart.Gradient id="fill-desktop" series="desktop" />` inside a chart, then `fill="url(#fill-desktop)"`, fades a series color in place of a hard-coded hex.
+- `className="dixy-charts-label-inside"` on a `LabelList` puts labels inside marks: white in light mode, ink in dark, each ≥4.5:1.
+- `dixy-charts-center-value` and `dixy-charts-center-label` style donut and gauge center text.
+- Radial bar and bar `background` tracks use `--dixy-color-chart-track`.
+- For radial bar legends, pass `<Chart.LegendContent nameKey="browser" />` to read each row's series key.
+
 ## Base UI coverage
 
 Dixy styles all 37 documented component families in `@base-ui/react@1.9.0`. Import compound families such as `Checkbox`, `Switch`, `Tabs`, `Tooltip`, `Select`, `Combobox`, `Menu`, `Drawer` and `Toast` from `@dixy-ui/react`. Use their Base UI part names (`Root`, `Trigger`, `Popup`, and so on). All public parts and helpers are retained. Input is exposed as `TextField`; `Field.Control` is also available with the input recipe.
