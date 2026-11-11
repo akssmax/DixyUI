@@ -2425,3 +2425,21 @@ Measured on a production build served by `vite preview` (Cloudflare worker, port
   - At 512px the toggle sits top-right; at 375px it wraps under the caption, with no horizontal scroll.
   - Dark mode.
 - Not tested: the figure height changes between chart and table (table height follows its rows); this may matter in dense grids. Screen-reader announcement of the view change wasn't checked.
+
+### 2026-11-11 — No-frame skins keep ornament renderers out of layout (#24)
+
+- Report: with `@dixy-ui/themes/candy-clay.css` and `ornamentRenderer={ClayOrnament}`, `.dixy-clay-ornament` and its canvas computed to `position: static`. The canvas rendered below `Card.Root` and `Dialog.Popup`, growing both and overflowing narrow cards.
+- Cause: Candy Clay and Ocean Depths moved to plain cards (frame `none`) in af6de69. `frameStyles()` returned `""` for No frame, so no ornament rules were emitted, while the README still pairs each skin with its renderer.
+- Fix: `frame-styles.ts` emits one rule for No-frame themes: `.dixy-skin-ornament { position:absolute; inset:0; display:none; pointer-events:none; }`, scoped to the theme. Any renderer passed to a No-frame theme stays inert and takes no space. The plain-card design is kept; framed themes are unchanged. Regenerated with `pnpm skins:generate`: Candy Clay, Ocean Depths, Scrapbook, Signal, Dispatch, Ledger and Mainframe each gain the rule. The README notes Ocean and Clay renderers only draw for `coral`/`cushion` frames.
+- Test: `skins.test.mjs` checks every No-frame starter's generated CSS has that rule (absolute, inset 0, hidden, no pointer events). It fails against main's `candy-clay.css` ("dixy/candy-clay has no rule for its ornament wrapper") and passes after.
+- Verified in the in-app browser (docs-alt dev server, compiled `dist` packages, a harness rendering a 320px Candy Clay `Card.Root` and an open `Dialog.Popup`, each with and without `ClayOrnament`):
+
+  | CSS   | Viewport | Mode       | Card height (without → with) | Dialog height | Canvas                    |
+  | ----- | -------- | ---------- | ---------------------------- | ------------- | ------------------------- |
+  | main  | 375 px   | light/dark | 78 → 252                     | 142 → 316     | static, 1584–3296 px wide |
+  | main  | 320 px   | light/dark | 78 → 252                     | 142 → 316     | static, 3296 px wide      |
+  | fixed | 375 px   | light/dark | 78 → 78                      | 142 → 142     | wrapper absolute, hidden  |
+  | fixed | 320 px   | light/dark | 78 → 78                      | 142 → 142     | wrapper absolute, hidden  |
+
+- `pnpm check` and `pnpm package:check` pass. In a fresh worktree `verify-package.mjs` first needed `--online` to fill its offline pnpm store.
+- Not tested: Ocean Depths and the other No-frame skins in the browser (covered by the CSS test only); reduced motion (nothing animates when hidden); Safari and Firefox; a packed consumer measuring layout (the package verifier type-checks and SSR-renders skin entries but does no layout).

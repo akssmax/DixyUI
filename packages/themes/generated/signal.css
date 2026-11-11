@@ -457,6 +457,13 @@
     border: 1px solid var(--dixy-skin-edge);
   }
 
+  .dixy-theme[data-dixy-skin="dixy/signal"] .dixy-skin-ornament {
+    position: absolute;
+    inset: 0;
+    display: none;
+    pointer-events: none;
+  }
+
   .dixy-theme[data-dixy-skin="dixy/signal"] {
     --dixy-personality-press-distance: 0px;
   }

@@ -70,3 +70,33 @@ test("skin CSS stays independent, bounded and scoped to each actual component", 
   assert.match(forest, /data-animated/);
   assert.match(forest, /prefers-reduced-motion/);
 });
+
+test("no-frame skins keep a passed ornament renderer out of flow (issue #24)", async () => {
+  const { themeDocuments } = await import("../src/documents.ts");
+  const unframed = themeDocuments.filter(
+    (document) => document.recipes.frame.id === "none",
+  );
+  assert.ok(
+    unframed.some((document) => document.id === "dixy/candy-clay"),
+    "Candy Clay ships plain cards",
+  );
+  for (const document of unframed) {
+    const css = fs.readFileSync(
+      new URL(
+        "../generated/" + document.id.split("/")[1] + ".css",
+        import.meta.url,
+      ),
+      "utf8",
+    );
+    const scope = `.dixy-theme[data-dixy-skin="${document.id}"] .dixy-skin-ornament`;
+    const rule = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(
+      ([, selector]) => selector.trim() === scope,
+    );
+    assert.ok(rule, `${document.id} has no rule for its ornament wrapper`);
+    // Wrapper (and the canvas inside it) must not take up layout space.
+    assert.match(rule[2], /position:\s*absolute/);
+    assert.match(rule[2], /inset:\s*0/);
+    assert.match(rule[2], /display:\s*none/);
+    assert.match(rule[2], /pointer-events:\s*none/);
+  }
+});
