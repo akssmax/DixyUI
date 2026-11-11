@@ -1,5 +1,16 @@
 # @dixy-ui/react
 
+## 0.1.0-beta.7
+
+### Minor Changes
+
+- f6c380e: Charts: add `Chart.Gradient` for theme-aware gradient fills. `Chart.LegendContent` `nameKey` now reads any row field (for radial bar legends). `charts.css` adds styles for label lists, inside labels, donut center text, leader lines and radial tracks. Tokens add `chart.track` for radial and gauge backgrounds.
+
+### Patch Changes
+
+- Updated dependencies [f6c380e]
+  - @dixy-ui/tokens@0.1.0-beta.5
+
 ## 0.1.0-beta.6
 
 ### Minor Changes
