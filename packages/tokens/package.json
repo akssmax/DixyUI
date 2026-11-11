@@ -1,6 +1,6 @@
 {
   "name": "@dixy-ui/tokens",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "description": "Framework-independent Dixy color, typography, sizing and spacing contracts.",
   "license": "MIT",
   "author": "Akshay Saini",
