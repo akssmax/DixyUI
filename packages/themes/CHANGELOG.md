@@ -1,5 +1,12 @@
 # @dixy-ui/themes
 
+## 0.1.0-beta.7
+
+### Patch Changes
+
+- Updated dependencies [f6c380e]
+  - @dixy-ui/tokens@0.1.0-beta.5
+
 ## 0.1.0-beta.6
 
 ### Patch Changes
