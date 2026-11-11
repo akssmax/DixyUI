@@ -125,7 +125,7 @@ Omit animateOrnaments for still geometry. The playground's Animate details butto
 | Y2K Titanium    | `TitaniumOrnament`    | Chamfers, screws, perforations and light pipes                         |
 | Material Light  | `LightOrnament`       | Porcelain halo and fine rim highlights                                 |
 
-Each export comes from `@dixy-ui/themes/<slug>/react`. CSS/definition-only consumption remains supported without the React artwork. See `docs/PROCEDURAL_SKINS.md` in the repository for architecture and verification scope.
+Each export comes from `@dixy-ui/themes/<slug>/react`. Ocean Depths and Candy Clay now ship plain cards (No frame), so their stylesheets keep `OceanOrnament` and `ClayOrnament` hidden and out of layout; the renderers draw on themes whose frame recipe is `coral` or `cushion`. CSS/definition-only consumption remains supported without the React artwork. See `docs/PROCEDURAL_SKINS.md` in the repository for architecture and verification scope.
 
 Themes style component surfaces and edges. Button labels and icons belong to the consumer; no renderer is mounted inside a Button. A loading spinner remains a functional Button feature. Retro frames do not simulate window title bars, window actions or resize handles. Compose working controls explicitly when an application needs them.
 

@@ -38,7 +38,14 @@ export const framePrefixes = {
 } as const;
 /** Frame code owns trim/geometry only. It never paints an input or action surface. */
 export function frameStyles(m: ResolvedThemeRecipe, theme: string): string {
-  if (m.frame === "none") return "";
+  // No frame: the material carries the look, so an ornament renderer passed
+  // anyway (e.g. ClayOrnament on Candy Clay) must stay inert. Take it out of
+  // flow and hide it; without this its wrapper and canvas sat in normal flow
+  // and grew the card or dialog (issue #24).
+  if (m.frame === "none")
+    return `
+    ${theme} .dixy-skin-ornament { position:absolute; inset:0; display:none; pointer-events:none; }
+  `;
   const prefix = framePrefixes[m.frame];
   const art = `${theme} .dixy-${prefix}-ornament`;
   const safe = {

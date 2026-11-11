@@ -523,6 +523,13 @@
     border: 1px solid var(--dixy-skin-edge);
   }
 
+  .dixy-theme[data-dixy-skin="dixy/ocean-depths"] .dixy-skin-ornament {
+    position: absolute;
+    inset: 0;
+    display: none;
+    pointer-events: none;
+  }
+
   .dixy-theme[data-dixy-skin="dixy/ocean-depths"]
     :is(.dixy-switch-thumb)[data-dixy-skin="dixy/ocean-depths"] {
     border-radius: 999px;
