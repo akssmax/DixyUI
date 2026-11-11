@@ -113,6 +113,17 @@ try {
     assert.ok(!coreManifest.dependencies?.[pack]);
     assert.ok(!fs.existsSync(path.join(consumer, "node_modules", pack)));
   }
+  // Charts ship as an opt-in subpath; Recharts stays an optional peer.
+  assert.equal(coreManifest.peerDependenciesMeta?.recharts?.optional, true);
+  assert.ok(!coreManifest.dependencies?.recharts);
+  for (const file of ["charts.js", "charts.d.ts", "charts.css"])
+    assert.ok(
+      fs.existsSync(
+        path.join(consumer, "node_modules/@dixy-ui/react/dist", file),
+      ),
+      `Missing packaged ${file}`,
+    );
+  assert.match(css, /--dixy-color-chart-1/);
   assert.match(css, /--dixy-accent/);
   assert.match(css, /--dixy-color-blue-12/);
   assert.match(css, /--dixy-color-stone-12/);

@@ -1197,6 +1197,75 @@ export const additionComponentRegistry = {
       "This lightweight SVG recipe accepts finite nonnegative values. The caption names the chart, and View chart data exposes a native table with every value. Complex series, axes, interactions and chart types remain separate future extensions.",
     token: "--dixy-color-background-surface",
   },
+  charts: {
+    exportName: "Chart",
+    title: "Charts",
+    category: "Data display",
+    description: "Recharts, dressed in Dixy.",
+    detail:
+      "Import from @dixy-ui/react/charts with the optional peer recharts. Compose Recharts primitives yourself; Chart.Root maps a config of series labels and colors to --dixy-series-<key> variables, and the tooltip, legend and data table read the same config. Series default to the themed --dixy-color-chart-1 … 6 palette, so every built-in theme and light/dark restyles them.",
+    primitive: "",
+    engine: "Recharts + native",
+    api: [
+      "ChartRootProps",
+      "ChartTooltipContentProps",
+      "ChartLegendContentProps",
+      "ChartDataTableProps",
+    ],
+    source: "charts/chart.tsx",
+    load: () => import("../demos/charts-example"),
+    code: () => import("../demos/charts-example?raw"),
+    composition: {
+      tree: "Chart.Root (config, label, description, status) — figure, sets --dixy-series-*\n├── header: figcaption + Chart | Table toggle (tableDisplay=toggle only)\n├── ResponsiveContainer → one Recharts chart (BarChart, LineChart, AreaChart, PieChart …)\n│   ├── <Tooltip content={<Chart.TooltipContent />} />\n│   └── <Legend content={<Chart.LegendContent />} />\n└── table slot (optional) → Chart.DataTable: behind a disclosure, or in place of the plot",
+      detail:
+        "Root owns the caption, the plot box and the states (loading skeleton, empty message). Recharts owns scales, layout, animation and pointer hit-testing. Use seriesColor(key) for fill and stroke so the color comes from the config.",
+    },
+    controls: [
+      {
+        name: "type",
+        label: "Type",
+        options: ["bar", "line", "area", "pie"],
+        initial: "bar",
+      },
+      {
+        name: "indicator",
+        label: "Tooltip indicator",
+        options: ["dot", "line", "dashed"],
+        initial: "dot",
+      },
+      {
+        name: "status",
+        label: "Status",
+        options: ["ready", "loading", "empty"],
+        initial: "ready",
+      },
+      {
+        name: "table",
+        label: "Data table",
+        options: ["none", "disclosure", "toggle"],
+        initial: "none",
+      },
+      { name: "legend", label: "Legend", initial: true },
+      { name: "grid", label: "Grid", initial: true },
+    ],
+    keyboard: [
+      ["Tab", "Focus the chart (accessibilityLayer)."],
+      ["Arrow Left / Right", "Move the tooltip between categories."],
+      [
+        "Arrow Left / Right, Enter / Space",
+        "In the Chart | Table toggle: move between views and switch.",
+      ],
+      [
+        "Enter / Space on View chart data",
+        "Expand or collapse the native data table.",
+      ],
+    ],
+    accessibility:
+      'Start with the description: one sentence with the takeaway ("Desktop peaked in February at 305"). It describes the figure and the chart, and is enough of a text alternative for a simple chart. Add a table only when readers need the values: tableDisplay="disclosure" (the default) puts it behind View chart data, for reports and public content; tableDisplay="toggle" adds a Chart | Table switch, for analytical views. Most dashboard charts need neither. The figure and the Recharts svg are named by the caption (hideLabel keeps the name), and accessibilityLayer lets keyboard users step through values. Series colors are ≥3:1 on every surface, but color alone is not a label: keep the legend or direct labels. Recharts animations respect prefers-reduced-motion by default.',
+    lesson:
+      "Like shadcn/ui charts, Dixy doesn't wrap the chart engine. It adds the design-system layer around it: one config for labels and colors, themed tokens, styled tooltip and legend, states and an accessible table.",
+    token: "--dixy-color-chart-1",
+  },
   "progress-circle": {
     exportName: "ProgressCircle",
     title: "ProgressCircle",

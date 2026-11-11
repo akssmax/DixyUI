@@ -2252,3 +2252,57 @@ The hanging canopy stems had a separate problem: they were S-wiggles, and their 
   - The name reads "Keyboard shortcuts"; no horizontal scroll.
   - `pnpm check`, `pnpm format:check`.
 - Not tested: screen readers, mobile footer layout, dark mode for the switch. Remapping isn't offered; turning the shortcut off satisfies 2.1.4 on its own.
+
+### 2026-11-11 — Charts entry: Recharts, dressed in Dixy
+
+- What: a new optional `@dixy-ui/react/charts` entry with `charts.css`. The approach follows shadcn/ui charts: Dixy doesn't wrap the engine. You compose Recharts (3.10.1, an optional peer), and Dixy adds:
+  - `Chart.Root`: figure and caption, a `config` mapped to `--dixy-series-<key>`, an aspect-ratio plot box, loading and empty states, and a `table` slot.
+  - `Chart.TooltipContent` and `Chart.LegendContent`, which plug into Recharts' `content` props and read labels and colors from the config.
+  - `Chart.DataTable`: a native table of every value behind a disclosure, kept from the old Chart.
+  - `seriesColor(key)` for `fill` and `stroke`.
+- Tokens: `chart.1`–`chart.6`, `chart.grid`, `chart.axis` and `chart.cursor`.
+  - Series 1 is the accent. In light mode it uses the focus mix, because bright accents (amber, lime, sky, mint, yellow) measure about 1.5:1 at step 9.
+  - Series 2–6 come from `chartSeriesFamilies(accent)`, rebound in every `[data-accent]` rule. Companions within 35° of the accent's hue are skipped.
+- Why per-accent companions: the first version used fixed hues. The browser pie showed Edge (violet) and Chrome (the purple Original Dixy accent) as the same color. With a fixed palette, some accent would always collide.
+- `light-dark()` for `{ light, dark }` series colors: Theme already sets `color-scheme` per appearance, so nested Themes resolve without injecting a `<style>` tag.
+- Bugs found in the browser:
+  - With `accessibilityLayer`, Recharts makes the svg a focusable `role="application"` with no name. Root now passes `aria-labelledby` (and `aria-describedby`) from its caption unless the author named the chart.
+  - Recharts sorts legend items alphabetically. `LegendContent` now follows config order, so the legend matches the table.
+  - Line and area charts clipped their end tick labels. The demo pads the X axis for them.
+- Tests:
+  - Tokens: every series is ≥3:1 and axis text ≥4.5:1 against canvas, surface and raised surface, for all 39 accents × 11 neutrals × light/dark. Companions are ≥30° apart from the accent and from each other. The `:root` roles equal the blue accent's companions.
+  - React: 8 chart tests covering config → variables (palette, index, CSS color, light-dark), caption naming with `hideLabel`, the states, tooltip and legend content, the data table with an axe scan, and the error outside Root.
+  - Package: the tree-shaking check forbids `recharts` and `victory-vendor` in core bundles (sizes unchanged: 17.1, 139.5 and 44.4 KiB). The package verifier checks the charts files, the optional peer and the `--dixy-color-chart-1` token.
+- Verified in the in-app browser on `/docs/components/charts`:
+  - Bar, line, area and pie with Original Dixy (purple accent).
+  - Tab focuses the chart with a visible ring, and arrow keys move the Dixy tooltip (Feb → Desktop 305, Mobile 200).
+  - The svg's name is "Visitors by device".
+  - Pie companions are purple, orange, teal, crimson and grass.
+  - Dark mode bars, tooltip and open data table.
+  - Loading sets `aria-busy` and shows a skeleton with no table; empty shows its message.
+  - 375 px: no horizontal scroll, all month labels shown.
+  - `pnpm check` and `pnpm package:check` both pass.
+- Not tested: OS reduced motion (Recharts' default `isAnimationActive="auto"` is documented to respect it; not emulated here), screen readers, forced colors, other themes in the browser (the token tests cover their math), touch tooltips, RTL. A packed consumer importing `@dixy-ui/react/charts` with Recharts installed isn't in the verifier yet.
+
+### 2026-11-11 — Chart tables become optional, with a Chart | Table toggle
+
+- Question: do charts need "View chart data"? Common practice varies. Product dashboards (shadcn, Tremor, Stripe) show none. Reporting and public data (GOV.UK, ONS, the BBC and FT, Datawrapper) offer a "show data" disclosure. Analytics tools (Google Analytics, Grafana, Highcharts' data-table menu) offer a Chart | Table switch.
+- What changed:
+  1. The table stays opt-in through the `table` slot. The docs demo now defaults to no table.
+  2. The playground has a "Data table" control: none, disclosure or toggle.
+  3. The description is now the first advice. Root's JSDoc, the docs accessibility notes and the demo all model a one-sentence takeaway ("Desktop peaked in February at 305; mobile led only in April.") instead of a date range. For a simple chart that is the text alternative.
+  4. New `tableDisplay="toggle"` on `Chart.Root` adds a segmented Dixy `ToggleGroup` (named "View") to the header and swaps the plot for the table. In that mode `Chart.DataTable` renders a plain table, with no disclosure. The view can be controlled or uncontrolled (`view`, `defaultView`, `onViewChange`). Labels come from `viewLabels`.
+- Details:
+  - Base UI lets a single-select group deselect, so pressing the active view is ignored and a view always shows.
+  - The toggle is hidden while loading or empty.
+  - The caption flexes from 12rem, so the toggle sits top-right and drops below the caption only on narrow widths.
+- Tests: three new chart tests, 11 in total.
+  - No table slot means no disclosure or toggle.
+  - Toggle by pointer and keyboard (Arrow Left, then Enter), no deselect, the `onViewChange` sequence, an inline table with no `<details>`, and an axe scan.
+  - The controlled view, and the toggle hidden while loading.
+- Verified in the in-app browser:
+  - The default shows no table and no toggle.
+  - With toggle, Chart is pressed first; clicking Table swaps in the inline table.
+  - At 512px the toggle sits top-right; at 375px it wraps under the caption, with no horizontal scroll.
+  - Dark mode.
+- Not tested: the figure height changes between chart and table (table height follows its rows); this may matter in dense grids. Screen-reader announcement of the view change wasn't checked.

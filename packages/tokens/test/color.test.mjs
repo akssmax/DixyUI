@@ -20,6 +20,7 @@ import {
   colorThemeVariables,
   color,
   semanticColor,
+  chartSeriesFamilies,
 } from "../dist/index.js";
 const modes = ["light", "dark"];
 const minimum = (fg, bg, ratio, label) =>
@@ -153,6 +154,66 @@ test("readable surface, soft-action, selection and feedback pairs meet their con
           );
         }
       }
+});
+
+test("chart series stay 3:1 against every surface and axis text stays readable", () => {
+  for (const mode of modes)
+    for (const accent of colorFamilies)
+      for (const neutral of neutralColorFamilies) {
+        const get = (role) =>
+          resolveColor(semanticColors[role][mode], mode, accent, neutral);
+        const series = [
+          get("chart.1"),
+          ...chartSeriesFamilies(accent).map((family) =>
+            resolveColor(`${family}.9`, mode),
+          ),
+        ];
+        for (const surface of [
+          "background.canvas",
+          "background.surface",
+          "background.surface.raised",
+        ]) {
+          series.forEach((color, index) =>
+            minimum(
+              color,
+              get(surface),
+              3,
+              `${mode}/${accent}/${neutral}/chart.${index + 1} on ${surface}`,
+            ),
+          );
+          minimum(
+            get("chart.axis"),
+            get(surface),
+            4.5,
+            `${mode}/${accent}/${neutral}/chart.axis on ${surface}`,
+          );
+        }
+      }
+});
+
+test("chart companions never repeat the accent's hue and stay 30° apart", () => {
+  const hue = (family) => colorPalettes[family].light[9][2];
+  const gap = (a, b) => {
+    const value = Math.abs(a - b) % 360;
+    return Math.min(value, 360 - value);
+  };
+  for (const accent of colorFamilies) {
+    const companions = chartSeriesFamilies(accent);
+    assert.equal(companions.length, 5, accent);
+    const chromatic = colorPalettes[accent].light[9][1] >= 0.05;
+    const hues = [...(chromatic ? [accent] : []), ...companions].map(hue);
+    for (let i = 0; i < hues.length; i++)
+      for (let j = i + 1; j < hues.length; j++)
+        assert.ok(
+          gap(hues[i], hues[j]) >= 30,
+          `${accent}: series ${i + 1} and ${j + 1} are ${gap(hues[i], hues[j]).toFixed(0)}° apart`,
+        );
+  }
+  // The :root roles are the default blue accent's companions.
+  assert.deepEqual(
+    [2, 3, 4, 5, 6].map((n) => semanticColors[`chart.${n}`].light),
+    chartSeriesFamilies("blue").map((family) => `${family}.9`),
+  );
 });
 
 test("brand changes cannot recolor destructive actions or status roles", () => {

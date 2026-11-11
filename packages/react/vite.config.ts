@@ -6,7 +6,7 @@ import fs from "node:fs";
 const optionalStyles = () => ({
   name: "dixy-optional-styles",
   buildStart(this: { addWatchFile: (path: string) => void }) {
-    for (const name of ["materials", "backdrop-pilot", "ai"])
+    for (const name of ["materials", "backdrop-pilot", "ai", "charts"])
       this.addWatchFile(
         new URL(`./src/styles/${name}.css`, import.meta.url).pathname,
       );
@@ -18,7 +18,7 @@ const optionalStyles = () => ({
       source: string;
     }) => void;
   }) {
-    for (const name of ["materials", "backdrop-pilot", "ai"]) {
+    for (const name of ["materials", "backdrop-pilot", "ai", "charts"]) {
       this.emitFile({
         type: "asset",
         fileName: `${name}.css`,
@@ -40,6 +40,7 @@ export default defineConfig(({ mode }) => ({
         motion: "src/motion.tsx",
         feedback: "src/feedback.tsx",
         ai: "src/ai.tsx",
+        charts: "src/charts.tsx",
       },
       formats: ["es"],
       fileName: (_format, name) => `${name}.js`,
@@ -59,6 +60,7 @@ export default defineConfig(({ mode }) => ({
         /^@internationalized\/date(?:\/|$)/,
         /^react-markdown(?:\/|$)/,
         /^remark-gfm(?:\/|$)/,
+        /^recharts(?:\/|$)/,
       ],
       // One file per source module, not one flat dixy.js. A consumer's
       // bundler splits chunks by module, so a single file put every component

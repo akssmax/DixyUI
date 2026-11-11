@@ -598,6 +598,7 @@
     --dixy-color-mode-text-disabled: var(--dixy-color-base-8);
     --dixy-color-mode-icon-disabled: var(--dixy-color-base-8);
     --dixy-color-mode-border-strong: var(--dixy-color-base-9);
+    --dixy-color-mode-chart-1: var(--dixy-color-brand-focus);
     --dixy-color-black-a1: oklch(0 0 0 / 0.05);
     --dixy-color-black-a2: oklch(0 0 0 / 0.1);
     --dixy-color-black-a3: oklch(0 0 0 / 0.15);
@@ -768,6 +769,15 @@
     --dixy-color-text-on-discovery: var(--dixy-color-purple-on-solid);
     --dixy-color-icon-discovery: var(--dixy-color-purple-11);
     --dixy-color-border-discovery: var(--dixy-color-purple-8);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1383,6 +1393,7 @@
     --dixy-color-mode-text-disabled: var(--dixy-color-base-7);
     --dixy-color-mode-icon-disabled: var(--dixy-color-base-7);
     --dixy-color-mode-border-strong: var(--dixy-color-base-8);
+    --dixy-color-mode-chart-1: var(--dixy-color-brand-9);
     --dixy-color-black-a1: oklch(0 0 0 / 0.05);
     --dixy-color-black-a2: oklch(0 0 0 / 0.1);
     --dixy-color-black-a3: oklch(0 0 0 / 0.15);
@@ -1553,6 +1564,15 @@
     --dixy-color-text-on-discovery: var(--dixy-color-purple-on-solid);
     --dixy-color-icon-discovery: var(--dixy-color-purple-11);
     --dixy-color-border-discovery: var(--dixy-color-purple-8);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1605,6 +1625,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1622,6 +1643,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="slate"] {
     --dixy-color-brand-1: var(--dixy-color-slate-1);
@@ -1657,6 +1683,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1674,6 +1701,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="gray"] {
     --dixy-color-brand-1: var(--dixy-color-gray-1);
@@ -1709,6 +1741,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1726,6 +1759,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="zinc"] {
     --dixy-color-brand-1: var(--dixy-color-zinc-1);
@@ -1761,6 +1799,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1778,6 +1817,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="stone"] {
     --dixy-color-brand-1: var(--dixy-color-stone-1);
@@ -1813,6 +1857,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1830,6 +1875,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="taupe"] {
     --dixy-color-brand-1: var(--dixy-color-taupe-1);
@@ -1865,6 +1915,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1882,6 +1933,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="mauve"] {
     --dixy-color-brand-1: var(--dixy-color-mauve-1);
@@ -1917,6 +1973,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1934,6 +1991,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="mist"] {
     --dixy-color-brand-1: var(--dixy-color-mist-1);
@@ -1969,6 +2031,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -1986,6 +2049,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="olive"] {
     --dixy-color-brand-1: var(--dixy-color-olive-1);
@@ -2021,6 +2089,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2038,6 +2107,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="sage"] {
     --dixy-color-brand-1: var(--dixy-color-sage-1);
@@ -2073,6 +2147,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2090,6 +2165,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="sand"] {
     --dixy-color-brand-1: var(--dixy-color-sand-1);
@@ -2125,6 +2205,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2142,6 +2223,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="tomato"] {
     --dixy-color-brand-1: var(--dixy-color-tomato-1);
@@ -2177,6 +2263,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2194,6 +2281,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-teal-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-grass-9);
+    --dixy-color-chart-5: var(--dixy-color-gold-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="red"] {
     --dixy-color-brand-1: var(--dixy-color-red-1);
@@ -2229,6 +2321,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2246,6 +2339,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-teal-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-grass-9);
+    --dixy-color-chart-5: var(--dixy-color-gold-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="ruby"] {
     --dixy-color-brand-1: var(--dixy-color-ruby-1);
@@ -2281,6 +2379,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2298,6 +2397,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="crimson"] {
     --dixy-color-brand-1: var(--dixy-color-crimson-1);
@@ -2333,6 +2437,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2350,6 +2455,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="rose"] {
     --dixy-color-brand-1: var(--dixy-color-rose-1);
@@ -2385,6 +2495,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2402,6 +2513,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="pink"] {
     --dixy-color-brand-1: var(--dixy-color-pink-1);
@@ -2437,6 +2553,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2454,6 +2571,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="fuchsia"] {
     --dixy-color-brand-1: var(--dixy-color-fuchsia-1);
@@ -2489,6 +2611,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2506,6 +2629,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="plum"] {
     --dixy-color-brand-1: var(--dixy-color-plum-1);
@@ -2541,6 +2669,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2558,6 +2687,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="purple"] {
     --dixy-color-brand-1: var(--dixy-color-purple-1);
@@ -2593,6 +2727,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2610,6 +2745,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="violet"] {
     --dixy-color-brand-1: var(--dixy-color-violet-1);
@@ -2645,6 +2785,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2662,6 +2803,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="iris"] {
     --dixy-color-brand-1: var(--dixy-color-iris-1);
@@ -2697,6 +2843,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2714,6 +2861,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="indigo"] {
     --dixy-color-brand-1: var(--dixy-color-indigo-1);
@@ -2749,6 +2901,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2766,6 +2919,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="blue"] {
     --dixy-color-brand-1: var(--dixy-color-blue-1);
@@ -2801,6 +2959,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2818,6 +2977,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="sky"] {
     --dixy-color-brand-1: var(--dixy-color-sky-1);
@@ -2853,6 +3017,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2870,6 +3035,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="cyan"] {
     --dixy-color-brand-1: var(--dixy-color-cyan-1);
@@ -2905,6 +3075,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2922,6 +3093,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="teal"] {
     --dixy-color-brand-1: var(--dixy-color-teal-1);
@@ -2957,6 +3133,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -2974,6 +3151,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="emerald"] {
     --dixy-color-brand-1: var(--dixy-color-emerald-1);
@@ -3009,6 +3191,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3026,6 +3209,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-gold-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="jade"] {
     --dixy-color-brand-1: var(--dixy-color-jade-1);
@@ -3061,6 +3249,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3078,6 +3267,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-gold-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="green"] {
     --dixy-color-brand-1: var(--dixy-color-green-1);
@@ -3113,6 +3307,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3130,6 +3325,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-gold-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="grass"] {
     --dixy-color-brand-1: var(--dixy-color-grass-1);
@@ -3165,6 +3365,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3182,6 +3383,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="lime"] {
     --dixy-color-brand-1: var(--dixy-color-lime-1);
@@ -3217,6 +3423,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3234,6 +3441,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-gold-9);
   }
   [data-accent="mint"] {
     --dixy-color-brand-1: var(--dixy-color-mint-1);
@@ -3269,6 +3481,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3286,6 +3499,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-gold-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="yellow"] {
     --dixy-color-brand-1: var(--dixy-color-yellow-1);
@@ -3321,6 +3539,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3338,6 +3557,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="amber"] {
     --dixy-color-brand-1: var(--dixy-color-amber-1);
@@ -3373,6 +3597,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3390,6 +3615,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-orange-9);
+    --dixy-color-chart-3: var(--dixy-color-teal-9);
+    --dixy-color-chart-4: var(--dixy-color-violet-9);
+    --dixy-color-chart-5: var(--dixy-color-crimson-9);
+    --dixy-color-chart-6: var(--dixy-color-grass-9);
   }
   [data-accent="orange"] {
     --dixy-color-brand-1: var(--dixy-color-orange-1);
@@ -3425,6 +3655,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3442,6 +3673,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-teal-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="brown"] {
     --dixy-color-brand-1: var(--dixy-color-brown-1);
@@ -3477,6 +3713,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3494,6 +3731,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-teal-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="bronze"] {
     --dixy-color-brand-1: var(--dixy-color-bronze-1);
@@ -3529,6 +3771,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3546,6 +3789,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-teal-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-accent="gold"] {
     --dixy-color-brand-1: var(--dixy-color-gold-1);
@@ -3581,6 +3829,7 @@
     );
     --dixy-color-text-on-action-primary: var(--dixy-color-brand-on-solid);
     --dixy-color-text-action-primary: var(--dixy-color-brand-11);
+    --dixy-color-chart-1: var(--dixy-color-mode-chart-1);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3598,6 +3847,11 @@
     --dixy-neutral: var(--dixy-color-background-action-secondary);
     --dixy-neutral-hover: var(--dixy-color-background-action-secondary-hover);
     --dixy-neutral-contrast: var(--dixy-color-text-on-action-secondary);
+    --dixy-color-chart-2: var(--dixy-color-teal-9);
+    --dixy-color-chart-3: var(--dixy-color-violet-9);
+    --dixy-color-chart-4: var(--dixy-color-crimson-9);
+    --dixy-color-chart-5: var(--dixy-color-grass-9);
+    --dixy-color-chart-6: var(--dixy-color-blue-9);
   }
   [data-neutral="neutral"] {
     --dixy-color-base-1: var(--dixy-color-neutral-1);
@@ -3650,6 +3904,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3719,6 +3976,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3788,6 +4048,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3857,6 +4120,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3926,6 +4192,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -3995,6 +4264,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4064,6 +4336,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4133,6 +4408,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4202,6 +4480,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4271,6 +4552,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);
@@ -4340,6 +4624,9 @@
     );
     --dixy-color-text-on-action-secondary: var(--dixy-color-base-on-solid);
     --dixy-color-text-action-secondary: var(--dixy-color-base-11);
+    --dixy-color-chart-grid: var(--dixy-color-base-6);
+    --dixy-color-chart-axis: var(--dixy-color-base-11);
+    --dixy-color-chart-cursor: var(--dixy-color-base-4);
     --dixy-bg: var(--dixy-color-background-canvas);
     --dixy-surface: var(--dixy-color-background-surface-raised);
     --dixy-surface-muted: var(--dixy-color-background-subtle);

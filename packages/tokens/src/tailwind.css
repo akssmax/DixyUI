@@ -135,6 +135,15 @@
   --color-dixy-on-discovery: var(--dixy-color-text-on-discovery);
   --color-dixy-icon-discovery: var(--dixy-color-icon-discovery);
   --color-dixy-border-discovery: var(--dixy-color-border-discovery);
+  --color-dixy-chart-1: var(--dixy-color-chart-1);
+  --color-dixy-chart-2: var(--dixy-color-chart-2);
+  --color-dixy-chart-3: var(--dixy-color-chart-3);
+  --color-dixy-chart-4: var(--dixy-color-chart-4);
+  --color-dixy-chart-5: var(--dixy-color-chart-5);
+  --color-dixy-chart-6: var(--dixy-color-chart-6);
+  --color-dixy-chart-grid: var(--dixy-color-chart-grid);
+  --color-dixy-chart-axis: var(--dixy-color-chart-axis);
+  --color-dixy-chart-cursor: var(--dixy-color-chart-cursor);
   --color-dixy-neutral-1: var(--dixy-color-neutral-1);
   --color-dixy-neutral-2: var(--dixy-color-neutral-2);
   --color-dixy-neutral-3: var(--dixy-color-neutral-3);

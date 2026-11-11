@@ -30,6 +30,9 @@ const forbiddenForCore = [
   "remark-gfm",
   "micromark",
   "mdast-util-from-markdown",
+  // Recharts belongs to the optional @dixy-ui/react/charts entry only.
+  "recharts",
+  "victory-vendor",
 ];
 // Budgets are minified KiB, React excluded, with headroom over the measured
 // size (17, 140 and 44 KiB on 2026-11-08). Raise one only on purpose.
