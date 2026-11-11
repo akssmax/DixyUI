@@ -62,7 +62,11 @@ export default defineConfig({
     themeAuditReport(),
     // Builds and runs the SSR environment as a Cloudflare Worker (wrangler.jsonc).
     cloudflare({ viteEnvironment: { name: "ssr" } }),
-    { ...mdx({ remarkPlugins: [remarkGfm] }), enforce: "pre" },
+    // Only .mdx is content. Plain .md (package changelogs) loads as ?raw text.
+    {
+      ...mdx({ remarkPlugins: [remarkGfm], mdExtensions: [] }),
+      enforce: "pre",
+    },
     tanstackStart(),
     react({ include: /\.(jsx|tsx|mdx)$/ }),
   ],

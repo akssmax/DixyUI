@@ -1,12 +1,12 @@
 # @dixy-ui/themes
 
-32 starter themes for [Dixy UI](https://github.com/akssmax/DixyUI), from paper and glass to terminals and festivals, plus an authoring API for your own. Each theme is a material, a frame, a character and a chrome over the same accessible components.
+38 starter themes for [Dixy UI](https://github.com/akssmax/DixyUI), from paper and glass to terminals and festivals, plus an authoring API for your own. Each theme is a material, a frame, a character and a chrome over the same accessible components.
 
 [![npm](https://img.shields.io/npm/v/%40dixy-ui%2Fthemes/beta?label=npm&color=7c3aed)](https://www.npmjs.com/package/@dixy-ui/themes) [![MIT](https://img.shields.io/badge/license-MIT-7c3aed)](https://github.com/akssmax/DixyUI/blob/main/LICENSE)
 
 > **Public beta.** APIs may change between `0.x` releases. See the [changelog](./CHANGELOG.md) and the [known issues](https://github.com/akssmax/DixyUI#known-issues).
 
-[Documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) · [Components](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button) · [Themes](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
+[Documentation](https://dixyui.com) · [Components](https://dixyui.com/docs/components/button) · [Themes](https://dixyui.com/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
 
 ## Install
 
@@ -31,7 +31,7 @@ import { retroOSTheme } from "@dixy-ui/themes/retro-os";
 </Theme>;
 ```
 
-Browse all 32 starters on the [landing page](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) or build your own in the [playground](https://dixy-ui-docs.akshaysaini-design.workers.dev/playground).
+Browse all 38 starters on the [landing page](https://dixyui.com/#themes) or build your own in the [playground](https://dixyui.com/playground).
 
 ## Skins and ornament renderers
 

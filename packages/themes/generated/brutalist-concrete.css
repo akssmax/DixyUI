@@ -167,13 +167,11 @@
   }
 }
 @layer dixy.components {
-  .dixy-theme[data-dixy-skin="dixy/brutalist-concrete"] {
-    position: relative;
-    isolation: isolate;
-  }
   .dixy-theme[data-dixy-skin="dixy/brutalist-concrete"]:not(
       .dixy-portal-scope
     ) {
+    position: relative;
+    isolation: isolate;
     background-color: var(--dixy-skin-ground);
     background-image: var(--dixy-skin-canvas);
   }

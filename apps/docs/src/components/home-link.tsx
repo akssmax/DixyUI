@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ComponentProps } from "react";
-import { skinCatalog } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
 import { useAppAppearance } from "./app-appearance-provider";
 
 /**

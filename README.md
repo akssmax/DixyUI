@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://dixy-ui-docs.akshaysaini-design.workers.dev">
+  <a href="https://dixyui.com">
     <img src="./apps/docs/public/brand/dixy-mark.svg" width="72" height="72" alt="" />
   </a>
 </p>
@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>Components with character.</strong><br />
-  Accessible React components on Base UI, with 32 starter themes that change the whole feel of your product.
+  Accessible React components on Base UI, with 38 starter themes that change the whole feel of your product.
 </p>
 
 <p align="center">
@@ -19,10 +19,10 @@
 </p>
 
 <p align="center">
-  <a href="https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/installation"><strong>Get started</strong></a> ·
-  <a href="https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button">Components</a> ·
-  <a href="https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes">Themes</a> ·
-  <a href="https://dixy-ui-docs.akshaysaini-design.workers.dev/playground">Playground</a>
+  <a href="https://dixyui.com/docs/installation"><strong>Get started</strong></a> ·
+  <a href="https://dixyui.com/docs/components/button">Components</a> ·
+  <a href="https://dixyui.com/#themes">Themes</a> ·
+  <a href="https://dixyui.com/playground">Playground</a>
 </p>
 
 <br />
@@ -38,7 +38,7 @@
 ## Why Dixy
 
 - **Accessible by default.** Behaviour comes from [Base UI](https://base-ui.com) and [React Aria](https://react-spectrum.adobe.com/react-aria/), covering focus management, keyboard support and ARIA. Every component is checked with axe in the test suite.
-- **Themes, not just colours.** One `<Theme>` prop switches material, frame, typography and ornament. Pick from 32 starter themes or write your own with the theme authoring API.
+- **Themes, not just colours.** One `<Theme>` prop switches material, frame, typography and ornament. Pick from 38 starter themes or write your own with the theme authoring API.
 - **Semantic tokens.** 39 OKLCH palette families with 12 light and 12 dark stops each. Components use semantic roles (surface, text, border, action, feedback), so dark mode and custom accents just work.
 - **Motion with restraint.** Shared timings and easing, with optional springs through `@dixy-ui/react/motion`. Reduced motion is respected everywhere.
 - **No build step for styles.** Plain CSS in cascade layers, so your styles always win. No Tailwind compiler required, but Tailwind v4 bindings are available if you want them.
@@ -78,11 +78,11 @@ export function App() {
 }
 ```
 
-Read the [installation guide](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/installation) for SSR, overlays and framework notes.
+Read the [installation guide](https://dixyui.com/docs/installation) for SSR, overlays and framework notes.
 
 ## Themes
 
-<img src="./.github/assets/readme-themes.png" alt="A grid of 32 starter themes, including Original Dixy, Living Forest, Retro OS, Candy Clay, Phosphor Terminal and Swiss Poster." />
+<img src="./.github/assets/readme-themes.png" alt="A grid of starter themes, including Original Dixy, Living Forest, Retro OS, Candy Clay, Phosphor Terminal and Swiss Poster." />
 
 Each starter is a material, a frame, a character and a chrome, composed over the same components. Add one with two imports:
 
@@ -99,27 +99,31 @@ import "@dixy-ui/themes/retro-os.css";
 </Theme>;
 ```
 
-Every theme is a separate entry point, so you only ship the one you use. Try them all on the [landing page](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes), or design your own in the [playground](https://dixy-ui-docs.akshaysaini-design.workers.dev/playground).
+Every theme is a separate entry point, so you only ship the one you use. Try them all on the [landing page](https://dixyui.com/#themes), or design your own in the [playground](https://dixyui.com/playground).
 
 ## Components
 
-86 components in six groups. Browse them in the [docs](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button).
+96 components in ten groups. Browse them in the [docs](https://dixyui.com/docs/components/button).
 
-| Group          | Components                                                                                                                                                                                                                                                                                                                                                                        |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Actions**    | Button, Button Group, Toggle, Toggle Group                                                                                                                                                                                                                                                                                                                                        |
-| **Inputs**     | Autocomplete, Checkbox, Checkbox Group, Color Picker, Combobox, Date Field, Date Picker, Date Range Picker, Field, Fieldset, Form, Input Group, Native Select, Number Field, OTP Field, Password Field, Radio Group, Search Field, Select, Slider, Switch, Text Field, Textarea, Time Field                                                                                       |
-| **Overlays**   | Alert Dialog, Context Menu, Dialog, Drawer, Menu, Popover, Preview Card, Toast, Tooltip                                                                                                                                                                                                                                                                                           |
-| **Navigation** | Breadcrumbs, Command, Link, Menubar, Navbar, Navigation Menu, Pagination, Sidebar, Tabs, Toolbar                                                                                                                                                                                                                                                                                  |
-| **Content**    | Accordion, Alert, Aspect Ratio, Avatar, Avatar Group, Badge, Blockquote, Calendar, Card, Carousel, Chart, Chip, Code, Collapsible, Data List, Data Table, Empty State, Icon, Image, Item, Kbd, List Box, Meter, Progress, Progress Circle, Range Calendar, Scroll Area, Scroll Shadow, Separator, Skeleton, Snippet, Spinner, Table, Tag Group, Typography, User, Visually Hidden |
-| **Layout**     | Grid, Resizable Panels                                                                                                                                                                                                                                                                                                                                                            |
+| Group                   | Components                                                                                                                                                                                                                          |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Actions**             | Button, Button Group, Link, Toggle, Toggle Group                                                                                                                                                                                    |
+| **Forms**               | Autocomplete, Checkbox, Checkbox Group, Color Picker, Combobox, Field, Fieldset, Form, Input Group, Native Select, Number Field, OTP Field, Password Field, Radio Group, Search Field, Select, Slider, Switch, Text Field, Textarea |
+| **Date & time**         | Calendar, Date Field, Date Picker, Date Range Picker, Range Calendar, Time Field                                                                                                                                                    |
+| **Navigation**          | Breadcrumbs, Command, Menubar, Navbar, Navigation Menu, Pagination, Sidebar, Tabs, Toolbar                                                                                                                                          |
+| **Overlays**            | Alert Dialog, Context Menu, Dialog, Drawer, Menu, Popover, Preview Card, Tooltip                                                                                                                                                    |
+| **Feedback**            | Alert, Empty State, Meter, Progress, Progress Circle, Skeleton, Spinner, Toast                                                                                                                                                      |
+| **Data display**        | Avatar, Avatar Group, Badge, Card, Carousel, Chart, Chip, Data List, Data Table, Image, Item, Kbd, List Box, Table, Tag Group, User                                                                                                 |
+| **Layout & disclosure** | Accordion, Aspect Ratio, Collapsible, Grid, Resizable Panels, Scroll Area, Scroll Shadow, Separator, Visually Hidden                                                                                                                |
+| **Text & code**         | Blockquote, Code, Icon, Snippet, Typography                                                                                                                                                                                         |
+| **AI**                  | Code Block, Conversation, Message, Prompt Input, Reasoning, Response, Shimmer & Loader, Sources, Suggestions, Tool                                                                                                                  |
 
 ## Packages
 
 | Package                                | Description                                                                                        |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | [`@dixy-ui/react`](./packages/react)   | The components, the `Theme` provider and the stylesheet                                            |
-| [`@dixy-ui/themes`](./packages/themes) | 32 optional starter themes and the theme authoring API                                             |
+| [`@dixy-ui/themes`](./packages/themes) | 38 optional starter themes and the theme authoring API                                             |
 | [`@dixy-ui/tokens`](./packages/tokens) | Framework-independent colour, type, size, space and motion tokens as plain CSS, TS and Tailwind v4 |
 
 ## Supported environments

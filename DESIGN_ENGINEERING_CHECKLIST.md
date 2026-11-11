@@ -859,6 +859,19 @@ Plan and remaining steps: [docs/BETA_PLAN.md](docs/BETA_PLAN.md).
 - [ ] Prune inactive skin `<style>` tags on docs theme switches; make skin definitions load lazily.
 - [ ] Learning: explain why a route's `validateSearch` import ends up in the entry chunk, and how bundlers decide chunk boundaries by module rather than by export.
 
+## Performance audit — 2026-11-10
+
+- [x] Generated component index (slug, title, category) replaces the full registry in the docs entry chunk: 563.0 → 374.9 KB (152.0 → 118.3 KB gzip); homepage JS 1,265 → 1,083 KB. Typecheck fails if the index and registry differ. Evidence: docs/BUILD_LOG.md, "Performance audit: packages and docs".
+- [x] Removed a verbatim 245-line duplicate block from `docs.css` (output CSS unchanged: the minifier already dropped it).
+- [x] Checked tree-shaking guards, font loading, images, animation loops, effect dependencies, sidebar and gallery rendering; no change needed.
+- [x] The theme engine loads on demand: Original Dixy pages' entry closure 1,061.2 → 700.5 KB from `main` (304.7 → 228.6 KB gzip); themed readers keep server HTML until it loads. Evidence: docs/BUILD_LOG.md, "Theme engine loads on demand".
+- [ ] Split skin definitions per skin, so a themed reader loads one skin instead of all 39 (`generated-skin-loaders`, 164 KB).
+- [ ] Learning: explain how a suspended component keeps its server HTML during hydration, and why `use()` needs a cached promise.
+- [ ] Decide whether accent/neutral palette families become opt-in CSS (206 KB of 386 KB minified `styles.css`; a public CSS change).
+- [ ] Measure throttled LCP/INP and brotli transfer sizes on the deployed worker.
+- [ ] Learning: explain why a module imported by a route's options or the root shell lands in the entry chunk even when only three fields are used.
+- [ ] Learning: explain why removing duplicate CSS rules saved no bytes after minification.
+
 ## Radius and hero fixes — 2026-11-09
 
 - [x] Multi-line fields cap at the card radius under `radius="full"` (library textarea and skin compiler); docs scene cards use the card radius. Evidence: docs/BUILD_LOG.md, 2026-11-09.
@@ -946,6 +959,23 @@ The anatomy follows Vercel's AI Elements; the implementation is Dixy's own (Base
 - [ ] Screen-reader pass on the sidebar disclosures.
 - [ ] Learning: explain why components are grouped by purpose rather than by primitive.
 - [ ] Learning: explain WCAG 2.1.4 and why Shift+R still counts as a character-key shortcut.
+
+## Beta feedback fixes (2026-11-10)
+
+- [x] Starter themes no longer position the portal scope; popups stay at their trigger (regression test in `skins.test.mjs`).
+- [x] Tabs panels stretch when the root is a flex column.
+- [x] Installation docs and agent prompt cover Tailwind v4 layer order and each theme's fonts.
+- [x] README counts and links match the catalog and dixyui.com (`readme.test.mjs`).
+- [ ] Re-test in the reporter's TanStack Start + Tailwind v4 app after the next beta publishes.
+- [ ] Check Select with the absolute positioning strategy, and vertical tabs.
+- [ ] Learning: explain containing blocks, and why a positioned zero-height portal wrapper moves absolutely positioned popups.
+- [ ] Learning: explain cascade layer order and why the first declared layer loses.
+
+## Changelog page (2026-11-10)
+
+- [x] `/docs/changelog` renders each package's CHANGELOG.md, newest first, with commit and npm links.
+- [ ] Show release dates (from GitHub releases or the version commit).
+- [ ] Learning: explain why each package keeps its own version line in a Changesets monorepo.
 
 ## Charts entry — 2026-11-11
 

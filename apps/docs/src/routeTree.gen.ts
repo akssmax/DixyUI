@@ -14,6 +14,7 @@ import { Route as AiExampleRouteImport } from './routes/ai-example'
 import { Route as DixyExampleRouteImport } from './routes/dixy-example'
 import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibility'
+import { Route as DocsChangelogRouteImport } from './routes/docs.changelog'
 import { Route as DocsInstallationRouteImport } from './routes/docs.installation'
 import { Route as LabControlsRouteImport } from './routes/lab.controls'
 import { Route as LabKitchenSinkRouteImport } from './routes/lab.kitchen-sink'
@@ -45,6 +46,11 @@ const PlaygroundRoute = PlaygroundRouteImport.update({
 const DocsAccessibilityRoute = DocsAccessibilityRouteImport.update({
   id: '/docs/accessibility',
   path: '/docs/accessibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsChangelogRoute = DocsChangelogRouteImport.update({
+  id: '/docs/changelog',
+  path: '/docs/changelog',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsInstallationRoute = DocsInstallationRouteImport.update({
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
+  '/docs/changelog': typeof DocsChangelogRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
+  '/docs/changelog': typeof DocsChangelogRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
+  '/docs/changelog': typeof DocsChangelogRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/lab/controls': typeof LabControlsRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
+    | '/docs/changelog'
     | '/docs/installation'
     | '/lab/controls'
     | '/lab/kitchen-sink'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
+    | '/docs/changelog'
     | '/docs/installation'
     | '/lab/controls'
     | '/lab/kitchen-sink'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/dixy-example'
     | '/playground'
     | '/docs/accessibility'
+    | '/docs/changelog'
     | '/docs/installation'
     | '/lab/controls'
     | '/lab/kitchen-sink'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   DixyExampleRoute: typeof DixyExampleRoute
   PlaygroundRoute: typeof PlaygroundRoute
   DocsAccessibilityRoute: typeof DocsAccessibilityRoute
+  DocsChangelogRoute: typeof DocsChangelogRoute
   DocsInstallationRoute: typeof DocsInstallationRoute
   LabControlsRoute: typeof LabControlsRoute
   LabKitchenSinkRoute: typeof LabKitchenSinkRoute
@@ -222,6 +235,13 @@ declare module '@tanstack/react-router' {
       path: '/docs/accessibility'
       fullPath: '/docs/accessibility'
       preLoaderRoute: typeof DocsAccessibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/changelog': {
+      id: '/docs/changelog'
+      path: '/docs/changelog'
+      fullPath: '/docs/changelog'
+      preLoaderRoute: typeof DocsChangelogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs/installation': {
@@ -282,6 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   DixyExampleRoute: DixyExampleRoute,
   PlaygroundRoute: PlaygroundRoute,
   DocsAccessibilityRoute: DocsAccessibilityRoute,
+  DocsChangelogRoute: DocsChangelogRoute,
   DocsInstallationRoute: DocsInstallationRoute,
   LabControlsRoute: LabControlsRoute,
   LabKitchenSinkRoute: LabKitchenSinkRoute,

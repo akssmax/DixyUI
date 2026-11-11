@@ -16,16 +16,10 @@ import {
   type Control,
   type DemoState,
 } from "../registry/components";
-import {
-  playgroundThemeProps,
-  skinCatalog,
-  skinThemePreset,
-} from "../lib/theme-playground";
-import {
-  deduplicateSkinStyles,
-  loadMaterialCSS,
-  loadSkinCSS,
-} from "../lib/theme-skin-catalogue";
+import { playgroundThemeProps, skinThemePreset } from "../lib/theme-playground";
+import { skinCatalog } from "@dixy-ui/themes/catalog";
+import { loadStarterStyles } from "../lib/theme-engine";
+import { deduplicateSkinStyles } from "../lib/theme-skin-catalogue";
 import "../styles/kitchen-sink.css";
 
 /**
@@ -53,19 +47,7 @@ export const Route = createFileRoute("/lab/kitchen-sink")({
   loaderDeps: ({ search }) => ({
     id: skinCatalog.find((skin) => skin.slug === search.skin)?.id ?? "none",
   }),
-  loader: async ({ deps }) => {
-    try {
-      const preset = skinThemePreset(deps.id);
-      return {
-        id: deps.id,
-        css: await loadSkinCSS(deps.id),
-        materialCSS:
-          preset.material !== "inherit" ? await loadMaterialCSS() : "",
-      };
-    } catch {
-      return { id: deps.id, css: "", materialCSS: "" };
-    }
-  },
+  loader: ({ deps }) => loadStarterStyles(deps.id),
   head: ({ loaderData }) => ({
     meta: [{ title: "Kitchen sink — Dixy UI lab" }],
     styles: [

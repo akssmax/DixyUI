@@ -14,11 +14,20 @@ import {
   serializeThemePreset,
   type ThemePreset,
 } from "../lib/theme-playground";
-import {
-  loadSkinCSS,
-  loadMaterialCSS,
-  deduplicateSkinStyles,
-} from "../lib/theme-skin-catalogue";
+import { deduplicateSkinStyles } from "../lib/theme-skin-catalogue";
+import { loadThemeEngine } from "../lib/theme-engine";
+
+let lastLoad:
+  | {
+      key: string;
+      data: {
+        skin: string;
+        css: string;
+        materialCSS: string;
+        loadWarning: string;
+      };
+    }
+  | undefined;
 export const Route = createFileRoute("/playground")({
   // Unknown or default view/panel values are dropped, so links stay short and
   // a stale link falls back to Overview and the Theme tab.
@@ -37,37 +46,47 @@ export const Route = createFileRoute("/playground")({
         ? search.panel
         : undefined,
   }),
-  loaderDeps: ({ search }) => {
-    try {
-      const preset = search.theme
-        ? parseThemePreset(search.theme)
-        : defaultThemePreset;
-      return {
-        skin: preset.skin,
-        document: preset.document,
-        material: preset.material !== "inherit",
-      };
-    } catch {
-      return { skin: "none", document: null, material: false };
-    }
-  },
+  // Parsing a preset needs the theme engine, which is loaded on demand so it
+  // stays out of the site-wide entry chunk (route options live there).
+  loaderDeps: ({ search }) => ({ theme: search.theme }),
   loader: async ({ deps }) => {
+    const { playground, skins } = await loadThemeEngine();
+    let skin = "none";
+    let document: ThemePreset["document"] = null;
+    let material = false;
     try {
-      return {
-        skin: deps.document?.id ?? deps.skin,
-        css: await loadSkinCSS(deps.skin, deps.document),
-        materialCSS: deps.material ? await loadMaterialCSS() : "",
+      const preset = deps.theme
+        ? playground.parseThemePreset(deps.theme)
+        : playground.defaultThemePreset;
+      skin = preset.skin;
+      document = preset.document;
+      material = preset.material !== "inherit";
+    } catch {
+      // An invalid preset falls back to Original Dixy; the page warns.
+    }
+    // Control tweaks rewrite ?theme= often; reuse the result while the skin,
+    // document and material it depends on are unchanged.
+    const key = JSON.stringify([skin, document, material]);
+    if (lastLoad?.key === key) return lastLoad.data;
+    let data;
+    try {
+      data = {
+        skin: document?.id ?? skin,
+        css: await skins.loadSkinCSS(skin, document),
+        materialCSS: material ? await skins.loadMaterialCSS() : "",
         loadWarning: "",
       };
     } catch {
       return {
-        skin: deps.document?.id ?? deps.skin,
+        skin: document?.id ?? skin,
         css: "",
         materialCSS: "",
         loadWarning:
           "The skin finish could not load. Your controls and preset are available; choose the skin again to retry.",
       };
     }
+    lastLoad = { key, data };
+    return data;
   },
   head: ({ loaderData }) => ({
     meta: [

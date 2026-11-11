@@ -176,11 +176,9 @@
   }
 }
 @layer dixy.components {
-  .dixy-theme[data-dixy-skin="dixy/freighter"] {
+  .dixy-theme[data-dixy-skin="dixy/freighter"]:not(.dixy-portal-scope) {
     position: relative;
     isolation: isolate;
-  }
-  .dixy-theme[data-dixy-skin="dixy/freighter"]:not(.dixy-portal-scope) {
     background-color: var(--dixy-skin-ground);
     background-image: var(--dixy-skin-canvas);
   }

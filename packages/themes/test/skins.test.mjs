@@ -44,6 +44,23 @@ test("skin CSS stays independent, bounded and scoped to each actual component", 
       assert.ok(!css.includes("dixy/" + other.slug));
     assert.ok(css.includes(".dixy-card"));
     assert.ok(css.includes('[data-dixy-skin="dixy/' + manifest.slug + '"]'));
+    // Popups portal into a zero-height .dixy-portal-scope at the end of <body>.
+    // Positioning or isolating it makes it their containing block, and they
+    // render a page height away from their trigger.
+    for (const [, selector, body] of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      if (
+        !/position\s*:|isolation\s*:|transform\s*:|filter\s*:|contain\s*:/.test(
+          body,
+        )
+      )
+        continue;
+      for (const part of selector.split(","))
+        assert.doesNotMatch(
+          part.trim(),
+          /^\.dixy-theme\[data-dixy-skin="[^"]+"\](\[[^\]]+\])*$/,
+          manifest.slug + " positions the portal scope: " + part.trim(),
+        );
+    }
   }
   const forest = fs.readFileSync(
     new URL("../generated/living-forest.css", import.meta.url),

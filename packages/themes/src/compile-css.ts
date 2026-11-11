@@ -89,6 +89,10 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   // Character rules sit after material rules and carry the theme ancestor, so they win over paint defaults.
   const C = (parts: string, state = "") =>
     `${theme} :is(${parts})[data-dixy-skin="${m.id}"]${state}`;
+  // The theme root is positioned and isolated, but never the portal scope: a
+  // zero-height wrapper at the end of <body>. Positioned, it becomes the popups'
+  // containing block while Floating UI measures from the document, so popups
+  // land a whole page height away.
   return `
 @layer dixy.tokens, dixy.components;
 @layer dixy.tokens {
@@ -134,8 +138,7 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   ${paletteCSS}
 }
 @layer dixy.components {
-  ${theme} { position:relative; isolation:isolate; }
-  ${theme}:not(.dixy-portal-scope) { background-color:var(--dixy-skin-ground); background-image:var(--dixy-skin-canvas); }
+  ${theme}:not(.dixy-portal-scope) { position:relative; isolation:isolate; background-color:var(--dixy-skin-ground); background-image:var(--dixy-skin-canvas); }
   ${S(surfaces)} { position:relative; border-radius:${radius("card")}; }
   ${S(overlays)} { border-radius:${radius("overlay")}; }
   ${S(".dixy-card,.dixy-dialog-popup")} { padding:var(--dixy-skin-card-inset); border:${frameWidth}px ${borderStyle} var(--dixy-skin-edge); }

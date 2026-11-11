@@ -6,7 +6,7 @@ Expressive, accessible React components built on [Base UI](https://base-ui.com),
 
 > **Public beta.** APIs may change between `0.x` releases. See the [changelog](./CHANGELOG.md) and the [known issues](https://github.com/akssmax/DixyUI#known-issues).
 
-[Documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) · [Components](https://dixy-ui-docs.akshaysaini-design.workers.dev/docs/components/button) · [Themes](https://dixy-ui-docs.akshaysaini-design.workers.dev/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
+[Documentation](https://dixyui.com) · [Components](https://dixyui.com/docs/components/button) · [Themes](https://dixyui.com/#themes) · [GitHub](https://github.com/akssmax/DixyUI)
 
 ## Install
 
@@ -39,7 +39,7 @@ Buttons preserve Base UI's render/ref/event contracts. To render navigation as a
 
 Field.Label, TextField, Field.Description and Field.Error share Base UI field context. Dialog exposes compound parts, including its portal, backdrop, viewport, popup, title, description and close action.
 
-The accessibility target is WCAG 2.2 AA; automated axe checks run on every component, and manual screen-reader, forced-colours and zoom testing is still in progress. See the [documentation](https://dixy-ui-docs.akshaysaini-design.workers.dev) for every component's API, keyboard behaviour and examples.
+The accessibility target is WCAG 2.2 AA; automated axe checks run on every component, and manual screen-reader, forced-colours and zoom testing is still in progress. See the [documentation](https://dixyui.com) for every component's API, keyboard behaviour and examples.
 
 ## Reference
 

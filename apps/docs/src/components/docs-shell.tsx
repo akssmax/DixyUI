@@ -31,7 +31,7 @@ import {
   X,
 } from "lucide-react";
 import { skinCatalog } from "@dixy-ui/themes/catalog";
-import { componentRegistry } from "../registry/components";
+import { componentIndex } from "../generated/component-index";
 import { DixyMark } from "./dixy-mark";
 import { useAppAppearance } from "./app-appearance-provider";
 import { useDocsTheme } from "./use-docs-theme";
@@ -67,7 +67,7 @@ const rank = (category = "") => {
 // Registry titles mix "DateField" and "Date Field"; the nav reads as words.
 const navLabel = (title: string) => title.replace(/([a-z])([A-Z])/g, "$1 $2");
 
-const componentItems: NavItem[] = Object.entries(componentRegistry)
+const componentItems: NavItem[] = Object.entries(componentIndex)
   .map(([slug, entry]) => ({
     label: navLabel(entry.title),
     path: `/docs/components/${slug}`,
@@ -126,7 +126,10 @@ export const navigation: { title: string; items: NavItem[] }[] = [
   { title: "Components", items: componentItems },
   {
     title: "Resources",
-    items: [{ label: "Accessibility", path: "/docs/accessibility" }],
+    items: [
+      { label: "Accessibility", path: "/docs/accessibility" },
+      { label: "Changelog", path: "/docs/changelog" },
+    ],
   },
 ];
 
