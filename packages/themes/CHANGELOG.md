@@ -1,5 +1,13 @@
 # @dixy-ui/themes
 
+## 0.1.0-beta.6
+
+### Patch Changes
+
+- cebe805: Fix Candy Clay (and the other No-frame starters, such as Ocean Depths) growing cards and dialogs when an ornament renderer is passed anyway. These starters ship plain cards, so their stylesheet now takes any `.dixy-skin-ornament` out of flow and hides it. Previously `ClayOrnament`'s wrapper and canvas stayed `position: static` and added a canvas below the content, wider than the card on narrow screens (#24).
+- Updated dependencies [cb2cb59]
+  - @dixy-ui/tokens@0.1.0-beta.4
+
 ## 0.1.0-beta.5
 
 ### Patch Changes
