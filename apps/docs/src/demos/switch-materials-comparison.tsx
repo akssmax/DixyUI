@@ -11,21 +11,23 @@ export default function SwitchMaterialsComparison() {
         gap: "var(--dixy-spacing-inline-lg)",
       }}
     >
-      {(["matte", "glossy", "soft", "metal", "paper", "bevel"] as const).map((value) => (
-        <label
-          key={value}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "var(--dixy-spacing-inline-sm)",
-          }}
-        >
-          <Switch.Root material={value} defaultChecked>
-            <Switch.Thumb />
-          </Switch.Root>
-          {value}
-        </label>
-      ))}
+      {(["matte", "glossy", "soft", "metal", "paper", "bevel"] as const).map(
+        (value) => (
+          <label
+            key={value}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "var(--dixy-spacing-inline-sm)",
+            }}
+          >
+            <Switch.Root material={value} defaultChecked>
+              <Switch.Thumb />
+            </Switch.Root>
+            {value}
+          </label>
+        ),
+      )}
     </div>
   );
 }

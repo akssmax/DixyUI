@@ -484,7 +484,11 @@ export function auditSpecimen(root: Element): AuditIssue[] {
 
 /** First family in a font-family list, unquoted and lower-case. */
 const firstFamily = (value: string) =>
-  value.split(",")[0]!.trim().replace(/^["']|["']$/g, "").toLowerCase();
+  value
+    .split(",")[0]!
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .toLowerCase();
 
 /** Roles whose type must stay plain in an expressive theme (M3). */
 const plainTypeRoles: Record<string, string> = {
@@ -552,7 +556,9 @@ function expressiveIssues(root: Element): AuditIssue[] {
     const widths = Array.from(group.children, (child) =>
       Math.round(child.getBoundingClientRect().width),
     );
-    const selected = group.querySelector<HTMLElement>(":scope > [data-pressed]");
+    const selected = group.querySelector<HTMLElement>(
+      ":scope > [data-pressed]",
+    );
     const others = Array.from(group.children).filter((c) => c !== selected);
     if (!selected || !others.length) continue;
     const grown =

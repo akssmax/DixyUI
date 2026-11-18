@@ -29,9 +29,11 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   const actions =
     ':is([data-variant="solid"],[data-variant="soft"],[data-variant="outline"]):not([data-disabled])';
   const p = m.parameters;
-  const style = Object.entries(themeFoundationStyle(m.foundations, {
-    titles: titleFont(m.character),
-  }))
+  const style = Object.entries(
+    themeFoundationStyle(m.foundations, {
+      titles: titleFont(m.character),
+    }),
+  )
     .map(
       ([key, value]) =>
         `${key === "fontFamily" ? "font-family" : key}:${value};`,

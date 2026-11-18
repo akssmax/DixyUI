@@ -992,10 +992,7 @@
     );
   }
   .dixy-aria-listboxitem[data-selected] {
-    background-color: var(
-      --dixy-highlight-band,
-      var(--dixy-component-subtle)
-    );
+    background-color: var(--dixy-highlight-band, var(--dixy-component-subtle));
     color: var(--dixy-highlight-on-band, var(--dixy-component-text));
   }
   .dixy-aria-calendarcell[data-selected] {

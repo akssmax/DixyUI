@@ -79,7 +79,9 @@ function DisplayCard({
             font: `var(--dixy-font-${role})`,
             letterSpacing: `var(--dixy-font-${role}-letter-spacing)`,
           }}
-          lang={/[\u3040-\u30ff\u4e00-\u9fff]/.test(display.text) ? "ja" : undefined}
+          lang={
+            /[\u3040-\u30ff\u4e00-\u9fff]/.test(display.text) ? "ja" : undefined
+          }
         >
           {display.text}
         </p>

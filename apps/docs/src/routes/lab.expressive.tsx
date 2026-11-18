@@ -340,7 +340,7 @@ function Progress() {
   return (
     <Section
       title="Loading and progress"
-      note="Library parts under Theme progress=&quot;wave&quot;: a contained shape loader, a wavy ring with its numeral, and a wavy bar with its stop indicator. Reduced motion holds them still."
+      note='Library parts under Theme progress="wave": a contained shape loader, a wavy ring with its numeral, and a wavy bar with its stop indicator. Reduced motion holds them still.'
     >
       <Theme progress="wave">
         <div className="xp-progress-row">
