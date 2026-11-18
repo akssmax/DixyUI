@@ -7,6 +7,8 @@ import {
   Checkbox,
   Heading,
   Switch,
+  ListBox,
+  Progress,
   Tabs,
   Text,
   TextField,
@@ -183,6 +185,26 @@ function Specimen({ id, appearance }: { id: string; appearance: Appearance }) {
               </Toggle>
             </ToggleGroup>
           </div>
+          <Progress.Root
+            value={40}
+            aria-label={`${meta.name} ${appearance} progress`}
+            data-audit="progress"
+          >
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+          <ListBox.Root
+            aria-label={`${meta.name} ${appearance} options`}
+            selectionMode="single"
+            defaultSelectedKeys={["picked"]}
+            className="audit-options"
+          >
+            <ListBox.Item id="picked" data-audit="option-selected">
+              Selected option
+            </ListBox.Item>
+            <ListBox.Item id="other">Other option</ListBox.Item>
+          </ListBox.Root>
         </Card.Content>
       </Card.Root>
     </Theme>

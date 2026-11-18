@@ -1,8 +1,13 @@
 import { useContext } from "react";
 import { AvatarGroupContext } from "../utilities/visual-group-context";
 import { Avatar as Primitive } from "@base-ui/react/avatar";
-import type { ComponentProps } from "react";
-import type { Material, RadiusPreset } from "@dixy-ui/tokens";
+import type { ComponentProps, CSSProperties } from "react";
+import {
+  shapePolygon,
+  type Material,
+  type RadiusPreset,
+} from "@dixy-ui/tokens";
+import { useThemeSettings } from "../theme/theme";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { styledPrimitive } from "../utilities/styled-primitive";
@@ -29,9 +34,16 @@ function AvatarRootVisual({
   radius,
   material,
   className,
+  style,
   ...props
 }: AvatarRootProps) {
   const group = useContext(AvatarGroupContext);
+  // Theme avatarShape clips the frame to a library shape (cookie, clover…).
+  const { avatarShape } = useThemeSettings();
+  const clip =
+    avatarShape === "none"
+      ? undefined
+      : ({ clipPath: shapePolygon(avatarShape) } as CSSProperties);
   const visual = useComponentVisuals(
     {
       size: size ?? group?.size,
@@ -47,6 +59,14 @@ function AvatarRootVisual({
     <Primitive.Root
       {...props}
       {...visual}
+      data-shape={avatarShape === "none" ? undefined : avatarShape}
+      style={
+        clip
+          ? typeof style === "function"
+            ? (state) => ({ ...clip, ...style(state) })
+            : { ...clip, ...style }
+          : style
+      }
       className={withClassName("dixy-avatar-root", className)}
     />
   );

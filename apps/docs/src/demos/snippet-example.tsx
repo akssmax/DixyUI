@@ -14,7 +14,7 @@ export default function SnippetExample({
   color?: "accent" | "neutral" | "danger" | "success";
   size?: "sm" | "md" | "lg";
   radius?: "none" | "sm" | "md" | "lg" | "full";
-  material?: "matte" | "glossy" | "soft" | "metal" | "paper";
+  material?: "matte" | "glossy" | "soft" | "metal" | "paper" | "bevel";
   symbol?: boolean;
   hideCopyButton?: boolean;
 }) {

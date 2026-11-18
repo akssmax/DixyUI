@@ -1,9 +1,9 @@
 /**
- * The fourteen 2026-12 launch starters, authored as v2 data plus their own
+ * The 2026-12 launch starters, authored as v2 data plus their own
  * character, window chrome and catalog metadata. documents.ts and manifests.ts
  * splice these in, so each starter stays one self-contained record here.
  */
-import type { ThemeCharacter } from "./character.ts";
+import type { AuthoredCharacter } from "./character.ts";
 import type { ThemeChrome } from "./chrome.ts";
 import { frameRecipes, type FrameRecipeId } from "./recipes.ts";
 
@@ -17,7 +17,7 @@ type Foundations = {
   headingFont: string;
   border: 1 | 2;
   depth: "none" | "raised" | "floating";
-  material: "matte" | "glossy" | "soft" | "metal" | "paper";
+  material: "matte" | "glossy" | "soft" | "metal" | "paper" | "bevel";
 };
 type MaterialParameters = {
   surfaceMix: number;
@@ -34,6 +34,12 @@ type Voice = {
   body: string;
   primary: string;
   secondary: string;
+  /** Large-type starter content: a word or numeral set in a fluid display role. */
+  display?: {
+    text: string;
+    caption: string;
+    role: "display.xl" | "display.2xl" | "display.3xl";
+  };
 };
 interface LaunchStarter {
   slug: string;
@@ -46,7 +52,7 @@ interface LaunchStarter {
   foundations: Foundations;
   material: { id: string; parameters: MaterialParameters };
   frame: string;
-  character: Omit<ThemeCharacter, "chrome">;
+  character: AuthoredCharacter;
   chrome: Partial<ThemeChrome>;
 }
 
@@ -82,6 +88,11 @@ export const launchStarters: readonly LaunchStarter[] = [
       body: "Type a command. The screen glows back.",
       primary: "Run",
       secondary: "Abort",
+      display: {
+        text: "64K",
+        caption: "RAM system, ready.",
+        role: "display.3xl",
+      },
     },
     foundations: {
       accentColor: "green",
@@ -142,7 +153,7 @@ export const launchStarters: readonly LaunchStarter[] = [
       headingFont: "jetbrains",
       border: 1,
       depth: "none",
-      material: "matte",
+      material: "bevel",
     },
     material: { id: "ansi-term", parameters: mat(20, 15, 0, 0.2, 0) },
     frame: "panes",
@@ -209,6 +220,7 @@ export const launchStarters: readonly LaunchStarter[] = [
         focus: "offset",
         divider: "line",
         selection: "accent",
+        highlight: "band",
         scrollbar: "native",
         iconStroke: 2.25,
       },
@@ -229,6 +241,11 @@ export const launchStarters: readonly LaunchStarter[] = [
       body: "Pattern by pattern, a wall becomes a story.",
       primary: "Lay tile",
       secondary: "Sample",
+      display: {
+        text: "Azul.",
+        caption: "Cobalt on tin-white glaze.",
+        role: "display.2xl",
+      },
     },
     foundations: {
       accentColor: "blue",
@@ -310,6 +327,7 @@ export const launchStarters: readonly LaunchStarter[] = [
         focus: "offset",
         divider: "groove",
         selection: "inverse",
+        highlight: "band",
         scrollbar: "thin",
         iconStroke: 2.5,
       },
@@ -382,6 +400,11 @@ export const launchStarters: readonly LaunchStarter[] = [
       body: "Every system nominal. Every vector plotted.",
       primary: "Engage",
       secondary: "Hold",
+      display: {
+        text: "3.2",
+        caption: "km/s delta-v to orbit 412.",
+        role: "display.3xl",
+      },
     },
     foundations: {
       accentColor: "cyan",
@@ -463,6 +486,7 @@ export const launchStarters: readonly LaunchStarter[] = [
         focus: "offset",
         divider: "groove",
         selection: "inverse",
+        highlight: "band",
         scrollbar: "accent",
         iconStroke: 2.25,
       },
@@ -532,6 +556,11 @@ export const launchStarters: readonly LaunchStarter[] = [
       body: "Clean the house, light the lamps, share the sweets.",
       primary: "Celebrate",
       secondary: "Share sweets",
+      display: {
+        text: "Diya.",
+        caption: "One lamp lights the next.",
+        role: "display.2xl",
+      },
     },
     foundations: {
       accentColor: "ruby",
@@ -688,6 +717,11 @@ export const launchStarters: readonly LaunchStarter[] = [
       body: "Pull up a chair. The cider is still warm.",
       primary: "Warm up",
       secondary: "Stay in",
+      display: {
+        text: "Cosy.",
+        caption: "The cider is still warm.",
+        role: "display.2xl",
+      },
     },
     foundations: {
       accentColor: "crimson",
@@ -847,7 +881,7 @@ export const launchStarters: readonly LaunchStarter[] = [
       headingFont: "pixel",
       border: 2,
       depth: "raised",
-      material: "matte",
+      material: "bevel",
     },
     material: { id: "menu-window", parameters: mat(40, 0, 0, 0, 0.1) },
     frame: "menu",
@@ -896,7 +930,7 @@ export const launchStarters: readonly LaunchStarter[] = [
       headingFont: "pixel",
       border: 2,
       depth: "raised",
-      material: "matte",
+      material: "bevel",
     },
     material: { id: "arcade-bezel", parameters: mat(60, 15, 0, 0, 0) },
     frame: "marquee",
@@ -996,7 +1030,7 @@ export const launchStarters: readonly LaunchStarter[] = [
       headingFont: "plexSans",
       border: 1,
       depth: "none",
-      material: "matte",
+      material: "bevel",
     },
     material: { id: "layer-grid", parameters: mat(0, 0, 0, 0, 0) },
     frame: "none",
@@ -1114,12 +1148,185 @@ export const launchStarters: readonly LaunchStarter[] = [
         focus: "halo",
         divider: "line",
         selection: "inverse",
+        highlight: "band",
         scrollbar: "native",
         iconStroke: 2,
       },
       backdrop: { pattern: "none", intensity: 0, scale: 1 },
     },
     chrome: { edge: "double", well: "sunken", corners: "inherit" },
+  },
+  // Expressive group: tonal surfaces, round-to-square press morph, springy
+  // motion and big display type. Original themes, not a Material clone.
+  {
+    slug: "bloom",
+    symbol: "bloom",
+    name: "Bloom",
+    description: "Make it yours.",
+    detail:
+      "Tonal violet surfaces, soft wonky Fraunces headings, pill controls that square off when pressed and wavy progress.",
+    swatches: ["#6e4ae0", "#efe9ff", "#ffb4d0"],
+    voice: {
+      eyebrow: "TODAY · 3 HABITS",
+      headline: "Make it yours.",
+      body: "Round at rest, square when you press. Every tap answers back.",
+      primary: "Start",
+      secondary: "Later",
+      display: { text: "12", caption: "day streak", role: "display.3xl" },
+    },
+    foundations: {
+      accentColor: "violet",
+      neutralColor: "mauve",
+      radius: "lg",
+      shape: "pill",
+      appearance: "light",
+      bodyFont: "figtree",
+      headingFont: "fraunces",
+      border: 1,
+      depth: "none",
+      material: "soft",
+    },
+    material: { id: "tonal-surface", parameters: mat(40, 55, 0, 0, 0) },
+    frame: "none",
+    character: {
+      controls: "standard",
+      motion: { style: "springy", press: 1, tempo: 1.1 },
+      type: {
+        headingCase: "none",
+        headingTracking: -0.02,
+        headingWeight: 700,
+        numerals: "proportional",
+        axes: "soft",
+      },
+      states: "standard",
+      details: {
+        focus: "offset",
+        divider: "line",
+        selection: "accent",
+        morph: "press",
+        progress: "wave",
+        avatar: "cookie-9",
+        scrollbar: "thin",
+        iconStroke: 2,
+      },
+      backdrop: { pattern: "shapes", intensity: 0.7, scale: 1 },
+    },
+    chrome: { edge: "pill", well: "sunken", corners: "round" },
+  },
+  {
+    slug: "pulse",
+    symbol: "pulse",
+    name: "Pulse",
+    description: "Keep moving.",
+    detail:
+      "Lime on a deep tonal dark, condensed heavy headings, wavy progress, press morph and tabular numerals for timers and reps.",
+    swatches: ["#bdee63", "#151a10", "#3b4a24"],
+    voice: {
+      eyebrow: "LOWER BODY · BLOCK 3 OF 5",
+      headline: "Keep moving.",
+      body: "Three sets left. Rest when the ring fills.",
+      primary: "Log set",
+      secondary: "Skip",
+      display: {
+        text: "42:10",
+        caption: "minutes this week",
+        role: "display.2xl",
+      },
+    },
+    foundations: {
+      accentColor: "lime",
+      neutralColor: "olive",
+      radius: "lg",
+      shape: "pill",
+      appearance: "dark",
+      bodyFont: "figtree",
+      headingFont: "bricolage",
+      border: 1,
+      depth: "none",
+      material: "soft",
+    },
+    material: { id: "tonal-surface", parameters: mat(40, 70, 0, 0, 0) },
+    frame: "none",
+    character: {
+      controls: "standard",
+      motion: { style: "springy", press: 1, tempo: 1.2 },
+      type: {
+        headingCase: "none",
+        headingTracking: -0.025,
+        headingWeight: 800,
+        numerals: "tabular",
+        axes: "condensed",
+      },
+      states: "standard",
+      details: {
+        focus: "offset",
+        divider: "line",
+        selection: "accent",
+        highlight: "band",
+        morph: "press",
+        progress: "wave",
+        avatar: "soft-burst",
+        scrollbar: "thin",
+        iconStroke: 2,
+      },
+      backdrop: { pattern: "grid", intensity: 0.12, scale: 1 },
+    },
+    chrome: { edge: "line", well: "recessed", corners: "round" },
+  },
+  {
+    slug: "sorbet",
+    symbol: "sorbet",
+    name: "Sorbet",
+    description: "Something sweet.",
+    detail:
+      "Warm tangerine tones, extra-wide rounded headings, wavy progress, a dotted backdrop and controls that squish into shape.",
+    swatches: ["#ff7a45", "#fff1e8", "#ffd166"],
+    voice: {
+      eyebrow: "ORDER #208 · READY SOON",
+      headline: "Something sweet.",
+      body: "Two scoops, one cone, no rush. We'll ping you.",
+      primary: "Order",
+      secondary: "Edit",
+      display: { text: "Yum", caption: "fresh daily", role: "display.3xl" },
+    },
+    foundations: {
+      accentColor: "orange",
+      neutralColor: "sand",
+      radius: "lg",
+      shape: "pill",
+      appearance: "light",
+      bodyFont: "figtree",
+      headingFont: "rounded",
+      border: 1,
+      depth: "none",
+      material: "soft",
+    },
+    material: { id: "tonal-surface", parameters: mat(45, 60, 0, 0, 0) },
+    frame: "none",
+    character: {
+      controls: "standard",
+      motion: { style: "springy", press: 1, tempo: 1 },
+      type: {
+        headingCase: "none",
+        headingTracking: -0.01,
+        headingWeight: 700,
+        numerals: "proportional",
+        axes: "wide",
+      },
+      states: "standard",
+      details: {
+        focus: "offset",
+        divider: "dotted",
+        selection: "accent",
+        morph: "press",
+        progress: "wave",
+        avatar: "clover-4",
+        scrollbar: "thin",
+        iconStroke: 2,
+      },
+      backdrop: { pattern: "dots", intensity: 0.25, scale: 1 },
+    },
+    chrome: { edge: "pill", well: "paper", corners: "round" },
   },
 ];
 
@@ -1158,7 +1365,7 @@ export const launchDocuments = launchStarters.map((s) => ({
 }));
 export const launchCharacters = Object.fromEntries(
   launchStarters.map((s) => [id(s), s.character]),
-) as Record<string, Omit<ThemeCharacter, "chrome">>;
+) as Record<string, AuthoredCharacter>;
 export const launchChrome = Object.fromEntries(
   launchStarters.map((s) => [id(s), s.chrome]),
 ) as Record<string, Partial<ThemeChrome>>;

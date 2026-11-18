@@ -7,11 +7,12 @@ export default function SpinnerExample({
   color = "accent",
   radius,
   material,
-}: VisualProps) {
+  contained = false,
+}: VisualProps & { contained?: boolean }) {
   const visual = { size, color };
   return (
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
-      <Spinner {...visual} label="Loading workspace" />
+      <Spinner {...visual} contained={contained} label="Loading workspace" />
     </Stack>
   );
 }

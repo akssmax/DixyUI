@@ -6,7 +6,7 @@
  */
 
 export type AuditCheck =
-  "contrast" | "boundary" | "focus" | "target" | "overflow";
+  "contrast" | "boundary" | "focus" | "target" | "overflow" | "expressive";
 export type AuditSeverity = "fail" | "warn";
 
 export interface AuditIssue {
@@ -41,6 +41,8 @@ const stateRoles: Record<string, string> = {
   "tab-selected": "Selected tab label",
   "tab-filled-selected": "Selected segmented tab label",
   "segment-selected": "Selected segment label",
+  // Tint or band (character.details.highlight), on the popup/list surface.
+  "option-selected": "Selected list option",
 };
 const focusRoles = new Set([
   "button-solid",
@@ -464,6 +466,7 @@ export function auditSpecimen(root: Element): AuditIssue[] {
         message: `${role} clips its label (${element.scrollWidth}px of content in ${element.clientWidth}px)`,
       });
   }
+  issues.push(...expressiveIssues(root));
   // Ornaments may bleed past the edge on purpose; only content counts.
   const edge = root.getBoundingClientRect().right;
   for (const element of root.querySelectorAll<HTMLElement>("[data-audit]")) {
@@ -474,6 +477,93 @@ export function auditSpecimen(root: Element): AuditIssue[] {
         severity: "fail",
         role: element.dataset.audit!,
         message: `${element.dataset.audit} runs ${Math.round(past)}px past the edge of its card`,
+      });
+  }
+  return issues;
+}
+
+/** First family in a font-family list, unquoted and lower-case. */
+const firstFamily = (value: string) =>
+  value.split(",")[0]!.trim().replace(/^["']|["']$/g, "").toLowerCase();
+
+/** Roles whose type must stay plain in an expressive theme (M3). */
+const plainTypeRoles: Record<string, string> = {
+  heading: "Card title (title role)",
+  "text-body": "Body text",
+  "text-muted": "Muted text",
+  "button-solid": "Button label",
+  "segment-selected": "Segment label",
+};
+
+/**
+ * M3 Expressive rules, checked when the specimen is expressive (its
+ * controls morph or its progress is a wave):
+ * - expressive display fonts stay on display and headline roles; titles,
+ *   body and labels use the body font;
+ * - a wave whose tonal track is under 3:1 against the surface shows a stop
+ *   indicator;
+ * - a connected group changes shape only: the selected segment is no wider
+ *   than its neighbours.
+ */
+function expressiveIssues(root: Element): AuditIssue[] {
+  if (!root.querySelector("[data-morph], [data-wave], [data-connected]"))
+    return [];
+  const issues: AuditIssue[] = [];
+  const style = getComputedStyle(root);
+  const display = firstFamily(style.getPropertyValue("--dixy-font-display"));
+  const sans = firstFamily(style.getPropertyValue("--dixy-font-sans"));
+  if (display && display !== sans)
+    for (const [role, label] of Object.entries(plainTypeRoles)) {
+      const element = root.querySelector<HTMLElement>(`[data-audit="${role}"]`);
+      if (!element) continue;
+      const family = firstFamily(getComputedStyle(element).fontFamily);
+      if (family === display)
+        issues.push({
+          check: "expressive",
+          severity: "fail",
+          role,
+          message: `${label} uses the display font ${display}; M3 keeps expressive fonts to display and headline roles`,
+          measured: family,
+          required: sans,
+        });
+    }
+  for (const wave of root.querySelectorAll<HTMLElement>(
+    ".dixy-progress-root[data-wave]:not([data-indeterminate], [data-complete])",
+  )) {
+    const track = wave.querySelector(".dixy-progress-track");
+    if (!track) continue;
+    const rest = getComputedStyle(track, "::after").backgroundColor;
+    const surface = backdrop(track, root).color;
+    const contrast = ratio(over(toRgba(rest), surface), surface);
+    const stop = getComputedStyle(track, "::before");
+    if (contrast < 3 && (stop.content === "none" || stop.display === "none"))
+      issues.push({
+        check: "expressive",
+        severity: "fail",
+        role: wave.dataset.audit ?? "progress",
+        message: `Wave track is ${contrast.toFixed(2)}:1 against its surface with no stop indicator; M3 requires one under 3:1`,
+        measured: `${contrast.toFixed(2)}:1`,
+        required: "stop indicator",
+      });
+  }
+  for (const group of root.querySelectorAll<HTMLElement>(
+    ".dixy-toggle-group[data-connected]",
+  )) {
+    const widths = Array.from(group.children, (child) =>
+      Math.round(child.getBoundingClientRect().width),
+    );
+    const selected = group.querySelector<HTMLElement>(":scope > [data-pressed]");
+    const others = Array.from(group.children).filter((c) => c !== selected);
+    if (!selected || !others.length) continue;
+    const grown =
+      selected.getBoundingClientRect().width -
+      Math.max(...others.map((c) => c.getBoundingClientRect().width));
+    if (grown > 2)
+      issues.push({
+        check: "expressive",
+        severity: "warn",
+        role: selected.dataset.audit ?? "segment-selected",
+        message: `Selected segment is ${Math.round(grown)}px wider than its neighbours (${widths.join("/")}px); a connected group changes shape only`,
       });
   }
   return issues;

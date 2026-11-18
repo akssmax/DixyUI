@@ -852,8 +852,11 @@
     .dixy-navigation-menu-item,
     .dixy-select-item
   )[data-highlighted] {
-    background: var(--dixy-color-background-selected);
-    color: var(--dixy-color-text-selected);
+    background: var(
+      --dixy-highlight-band,
+      var(--dixy-color-background-selected)
+    );
+    color: var(--dixy-highlight-on-band, var(--dixy-color-text-selected));
   }
   :is(
     .dixy-accordion-item,

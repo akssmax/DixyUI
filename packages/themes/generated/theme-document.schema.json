@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
-    "schemaVersion": { "enum": [6] },
+    "schemaVersion": { "enum": [8] },
     "id": {
       "type": "string",
       "minLength": 3,
@@ -98,9 +98,19 @@
         },
         "radius": { "enum": ["none", "sm", "md", "lg", "full"] },
         "density": { "enum": ["compact", "default", "comfortable"] },
-        "material": { "enum": ["matte", "glossy", "soft", "metal", "paper"] },
+        "material": {
+          "enum": ["matte", "glossy", "soft", "metal", "paper", "bevel"]
+        },
         "componentFinish": {
-          "enum": ["inherit", "matte", "glossy", "soft", "metal", "paper"]
+          "enum": [
+            "inherit",
+            "matte",
+            "glossy",
+            "soft",
+            "metal",
+            "paper",
+            "bevel"
+          ]
         },
         "shape": { "enum": ["rounded", "pill", "square"] },
         "appearance": { "enum": ["light", "dark"] },
@@ -239,7 +249,8 @@
                 "mono-ink",
                 "signal-contrast",
                 "menu-window",
-                "arcade-bezel"
+                "arcade-bezel",
+                "tonal-surface"
               ]
             },
             "version": { "enum": [1] },
@@ -689,13 +700,15 @@
               "maximum": 0.2
             },
             "headingWeight": { "enum": [300, 400, 500, 600, 700, 800, 900] },
-            "numerals": { "enum": ["proportional", "tabular", "oldstyle"] }
+            "numerals": { "enum": ["proportional", "tabular", "oldstyle"] },
+            "axes": { "enum": ["none", "condensed", "wide", "soft"] }
           },
           "required": [
             "headingCase",
             "headingTracking",
             "headingWeight",
-            "numerals"
+            "numerals",
+            "axes"
           ],
           "additionalProperties": false
         },
@@ -712,6 +725,49 @@
               "enum": ["line", "dashed", "dotted", "double", "groove"]
             },
             "selection": { "enum": ["accent", "inverse", "highlighter"] },
+            "highlight": { "enum": ["tint", "band"] },
+            "morph": { "enum": ["off", "press"] },
+            "progress": { "enum": ["line", "wave"] },
+            "avatar": {
+              "enum": [
+                "none",
+                "circle",
+                "square",
+                "slanted",
+                "dome",
+                "semicircle",
+                "fan",
+                "oval",
+                "pill",
+                "triangle",
+                "arrow",
+                "diamond",
+                "clam-shell",
+                "pentagon",
+                "gem",
+                "sunny",
+                "very-sunny",
+                "cookie-4",
+                "cookie-6",
+                "cookie-7",
+                "cookie-9",
+                "cookie-12",
+                "clover-4",
+                "clover-8",
+                "burst",
+                "soft-burst",
+                "boom",
+                "soft-boom",
+                "bloom",
+                "puffy",
+                "puffy-diamond",
+                "pixel-circle",
+                "pixel-triangle",
+                "bun",
+                "ghostish",
+                "heart"
+              ]
+            },
             "scrollbar": { "enum": ["native", "thin", "accent"] },
             "iconStroke": {
               "type": "number",
@@ -724,6 +780,10 @@
             "focus",
             "divider",
             "selection",
+            "highlight",
+            "morph",
+            "progress",
+            "avatar",
             "scrollbar",
             "iconStroke"
           ],
@@ -742,7 +802,8 @@
                 "fibre",
                 "dots",
                 "topo",
-                "halftone"
+                "halftone",
+                "shapes"
               ]
             },
             "intensity": {

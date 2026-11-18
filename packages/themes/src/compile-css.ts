@@ -4,7 +4,11 @@ import { createColorPalette, colorThemeVariables } from "@dixy-ui/tokens";
 import { frameStyles } from "./frame-styles.ts";
 import { themeFoundationStyle } from "./foundations.ts";
 import type { ResolvedThemeRecipe } from "./resolve.ts";
-import { characterComponentCSS, characterTokenCSS } from "./character.ts";
+import {
+  characterComponentCSS,
+  characterTokenCSS,
+  titleFont,
+} from "./character.ts";
 const surfaces =
   ".dixy-card,.dixy-box,.dixy-dialog-popup,.dixy-alert-dialog-popup,.dixy-drawer-popup,.dixy-popover-popup,.dixy-preview-card-popup,.dixy-tooltip-popup,.dixy-select-popup,.dixy-combobox-popup,.dixy-autocomplete-popup,.dixy-menu-popup,.dixy-context-menu-popup,.dixy-navigation-menu-popup,.dixy-toast-root,.dixy-alert,.dixy-list-box,.dixy-calendar,.dixy-range-calendar";
 const overlays =
@@ -25,7 +29,9 @@ export function compileThemeCSS(m: ResolvedThemeRecipe): string {
   const actions =
     ':is([data-variant="solid"],[data-variant="soft"],[data-variant="outline"]):not([data-disabled])';
   const p = m.parameters;
-  const style = Object.entries(themeFoundationStyle(m.foundations))
+  const style = Object.entries(themeFoundationStyle(m.foundations, {
+    titles: titleFont(m.character),
+  }))
     .map(
       ([key, value]) =>
         `${key === "fontFamily" ? "font-family" : key}:${value};`,

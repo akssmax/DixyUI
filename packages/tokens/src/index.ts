@@ -7,6 +7,7 @@ export * from "./surfaces.js";
 export * from "./motion.js";
 export * from "./materials.js";
 export * from "./shapes.js";
+export * from "./shape-geometry.js";
 export * from "./personalities.js";
 export * from "./feedback.js";
 export * from "./skins.js";

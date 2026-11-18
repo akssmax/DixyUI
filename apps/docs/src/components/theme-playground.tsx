@@ -167,6 +167,7 @@ const finishOptions = [
   ["soft", "Clay"],
   ["metal", "Metal"],
   ["paper", "Paper"],
+  ["bevel", "Bevel"],
 ] as const;
 
 /* Preset keys each inspector tab owns, used for the "edited" dots and count. */

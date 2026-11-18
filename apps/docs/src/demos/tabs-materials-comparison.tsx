@@ -3,7 +3,7 @@ import "@dixy-ui/react/materials.css";
 export default function TabsMaterialsComparison() {
   return (
     <Stack gap="lg" style={{ width: "min(100%, 30rem)" }}>
-      {(["matte", "glossy", "soft", "metal", "paper"] as const).map((value) => (
+      {(["matte", "glossy", "soft", "metal", "paper", "bevel"] as const).map((value) => (
         <div key={value}>
           <Text variant="body.sm">{value}</Text>
           <Tabs.Root

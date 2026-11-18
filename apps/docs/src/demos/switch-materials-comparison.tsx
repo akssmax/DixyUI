@@ -11,7 +11,7 @@ export default function SwitchMaterialsComparison() {
         gap: "var(--dixy-spacing-inline-lg)",
       }}
     >
-      {(["matte", "glossy", "soft", "metal", "paper"] as const).map((value) => (
+      {(["matte", "glossy", "soft", "metal", "paper", "bevel"] as const).map((value) => (
         <label
           key={value}
           style={{

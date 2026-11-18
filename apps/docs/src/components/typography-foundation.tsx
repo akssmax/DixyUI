@@ -77,7 +77,7 @@ export function TypographyFoundation() {
 
       <h2>Our recommendation</h2>
       <p>
-        Use a semantic system with 18 roles across display, heading, title,
+        Use a semantic system with 21 roles across display, heading, title,
         body, label, caption and code. Inter Variable is the default interface
         face. Space Grotesk Variable brings character to short display
         statements. JetBrains Mono is a static code face; code does not need a
@@ -85,9 +85,12 @@ export function TypographyFoundation() {
       </p>
       <p>
         Sizes and line heights use rem; tracking uses em. The root font size
-        stays under the reader’s control. Display tokens are fixed contracts:
-        layouts explicitly choose a smaller role at narrow widths. Density
-        changes spacing, never text size.
+        stays under the reader’s control. display.lg and below are fixed
+        contracts: layouts explicitly choose a smaller role at narrow widths.
+        display.xl, 2xl and 3xl are poster sizes for words that are the
+        interface (a selected value, a city, a speed). They scale with their
+        container from a phone-safe minimum, with unitless leading so lines stay
+        tight. Density changes spacing, never text size.
       </p>
       <div className="table-scroll">
         <table className="api-table">
@@ -171,8 +174,10 @@ export function TypographyFoundation() {
             <div className="typography-row-meta">
               <code>font.{role}</code>
               <span>
-                {token.size} / {token.lineHeight} ·{" "}
-                {fontWeightPrimitives[token.weight]} · {token.family}
+                {"fluid" in token
+                  ? `${token.fluid.min}–${token.size} / ${token.lineHeight / token.size}`
+                  : `${token.size} / ${token.lineHeight}`}{" "}
+                · {fontWeightPrimitives[token.weight]} · {token.family}
               </span>
             </div>
             <p data-typography={role}>

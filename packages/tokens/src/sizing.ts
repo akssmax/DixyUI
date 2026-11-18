@@ -1,6 +1,6 @@
 /** Reference pixels at a 16px root. Density does not change sizing. */
 export const sizing = {
-  control: { sm: 32, md: 40, lg: 48 },
+  control: { xs: 28, sm: 32, md: 40, lg: 48, xl: 72 },
   icon: { xs: 12, sm: 16, md: 20, lg: 24, xl: 32, "2xl": 48 },
   target: { minimum: 24, comfortable: 44 },
 } as const;

@@ -1,6 +1,6 @@
 # @dixy-ui/themes
 
-38 starter themes for [Dixy UI](https://github.com/akssmax/DixyUI), from paper and glass to terminals and festivals, plus an authoring API for your own. Each theme is a material, a frame, a character and a chrome over the same accessible components.
+41 starter themes for [Dixy UI](https://github.com/akssmax/DixyUI), from paper and glass to terminals and festivals, plus an authoring API for your own. Each theme is a material, a frame, a character and a chrome over the same accessible components.
 
 [![npm](https://img.shields.io/npm/v/%40dixy-ui%2Fthemes/beta?label=npm&color=7c3aed)](https://www.npmjs.com/package/@dixy-ui/themes) [![MIT](https://img.shields.io/badge/license-MIT-7c3aed)](https://github.com/akssmax/DixyUI/blob/main/LICENSE)
 
@@ -31,7 +31,7 @@ import { retroOSTheme } from "@dixy-ui/themes/retro-os";
 </Theme>;
 ```
 
-Browse all 38 starters on the [landing page](https://dixyui.com/#themes) or build your own in the [playground](https://dixyui.com/playground).
+Browse all 41 starters on the [landing page](https://dixyui.com/#themes) or build your own in the [playground](https://dixyui.com/playground).
 
 ## Skins and ornament renderers
 

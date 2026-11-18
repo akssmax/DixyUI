@@ -358,4 +358,773 @@
       );
     }
   }
+
+  /*
+   * Option highlight. A band Theme sets one token pair that option rules read
+   * before each item's own tint; a tint Theme clears it, so the nearest Theme
+   * wins. The portal scope carries data-highlight, so popups follow.
+   */
+  .dixy-theme[data-highlight="band"] {
+    --dixy-highlight-band: var(--dixy-color-base-12);
+    --dixy-highlight-on-band: var(--dixy-color-base-1);
+  }
+  .dixy-theme[data-highlight="tint"] {
+    --dixy-highlight-band: initial;
+    --dixy-highlight-on-band: initial;
+  }
+
+  /*
+   * Accent surface: a Box painted with the brand solid. It remaps the tokens
+   * content reads (text, borders, skin paint, button colours), so any Dixy part
+   * placed inside stays legible on the fill, in every theme. The fill is
+   * captured on the Box before the remap, so nested parts can't re-read it.
+   */
+  .dixy-box[data-surface="accent"] {
+    --dixy-surface-fill: var(--dixy-color-brand-10);
+    --dixy-surface-ink: var(--dixy-color-brand-on-solid);
+    /* Options inside always band (a tint would vanish on the fill), and the
+       band and filled buttons stay a dark ink on it. */
+    --dixy-highlight-band: var(--dixy-color-base-12);
+    --dixy-highlight-on-band: var(--dixy-color-base-1);
+    background-color: var(--dixy-surface-fill);
+    color: var(--dixy-surface-ink);
+    --dixy-color-text-primary: var(--dixy-surface-ink);
+    --dixy-color-text-secondary: var(--dixy-surface-ink);
+    --dixy-color-border-default: var(--dixy-surface-ink);
+    --dixy-color-border-strong: var(--dixy-surface-ink);
+    --dixy-color-border-focus: var(--dixy-surface-ink);
+    /* Skins and materials paint boxes from these tokens; pointing them at the
+       fill (not transparent) paints this Box and keeps nested panels on it. */
+    --dixy-skin-surface: var(--dixy-surface-fill);
+    --dixy-color-background-surface-raised: var(--dixy-surface-fill);
+    --dixy-skin-edge: var(--dixy-surface-ink);
+    --dixy-button-primary-background: var(--dixy-highlight-band);
+    --dixy-button-primary-hover: color-mix(
+      in oklch,
+      var(--dixy-highlight-band) 85%,
+      var(--dixy-surface-fill)
+    );
+    --dixy-button-primary-pressed: var(--dixy-highlight-band);
+    --dixy-button-primary-foreground: var(--dixy-highlight-on-band);
+    --dixy-button-primary-text: var(--dixy-surface-ink);
+    --dixy-button-secondary-text: var(--dixy-surface-ink);
+  }
+  /* Dark brand-10 is a pale tint; keep a deep solid, and a dark band on it
+     (a light band measured 2.12:1 against the fill). */
+  :where([data-appearance="dark"]) .dixy-box[data-surface="accent"] {
+    --dixy-surface-fill: var(--dixy-color-brand-9);
+    --dixy-highlight-band: var(--dixy-color-base-1);
+    --dixy-highlight-on-band: var(--dixy-color-base-12);
+  }
+
+  /* Expressive shapes morph by transitioning the path (same command list for
+     every kind). Browsers without CSS `d` simply switch shapes. */
+  .dixy-shape[data-kind] path {
+    transition: d var(--dixy-shape-morph-duration, 0s)
+      var(--dixy-shape-morph-easing, linear);
+  }
+  [data-motion="reduced"] .dixy-shape path {
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-shape path {
+      transition: none;
+    }
+  }
+}
+
+/* Expressive shape morph. Its own layer, declared after components, so an
+   opt-in `morph` beats skin corner rules without specificity games; attached
+   and segmented groups keep their joined corners. */
+@layer dixy.expressive {
+  :is(.dixy-button, .dixy-toggle)[data-morph]:not(
+      :is(
+          .dixy-button-group[data-attached="true"],
+          .dixy-toggle-group[data-attached],
+          .dixy-toggle-group[data-segmented]
+        )
+        > *
+    ) {
+    --dixy-morph-size: max(
+      var(--dixy-height-md),
+      var(--dixy-interaction-target)
+    );
+    --dixy-morph-press: 0.22;
+    border-radius: calc(var(--dixy-morph-size) / 2);
+    --dixy-morph-feedback: var(--dixy-button-motion-feedback-effects, 150ms);
+    transition:
+      border-radius var(--dixy-motion-spring-press-duration, 180ms)
+        var(--dixy-motion-spring-press, ease-out),
+      background-color var(--dixy-morph-feedback),
+      color var(--dixy-morph-feedback),
+      border-color var(--dixy-morph-feedback),
+      transform var(--dixy-button-motion-feedback, 150ms);
+  }
+  .dixy-toggle[data-morph] {
+    --dixy-morph-feedback: var(--dixy-toggle-motion-feedback-effects, 150ms);
+  }
+  .dixy-button[data-morph][data-size="sm"] {
+    --dixy-morph-size: max(
+      var(--dixy-height-sm),
+      var(--dixy-interaction-target)
+    );
+  }
+  .dixy-button[data-morph][data-size="lg"] {
+    --dixy-morph-size: max(
+      var(--dixy-height-lg),
+      var(--dixy-interaction-target)
+    );
+  }
+  .dixy-toggle[data-morph] {
+    --dixy-morph-size: max(
+      var(--dixy-component-height, var(--dixy-height-md)),
+      var(--dixy-interaction-target)
+    );
+  }
+  /* Pressed squares off; a selected toggle stays square. The corner keeps the
+     same ratio to the height at every size. */
+  :is(.dixy-button, .dixy-toggle)[data-morph]:not(
+      :is(
+          .dixy-button-group[data-attached="true"],
+          .dixy-toggle-group[data-attached],
+          .dixy-toggle-group[data-segmented]
+        )
+        > *
+    ):is(:active:not([data-disabled]), .dixy-toggle[data-pressed]) {
+    border-radius: calc(var(--dixy-morph-size) * var(--dixy-morph-press));
+  }
+  /* Reduced motion: corners switch instantly; colour feedback stays. */
+  [data-motion="reduced"] :is(.dixy-button, .dixy-toggle)[data-morph] {
+    transition:
+      background-color var(--dixy-morph-feedback),
+      color var(--dixy-morph-feedback),
+      border-color var(--dixy-morph-feedback),
+      transform var(--dixy-button-motion-feedback, 150ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :is(.dixy-button, .dixy-toggle)[data-morph] {
+      transition:
+        background-color var(--dixy-morph-feedback),
+        color var(--dixy-morph-feedback),
+        border-color var(--dixy-morph-feedback),
+        transform var(--dixy-button-motion-feedback, 150ms);
+    }
+  }
+}
+
+/* Wavy progress. The indicator keeps Base UI's width and is masked to a
+   repeating wave; the track draws the flat remainder after a gap, using the
+   fraction Progress.Root writes. Same layer as morph so skins don't repaint
+   the track behind the wave. */
+@layer dixy.expressive {
+  .dixy-progress-root[data-wave] {
+    --dixy-wave-stroke: var(--dixy-track-size, 8px);
+    --dixy-wave-height: calc(var(--dixy-wave-stroke) * 3);
+    --dixy-wave-length: calc(var(--dixy-wave-height) * 5 / 3);
+    --dixy-wave-gap: calc(var(--dixy-wave-stroke) * 1.5);
+  }
+  .dixy-progress-root[data-wave] .dixy-progress-track {
+    overflow: visible;
+    block-size: var(--dixy-wave-height);
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .dixy-progress-root[data-wave] .dixy-progress-track::after {
+    content: "";
+    position: absolute;
+    inset-block: calc((var(--dixy-wave-height) - var(--dixy-wave-stroke)) / 2);
+    inset-inline-start: min(
+      100%,
+      calc(var(--dixy-progress-fraction, 0) * 100% + var(--dixy-wave-gap))
+    );
+    inset-inline-end: 0;
+    border-radius: var(--dixy-wave-stroke);
+    /* A tonal remainder, like the tonal surfaces it sits on. */
+    background: var(--dixy-color-brand-4, var(--dixy-color-background-subtle));
+  }
+  /* Indeterminate: no flat line under the travelling wave to cross it. */
+  .dixy-progress-root[data-wave][data-indeterminate]
+    .dixy-progress-track::after {
+    content: none;
+  }
+  /* The indicator keeps Base UI's width; WaveLine draws inside it in the
+     indicator colour, so skins and materials paint the stroke, not a box. */
+  .dixy-progress-root[data-wave] .dixy-progress-indicator {
+    position: relative;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+    color: var(
+      --dixy-component-fill,
+      var(--dixy-color-background-action-primary)
+    );
+  }
+  .dixy-progress-wave {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: visible;
+  }
+  /* Reduced motion: WaveLine holds its phase (see progress.tsx). */
+}
+
+/* Expressive progress, loaders, connected groups and shaped avatars (Theme
+   progress="wave", morph="press", avatarShape). */
+@layer dixy.expressive {
+  .dixy-shape-loader {
+    display: inline-block;
+    inline-size: calc(var(--dixy-size-icon-sm) * 1.15);
+    block-size: calc(var(--dixy-size-icon-sm) * 1.15);
+    flex: none;
+    color: currentColor;
+    animation: dixy-spin 4.2s linear infinite;
+  }
+  [data-motion="reduced"] .dixy-shape-loader {
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-shape-loader {
+      animation: none;
+    }
+  }
+
+  /* Wavy ring: rounded ends on the fill, a softer tonal track. */
+  .dixy-progress-circle path.dixy-progress-ring-fill {
+    stroke-linecap: round;
+    stroke-width: 3.5;
+  }
+  .dixy-progress-circle path.dixy-progress-ring-track {
+    stroke-width: 3.5;
+    stroke: var(--dixy-color-brand-4, var(--dixy-color-background-subtle));
+  }
+
+  /* Connected button group (M3): spans its container in equal segments with
+     2px gaps, small inner corners and round ends. Only shape changes: the
+     pressed segment's inner corners square off, the selected one goes fully
+     round. Widths never move. */
+  .dixy-toggle-group[data-connected] {
+    --dixy-connected-size: max(
+      var(--dixy-component-height, var(--dixy-height-md)),
+      var(--dixy-interaction-target)
+    );
+    display: flex;
+    flex-wrap: nowrap;
+    inline-size: 100%;
+    max-inline-size: var(--dixy-connected-max-width, 40rem);
+    gap: 2px;
+  }
+  .dixy-toggle-group[data-connected] > .dixy-toggle {
+    flex: 1 1 0;
+    min-inline-size: max-content;
+    margin: 0;
+    border-radius: calc(var(--dixy-connected-size) * 0.2);
+    transition:
+      border-radius var(--dixy-motion-spring-press-duration, 180ms)
+        var(--dixy-motion-spring-press, ease-out),
+      background-color 150ms,
+      color 150ms;
+  }
+  .dixy-toggle-group[data-connected] > .dixy-toggle:first-child {
+    border-start-start-radius: calc(var(--dixy-connected-size) / 2);
+    border-end-start-radius: calc(var(--dixy-connected-size) / 2);
+  }
+  .dixy-toggle-group[data-connected] > .dixy-toggle:last-child {
+    border-start-end-radius: calc(var(--dixy-connected-size) / 2);
+    border-end-end-radius: calc(var(--dixy-connected-size) / 2);
+  }
+  .dixy-toggle-group[data-connected]
+    > .dixy-toggle:active:not([data-disabled], [data-pressed]) {
+    border-radius: calc(var(--dixy-connected-size) * 0.08);
+  }
+  .dixy-toggle-group[data-connected] > .dixy-toggle[data-pressed] {
+    border-radius: calc(var(--dixy-connected-size) / 2);
+  }
+  /* A segmented group drops its sunken track: tonal choices, a filled pick. */
+  .dixy-toggle-group[data-connected][data-segmented] {
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .dixy-toggle-group[data-connected][data-segmented] > .dixy-toggle {
+    border: 0;
+    background: var(--dixy-component-subtle);
+    color: var(--dixy-component-text);
+    box-shadow: none;
+  }
+  .dixy-toggle-group[data-connected][data-segmented]
+    > .dixy-toggle[data-pressed] {
+    background: var(--dixy-component-fill);
+    color: var(--dixy-component-on-fill);
+  }
+  [data-motion="reduced"] .dixy-toggle-group[data-connected] > .dixy-toggle {
+    transition:
+      background-color 150ms,
+      color 150ms;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-toggle-group[data-connected] > .dixy-toggle {
+      transition:
+        background-color 150ms,
+        color 150ms;
+    }
+  }
+
+  /* Shaped avatars: the clip is the shape, so drop the frame's own corners
+     and edge (a border would be cut into a broken outline). */
+  .dixy-avatar-root[data-shape] {
+    border-radius: 0;
+    border-color: transparent;
+    box-shadow: none;
+  }
+}
+
+/* M3 Expressive rules beyond the basics: standard groups, the size ends,
+   shape-backed toggles, the wave's stop indicator and low-value dot, the
+   indeterminate wave and the contained loader. */
+@layer dixy.expressive {
+  /* Standard button group (M3): the pressed button widens and its neighbours
+     give way, on the press spring; nothing changes at rest. */
+  :is(.dixy-button-group, .dixy-toggle-group)[data-expressive] {
+    flex-wrap: nowrap;
+  }
+  :is(.dixy-button-group, .dixy-toggle-group)[data-expressive] > * {
+    --dixy-group-pad: var(--dixy-spacing-inset-md);
+    padding-inline: var(--dixy-group-pad);
+    transition:
+      padding var(--dixy-motion-spring-press-duration, 180ms)
+        var(--dixy-motion-spring-press, ease-out),
+      border-radius var(--dixy-motion-spring-press-duration, 180ms)
+        var(--dixy-motion-spring-press, ease-out),
+      background-color 150ms,
+      color 150ms;
+  }
+  .dixy-button-group[data-expressive] > .dixy-button {
+    --dixy-group-pad: var(--dixy-button-padding, var(--dixy-spacing-inset-md));
+  }
+  .dixy-button-group[data-expressive] > .dixy-button[data-size="sm"] {
+    --dixy-group-pad: var(
+      --dixy-button-padding-sm,
+      var(--dixy-spacing-inset-sm)
+    );
+  }
+  .dixy-button-group[data-expressive] > .dixy-button[data-size="lg"] {
+    --dixy-group-pad: var(
+      --dixy-button-padding-lg,
+      var(--dixy-spacing-inset-lg)
+    );
+  }
+  :is(.dixy-button-group, .dixy-toggle-group)[data-expressive]
+    > :active:not([data-disabled], .dixy-icon-button) {
+    padding-inline: calc(var(--dixy-group-pad) * 1.5);
+  }
+  :is(.dixy-button-group, .dixy-toggle-group)[data-expressive]:has(
+      > :active:not([data-disabled], .dixy-icon-button)
+    )
+    > :not(:active, .dixy-icon-button) {
+    padding-inline: calc(var(--dixy-group-pad) * 0.75);
+  }
+
+  /* The M3 size ends: XS for dense rows, XL for a hero action. Labels keep
+     the label type; display fonts never reach a button. */
+  .dixy-button[data-size="xs"] {
+    height: var(--dixy-height-xs, var(--dixy-size-control-xs, 1.75rem));
+    padding-inline: calc(var(--dixy-button-padding-sm, 0.75rem) * 0.75);
+    font: var(--dixy-font-label-sm);
+    gap: var(--dixy-space-050, 4px);
+  }
+  .dixy-button[data-size="xl"] {
+    --dixy-control-icon-size: var(--dixy-size-icon-lg);
+    height: var(--dixy-height-xl, var(--dixy-size-control-xl, 4.5rem));
+    padding-inline: calc(var(--dixy-button-padding-lg, 1.25rem) * 1.6);
+    font: var(--dixy-font-label-lg);
+    font-size: calc(var(--dixy-font-label-lg-size, 1rem) * 1.375);
+  }
+  .dixy-icon-button[data-size="xs"] {
+    width: var(--dixy-height-xs, var(--dixy-size-control-xs, 1.75rem));
+    padding: 0;
+  }
+  .dixy-icon-button[data-size="xl"] {
+    width: var(--dixy-height-xl, var(--dixy-size-control-xl, 4.5rem));
+    padding: 0;
+  }
+  .dixy-icon-button[data-size="xl"] svg {
+    inline-size: var(--dixy-size-icon-xl);
+    block-size: var(--dixy-size-icon-xl);
+  }
+  .dixy-button[data-morph][data-size="xs"] {
+    --dixy-morph-size: max(
+      var(--dixy-height-xs, var(--dixy-size-control-xs, 1.75rem)),
+      var(--dixy-interaction-target)
+    );
+  }
+  .dixy-button[data-morph][data-size="xl"] {
+    --dixy-morph-size: var(
+      --dixy-height-xl,
+      var(--dixy-size-control-xl, 4.5rem)
+    );
+  }
+  .dixy-toggle[data-size="xs"] {
+    --dixy-component-height: var(--dixy-size-control-xs, 1.75rem);
+    --dixy-component-font: var(--dixy-font-label-sm);
+  }
+  .dixy-toggle[data-size="xl"] {
+    --dixy-component-height: var(--dixy-size-control-xl, 4.5rem);
+    --dixy-component-font: var(--dixy-font-label-lg);
+    font-size: calc(var(--dixy-font-label-lg-size, 1rem) * 1.375);
+    letter-spacing: normal;
+  }
+  .dixy-toggle[data-size="xl"] :where(*) {
+    letter-spacing: normal;
+  }
+
+  /* Shape-backed toggle: the container is a library shape that morphs when
+     selected; the control's own box stays the hit area. */
+  .dixy-toggle[data-shaped][data-dixy-visual] {
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    place-items: center;
+    aspect-ratio: 1;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--dixy-component-text);
+  }
+  .dixy-toggle[data-shaped][data-dixy-visual] > :not(.dixy-toggle-shape) {
+    grid-area: 1 / 1;
+  }
+  .dixy-toggle[data-shaped] .dixy-toggle-shape {
+    grid-area: 1 / 1;
+    z-index: -1;
+    inline-size: 100%;
+    block-size: 100%;
+    color: var(--dixy-component-subtle);
+    transition: color 150ms;
+  }
+  .dixy-toggle[data-shaped][data-pressed][data-dixy-visual] {
+    color: var(--dixy-component-on-fill);
+    background: none;
+  }
+  .dixy-toggle[data-shaped][data-pressed] .dixy-toggle-shape {
+    color: var(--dixy-component-fill);
+  }
+  .dixy-toggle[data-shaped][data-disabled] .dixy-toggle-shape {
+    color: var(--dixy-color-background-disabled);
+  }
+
+  /* Wave stop indicator (M3): a dot of the indicator colour at the end of
+     the tonal track, required because the track is under 3:1. */
+  .dixy-progress-root[data-wave]:not([data-indeterminate])
+    .dixy-progress-track::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset-block-start: calc(
+      (var(--dixy-wave-height) - var(--dixy-wave-stroke) / 2) / 2
+    );
+    inset-inline-end: calc(var(--dixy-wave-stroke) / 4);
+    inline-size: calc(var(--dixy-wave-stroke) / 2);
+    block-size: calc(var(--dixy-wave-stroke) / 2);
+    border-radius: 50%;
+    background: var(
+      --dixy-component-fill,
+      var(--dixy-color-background-action-primary)
+    );
+  }
+  /* At 100% the indicator reaches the end; the dot would sit on it. */
+  .dixy-progress-root[data-wave][data-complete] .dixy-progress-track::before {
+    display: none;
+  }
+  /* Low values need no rule: WaveLine eases the amplitude in over the
+     first wavelength, so a short indicator reads as a line or a dot. */
+  /* Indeterminate wave: a segment that grows and shrinks as it travels,
+     clipped to the track's length. */
+  .dixy-progress-root[data-wave][data-indeterminate] .dixy-progress-track {
+    overflow-x: clip;
+  }
+  .dixy-progress-root[data-wave][data-indeterminate] .dixy-progress-indicator {
+    position: absolute;
+    inset-block: 0;
+    inline-size: 40%;
+    animation: dixy-wave-sweep 1.8s ease-in-out infinite;
+  }
+  @keyframes dixy-wave-sweep {
+    0% {
+      inset-inline-start: -10%;
+      inline-size: 10%;
+    }
+    50% {
+      inline-size: 45%;
+    }
+    100% {
+      inset-inline-start: 100%;
+      inline-size: 10%;
+    }
+  }
+  [data-motion="reduced"]
+    .dixy-progress-root[data-wave][data-indeterminate]
+    .dixy-progress-indicator {
+    inset-inline-start: 0;
+    animation: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-progress-root[data-wave][data-indeterminate]
+      .dixy-progress-indicator {
+      inset-inline-start: 0;
+      animation: none;
+    }
+  }
+
+  /* Loader sizes (M3: 24-240; lg is M3's 48 standalone default) and the
+     optional circular container for loaders over content. */
+  .dixy-loading .dixy-shape-loader {
+    inline-size: var(--dixy-loader-size, 1.5rem);
+    block-size: var(--dixy-loader-size, 1.5rem);
+  }
+  .dixy-loading[data-size="sm"] {
+    --dixy-loader-size: 1.25rem;
+  }
+  .dixy-loading[data-size="lg"] {
+    --dixy-loader-size: 3rem;
+  }
+  /* The container is the status element itself; only the shape turns. */
+  .dixy-loading[data-contained] {
+    justify-content: center;
+    gap: 0;
+    inline-size: calc(var(--dixy-loader-size, 1.5rem) * 1.6);
+    block-size: calc(var(--dixy-loader-size, 1.5rem) * 1.6);
+    min-block-size: 0;
+    border-radius: 50%;
+    background: var(--dixy-color-brand-3, var(--dixy-component-subtle));
+    color: var(--dixy-color-brand-9, var(--dixy-component-fill));
+  }
+  .dixy-loading[data-waiting] > :not(.dixy-visually-hidden) {
+    visibility: hidden;
+  }
+
+  /* Ring value: a heavy, narrow, tabular numeral in the centre. */
+  .dixy-progress-circle[data-show-value] {
+    container-type: inline-size;
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+  }
+  .dixy-progress-circle[data-show-value] > svg {
+    grid-area: 1 / 1;
+  }
+  .dixy-progress-circle-value {
+    grid-area: 1 / 1;
+    font-family: var(--dixy-font-heading-md-family, inherit);
+    font-size: 30cqi;
+    font-weight: 800;
+    font-stretch: var(--dixy-font-numeral-stretch, 85%);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--dixy-component-text);
+  }
+}
+
+/* Split button, FAB menu and the floating toolbar (M3 Expressive). */
+@layer dixy.expressive {
+  .dixy-split-button {
+    --dixy-split-height: var(--dixy-height-md);
+    display: inline-flex;
+    gap: 2px;
+    vertical-align: middle;
+  }
+  .dixy-split-button[data-size="xs"] {
+    --dixy-split-height: var(--dixy-height-xs, 1.75rem);
+  }
+  .dixy-split-button[data-size="sm"] {
+    --dixy-split-height: var(--dixy-height-sm);
+  }
+  .dixy-split-button[data-size="lg"] {
+    --dixy-split-height: var(--dixy-height-lg);
+  }
+  .dixy-split-button[data-size="xl"] {
+    --dixy-split-height: var(--dixy-height-xl, 4.5rem);
+  }
+  .dixy-split-button > .dixy-button {
+    --dixy-split-outer: calc(
+      max(var(--dixy-split-height), var(--dixy-interaction-target)) / 2
+    );
+    --dixy-split-inner: calc(var(--dixy-split-height) * 0.12);
+    transition:
+      border-radius var(--dixy-motion-spring-press-duration, 180ms)
+        var(--dixy-motion-spring-press, ease-out),
+      background-color 150ms,
+      color 150ms;
+  }
+  .dixy-split-button > .dixy-split-button-action {
+    border-radius: var(--dixy-split-outer) var(--dixy-split-inner)
+      var(--dixy-split-inner) var(--dixy-split-outer);
+  }
+  .dixy-split-button > .dixy-split-button-trigger {
+    inline-size: auto;
+    min-inline-size: calc(var(--dixy-split-height) * 0.95);
+    padding-inline: calc(var(--dixy-split-height) * 0.22);
+    border-radius: var(--dixy-split-inner) var(--dixy-split-outer)
+      var(--dixy-split-outer) var(--dixy-split-inner);
+  }
+  .dixy-split-button > .dixy-split-button-action:active:not([data-disabled]),
+  .dixy-split-button > .dixy-split-button-trigger:active:not([data-disabled]) {
+    --dixy-split-inner: calc(var(--dixy-split-height) * 0.22);
+  }
+  .dixy-split-button > .dixy-split-button-trigger[data-popup-open] {
+    border-radius: var(--dixy-split-outer);
+  }
+  /* Right to left mirrors the halves. */
+  .dixy-split-button:dir(rtl) > .dixy-split-button-action {
+    border-radius: var(--dixy-split-inner) var(--dixy-split-outer)
+      var(--dixy-split-outer) var(--dixy-split-inner);
+  }
+  .dixy-split-button:dir(rtl)
+    > .dixy-split-button-trigger:not([data-popup-open]) {
+    border-radius: var(--dixy-split-outer) var(--dixy-split-inner)
+      var(--dixy-split-inner) var(--dixy-split-outer);
+  }
+  /* The chevron turns on the standard curve, not the spring (M3). */
+  .dixy-split-button-trigger .dixy-artwork {
+    transition: rotate var(--dixy-motion-duration-deliberate)
+      var(--dixy-motion-easing-standard, ease);
+  }
+  .dixy-split-button-trigger[data-popup-open] .dixy-artwork {
+    rotate: 180deg;
+  }
+
+  /* FAB: a rounded square that becomes a round close button when open. */
+  .dixy-fab.dixy-button {
+    --dixy-fab-size: var(--dixy-height-lg);
+    inline-size: var(--dixy-fab-size);
+    block-size: var(--dixy-fab-size);
+    padding: 0;
+    border-radius: calc(var(--dixy-fab-size) * 0.3);
+    box-shadow: var(--dixy-shadow-floating);
+    transition:
+      border-radius var(--dixy-motion-spring-press-duration, 180ms)
+        var(--dixy-motion-spring-press, ease-out),
+      background-color 150ms;
+  }
+  .dixy-fab.dixy-button[data-size="md"] {
+    --dixy-fab-size: var(--dixy-height-md);
+  }
+  .dixy-fab.dixy-button[data-size="lg"] {
+    --dixy-fab-size: calc(var(--dixy-height-lg) * 7 / 6);
+  }
+  .dixy-fab.dixy-button[data-size="xl"] {
+    --dixy-fab-size: calc(var(--dixy-height-xl, 4.5rem) * 1.25);
+  }
+  .dixy-fab.dixy-button[data-popup-open] {
+    border-radius: 50%;
+  }
+  .dixy-fab-icon {
+    display: inline-grid;
+    place-items: center;
+    transition: rotate var(--dixy-motion-spring-press-duration, 180ms)
+      var(--dixy-motion-spring-press, ease-out);
+  }
+  .dixy-fab-icon .dixy-artwork {
+    inline-size: calc(var(--dixy-fab-size) * 0.4);
+    block-size: calc(var(--dixy-fab-size) * 0.4);
+  }
+  .dixy-fab-icon[data-open] {
+    rotate: 90deg;
+  }
+  /* The menu: no panel, just labelled pills stacked to the trailing edge. */
+  .dixy-menu-popup.dixy-fab-menu-popup {
+    display: grid;
+    justify-items: end;
+    gap: var(--dixy-space-100, 8px);
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    outline: 0;
+  }
+  .dixy-fab-menu-popup > .dixy-menu-item.dixy-fab-menu-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-space-150, 12px);
+    inline-size: max-content;
+    min-block-size: max(3.5rem, var(--dixy-interaction-target));
+    padding-inline: 1.25rem 1.5rem;
+    border-radius: 999px;
+    background: var(--dixy-color-brand-3, var(--dixy-component-subtle));
+    color: var(--dixy-color-brand-12, var(--dixy-component-text));
+    font: var(--dixy-font-label-lg);
+    box-shadow: var(--dixy-shadow-raised);
+    animation: dixy-fab-fan 260ms var(--dixy-motion-spring-press, ease-out) both;
+  }
+  .dixy-fab-menu-popup > .dixy-fab-menu-item:nth-last-child(2) {
+    animation-delay: 30ms;
+  }
+  .dixy-fab-menu-popup > .dixy-fab-menu-item:nth-last-child(3) {
+    animation-delay: 60ms;
+  }
+  .dixy-fab-menu-popup > .dixy-fab-menu-item:nth-last-child(n + 4) {
+    animation-delay: 90ms;
+  }
+  .dixy-fab-menu-popup > .dixy-fab-menu-item[data-highlighted] {
+    background: var(--dixy-color-brand-4, var(--dixy-component-subtle));
+  }
+  .dixy-fab-menu-item-icon {
+    display: inline-grid;
+    place-items: center;
+  }
+  .dixy-fab-menu-item-icon svg {
+    inline-size: var(--dixy-size-icon-md);
+    block-size: var(--dixy-size-icon-md);
+  }
+  @keyframes dixy-fab-fan {
+    from {
+      opacity: 0;
+      translate: 0 12px;
+      scale: 0.85;
+    }
+  }
+  [data-motion="reduced"] .dixy-fab-menu-item,
+  [data-motion="reduced"] .dixy-fab-icon,
+  [data-motion="reduced"] .dixy-split-button-trigger .dixy-artwork {
+    animation: none;
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dixy-fab-menu-item,
+    .dixy-fab-icon,
+    .dixy-split-button-trigger .dixy-artwork {
+      animation: none;
+      transition: none;
+    }
+  }
+
+  /* Floating toolbar: a raised pill above content. Vibrant swaps to the
+     brand container for high emphasis. */
+  .dixy-toolbar-root:is([data-variant="floating"], [data-variant="vibrant"]) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dixy-space-050, 4px);
+    max-inline-size: 100%;
+    padding: var(--dixy-space-100, 8px);
+    border: 0;
+    border-radius: 999px;
+    background: var(--dixy-color-background-surface-raised);
+    box-shadow: var(--dixy-shadow-floating);
+  }
+  .dixy-toolbar-root[data-variant="vibrant"] {
+    background: var(--dixy-color-brand-9, var(--dixy-component-fill));
+    color: var(--dixy-color-brand-on-solid, var(--dixy-component-on-fill));
+  }
+  .dixy-toolbar-root[data-variant="vibrant"]
+    .dixy-button[data-variant="ghost"] {
+    --button-text: currentColor;
+    --button-soft-hover: color-mix(in oklch, currentColor 14%, transparent);
+    --button-soft-pressed: color-mix(in oklch, currentColor 22%, transparent);
+  }
 }

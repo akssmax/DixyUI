@@ -15,6 +15,11 @@ const metadata = [
       body: "Ideas take root here, one leaf at a time.",
       primary: "Plant an idea",
       secondary: "Water later",
+      display: {
+        text: "Grow.",
+        caption: "One leaf at a time.",
+        role: "display.3xl",
+      },
     },
   },
   {
@@ -45,6 +50,11 @@ const metadata = [
       body: "Your interface, tuned and on the beat.",
       primary: "Play",
       secondary: "Queue it",
+      display: {
+        text: "128",
+        caption: "kbps, now playing.",
+        role: "display.3xl",
+      },
     },
   },
   {
@@ -60,6 +70,11 @@ const metadata = [
       body: "Precise controls with a satisfying click.",
       primary: "Power on",
       secondary: "Store preset",
+      display: {
+        text: "0042",
+        caption: "Serial number, model D-01.",
+        role: "display.3xl",
+      },
     },
   },
   {
@@ -90,6 +105,11 @@ const metadata = [
       body: "Paper, thread and a little patience.",
       primary: "Begin a piece",
       secondary: "Stitch it in",
+      display: {
+        text: "Handmade.",
+        caption: "Forty hours, one piece.",
+        role: "display.2xl",
+      },
     },
   },
   {
@@ -105,6 +125,11 @@ const metadata = [
       body: "Ideas surface from the quiet below.",
       primary: "Dive in",
       secondary: "Bring it up",
+      display: {
+        text: "Deep.",
+        caption: "Fathom 03, calm waters.",
+        role: "display.3xl",
+      },
     },
   },
   {
@@ -135,6 +160,11 @@ const metadata = [
       body: "Lacquer, brass and a touch of ceremony.",
       primary: "Enter",
       secondary: "Reserve",
+      display: {
+        text: "MCMXXV",
+        caption: "The grand salon reopens.",
+        role: "display.xl",
+      },
     },
   },
   {
@@ -240,6 +270,11 @@ const metadata = [
       body: "Leave space. Let every mark mean something.",
       primary: "Begin",
       secondary: "Pause",
+      display: {
+        text: "間",
+        caption: "Ma: the space between marks.",
+        role: "display.3xl",
+      },
     },
   },
   {

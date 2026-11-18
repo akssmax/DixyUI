@@ -80,6 +80,12 @@
       var(--dixy-skin-control-edge), var(--dixy-skin-shadow);
     --dixy-skin-thumb: linear-gradient(#ffffff, #ffffff);
     --dixy-skin-mark-opacity: 1;
+    --dixy-font-display-3xl-weight: 800;
+    --dixy-font-display-3xl-letter-spacing: -0.02em;
+    --dixy-font-display-2xl-weight: 800;
+    --dixy-font-display-2xl-letter-spacing: -0.02em;
+    --dixy-font-display-xl-weight: 800;
+    --dixy-font-display-xl-letter-spacing: -0.02em;
     --dixy-font-display-lg-weight: 800;
     --dixy-font-display-lg-letter-spacing: -0.02em;
     --dixy-font-display-md-weight: 800;

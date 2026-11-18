@@ -371,6 +371,9 @@ try {
     ["mainframe", "mainframeTheme"],
     ["dispatch", "dispatchTheme"],
     ["signal", "signalTheme"],
+    ["bloom", "bloomTheme"],
+    ["pulse", "pulseTheme"],
+    ["sorbet", "sorbetTheme"],
   ];
   for (const [slug, settings] of plainSkins) {
     fs.writeFileSync(

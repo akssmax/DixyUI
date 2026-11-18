@@ -1,0 +1,579 @@
+/*
+ * Expressive lab. Shapes are the library <Shape> (SVG, decorative, behind
+ * content), so focus rings and text are never clipped; the loader uses the
+ * library's shapePolygon() with clip-path keyframes. CSS transitions use the
+ * --xp-spring* easings from springEasing().
+ */
+
+.xp-page {
+  --xp-emph:
+    "Bricolage Grotesque Variable", var(--dixy-font-display), sans-serif;
+  min-block-size: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+
+.xp-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding: 16px;
+  border-block-end: var(--dixy-border-default);
+}
+.xp-bar > :first-child {
+  margin-inline-end: auto;
+}
+.xp-title {
+  margin: 0;
+  font: var(--dixy-font-heading-md);
+  font-family: var(--xp-emph);
+  font-weight: 750;
+}
+.xp-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.xp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 20px;
+  max-inline-size: 76rem;
+  margin-inline: auto;
+  padding: 24px 16px 64px;
+}
+.xp-wide {
+  grid-column: 1 / -1;
+}
+.xp-section {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 28px;
+  background: var(--dixy-color-background-surface);
+  border: var(--dixy-border-default);
+}
+.xp-section-head {
+  display: grid;
+  gap: 4px;
+}
+.xp-section-title {
+  margin: 0;
+  font: var(--dixy-font-heading-sm);
+}
+
+.xp-shape.dixy-shape {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* ---------- Hero ---------- */
+
+.xp-hero {
+  container-type: inline-size;
+  display: grid;
+  gap: 16px;
+  padding: clamp(20px, 4vw, 40px);
+  border-radius: 36px;
+}
+.xp-hero-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.xp-eyebrow {
+  margin: 0;
+  font: var(--dixy-font-label-md);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.xp-badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 88px;
+  block-size: 88px;
+  flex: none;
+}
+.xp-badge-shape {
+  position: absolute;
+  inset: 0;
+  color: var(--dixy-highlight-band);
+  animation: xp-spin 24s linear infinite;
+}
+.xp-badge-text {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+  color: var(--dixy-highlight-on-band);
+  font: var(--dixy-font-label-sm);
+}
+.xp-badge-text b {
+  font-family: var(--xp-emph);
+  font-size: 28px;
+  font-weight: 800;
+  font-stretch: 80%;
+}
+.xp-hero-figure {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+}
+.xp-numeral {
+  font: var(--dixy-font-display-3xl);
+  font-family: var(--xp-emph);
+  font-weight: 800;
+  font-stretch: 75%;
+  /* Condensed widths need near-zero tracking; the role's tight value collides. */
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+}
+.xp-unit {
+  font: var(--dixy-font-heading-lg);
+  font-family: var(--xp-emph);
+  font-weight: 500;
+}
+.xp-hero-sub {
+  margin: 0;
+  font: var(--dixy-font-body-lg);
+}
+.xp-hero-cta {
+  justify-self: start;
+  min-block-size: 56px;
+  padding-inline: 28px;
+}
+
+/* Connected group (M3): 2px gaps, equal widths; the choice only changes
+   shape (fully round) and shows a check. */
+.xp-connected {
+  display: flex;
+  gap: 2px;
+  inline-size: 100%;
+}
+.xp-connected .xp-connected-item {
+  flex: 1 1 0;
+  min-block-size: 56px;
+  min-inline-size: 0;
+  gap: 6px;
+  border: 0;
+  border-radius: 8px;
+  background: color-mix(
+    in oklch,
+    var(--dixy-surface-ink, currentColor) 16%,
+    transparent
+  );
+  color: inherit;
+  font: var(--dixy-font-label-lg);
+  transition:
+    border-radius var(--xp-spring-fast-ms) var(--xp-spring-fast),
+    background-color 150ms;
+}
+.xp-connected .xp-connected-item:first-child {
+  border-start-start-radius: 28px;
+  border-end-start-radius: 28px;
+}
+.xp-connected .xp-connected-item:last-child {
+  border-start-end-radius: 28px;
+  border-end-end-radius: 28px;
+}
+.xp-connected .xp-connected-item[data-pressed] {
+  border-radius: 28px;
+  background: var(--dixy-highlight-band);
+  color: var(--dixy-highlight-on-band);
+  font-weight: 700;
+}
+.xp-check {
+  display: none;
+}
+.xp-connected-item[data-pressed] .xp-check {
+  display: inline;
+}
+
+/* ---------- Shape library ---------- */
+
+.xp-library {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.xp-stage {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.xp-stage-shape {
+  aspect-ratio: 1;
+  color: var(--dixy-color-brand-9);
+}
+.xp-stage-label {
+  font: var(--dixy-font-label-md);
+  color: var(--dixy-color-text-secondary);
+}
+.xp-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  gap: 8px;
+}
+.xp-swatch {
+  display: grid;
+  aspect-ratio: 1;
+  padding: 8px;
+  border: 0;
+  border-radius: 16px;
+  background: var(--dixy-color-background-subtle);
+  color: var(--dixy-color-text-secondary);
+  cursor: pointer;
+  transition: border-radius var(--xp-spring-fast-ms) var(--xp-spring-fast);
+}
+.xp-swatch:hover {
+  border-radius: 24px;
+}
+.xp-swatch[aria-pressed="true"] {
+  background: var(--dixy-color-background-action-primary-subtle);
+  color: var(--dixy-color-brand-11);
+  border-radius: 50%;
+}
+.xp-swatch:focus-visible {
+  outline: 2px solid var(--dixy-color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ---------- Shape on press and selection ---------- */
+
+.xp-sizes,
+.xp-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+/* The library `morph` prop owns the corners; the lab only adds the
+   XS and XL sizes, by feeding the size into --dixy-morph-size. */
+.xp-morph[data-xp-size] {
+  --xp-size: 56px;
+  --dixy-morph-size: var(--xp-size);
+  inline-size: var(--xp-size);
+  block-size: var(--xp-size);
+  min-block-size: var(--xp-size);
+  padding: 0;
+}
+.xp-morph svg {
+  inline-size: calc(var(--xp-size) * 0.42);
+  block-size: calc(var(--xp-size) * 0.42);
+}
+.xp-morph[data-xp-size="xs"] {
+  --xp-size: 32px;
+}
+.xp-morph[data-xp-size="sm"] {
+  --xp-size: 40px;
+}
+.xp-morph[data-xp-size="lg"] {
+  --xp-size: 96px;
+}
+.xp-morph[data-xp-size="xl"] {
+  --xp-size: 136px;
+}
+
+/* Library shaped toggles (Toggle shapes); the lab only sets the size. */
+.xp-shape-toggle.dixy-toggle {
+  inline-size: 72px;
+  block-size: 72px;
+}
+.xp-shape-toggle svg:not(.dixy-toggle-shape) {
+  inline-size: 28px;
+  block-size: 28px;
+}
+.xp-ring-lib {
+  inline-size: 112px;
+  block-size: 112px;
+}
+
+/* ---------- Loading and progress ---------- */
+
+.xp-progress-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+}
+/* Waves fill their whole track height; give stacked bars room. */
+.xp-progress-stack {
+  display: grid;
+  gap: 16px;
+  margin-block-start: 16px;
+}
+.xp-progress-actions {
+  display: flex;
+  gap: 8px;
+}
+.xp-loader {
+  display: grid;
+  place-items: center;
+  inline-size: 72px;
+  block-size: 72px;
+  border-radius: 50%;
+  background: var(--dixy-color-background-action-primary-subtle);
+}
+.xp-loader-shape {
+  inline-size: 44px;
+  block-size: 44px;
+  background: var(--dixy-color-brand-9);
+}
+.xp-loader[data-running] .xp-loader-shape {
+  animation:
+    xp-loader 4.2s var(--xp-spring) infinite,
+    xp-spin 4.2s linear infinite;
+}
+@keyframes xp-spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+/* Library <Progress wave>; on the accent fill it takes the fill's ink. */
+.xp-wave-on-fill .dixy-progress-indicator {
+  color: var(--dixy-surface-ink);
+}
+.xp-wave-on-fill .dixy-progress-track::before {
+  background: var(--dixy-surface-ink);
+}
+.xp-wave-on-fill .dixy-progress-track::after {
+  background: color-mix(in oklch, var(--dixy-surface-ink) 35%, transparent);
+}
+
+.xp-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: 112px;
+  block-size: 112px;
+}
+.xp-ring svg {
+  position: absolute;
+  inset: 0;
+}
+.xp-ring-track,
+.xp-ring-done {
+  fill: none;
+  stroke-width: 6;
+}
+.xp-ring-track {
+  stroke: var(--dixy-color-background-action-primary-subtle);
+}
+.xp-ring-done {
+  stroke: var(--dixy-color-brand-9);
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--xp-spring-ms) var(--xp-spring);
+}
+.xp-ring-value {
+  font-family: var(--xp-emph);
+  font-size: 28px;
+  font-weight: 750;
+  font-stretch: 80%;
+  font-variant-numeric: tabular-nums;
+}
+.xp-ring-value small {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ---------- Split button, toolbar, FAB menu ---------- */
+
+.xp-split {
+  display: flex;
+  gap: 2px;
+}
+.xp-split .xp-split-main {
+  min-block-size: 56px;
+  border-radius: 28px 6px 6px 28px;
+  padding-inline: 24px 18px;
+}
+.xp-split .xp-split-trigger {
+  min-block-size: 56px;
+  inline-size: 52px;
+  padding: 0;
+  border-radius: 6px 28px 28px 6px;
+  transition: border-radius var(--xp-spring-fast-ms) var(--xp-spring-fast);
+  /* Both halves are one primary action; the menu trigger's own tint would split them. */
+  background: var(--dixy-button-primary-background);
+  color: var(--dixy-button-primary-foreground);
+}
+.xp-split .xp-split-trigger svg {
+  transition: rotate var(--xp-spring-ms) var(--xp-spring);
+}
+.xp-split .xp-split-trigger[data-popup-open] {
+  border-radius: 28px;
+}
+.xp-split .xp-split-trigger[data-popup-open] svg {
+  rotate: 180deg;
+}
+
+.xp-dock {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block-start: 8px;
+}
+.xp-floating {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-radius: 999px;
+  background: var(--dixy-color-background-surface-raised);
+  box-shadow: var(--dixy-shadow-lg);
+}
+.xp-fab-menu {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+.xp-fab-items {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* `display: grid` above would beat the hidden attribute. */
+.xp-fab-items[hidden] {
+  display: none;
+}
+.xp-fab-items li {
+  animation: xp-fan-in var(--xp-spring-ms) var(--xp-spring) both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+@keyframes xp-fan-in {
+  from {
+    opacity: 0;
+    translate: 0 12px;
+    scale: 0.8;
+  }
+}
+.xp-fab-item {
+  min-block-size: 48px;
+  border-radius: 24px;
+  padding-inline: 20px;
+}
+.xp-fab {
+  position: relative;
+  inline-size: 64px;
+  block-size: 64px;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--dixy-color-brand-on-solid);
+  overflow: visible;
+}
+.xp-fab:hover,
+.xp-fab:active {
+  background: transparent;
+}
+.xp-fab-shape {
+  position: absolute;
+  inset: 0;
+  color: var(--dixy-color-brand-9);
+}
+.xp-fab svg {
+  position: relative;
+  inline-size: 26px;
+  block-size: 26px;
+  transition: rotate var(--xp-spring-ms) var(--xp-spring);
+}
+.xp-fab[aria-expanded="true"] svg {
+  rotate: 90deg;
+}
+
+/* ---------- Emphasized type ---------- */
+
+.xp-type {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 24px 32px;
+  align-items: end;
+}
+.xp-type-pair,
+.xp-type-row {
+  display: grid;
+  gap: 4px;
+  min-inline-size: 0;
+}
+.xp-type-row {
+  grid-column: 1 / -1;
+}
+.xp-type-tag {
+  font: var(--dixy-font-label-sm);
+  color: var(--dixy-color-text-secondary);
+}
+.xp-type p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.xp-type-3xl {
+  font: var(--dixy-font-display-3xl);
+  font-family: var(--xp-emph);
+  font-weight: 800;
+  font-stretch: 78%;
+  /* Condensed widths need near-zero tracking; the role's tight value collides. */
+  letter-spacing: -0.005em;
+  font-variant-numeric: tabular-nums;
+  color: var(--dixy-color-brand-11);
+}
+.xp-type-2xl {
+  font: var(--dixy-font-display-2xl);
+  font-family: var(--xp-emph);
+  font-weight: 400;
+  letter-spacing: var(--dixy-font-display-2xl-letter-spacing);
+}
+.xp-type-xl {
+  font: var(--dixy-font-display-xl);
+  font-family: var(--xp-emph);
+  font-weight: 750;
+  font-stretch: 75%;
+  /* Condensed widths need near-zero tracking; the role's tight value collides. */
+  letter-spacing: -0.005em;
+  hyphens: auto;
+}
+.xp-type-headline {
+  font: var(--dixy-font-heading-lg);
+  font-family: var(--xp-emph);
+  font-weight: 400;
+}
+.xp-type-headline b {
+  font-weight: 800;
+  color: var(--dixy-color-brand-11);
+}
+
+/* ---------- Small screens and reduced motion ---------- */
+
+@media (max-width: 40rem) {
+  .xp-library {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .xp-stage-shape {
+    max-inline-size: 12rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xp-page *,
+  .xp-page *::before {
+    transition-duration: 0s !important;
+    animation: none !important;
+  }
+}
+.xp-page[data-motion="reduced"] * {
+  transition-duration: 0s !important;
+  animation: none !important;
+}

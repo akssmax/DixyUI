@@ -44,7 +44,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -116,7 +116,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -186,7 +186,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -272,7 +272,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -388,7 +388,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -452,7 +452,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -518,7 +518,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -668,7 +668,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -732,7 +732,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -792,7 +792,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -954,7 +954,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1068,7 +1068,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1177,7 +1177,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1237,7 +1237,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1297,7 +1297,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1357,7 +1357,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -1412,7 +1412,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1472,7 +1472,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1589,7 +1589,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1701,7 +1701,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1772,7 +1772,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1814,7 +1814,7 @@ export const baseComponentRegistry = {
       {
         name: "size",
         label: "Size",
-        options: ["sm", "md", "lg"],
+        options: ["xs", "sm", "md", "lg", "xl"],
         initial: "md",
       },
       {
@@ -1838,7 +1838,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1904,7 +1904,7 @@ export const baseComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1973,7 +1973,7 @@ export const baseComponentRegistry = {
       {
         name: "variant",
         label: "Variant",
-        options: ["plain", "outline", "soft"],
+        options: ["plain", "outline", "soft", "floating", "vibrant"],
         initial: "plain",
       },
       {

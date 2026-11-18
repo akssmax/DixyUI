@@ -20,7 +20,7 @@ const layout = readFileSync(
 );
 
 test("control contracts preserve existing sizes and targets have CSS-pixel floors", () => {
-  assert.deepEqual(sizing.control, { sm: 32, md: 40, lg: 48 });
+  assert.deepEqual(sizing.control, { xs: 28, sm: 32, md: 40, lg: 48, xl: 72 });
   assert.equal(sizing.target.minimum, 24);
   assert.equal(sizing.target.comfortable, 44);
   for (const [family, tokens] of Object.entries(sizing)) {

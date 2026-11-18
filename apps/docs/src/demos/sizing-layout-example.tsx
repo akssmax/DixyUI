@@ -77,7 +77,17 @@ export default function SizingLayoutExample({
           </Text>
           <Field.Root>
             <Field.Label>Workspace name</Field.Label>
-            <TextField size={controlSize} defaultValue="Dixy Studio" />
+            {/* Fields stop at sm–lg; xs and xl are button sizes. */}
+            <TextField
+              size={
+                controlSize === "xs"
+                  ? "sm"
+                  : controlSize === "xl"
+                    ? "lg"
+                    : controlSize
+              }
+              defaultValue="Dixy Studio"
+            />
           </Field.Root>
           <Inline gap="md">
             <Button

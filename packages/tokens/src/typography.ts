@@ -1,10 +1,17 @@
 /** Pixel references assume a 16px root. CSS output uses rem for size and leading. */
 export const fontSizePrimitives = [
-  12, 14, 16, 18, 20, 24, 28, 32, 36, 44, 56,
+  12, 14, 16, 18, 20, 24, 28, 32, 36, 44, 56, 72, 96, 128,
 ] as const;
 export const lineHeightPrimitives = [
-  16, 20, 24, 26, 28, 32, 36, 40, 44, 52, 64,
+  16, 20, 24, 26, 28, 32, 36, 40, 44, 52, 64, 72, 96, 128,
 ] as const;
+
+/**
+ * Fluid roles grow from `min` at a 320px-wide container to their full size at
+ * 1280px, using container query units (`cqi`). With no size container in the
+ * tree, `cqi` falls back to the small viewport, so they still scale on phones.
+ */
+export const fluidRange = { from: 320, to: 1280 } as const;
 export const fontWeightPrimitives = {
   regular: 400,
   medium: 500,
@@ -27,10 +34,40 @@ export interface TypographyToken {
   weight: keyof typeof fontWeightPrimitives;
   letterSpacing: number;
   description: string;
+  /** Smallest size, in px, when the role scales with its container. */
+  fluid?: { min: number };
 }
 
 /** Semantic contracts: family, size, leading, weight and tracking travel together. */
 export const typography = {
+  "display.3xl": {
+    family: "display",
+    size: 128,
+    lineHeight: 128,
+    weight: "bold",
+    letterSpacing: -0.05,
+    fluid: { min: 52 },
+    description:
+      "Poster-scale words and numerals: one or two words that are the interface.",
+  },
+  "display.2xl": {
+    family: "display",
+    size: 96,
+    lineHeight: 96,
+    weight: "bold",
+    letterSpacing: -0.045,
+    fluid: { min: 44 },
+    description: "Oversized values, selections and short statements.",
+  },
+  "display.xl": {
+    family: "display",
+    size: 72,
+    lineHeight: 72,
+    weight: "bold",
+    letterSpacing: -0.04,
+    fluid: { min: 36 },
+    description: "Large expressive lists, options and hero lines.",
+  },
   "display.lg": {
     family: "display",
     size: 56,

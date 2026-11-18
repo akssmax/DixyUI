@@ -647,6 +647,30 @@ export const materialRecipes = freezeData({
     thumb: "linear-gradient(#ffd400,#ffd400)",
     tintActions: false,
   },
+  // Expressive tonal surfaces: no drop shadows; depth comes from accent-tinted
+  // tones, so the same recipe follows each theme's own accent.
+  "tonal-surface": {
+    label: "Tonal surface",
+    baseMaterial: "soft",
+    finish: "linear-gradient(transparent,transparent)",
+    edge: "color-mix(in oklch,var(--dixy-color-brand-6) 40%,transparent)",
+    darkEdge: "color-mix(in oklch,var(--dixy-color-brand-7) 45%,transparent)",
+    shadow: "0 0 #0000",
+    inset:
+      "inset 0 0 0 1px color-mix(in oklch,var(--dixy-color-brand-7) 35%,transparent)",
+    canvas:
+      "radial-gradient(120% 70% at 50% -10%,color-mix(in oklch,var(--dixy-color-brand-4) 55%,transparent),transparent 70%)",
+    darkCanvas:
+      "radial-gradient(120% 70% at 50% -10%,color-mix(in oklch,var(--dixy-color-brand-4) 60%,transparent),transparent 70%)",
+    tint: [
+      "var(--dixy-color-brand-3)",
+      "var(--dixy-color-brand-3)",
+      "var(--dixy-color-brand-2)",
+    ],
+    grain: "linear-gradient(transparent,transparent)",
+    thumb: "linear-gradient(#ffffff,#ffffff)",
+    tintActions: false,
+  },
 } as const);
 export const frameRecipes = freezeData({
   none: {

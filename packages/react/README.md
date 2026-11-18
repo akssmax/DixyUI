@@ -191,7 +191,7 @@ Dixy adds shared semantic styling while forwarding the primitive's props, generi
 
 `Checkbox.Indicator` provides centered, decorative SVG check and mixed marks when children are omitted. Its `checkedIcon` and `indeterminateIcon` slots accept custom decorative artwork without replacing Base UI state or presence. Custom children (including explicit `null`) remain unchanged. Its `feedback` and `indicator` motion aliases use the shared 120ms feedback recipe; Base UI owns presence, and reduced motion makes changes immediate.
 
-`Switch.Root` adds `size="sm" | "md" | "lg"`, `variant="solid" | "soft" | "outline"`, and `color="accent" | "neutral" | "danger" | "success"`. Accent follows `Theme.accentColor`. `radius="none" | "sm" | "md" | "lg" | "full"` and `material="matte" | "glossy" | "soft" | "metal" | "paper"` inherit Theme when omitted. Import `materials.css` for track finishes; effects reduction removes them. Sizes change visual proportions while preserving the shared minimum interaction target.
+`Switch.Root` adds `size="sm" | "md" | "lg"`, `variant="solid" | "soft" | "outline"`, and `color="accent" | "neutral" | "danger" | "success"`. Accent follows `Theme.accentColor`. `radius="none" | "sm" | "md" | "lg" | "full"` and `material="matte" | "glossy" | "soft" | "metal" | "paper" | "bevel"` inherit Theme when omitted. Import `materials.css` for track finishes; effects reduction removes them. Sizes change visual proportions while preserving the shared minimum interaction target.
 
 ```tsx
 <label>

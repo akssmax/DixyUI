@@ -274,6 +274,12 @@ importers:
       '@tanstack/react-start':
         specifier: 1.169.1
         version: 1.169.1(esbuild@0.28.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)(rolldown@1.2.13)(rollup@4.64.6)(supports-color@10.2.2)(vite@8.3.4(@types/node@26.6.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
+      '@ui-sdk/core':
+        specifier: 0.1.0-beta.1
+        version: 0.1.0-beta.1
+      '@ui-sdk/react':
+        specifier: 0.1.0-beta.1
+        version: 0.1.0-beta.1(@types/react@19.3.0)(@ui-sdk/core@0.1.0-beta.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       dialkit:
         specifier: 2.1.0
         version: 2.1.0(motion@14.2.0(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
@@ -2014,6 +2020,20 @@ packages:
 
   '@types/use-sync-external-store@0.0.6':
     resolution: {integrity: sha512-zFDAD+tlpf2r4asuHEj0XH6pY6i0g5NeAHPn+15wk3BV6JA69eERFXC1gyGThDkVa1zCyKr5jox1+2LbV/AMLg==}
+
+  '@ui-sdk/core@0.1.0-beta.1':
+    resolution: {integrity: sha512-sWsZW8RN6Gviir7REQYuDIafm9hierHQE31OJ+2g+1Pp3lDVKp/dk0+0dxFvqOQRmBveRvlE9FiARgNlQ9dMFw==}
+
+  '@ui-sdk/react@0.1.0-beta.1':
+    resolution: {integrity: sha512-7wcUsZI+WoG2uo3N+PHrWntk97qI9ez2cUrHV9H507FiL118Pi4tuhWUCMDtWwEUCNQLybpBm1QRLkEXVOPAUg==}
+    peerDependencies:
+      '@types/react': '>=19.2.10'
+      '@ui-sdk/core': ^0.1.0-beta.1
+      react: '>=19'
+      react-dom: '>=19'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
 
   '@ungap/structured-clone@1.4.0':
     resolution: {integrity: sha512-1mEZtMKPM09vDmQt5y7YvmN2+DFTP7Tg0EWXdic8/C6VRnpb33e4ghisCIE3WZjsE2N8mf+QV1Zqh7ZFYLWInQ==}
@@ -4958,6 +4978,16 @@ snapshots:
   '@types/unist@3.0.3': {}
 
   '@types/use-sync-external-store@0.0.6': {}
+
+  '@ui-sdk/core@0.1.0-beta.1': {}
+
+  '@ui-sdk/react@0.1.0-beta.1(@types/react@19.3.0)(@ui-sdk/core@0.1.0-beta.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0)':
+    dependencies:
+      '@ui-sdk/core': 0.1.0-beta.1
+      react: 19.3.0
+      react-dom: 19.3.0(react@19.3.0)
+    optionalDependencies:
+      '@types/react': 19.3.0
 
   '@ungap/structured-clone@1.4.0': {}
 

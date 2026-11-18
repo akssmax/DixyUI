@@ -10,8 +10,8 @@ export interface SelectTriggerProps extends Omit<
   ComponentProps<typeof Primitive.Trigger>,
   "size" | "variant" | "radius" | "material"
 > {
-  /** Component proportions; preserves the shared interaction target. @default md */
-  size?: "sm" | "md" | "lg";
+  /** Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role. @default md */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Visual emphasis; behavioral state remains primitive-owned. @default outline */
   variant?: "outline" | "soft";
   /** Contextual rounding; panels cap full rounding to preserve content. @default Theme.radius */
@@ -44,8 +44,8 @@ export interface SelectPopupProps extends Omit<
   ComponentProps<typeof Primitive.Popup>,
   "size" | "variant" | "radius" | "material"
 > {
-  /** Component proportions; preserves the shared interaction target. @default md */
-  size?: "sm" | "md" | "lg";
+  /** Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role. @default md */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Visual emphasis; behavioral state remains primitive-owned. @default outline */
   variant?: "outline" | "soft";
   /** Contextual rounding; panels cap full rounding to preserve content. @default Theme.radius */

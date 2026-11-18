@@ -1,7 +1,7 @@
 import { Dialog as Primitive } from "@base-ui/react/dialog";
 import type { Material, RadiusPreset } from "@dixy-ui/tokens";
 import { useComponentVisuals } from "../utilities/component-visuals";
-import type { ComponentProps } from "react";
+import { createContext, useContext, type ComponentProps } from "react";
 import { ThemeScope, SkinOrnament } from "../theme/theme";
 import { withClassName } from "../utilities/class-name";
 
@@ -13,6 +13,18 @@ export interface DialogPopupProps extends ComponentProps<
   /** Surface emphasis. @default outline */ variant?: "outline" | "soft";
   /** Panel rounding. @default Theme.radius */ radius?: RadiusPreset;
   /** Optional static finish; import materials.css. @default Theme.material */ material?: Material;
+}
+
+// Base UI keeps `modal` in a private store, so Root shares it with Popup.
+const DialogModalContext = createContext<boolean>(true);
+
+/** Base UI Dialog.Root; shares `modal` so Popup can set `aria-modal`. */
+function Root<Payload = unknown>(props: Primitive.Root.Props<Payload>) {
+  return (
+    <DialogModalContext.Provider value={props.modal !== false}>
+      <Primitive.Root {...props} />
+    </DialogModalContext.Provider>
+  );
 }
 
 function Portal({
@@ -59,8 +71,11 @@ function Popup({
   ...props
 }: DialogPopupProps) {
   const visual = useComponentVisuals({ size, variant, radius, material });
+  // Base UI makes the page inert but never sets aria-modal (APG modal dialog).
+  const modal = useContext(DialogModalContext);
   return (
     <Primitive.Popup
+      aria-modal={modal || undefined}
       {...props}
       className={withClassName("dixy-dialog-popup", className)}
       {...visual}
@@ -97,7 +112,7 @@ function Description({
 
 // Pure wrapper: bundlers may drop the whole object when it is unused.
 export const Dialog = /* @__PURE__ */ (() => ({
-  Root: Primitive.Root,
+  Root,
   Trigger: Primitive.Trigger,
   Portal,
   Backdrop,

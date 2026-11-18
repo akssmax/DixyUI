@@ -9,7 +9,7 @@ export const retroOS = {
     neutralColor: "sand",
     radius: "none",
     density: "default",
-    material: "matte",
+    material: "bevel",
     shape: "square",
   },
 } as const satisfies SkinDefinition;
@@ -23,7 +23,7 @@ export const retroOSTheme = {
       neutralColor: "sand",
       radius: "none",
       density: "default",
-      material: "matte",
+      material: "bevel",
       shape: "square",
     },
   },
@@ -36,6 +36,10 @@ export const retroOSTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily: '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif',
     "--dixy-font-sans":

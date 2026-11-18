@@ -449,6 +449,13 @@
           "default": "'center'"
         },
         {
+          "name": "side",
+          "type": "UseAnchorPositioningSharedParameters['side'] | undefined",
+          "required": false,
+          "description": "Which side of the anchor element to align the popup against.\nMay automatically change to avoid collisions.\n\nSubmenus and vertical menubars default to `'inline-end'`.",
+          "default": "'bottom'"
+        },
+        {
           "name": "anchor",
           "type": "Element | null | VirtualElement | React.RefObject<Element | null> | (() => Element | VirtualElement | null) | undefined",
           "required": false,
@@ -461,13 +468,6 @@
           "required": false,
           "description": "Determines which CSS `position` property to use.",
           "default": "'absolute'"
-        },
-        {
-          "name": "side",
-          "type": "UseAnchorPositioningSharedParameters['side'] | undefined",
-          "required": false,
-          "description": "Which side of the anchor element to align the popup against.\nMay automatically change to avoid collisions.\n\nSubmenus and vertical menubars default to `'inline-end'`.",
-          "default": "'bottom'"
         },
         {
           "name": "sideOffset",

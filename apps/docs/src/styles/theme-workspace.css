@@ -15,6 +15,18 @@
 .theme-wall-intro .dixy-heading {
   margin: 0;
 }
+/* Large-type starter content (voice.display). Numerals keep their widths. */
+.theme-wall-display .dixy-card-content {
+  display: grid;
+  gap: 8px;
+}
+.theme-wall-display-text {
+  margin: 0;
+  color: var(--dixy-color-text-primary);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
 
 /* Three explicit column stacks, not CSS multi-column. Multi-column fragments
    anything that bleeds above a card (canvas ornaments, frames): the bleed of a

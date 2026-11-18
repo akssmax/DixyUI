@@ -109,6 +109,9 @@
       var(--dixy-skin-control-edge), var(--dixy-skin-shadow);
     --dixy-skin-thumb: linear-gradient(180deg, #2e9e4f 0 22%, #f6f7f4 22%);
     --dixy-skin-mark-opacity: 1;
+    --dixy-font-display-3xl-weight: 700;
+    --dixy-font-display-2xl-weight: 700;
+    --dixy-font-display-xl-weight: 700;
     --dixy-font-display-lg-weight: 700;
     --dixy-font-display-md-weight: 700;
     --dixy-font-display-sm-weight: 700;

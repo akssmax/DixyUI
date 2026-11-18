@@ -23,6 +23,11 @@ import {
   numeralStyles,
   scrollbarStyles,
   selectionStyles,
+  highlightStyles,
+  morphStyles,
+  progressStyles,
+  avatarShapes,
+  headingAxesStyles,
   stateStyles,
 } from "./character.ts";
 import {
@@ -104,7 +109,7 @@ const fontKeys = [
 export const themeDocumentSchema = freezeData({
   $schema: "https://json-schema.org/draft/2020-12/schema",
   ...object({
-    schemaVersion: choice([6]),
+    schemaVersion: choice([8]),
     id: {
       type: "string",
       minLength: 3,
@@ -122,7 +127,7 @@ export const themeDocumentSchema = freezeData({
       neutralColor: choice(neutralColorFamilies),
       radius: choice(keys(radiusPresets)),
       density: choice(keys(spacingDensity)),
-      material: choice(["matte", "glossy", "soft", "metal", "paper"]),
+      material: choice(["matte", "glossy", "soft", "metal", "paper", "bevel"]),
       componentFinish: choice([
         "inherit",
         "matte",
@@ -130,6 +135,7 @@ export const themeDocumentSchema = freezeData({
         "soft",
         "metal",
         "paper",
+        "bevel",
       ]),
       shape: choice(["rounded", "pill", "square"]),
       appearance: choice(["light", "dark"]),
@@ -201,12 +207,17 @@ export const themeDocumentSchema = freezeData({
         headingTracking: number("Heading tracking", -0.05, 0.2),
         headingWeight: choice(headingWeights),
         numerals: choice(numeralStyles),
+        axes: choice(headingAxesStyles),
       }),
       states: choice(stateStyles),
       details: object({
         focus: choice(focusStyles),
         divider: choice(dividerStyles),
         selection: choice(selectionStyles),
+        highlight: choice(highlightStyles),
+        morph: choice(morphStyles),
+        progress: choice(progressStyles),
+        avatar: choice(avatarShapes),
         scrollbar: choice(scrollbarStyles),
         iconStroke: number("Icon stroke", 1, 2.75),
       }),
@@ -438,7 +449,17 @@ export function parseThemeDocument(input: unknown): ThemeDocument {
       ]);
     // Version-4 character, without the version-5 chrome block.
     const { chrome: _chrome, ...v4Character } = defaultCharacter;
-    migrated.character = JSON.parse(JSON.stringify(v4Character));
+    const {
+      highlight: _highlight,
+      morph: _morph,
+      progress: _progress,
+      avatar: _avatar,
+      ...v4Details
+    } = v4Character.details;
+    const { axes: _axes, ...v4Type } = v4Character.type;
+    migrated.character = JSON.parse(
+      JSON.stringify({ ...v4Character, type: v4Type, details: v4Details }),
+    );
     migrated.schemaVersion = 4;
     value = migrated;
   }
@@ -482,6 +503,62 @@ export function parseThemeDocument(input: unknown): ThemeDocument {
       parameters.backdropSaturate = 100;
     }
     migrated.schemaVersion = 6;
+    value = migrated;
+  }
+  // V6 character had no option highlight; "tint" is the stock look and compiles to no rules.
+  if (
+    value &&
+    typeof value === "object" &&
+    Object.getOwnPropertyDescriptor(value, "schemaVersion")?.value === 6
+  ) {
+    assertData(value);
+    const migrated = JSON.parse(JSON.stringify(value));
+    const details = migrated.character?.details;
+    if (details && typeof details === "object") {
+      if (Object.hasOwn(details, "highlight"))
+        throw new ThemeDocumentError([
+          {
+            path: "$.character.details.highlight",
+            message: "Not a version-6 field.",
+          },
+        ]);
+      details.highlight = "tint";
+    }
+    migrated.schemaVersion = 7;
+    value = migrated;
+  }
+  // V7 character had no corner morph, progress style or heading axes; the
+  // defaults keep fixed corners, flat bars and plain headings.
+  if (
+    value &&
+    typeof value === "object" &&
+    Object.getOwnPropertyDescriptor(value, "schemaVersion")?.value === 7
+  ) {
+    assertData(value);
+    const migrated = JSON.parse(JSON.stringify(value));
+    const details = migrated.character?.details;
+    if (details && typeof details === "object") {
+      for (const key of ["morph", "progress", "avatar"])
+        if (Object.hasOwn(details, key))
+          throw new ThemeDocumentError([
+            {
+              path: "$.character.details." + key,
+              message: "Not a version-7 field.",
+            },
+          ]);
+      details.morph = "off";
+      details.progress = "line";
+      details.avatar = "none";
+    }
+    const type = migrated.character?.type;
+    if (type && typeof type === "object") {
+      if (Object.hasOwn(type, "axes"))
+        throw new ThemeDocumentError([
+          { path: "$.character.type.axes", message: "Not a version-7 field." },
+        ]);
+      type.axes = "none";
+    }
+    migrated.schemaVersion = 8;
     value = migrated;
   }
   const issues: ThemeDocumentIssue[] = [];

@@ -10,8 +10,8 @@ export interface MenuPopupProps extends Omit<
   ComponentProps<typeof Primitive.Popup>,
   "size" | "variant" | "radius" | "material"
 > {
-  /** Component proportions; preserves the shared interaction target. @default md */
-  size?: "sm" | "md" | "lg";
+  /** Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role. @default md */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Visual emphasis; behavioral state remains primitive-owned. @default outline */
   variant?: "outline" | "soft";
   /** Contextual rounding; panels cap full rounding to preserve content. @default Theme.radius */
@@ -44,8 +44,8 @@ export interface MenuItemProps extends Omit<
   ComponentProps<typeof Primitive.Item>,
   "size" | "color" | "radius"
 > {
-  /** Component proportions; preserves the shared interaction target. @default md */
-  size?: "sm" | "md" | "lg";
+  /** Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role. @default md */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Semantic emphasis; unselected controls remain neutral. @default accent */
   color?: "accent" | "neutral" | "danger" | "success";
   /** Contextual rounding; panels cap full rounding to preserve content. @default Theme.radius */
@@ -76,8 +76,8 @@ export interface MenuLinkItemProps extends Omit<
   ComponentProps<typeof Primitive.LinkItem>,
   "size" | "color" | "radius"
 > {
-  /** Component proportions; preserves the shared interaction target. @default md */
-  size?: "sm" | "md" | "lg";
+  /** Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role. @default md */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Semantic emphasis; unselected controls remain neutral. @default accent */
   color?: "accent" | "neutral" | "danger" | "success";
   /** Contextual rounding; panels cap full rounding to preserve content. @default Theme.radius */

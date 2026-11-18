@@ -7,6 +7,12 @@ export interface PreviewVoice {
   body: string;
   primary: string;
   secondary: string;
+  /** Large-type starter content in a fluid display role (serif and numeral starters). */
+  display?: {
+    text: string;
+    caption: string;
+    role: "display.xl" | "display.2xl" | "display.3xl";
+  };
 }
 
 export const defaultVoice: PreviewVoice = {

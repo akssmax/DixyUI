@@ -14,6 +14,11 @@ export interface BoxOwnProps {
   material?: Material;
   /** Semantic surface shape, without clipping children or focus. Inherits Theme. */
   shape?: ShapePreset;
+  /**
+   * `accent` paints the Box with the brand solid and remaps text, border,
+   * button and highlight tokens so Dixy parts inside stay legible. @default default
+   */
+  surface?: "default" | "accent";
 }
 
 export interface ContainerOwnProps {
@@ -68,6 +73,7 @@ export function Box<E extends LayoutElement = "div">({
   as,
   material,
   shape,
+  surface,
   className,
   ...props
 }: BoxProps<E>) {
@@ -80,6 +86,7 @@ export function Box<E extends LayoutElement = "div">({
       material !== undefined || theme.materialOverride ? "" : undefined,
     "data-material": material ?? theme.material,
     "data-dixy-shape": shape ?? theme.shape,
+    "data-surface": surface === "accent" ? "accent" : undefined,
   });
 }
 

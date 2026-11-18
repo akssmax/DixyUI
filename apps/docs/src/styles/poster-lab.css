@@ -1,0 +1,121 @@
+/*
+ * Poster layer prototype. Token overrides only, scoped to `.poster-layer` on
+ * a Theme root, so turning the class off returns the stock Swiss Poster skin.
+ */
+
+.poster-lab {
+  min-block-size: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+
+.poster-lab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  padding: 12px 16px;
+  border-block-end: var(--dixy-border-default);
+}
+.poster-lab-bar > :first-child {
+  margin-inline-end: auto;
+}
+.poster-lab-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.poster-lab-main {
+  display: grid;
+  gap: 32px;
+  max-inline-size: 72rem;
+  margin-inline: auto;
+  padding: 24px 16px 64px;
+}
+
+.poster-surface {
+  /* Fluid display roles measure this box (cqi), not the viewport. */
+  container-type: inline-size;
+  display: grid;
+  gap: 16px;
+  padding: clamp(20px, 4vw, 48px);
+  border: var(--dixy-border-default);
+}
+.poster-eyebrow {
+  margin: 0;
+  font: var(--dixy-font-label-md);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dixy-color-text-secondary);
+}
+.poster-display {
+  margin: 0;
+  font: var(--dixy-font-display-lg);
+  letter-spacing: var(--dixy-font-display-lg-letter-spacing);
+  overflow-wrap: anywhere;
+}
+.poster-list {
+  max-block-size: none;
+  padding: 0;
+}
+.poster-actions,
+.poster-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.poster-controls {
+  display: grid;
+  gap: 16px;
+}
+.poster-heading {
+  margin: 0;
+  font: var(--dixy-font-heading-md);
+}
+
+/* ------------------------------------------------------------------ */
+/* The layer: now library features, plus poster-only type and rules    */
+/* ------------------------------------------------------------------ */
+
+/* Fill, ink, button and option-band tokens come from <Box surface="accent">;
+   the band in popups comes from the skin's character (highlight: "band").
+   What's left here is poster styling, not plumbing. */
+.poster-layer .dixy-aria-listboxitem[data-selected]::after {
+  content: " •";
+}
+
+.poster-layer .poster-display {
+  font: var(--dixy-font-display-3xl);
+  letter-spacing: var(--dixy-font-display-3xl-letter-spacing);
+  /* Long words break at real syllables; `lang` on the element picks the rules. */
+  hyphens: auto;
+}
+
+.poster-layer .poster-surface {
+  border: 0;
+}
+.poster-layer .poster-list {
+  border: 0;
+  border-block-start: 2px solid var(--dixy-surface-ink);
+}
+.poster-layer .poster-eyebrow {
+  color: inherit;
+}
+.poster-layer .poster-list .dixy-aria-listboxitem {
+  /* Size and tracking come from size="xl"; the layer only squares the rows. */
+  border-radius: 0;
+  border-block-end: 2px solid var(--dixy-surface-ink);
+  color: var(--dixy-surface-ink);
+}
+.poster-layer .poster-list .dixy-aria-listboxitem[data-selected] {
+  color: var(--dixy-highlight-on-band);
+}
+.poster-layer .poster-list .dixy-aria-listboxitem[data-focus-visible] {
+  outline: 3px solid var(--dixy-surface-ink);
+  outline-offset: -3px;
+}
+
+.poster-where {
+  max-inline-size: 40rem;
+}

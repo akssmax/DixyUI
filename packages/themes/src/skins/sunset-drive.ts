@@ -36,6 +36,10 @@ export const sunsetDriveTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"Figtree Variable", "Figtree", ui-sans-serif, system-ui, sans-serif',

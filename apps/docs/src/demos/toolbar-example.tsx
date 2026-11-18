@@ -9,7 +9,7 @@ export default function ToolbarExample({
   disabled = false,
 }: {
   radius?: "none" | "sm" | "md" | "lg" | "full";
-  variant?: "plain" | "outline" | "soft";
+  variant?: "plain" | "outline" | "soft" | "floating" | "vibrant";
   size?: "sm" | "md" | "lg";
 
   disabled?: boolean;

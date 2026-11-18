@@ -9,7 +9,7 @@ export const ansiPanes = {
     neutralColor: "slate",
     radius: "none",
     density: "default",
-    material: "matte",
+    material: "bevel",
     shape: "square",
   },
 } as const satisfies SkinDefinition;
@@ -23,7 +23,7 @@ export const ansiPanesTheme = {
       neutralColor: "slate",
       radius: "none",
       density: "default",
-      material: "matte",
+      material: "bevel",
       shape: "square",
     },
   },
@@ -36,6 +36,10 @@ export const ansiPanesTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace',

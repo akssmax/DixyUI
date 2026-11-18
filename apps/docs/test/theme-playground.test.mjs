@@ -219,7 +219,7 @@ test("custom mixes round-trip recipes, seed colors, settings and static exports"
   assert.equal(JSON.parse(serializeThemePreset(mixed)).version, 3);
   const document = editableThemeDocument(mixed);
   const imported = parseThemePreset(exportThemeDocument(mixed));
-  assert.equal(imported.document.schemaVersion, 6);
+  assert.equal(imported.document.schemaVersion, 8);
   // Character travels with the document: the Forest starter's leaves survive a material/frame mix.
   assert.equal(imported.document.character.controls, "botanical");
   assert.equal(imported.hue, 262);

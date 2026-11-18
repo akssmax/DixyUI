@@ -1,4 +1,4 @@
-import { typography } from "@dixy-ui/tokens";
+import { expressiveShapes, shapeOutline, typography } from "@dixy-ui/tokens";
 import { chromeCSS, defaultChrome, type ThemeChrome } from "./chrome.ts";
 
 /**
@@ -54,6 +54,14 @@ export const dividerStyles = [
   "groove",
 ] as const;
 export const selectionStyles = ["accent", "inverse", "highlighter"] as const;
+/** How a highlighted or selected list option is marked: a soft accent tint, or a full-ink band. */
+export const highlightStyles = ["tint", "band"] as const;
+/** Button and toggle corners: fixed, or round at rest and squarer when pressed or selected. */
+export const morphStyles = ["off", "press"] as const;
+/** Progress indicators: a flat bar, or a travelling wave. */
+export const progressStyles = ["line", "wave"] as const;
+/** Avatar silhouette: the theme's rounding, or a shape from the expressive library. */
+export const avatarShapes = ["none", ...expressiveShapes] as const;
 export const scrollbarStyles = ["native", "thin", "accent"] as const;
 export const backdropPatterns = [
   "none",
@@ -65,8 +73,11 @@ export const backdropPatterns = [
   "dots",
   "topo",
   "halftone",
+  "shapes",
 ] as const;
 export const headingCases = ["none", "uppercase", "small-caps"] as const;
+/** Variable-font axes for headings: condensed or wide width, or Fraunces-style soft, wonky letters. */
+export const headingAxesStyles = ["none", "condensed", "wide", "soft"] as const;
 export const headingWeights = [300, 400, 500, 600, 700, 800, 900] as const;
 export const numeralStyles = ["proportional", "tabular", "oldstyle"] as const;
 
@@ -87,12 +98,17 @@ export interface ThemeCharacter {
     readonly headingTracking: number;
     readonly headingWeight: (typeof headingWeights)[number];
     readonly numerals: (typeof numeralStyles)[number];
+    readonly axes: (typeof headingAxesStyles)[number];
   };
   readonly states: StateStyle;
   readonly details: {
     readonly focus: (typeof focusStyles)[number];
     readonly divider: (typeof dividerStyles)[number];
     readonly selection: (typeof selectionStyles)[number];
+    readonly highlight: (typeof highlightStyles)[number];
+    readonly morph: (typeof morphStyles)[number];
+    readonly progress: (typeof progressStyles)[number];
+    readonly avatar: (typeof avatarShapes)[number];
     readonly scrollbar: (typeof scrollbarStyles)[number];
     readonly iconStroke: number;
   };
@@ -105,6 +121,21 @@ export interface ThemeCharacter {
   readonly chrome: ThemeChrome;
 }
 
+/**
+ * Character as starters author it: chrome is set separately, and detail fields
+ * added after a starter was written are optional (they default to neutral).
+ */
+type LateDetails = "highlight" | "morph" | "progress" | "avatar";
+export type AuthoredCharacter = Omit<
+  ThemeCharacter,
+  "chrome" | "details" | "type"
+> & {
+  readonly type: Omit<ThemeCharacter["type"], "axes"> &
+    Partial<Pick<ThemeCharacter["type"], "axes">>;
+  readonly details: Omit<ThemeCharacter["details"], LateDetails> &
+    Partial<Pick<ThemeCharacter["details"], LateDetails>>;
+};
+
 /** Neutral character: compiles to no extra rules, so migrated documents look unchanged. */
 export const defaultCharacter: ThemeCharacter = {
   controls: "standard",
@@ -114,12 +145,17 @@ export const defaultCharacter: ThemeCharacter = {
     headingTracking: 0,
     headingWeight: 600,
     numerals: "proportional",
+    axes: "none",
   },
   states: "standard",
   details: {
     focus: "ring",
     divider: "line",
     selection: "accent",
+    highlight: "tint",
+    morph: "off",
+    progress: "line",
+    avatar: "none",
     scrollbar: "native",
     iconStroke: 2,
   },
@@ -168,6 +204,7 @@ export const characterLabels = {
     dots: "Dot grid",
     topo: "Topographic",
     halftone: "Halftone",
+    shapes: "Shape library",
   },
 } as const;
 
@@ -381,21 +418,31 @@ const headingRoles = Object.keys(typography).filter(
     role.startsWith("heading.") ||
     role.startsWith("title."),
 );
+/** Expressive type axes mark an expressive theme: titles then stay plain. */
+export function titleFont(c: Pick<ThemeCharacter, "type">): "heading" | "body" {
+  return c.type.axes === "none" ? "heading" : "body";
+}
 function typeVariables(c: ThemeCharacter): string {
   const t = c.type;
+  const stretch =
+    t.axes === "condensed" ? "condensed" : t.axes === "wide" ? "expanded" : "";
   if (
     t.headingWeight === defaultCharacter.type.headingWeight &&
-    t.headingTracking === 0
+    t.headingTracking === 0 &&
+    !stretch
   )
     return "";
+  const plainTitles = titleFont(c) === "body";
   return headingRoles
     .map((role) => {
       const key = role.replaceAll(".", "-");
+      // Plain titles keep the body font's weight and width (M3 caution).
+      if (plainTitles && role.startsWith("title.")) return "";
       return `--dixy-font-${key}-weight:${t.headingWeight}; ${
         t.headingTracking
           ? `--dixy-font-${key}-letter-spacing:${t.headingTracking}em;`
           : ""
-      }`;
+      }${stretch ? `--dixy-font-${key}-stretch:${stretch};` : ""}`;
     })
     .join(" ");
 }
@@ -417,6 +464,15 @@ function typeCSS(c: ThemeCharacter, theme: string): string {
   if (t.headingWeight !== defaultCharacter.type.headingWeight)
     rules.push(
       `${theme} :is(h1,h2,h3,.dixy-heading) { font-weight:${t.headingWeight}; }`,
+    );
+  // Axes ride on the heading roles' own elements; `font` shorthands elsewhere
+  // reset font-variation-settings, so the theme rule sets both properties.
+  // Width rides in the font tokens (typeVariables). Fraunces' SOFT and WONK
+  // have no shorthand keyword, so they need a rule; a later `font:`
+  // shorthand resets it.
+  if (t.axes === "soft")
+    rules.push(
+      `${theme} :is(h1,h2,h3,h4,.dixy-heading,.dixy-card-title,[data-typography^="display."],[data-typography^="heading."]) { font-variation-settings:"SOFT" 100, "WONK" 1; }`,
     );
   if (t.numerals !== "proportional")
     rules.push(
@@ -529,6 +585,33 @@ function detailCSS(c: ThemeCharacter, S: Scope, theme: string): string {
   return rules.join("\n  ");
 }
 
+/**
+ * A 260-unit tile of three library shapes for the "shapes" backdrop, as an
+ * inline SVG mask (no request). Outlines are thinned to 40 points and
+ * rounded to whole units to keep skin CSS inside its budget.
+ */
+const shapeTile = /* @__PURE__ */ (() => {
+  const place = (
+    name: (typeof expressiveShapes)[number],
+    x: number,
+    y: number,
+    size: number,
+  ) =>
+    "M" +
+    shapeOutline(name)
+      .filter((_, i) => i % 3 === 0)
+      .map(
+        ([px, py]) =>
+          `${Math.round(x + (px * size) / 100)} ${Math.round(y + (py * size) / 100)}`,
+      )
+      .join("L") +
+    "Z";
+  const d =
+    place("cookie-9", 18, 22, 70) +
+    place("clover-4", 150, 120, 62) +
+    place("very-sunny", 40, 170, 56);
+  return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 260'%3E%3Cpath d='${d}'/%3E%3C/svg%3E")`;
+})();
 /** Gradient-only patterns: no image requests, and removed by reduced effects/contrast/transparency preferences. */
 function backdropImage(pattern: BackdropPattern, s: number): string {
   const ink = "var(--dixy-skin-pattern-ink)";
@@ -550,6 +633,8 @@ function backdropImage(pattern: BackdropPattern, s: number): string {
       return `background-image:radial-gradient(${ink} 1.2px,transparent 1.7px); background-size:${px(20)} ${px(20)};`;
     case "topo":
       return `background-image:repeating-radial-gradient(circle at 28% 36%,transparent 0 ${px(14)},${ink} ${px(14)} ${px(15)}),repeating-radial-gradient(circle at 78% 72%,transparent 0 ${px(18)},${ink} ${px(18)} ${px(19)});`;
+    case "shapes":
+      return `background-color:${ink}; -webkit-mask:${shapeTile} 0 0/${px(260)} ${px(260)} repeat; mask:${shapeTile} 0 0/${px(260)} ${px(260)} repeat;`;
     case "halftone":
       return `background-image:radial-gradient(${ink} 32%,transparent 34%); background-size:${px(10)} ${px(10)}; -webkit-mask:linear-gradient(160deg,#000,transparent 70%); mask:linear-gradient(160deg,#000,transparent 70%);`;
   }

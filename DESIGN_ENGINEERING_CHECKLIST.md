@@ -1003,3 +1003,159 @@ Recharts, dressed in Dixy, following the shadcn/ui charts approach. Evidence: do
 - [ ] Learning: explain why inside labels flip to ink in dark mode instead of staying white.
 - [ ] Learning: explain how angle domains turn a radial bar into a share of a goal.
 - [ ] Learning: explain why `light-dark()` works here and what it depends on (`color-scheme` per Theme).
+
+## UI SDK pattern audit — 2026-11-15
+
+Ran `checkPattern` from `@ui-sdk/core/testing` (0.1.0-beta.1, scratch install, not a dependency) against 14 rendered components. Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] Dialog and AlertDialog popups set `aria-modal="true"` when modal.
+- [x] Toolbar handles Home/End; inputs keep caret behavior; consumer `preventDefault` wins.
+- [x] 13 of 14 patterns pass; RadioGroup fails only on the checker counting Base UI's hidden `aria-hidden` input as a radio.
+- [x] Real-browser sweep of 52 docs pages; every failure re-checked with real keys and classified (BUILD_LOG 2026-11-15).
+- [ ] Add `aria-modal="true"` to DatePicker and DateRangePicker calendar popovers.
+- [ ] Name the Select popup and Command listboxes (`aria-labelledby` to the field label).
+- [ ] Decide whether to add `@ui-sdk/core` as a dev dependency for a permanent conformance suite.
+- [ ] Report the RadioGroup false positive to vercel-labs/ui.
+- [ ] Screen-reader check that `aria-modal` changes nothing unwanted in VoiceOver/NVDA.
+- [ ] Learning: explain why Base UI relies on inertness while the APG asks for `aria-modal` too.
+
+## UI SDK × Dixy test bench (`/uisdk-test`) — 2026-11-15
+
+A classic media player built from Dixy components, with UI SDK Tree, Rating, Toggle and shortcuts. Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] Route outside the docs shell; UI SDK is a docs-only dependency.
+- [x] Live `checkPattern` panel (10 checks); every failure classified with real keys.
+- [x] UI SDK shortcuts pause in Dixy dialogs, menus, listboxes and trees (`when` guard), verified with X.
+- [x] Shortcut help lists all 7 shortcuts from `shortcuts.list()`.
+- [x] Dark mode, 4 skins, 3 finishes, windowshade and 375px checked; marquee respects reduced motion.
+- [ ] Visualizer reduced-motion check with the pane visible, and a real OS setting.
+- [ ] Decide whether Dixy dialogs should register with UI SDK's layer stack, or whether UI SDK should treat any `aria-modal` as blocking (raise upstream).
+- [ ] Report to vercel-labs/ui: Rating fails its own radio-group check; Tree hydration `aria-level` mismatch.
+- [ ] Screen-reader pass of the player (LCD time button, now-playing status, tree).
+- [ ] Learning: explain why `shortcuts.list()` is empty inside a modal and why the guard sits in `when`.
+- [ ] Learning: explain why a page shortcut must step aside for typeahead in menus and listboxes.
+
+## Poster layer prototype (`/lab/poster`) — 2026-11-15
+
+Token overrides on top of the Swiss Poster skin: a fluid display size, an accent-filled surface and an inverse highlight band. Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] Layer reaches portalled Menu and Select popups (tokens through Theme `style`).
+- [x] AA contrast measured in light and dark; dark fill keeps a dark band (8.04:1).
+- [x] 375px: display text on one line, no horizontal scroll; ListBox focus ring visible on the fill.
+- [ ] Decide: should Theme forward `className` to the portal scope, or should layers always travel through `style`?
+- [ ] Decide: route item highlight through one token (`--dixy-color-background-selected`) instead of per-component `--dixy-component-subtle`.
+- [ ] Graduate to skin options (`type.displayScale`, `details.highlight: tint | band`, `surface: accent`) and run the theme audit.
+- [ ] Check in Firefox/Safari, with forced colours and a screen reader.
+- [ ] Learning: explain why a red band fails AA at 14px but an inverse band passes in both modes.
+
+## Fluid poster display roles — 2026-11-15
+
+`display.xl/2xl/3xl` (36–72, 44–96 and 52–128px), container-relative, with unitless leading. Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] Contract-driven: roles and fluid ranges in `typography.ts`, CSS generated; skins regenerated.
+- [x] 375px, about 678px and 1440px measured against the formula; no horizontal overflow.
+- [x] Foundation page lists the new roles with their fluid ranges.
+- [ ] `pnpm package:check` once the local pnpm store can install offline.
+- [ ] Should component sizes (`size="xl"` on ListBox, Select and Combobox items) map to these roles, so poster-size options don't need custom CSS?
+- [ ] Firefox/Safari and RTL check of `cqi` sizes.
+- [ ] Learning: explain why fluid font sizes need unitless line-height in the `font` shorthand.
+- [ ] Learning: explain `cqi` versus `vw`, and what happens with no size container.
+
+## Expressive `size="xl"` — 2026-11-15
+
+ListBox, Select, Menu and Combobox options at the fluid display.xl role. Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] One shared rule; parts opt in per prop; buttons and fields stay sm/md/lg.
+- [x] Tracking resolves per element; grouped Combobox input takes the display font at xl only.
+- [x] Keyboard (filter, ArrowDown, Escape) and 375px checked in the browser; 4 unit tests.
+- [ ] Extend to Autocomplete and TagGroup (the video's pill tags), or decide they stay lg.
+- [ ] `pnpm package:check` with a working offline store.
+- [ ] Learning: explain why `letter-spacing` in em must be declared where the font size is, not inherited.
+
+## Bevel material and the Winamp Modern skin — 2026-11-15
+
+Evidence: docs/BUILD_LOG.md, 2026-11-15 (bevel material, Winamp Modern).
+
+- [x] `bevel` material with raised, pressed (inverted) and well edges; generator supports optional state edges.
+- [x] Bevel wired through themes schema, validation, docs options and API metadata; contract test added.
+- [x] `/uisdk-test` audited twice (Winamp 2 Classic, Winamp 5 Modern); Modern skin built from the skin source palette.
+- [x] Selection contrast raised from 2.76:1 to 5.17:1; focus rings verified on round controls.
+- [ ] Re-run `pnpm package:check` once `.pnpm-store` has the missing tarballs (`pnpm fetch` online).
+- [ ] Visual pass of `bevel` on the docs component pages and `/lab/theme-audit`; forced-colors check.
+- [ ] Decide whether the Retro OS skin should move from matte to bevel.
+- [ ] Decide whether the Modern controls (round rimmed buttons, trays, LED ovals) should become a Dixy theme or chrome option.
+- [ ] Learning: explain why bevel inverts edges for pressed and sunken parts instead of adding shadow.
+- [ ] Learning: explain why the skin's own selection colour was changed for contrast.
+
+## Interface experiments (`/ui-sdk-exp`) — 2026-11-15
+
+Eight tiles pairing Dixy parts and tokens with UI SDK behaviors (SegmentedControl, PasswordInput, TokenInput). Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] Each tile is its own Theme and size container; popups match the tile.
+- [x] Keyboard checked on every interactive tile; dark page and 375px checked; contrast measured.
+- [ ] Decide: should `ListBox.Item` forward `aria-description`, or document visually hidden text?
+- [ ] Add the reel's remaining ideas: a Gantt chart on UI SDK `timeline`, an image cropper, a segmented CRT name input.
+- [ ] Screen-reader pass on TokenInput and SegmentedControl.
+- [ ] Learning: explain why the tile's Theme, not the page's, has to wrap a portalled popup.
+
+## Option highlight band, accent surface and theme groups — 2026-11-15
+
+`Theme highlight`, `Box surface="accent"`, `character.details.highlight` (schema v7), bevel for retro starters, and large-type `voice.display`. Evidence: docs/BUILD_LOG.md, 2026-11-15.
+
+- [x] Band reaches portalled popups through the portal scope's data attribute; one token read before per-item tints.
+- [x] Six band skins audited (38/38 clean, new `option-selected` role); light/dark contrast measured; 375px display card checked.
+- [x] Skin CSS budget kept: highlight compiles to a Theme prop, not CSS.
+- [ ] Decide: promote Modern as an original silver/bevel starter, not a copy of the Winamp skin.
+- [ ] Use `Box surface="accent"` in a band skin demo beyond `/lab/poster`, and check it on other skins.
+- [ ] Reduced-motion and screen-reader pass on band highlights.
+- [ ] Learning: explain why a Theme prop beat compiled skin CSS for the band.
+- [ ] Learning: explain why the accent surface remaps tokens instead of raising selector specificity.
+
+## Expressive lab (`/lab/expressive`) — 2026-11-18
+
+Material 3 Expressive ideas mocked with Dixy parts: morphing shape library, press and selection shape change, connected groups that grow, wavy progress, morphing loader, split button, FAB menu, emphasized type. Evidence: docs/BUILD_LOG.md, 2026-11-18.
+
+- [x] Shapes share one 96-point outline so CSS can morph them; shapes never clip content or focus.
+- [x] Dixy springs converted to CSS `linear()` easings; reduced motion removes animation and morphs.
+- [x] Keyboard checked on the split button and FAB menu; dark at 375px checked; contrast measured.
+- [ ] Decide which ideas become library features (shape tokens, `shape` morph on Button/Toggle, wavy Progress, loader, split button).
+- [ ] Focus rings that follow a shape (outline currently stays rectangular).
+- [ ] Screen-reader pass on the loader and wavy progress.
+- [ ] Learning: explain why every shape needs the same vertex count to morph in CSS.
+- [ ] Learning: explain how a spring becomes a `linear()` easing, and what it loses (no velocity carry-over on interruption).
+
+## Expressive shape library — 2026-11-18
+
+35 rounded-polygon shapes in tokens, `Shape` morphing in react. Evidence: docs/BUILD_LOG.md, 2026-11-18.
+
+- [x] Shared fillets, even arc-length sampling, common start and winding, so any pair morphs.
+- [x] Morph rides the Theme spring; reduced motion switches instantly.
+- [ ] Review the 35 shapes' art direction with fresh eyes (cookie depth, ghostish, puffy).
+- [ ] Decide on press/selection shape props for Button and Toggle.
+- [ ] Check Safari fallback (no CSS `d`).
+- [ ] Learning: explain why corner fillets must share an edge instead of each taking half.
+
+## Press morph, wavy progress and expressive themes — 2026-11-18
+
+Evidence: docs/BUILD_LOG.md, 2026-11-18.
+
+- [x] `morph` on Button/IconButton/Toggle, with Theme default, spring easing, group exclusions and reduced motion.
+- [x] `wave` on Progress.Root, with Theme default and a still wave under reduced motion; progressbar semantics unchanged.
+- [x] Schema v8 (morph, progress, heading axes) with migration tests.
+- [x] Bloom, Pulse and Sorbet starters; theme audit 41/41 clean.
+- [ ] Watch press morph live and on touch; check Safari.
+- [x] Wavy ProgressCircle, shape-morphing loader, connected groups, shaped avatars and shapes backdrop in the expressive themes.
+- [x] Fix Fernpay stat figures overflowing near 870px (all themes): container-sized figures plus two-across below 46rem; 0 overflows across 41 themes × 6 widths.
+- [ ] Learning: explain why a width keyword inside the font shorthand survives where font-variation-settings does not.
+
+## M3 Expressive rules and components — 2026-11-18
+
+Evidence: docs/BUILD_LOG.md, 2026-11-18 ("M3 Expressive rules and the missing lab components").
+
+- [x] Connected groups change shape only (equal segments, full container width); separate groups under morph are M3 standard groups.
+- [x] Button, IconButton and Toggle `xs`/`xl`; `Toggle shapes` for shape-backed icon toggles.
+- [x] Wave stop indicator, low-value dot and an indeterminate wave; Spinner `contained`/`delay`; ProgressCircle `showValue`.
+- [x] `SplitButton`, `FabMenu` and Toolbar `floating`/`vibrant`, built on Base UI Menu and Toolbar.
+- [x] Expressive themes keep titles on the body font; theme audit checks fonts, stop indicators and connected widths (41/41 clean, negative test fires all three).
+- [ ] Check split button, FAB menu and shaped toggles with a screen reader, on touch and in Safari.
+- [ ] Learning: explain why the FAB menu is a Menu and not a disclosure, and what that changes for keyboard users.

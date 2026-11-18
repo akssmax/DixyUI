@@ -8,11 +8,12 @@ import {
   Text,
   Theme as ShapeScope,
 } from "@dixy-ui/react";
-import type { DecorativeShape, ShapePreset } from "@dixy-ui/tokens";
+import type { ShapePreset } from "@dixy-ui/tokens";
+import type { ShapeKind } from "@dixy-ui/react";
 
 interface ShapeExampleProps {
   geometry?: ShapePreset;
-  silhouette?: DecorativeShape;
+  silhouette?: ShapeKind;
   rtl?: boolean;
 }
 export default function ShapeExample({

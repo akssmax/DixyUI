@@ -9,11 +9,12 @@ import type {
   ShapePreset,
   Personality,
   MotionScheme,
+  ExpressiveShape,
   SkinDefinition,
   OrnamentLevel,
   SkinRelief,
 } from "@dixy-ui/tokens";
-import { personalityPresets } from "@dixy-ui/tokens";
+import { personalityPresets, springEasing } from "@dixy-ui/tokens";
 import {
   DirectionProvider,
   useDirection,
@@ -36,6 +37,13 @@ export interface SkinOrnamentProps {
   animate: boolean;
 }
 export type SkinOrnamentRenderer = ComponentType<SkinOrnamentProps>;
+export type ThemeHighlight = "tint" | "band";
+/** Button and Toggle corners: fixed, or round at rest and squarer when pressed or selected. */
+export type ThemeMorph = "off" | "press";
+/** Progress indicators: flat bars and spinners, or waves, wavy rings and a shape-morphing loader. */
+export type ThemeProgress = "line" | "wave";
+/** Avatar silhouette: the Theme's own rounding, or a shape from the expressive shape library. */
+export type ThemeAvatarShape = "none" | ExpressiveShape;
 
 export interface ThemeProps extends Omit<ComponentProps<"div">, "color"> {
   /** Optional independently imported skin. Undefined inherits; null clears. */
@@ -48,6 +56,17 @@ export interface ThemeProps extends Omit<ComponentProps<"div">, "color"> {
   ornament?: OrnamentLevel;
   /** Surface relief; zero keeps borders and removes decorative depth. @default 1 */
   relief?: SkinRelief;
+  /**
+   * How list options mark the highlighted or selected row: a soft accent
+   * tint, or a full-ink band. Popups inherit it. @default tint
+   */
+  highlight?: ThemeHighlight;
+  /** Default `morph` for Buttons and Toggles inside; each can still opt out. @default off */
+  morph?: ThemeMorph;
+  /** Default `wave` for Progress inside; each can still opt out. @default line */
+  progress?: ThemeProgress;
+  /** Clip Avatars to a library shape such as "cookie-9". @default none */
+  avatarShape?: ThemeAvatarShape;
   /** Default finish for supported controls and Box. Import materials.css. @default matte */
   material?: Material;
   /** Optional rendering policy. Ancestor reduction always wins. @default static */
@@ -89,6 +108,10 @@ type ThemeSettings = Required<
   ornamentRenderer: SkinOrnamentRenderer | null;
   ornament: OrnamentLevel;
   relief: SkinRelief;
+  highlight: ThemeHighlight;
+  morph: ThemeMorph;
+  progress: ThemeProgress;
+  avatarShape: ThemeAvatarShape;
   materialOverride: boolean;
   personality?: Personality;
   motionScheme: MotionScheme;
@@ -101,6 +124,10 @@ const ThemeContext = createContext<ThemeSettings>({
   animateOrnaments: false,
   ornament: "balanced",
   relief: 1,
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   materialOverride: false,
   appearance: "light",
   density: "default",
@@ -124,6 +151,10 @@ export function Theme({
   animateOrnaments,
   ornament,
   relief,
+  highlight,
+  morph,
+  progress,
+  avatarShape,
   density,
   motion,
   appearance,
@@ -172,6 +203,10 @@ export function Theme({
         : ornamentRenderer,
     ornament: ornament ?? parent.ornament,
     relief: relief ?? parent.relief,
+    highlight: highlight ?? parent.highlight,
+    morph: morph ?? parent.morph,
+    progress: progress ?? parent.progress,
+    avatarShape: avatarShape ?? parent.avatarShape,
     materialOverride:
       material !== undefined ||
       (skin === undefined && foundation.materialOverride),
@@ -187,7 +222,11 @@ export function Theme({
       parent.effects === "reduced" ? "reduced" : (effects ?? parent.effects),
     personality: personality ?? parent.personality,
     motionScheme: preset?.motionScheme ?? parent.motionScheme,
-    style: { ...parent.style, ...tokenOverrides },
+    style: {
+      ...parent.style,
+      ...springVars(preset?.motionScheme ?? parent.motionScheme),
+      ...tokenOverrides,
+    },
   };
 
   return (
@@ -200,6 +239,7 @@ export function Theme({
           data-dixy-skin={settings.skin?.id ?? "none"}
           data-ornament={settings.ornament}
           data-relief={settings.relief}
+          data-highlight={settings.highlight}
           data-appearance={settings.appearance}
           data-accent={settings.accentColor}
           data-neutral={settings.neutralColor}
@@ -220,6 +260,21 @@ export function Theme({
   );
 }
 
+/** The fast spatial spring as CSS, for press and selection shape changes. */
+const springCache = new Map<MotionScheme, CSSProperties>();
+function springVars(scheme: MotionScheme): CSSProperties {
+  let vars = springCache.get(scheme);
+  if (!vars) {
+    const { easing, duration } = springEasing(scheme, "spatial", "fast");
+    vars = {
+      "--dixy-motion-spring-press": easing,
+      "--dixy-motion-spring-press-duration": `${duration}ms`,
+    } as CSSProperties;
+    springCache.set(scheme, vars);
+  }
+  return vars;
+}
+
 /** Reapply the nearest theme to overlays portaled outside its DOM subtree. */
 export function ThemeScope({ children }: { children: React.ReactNode }) {
   const settings = useThemeSettings();
@@ -230,6 +285,7 @@ export function ThemeScope({ children }: { children: React.ReactNode }) {
       data-dixy-skin={settings.skin?.id ?? "none"}
       data-ornament={settings.ornament}
       data-relief={settings.relief}
+      data-highlight={settings.highlight}
       dir={direction}
       data-appearance={settings.appearance}
       data-accent={settings.accentColor}

@@ -32,6 +32,8 @@ function AlertDialogPopupVisual({
   );
   return (
     <Primitive.Popup
+      // Alert dialogs are always modal; Base UI omits aria-modal.
+      aria-modal
       {...props}
       {...visual}
       className={withClassName("dixy-alert-dialog-popup", className)}

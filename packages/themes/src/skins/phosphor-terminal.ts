@@ -36,6 +36,10 @@ export const phosphorTerminalTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily: '"VT323", "Share Tech Mono", ui-monospace, monospace',
     "--dixy-font-sans": '"VT323", "Share Tech Mono", ui-monospace, monospace',

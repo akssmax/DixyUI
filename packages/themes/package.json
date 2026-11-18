@@ -369,7 +369,22 @@
       "types": "./dist/skins/signal.d.ts",
       "import": "./dist/skins/signal.js"
     },
-    "./signal.css": "./dist/signal.css"
+    "./signal.css": "./dist/signal.css",
+    "./bloom": {
+      "types": "./dist/skins/bloom.d.ts",
+      "import": "./dist/skins/bloom.js"
+    },
+    "./bloom.css": "./dist/bloom.css",
+    "./pulse": {
+      "types": "./dist/skins/pulse.d.ts",
+      "import": "./dist/skins/pulse.js"
+    },
+    "./pulse.css": "./dist/pulse.css",
+    "./sorbet": {
+      "types": "./dist/skins/sorbet.d.ts",
+      "import": "./dist/skins/sorbet.js"
+    },
+    "./sorbet.css": "./dist/sorbet.css"
   },
   "scripts": {
     "build": "node ../../scripts/generate-skins.mjs && tsc && node ../../scripts/generate-skins.mjs --dist",

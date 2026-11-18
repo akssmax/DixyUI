@@ -103,6 +103,9 @@
       var(--dixy-skin-control-edge), var(--dixy-skin-shadow);
     --dixy-skin-thumb: radial-gradient(circle at 35% 30%, #f4dca0, #b98b3e 70%);
     --dixy-skin-mark-opacity: 1;
+    --dixy-font-display-3xl-weight: 500;
+    --dixy-font-display-2xl-weight: 500;
+    --dixy-font-display-xl-weight: 500;
     --dixy-font-display-lg-weight: 500;
     --dixy-font-display-md-weight: 500;
     --dixy-font-display-sm-weight: 500;
