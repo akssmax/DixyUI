@@ -3,6 +3,10 @@ export {
   type ThemeProps,
   type SkinOrnamentProps,
   type SkinOrnamentRenderer,
+  type ThemeHighlight,
+  type ThemeMorph,
+  type ThemeProgress,
+  type ThemeAvatarShape,
 } from "./theme/theme";
 export {
   Container,
@@ -20,6 +24,17 @@ export {
   type ButtonProps,
   type IconButtonProps,
 } from "./components/button";
+export {
+  SplitButton,
+  type SplitButtonRootProps,
+  type SplitButtonActionProps,
+  type SplitButtonMenuProps,
+} from "./components/split-button";
+export {
+  FabMenu,
+  type FabMenuRootProps,
+  type FabMenuItemProps,
+} from "./components/fab-menu";
 export {
   Text,
   Heading,
@@ -117,7 +132,7 @@ export type * from "@base-ui/react/dialog";
 export type * from "@base-ui/react/direction-provider";
 export type * from "@base-ui/react/csp-provider";
 export { componentMotion } from "./tokens/component-motion";
-export { Shape, type ShapeProps } from "./components/shape";
+export { Shape, type ShapeProps, type ShapeKind } from "./components/shape";
 
 export * from "./components/content";
 export * from "./components/basic-controls";

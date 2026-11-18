@@ -69,6 +69,36 @@ export const materialRecipes = {
       blend: "normal, screen",
     },
   },
+  bevel: {
+    label: "Bevel",
+    finish: "chiselled",
+    texture: "none",
+    // The bevel is the depth; a drop shadow would blur its hard edges.
+    depth: "none",
+    // Classic desktop chrome: a light top-left edge and a dark bottom-right
+    // edge. Pressed controls and sunken wells (fields, lists, tracks) swap them.
+    image: "linear-gradient(180deg, rgb(255 255 255 / .14), rgb(0 0 0 / .06))",
+    edge: "inset 1px 1px 0 rgb(255 255 255 / .8), inset -1px -1px 0 rgb(0 0 0 / .38)",
+    blend: "normal",
+    pressedImage:
+      "linear-gradient(180deg, rgb(0 0 0 / .08), rgb(255 255 255 / .06))",
+    pressedEdge:
+      "inset 1px 1px 0 rgb(0 0 0 / .38), inset -1px -1px 0 rgb(255 255 255 / .7)",
+    wellEdge:
+      "inset 1px 1px 0 rgb(0 0 0 / .3), inset -1px -1px 0 rgb(255 255 255 / .85)",
+    dark: {
+      image:
+        "linear-gradient(180deg, rgb(255 255 255 / .07), rgb(0 0 0 / .14))",
+      edge: "inset 1px 1px 0 rgb(255 255 255 / .2), inset -1px -1px 0 rgb(0 0 0 / .65)",
+      blend: "normal",
+      pressedImage:
+        "linear-gradient(180deg, rgb(0 0 0 / .18), rgb(255 255 255 / .03))",
+      pressedEdge:
+        "inset 1px 1px 0 rgb(0 0 0 / .65), inset -1px -1px 0 rgb(255 255 255 / .16)",
+      wellEdge:
+        "inset 1px 1px 0 rgb(0 0 0 / .7), inset -1px -1px 0 rgb(255 255 255 / .12)",
+    },
+  },
 } as const satisfies Record<
   string,
   {
@@ -79,7 +109,20 @@ export const materialRecipes = {
     image: string;
     edge: string;
     blend: string;
-    dark?: { image: string; edge: string; blend: string };
+    /** Finish for a control while pressed or holding an open popup. */
+    pressedImage?: string;
+    /** Edge for a control while pressed or holding an open popup. */
+    pressedEdge?: string;
+    /** Edge for sunken wells: fields, lists, checkbox boxes and slider tracks. */
+    wellEdge?: string;
+    dark?: {
+      image: string;
+      edge: string;
+      blend: string;
+      pressedImage?: string;
+      pressedEdge?: string;
+      wellEdge?: string;
+    };
   }
 >;
 

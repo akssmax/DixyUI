@@ -6,6 +6,7 @@ import {
   materialRecipes,
   shapePresets,
   shapePaths,
+  expressiveShapes,
   personalityPresets,
   feedbackEvents,
 } from "@dixy-ui/tokens";
@@ -51,7 +52,7 @@ const configurations = {
     defaults: { geometry: "pill", silhouette: "flower", rtl: false },
     controls: {
       geometry: Object.keys(shapePresets),
-      silhouette: Object.keys(shapePaths),
+      silhouette: [...Object.keys(shapePaths), ...expressiveShapes],
     },
   },
   emotion: {

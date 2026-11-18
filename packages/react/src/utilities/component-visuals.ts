@@ -5,8 +5,12 @@ import { useThemeSettings } from "../theme/theme";
 export type VisualColor =
   "accent" | "neutral" | "danger" | "success" | "warning" | "info";
 
+/** Control sizes; `xs` and `xl` are expressive sizes, offered by Toggle and list-like parts (lists draw `xl` in display type). */
+export type ComponentSize = "sm" | "md" | "lg";
+export type ExpressiveSize = "xs" | ComponentSize | "xl";
+
 type VisualSettings = {
-  size?: "sm" | "md" | "lg";
+  size?: ExpressiveSize;
   variant?: string;
   color?: VisualColor;
   radius?: RadiusPreset;

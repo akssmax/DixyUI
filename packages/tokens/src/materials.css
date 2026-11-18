@@ -4,11 +4,13 @@
     --dixy-material-matte-image: none;
     --dixy-material-matte-edge: none;
     --dixy-material-matte-blend: normal;
+
     --dixy-material-glossy-image:
       linear-gradient(180deg, rgb(255 255 255 / 0.2), transparent 6px),
       linear-gradient(180deg, transparent 40%, rgb(0 0 0 / 0.06));
     --dixy-material-glossy-edge: inset 0 1px 0 rgb(255 255 255 / 0.25);
     --dixy-material-glossy-blend: normal;
+
     --dixy-material-soft-image:
       radial-gradient(
         120% 90% at 30% 0%,
@@ -19,6 +21,7 @@
     --dixy-material-soft-edge:
       inset 0 2px 1px rgb(255 255 255 / 0.4), inset 0 -3px 5px rgb(0 0 0 / 0.14);
     --dixy-material-soft-blend: normal;
+
     --dixy-material-metal-image:
       repeating-linear-gradient(
         0deg,
@@ -40,6 +43,7 @@
     --dixy-material-metal-edge:
       inset 0 1px 0 rgb(255 255 255 / 0.65), inset 0 -1px 0 rgb(0 0 0 / 0.22);
     --dixy-material-metal-blend: normal, multiply;
+
     --dixy-material-paper-image:
       repeating-linear-gradient(
         72deg,
@@ -53,6 +57,27 @@
       linear-gradient(160deg, rgb(253 250 242), rgb(245 238 222));
     --dixy-material-paper-edge: inset 0 0 0 1px rgb(120 90 40 / 0.08);
     --dixy-material-paper-blend: normal, multiply;
+
+    --dixy-material-bevel-image: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.14),
+      rgb(0 0 0 / 0.06)
+    );
+    --dixy-material-bevel-edge:
+      inset 1px 1px 0 rgb(255 255 255 / 0.8),
+      inset -1px -1px 0 rgb(0 0 0 / 0.38);
+    --dixy-material-bevel-blend: normal;
+    --dixy-material-bevel-pressed-image: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.08),
+      rgb(255 255 255 / 0.06)
+    );
+    --dixy-material-bevel-pressed-edge:
+      inset 1px 1px 0 rgb(0 0 0 / 0.38),
+      inset -1px -1px 0 rgb(255 255 255 / 0.7);
+    --dixy-material-bevel-well-edge:
+      inset 1px 1px 0 rgb(0 0 0 / 0.3),
+      inset -1px -1px 0 rgb(255 255 255 / 0.85);
   }
   [data-appearance="light"] {
     --dixy-material-metal-image:
@@ -129,5 +154,49 @@
       linear-gradient(160deg, rgb(40 34 24), rgb(24 20 13));
     --dixy-material-paper-edge: inset 0 0 0 1px rgb(255 236 200 / 0.07);
     --dixy-material-paper-blend: normal, screen;
+  }
+  [data-appearance="light"] {
+    --dixy-material-bevel-image: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.14),
+      rgb(0 0 0 / 0.06)
+    );
+    --dixy-material-bevel-edge:
+      inset 1px 1px 0 rgb(255 255 255 / 0.8),
+      inset -1px -1px 0 rgb(0 0 0 / 0.38);
+    --dixy-material-bevel-blend: normal;
+    --dixy-material-bevel-pressed-image: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.08),
+      rgb(255 255 255 / 0.06)
+    );
+    --dixy-material-bevel-pressed-edge:
+      inset 1px 1px 0 rgb(0 0 0 / 0.38),
+      inset -1px -1px 0 rgb(255 255 255 / 0.7);
+    --dixy-material-bevel-well-edge:
+      inset 1px 1px 0 rgb(0 0 0 / 0.3),
+      inset -1px -1px 0 rgb(255 255 255 / 0.85);
+  }
+  [data-appearance="dark"] {
+    --dixy-material-bevel-image: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.07),
+      rgb(0 0 0 / 0.14)
+    );
+    --dixy-material-bevel-edge:
+      inset 1px 1px 0 rgb(255 255 255 / 0.2),
+      inset -1px -1px 0 rgb(0 0 0 / 0.65);
+    --dixy-material-bevel-blend: normal;
+    --dixy-material-bevel-pressed-image: linear-gradient(
+      180deg,
+      rgb(0 0 0 / 0.18),
+      rgb(255 255 255 / 0.03)
+    );
+    --dixy-material-bevel-pressed-edge:
+      inset 1px 1px 0 rgb(0 0 0 / 0.65),
+      inset -1px -1px 0 rgb(255 255 255 / 0.16);
+    --dixy-material-bevel-well-edge:
+      inset 1px 1px 0 rgb(0 0 0 / 0.7),
+      inset -1px -1px 0 rgb(255 255 255 / 0.12);
   }
 }

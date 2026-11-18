@@ -39,6 +39,8 @@ export const componentIndex = {
   "toolbar": { title: "Toolbar", category: "Navigation" },
   "field": { title: "Field", category: "Forms" },
   "button-group": { title: "Button Group", category: "Actions" },
+  "split-button": { title: "Split Button", category: "Actions" },
+  "fab-menu": { title: "FAB Menu", category: "Actions" },
   "avatar-group": { title: "Avatar Group", category: "Data display" },
   "card": { title: "Card", category: "Data display" },
   "alert": { title: "Alert", category: "Feedback" },

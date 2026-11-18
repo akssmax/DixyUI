@@ -49,6 +49,7 @@ import {
   numeralStyles,
   scrollbarStyles,
   selectionStyles,
+  highlightStyles,
   stateStyles,
 } from "@dixy-ui/themes/authoring";
 
@@ -544,6 +545,12 @@ export function ThemeRecipeMixer({
             "selection",
             "Text selection",
             selectionStyles,
+          )}
+          {characterSelect(
+            "details",
+            "highlight",
+            "Option highlight",
+            highlightStyles,
           )}
           {characterSelect(
             "details",

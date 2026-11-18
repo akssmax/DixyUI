@@ -16,7 +16,7 @@ fork.id = "example/grove";
 fork.foundations.radius = "none";
 fork.foundations.relief = 0;
 const compiled = compileThemeDocument(JSON.stringify(fork));
-assert.equal(schema.properties.schemaVersion.enum[0], 6);
+assert.equal(schema.properties.schemaVersion.enum[0], 8);
 assert.ok(schema.properties.character, "schema publishes theme character");
 assert.match(compiled.css, /border-radius:60% 4% 60% 4%/);
 assert.deepEqual(parseThemeDocument(compiled.document), fork);

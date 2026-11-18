@@ -1,0 +1,557 @@
+/*
+ * /ui-sdk-exp — interface experiments. Each tile is a Theme with its own
+ * appearance and accent; colours come from that tile's tokens, so Dixy parts
+ * and their portalled popups match it. Decorative shapes are the exception.
+ */
+
+.exp-page {
+  min-block-size: 100dvh;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+  padding: 0 16px 64px;
+}
+
+.exp-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px 32px;
+  max-inline-size: 84rem;
+  margin: 0 auto;
+  padding-block: 40px 28px;
+}
+.exp-title {
+  margin: 0 0 8px;
+  font: var(--dixy-font-display-xl);
+  letter-spacing: var(--dixy-font-display-xl-letter-spacing);
+}
+.exp-lede {
+  max-inline-size: 46ch;
+}
+.exp-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.exp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 24px;
+  max-inline-size: 84rem;
+  margin: 0 auto;
+}
+
+.exp-tile {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  min-inline-size: 0;
+}
+.exp-stage {
+  /* Fluid display roles measure the tile, not the window. */
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+  min-block-size: 26rem;
+  padding: clamp(20px, 6cqi, 36px);
+  overflow: hidden;
+  background: var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+.exp-caption {
+  display: grid;
+  gap: 2px;
+  font: var(--dixy-font-label-md);
+}
+.exp-caption-title {
+  font-weight: var(--dixy-font-weight-strong);
+}
+.exp-caption-libs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+  color: var(--dixy-color-text-secondary);
+  font: var(--dixy-font-label-sm);
+}
+.exp-caption-libs b {
+  font-weight: var(--dixy-font-weight-strong);
+  color: var(--dixy-color-text-primary);
+}
+
+/* 1. Where to? ----------------------------------------------------- */
+.exp-stage-where {
+  background: var(--dixy-color-brand-3);
+  justify-content: start;
+}
+.exp-where-eyebrow {
+  margin: 0;
+  font: var(--dixy-font-title-lg);
+  color: var(--dixy-color-brand-11);
+}
+.exp-stage-where .exp-where-group {
+  border: 0;
+  border-block-end: 3px solid var(--dixy-color-brand-12);
+  background: transparent;
+  padding-inline: 0;
+  --dixy-font-display-xl: var(--dixy-font-display-3xl);
+  --dixy-font-display-xl-size: var(--dixy-font-display-3xl-size);
+}
+.exp-stage-where .exp-where-input {
+  color: var(--dixy-color-brand-12);
+  caret-color: var(--dixy-color-brand-9);
+}
+.exp-stage-where .exp-where-input::placeholder {
+  color: color-mix(in oklab, var(--dixy-color-brand-12) 30%, transparent);
+}
+.exp-where-popup {
+  min-inline-size: var(--anchor-width);
+}
+.exp-where-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font: var(--dixy-font-title-lg);
+}
+.exp-where-country {
+  font: var(--dixy-font-label-md);
+  color: var(--dixy-color-text-secondary);
+}
+.exp-where-item[data-highlighted] .exp-where-country {
+  color: inherit;
+}
+
+/* 2. Playback speed ------------------------------------------------ */
+.exp-stage-speed {
+  background: var(--dixy-color-base-1);
+}
+.exp-speed-eyebrow {
+  margin: 0;
+  font: var(--dixy-font-label-md);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dixy-color-text-secondary);
+}
+.exp-stage-speed .exp-speed {
+  position: relative;
+  display: grid;
+  background: none;
+}
+.exp-speed-item {
+  all: unset;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 2px;
+  cursor: pointer;
+  color: var(--dixy-color-base-8);
+  border-block-end: 1px solid var(--dixy-color-border-subtle);
+  transition: color var(--dixy-motion-duration-fast, 120ms);
+}
+.exp-speed-num {
+  font-family: "Bricolage Grotesque Variable", var(--dixy-font-display);
+  font-size: var(--dixy-font-display-2xl-size);
+  font-weight: 700;
+  font-stretch: 75%;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.exp-speed-hint {
+  font: var(--dixy-font-label-sm);
+  color: var(--dixy-color-text-tertiary);
+}
+.exp-speed-item[data-checked] {
+  color: var(--dixy-color-brand-9);
+}
+.exp-speed-item[data-checked]::before {
+  content: "";
+  position: absolute;
+  inset-inline-start: -14px;
+  inset-block-start: 50%;
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.exp-speed-item:focus-visible {
+  outline: 2px solid var(--dixy-color-brand-9);
+  outline-offset: 2px;
+}
+.exp-speed-indicator {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(
+    var(--segmented-control-indicator-top, 0px) +
+      var(--segmented-control-indicator-height, 0px) - 3px
+  );
+  block-size: 3px;
+  background: var(--dixy-color-brand-9);
+  transition: inset-block-start var(--dixy-motion-duration-moderate, 200ms)
+    var(--dixy-motion-easing-standard, ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .exp-speed-indicator {
+    transition: none;
+  }
+}
+
+/* 3. Menubar ------------------------------------------------------- */
+.exp-stage-menubar {
+  background: var(--dixy-color-brand-2);
+  justify-content: start;
+}
+.exp-shapes > span {
+  position: absolute;
+  display: block;
+}
+.exp-shape-circle {
+  inset-inline-end: -12%;
+  inset-block-end: -14%;
+  inline-size: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #d8553a;
+}
+.exp-shape-tri {
+  inset-inline-start: 8%;
+  inset-block-start: 40%;
+  inline-size: 40%;
+  aspect-ratio: 1;
+  background: #ecb72e;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.exp-shape-sq {
+  inset-inline-start: 34%;
+  inset-block-end: 6%;
+  inline-size: 26%;
+  aspect-ratio: 1;
+  background: #2a4fa8;
+  rotate: -12deg;
+}
+.exp-stage-menubar .exp-menubar {
+  position: relative;
+  z-index: 1;
+  align-self: start;
+  border: 3px solid var(--dixy-color-base-12);
+  background: var(--dixy-color-base-1);
+  box-shadow: 6px 6px 0 var(--dixy-color-base-12);
+  padding: 4px;
+  gap: 2px;
+}
+.exp-menubar-trigger {
+  font-family: "Bricolage Grotesque Variable", var(--dixy-font-sans);
+  font-size: clamp(1.125rem, 0.6rem + 3cqi, 1.75rem);
+  font-weight: 600;
+  padding-inline: 12px;
+  min-block-size: 48px;
+}
+.exp-menubar-trigger[data-popup-open] {
+  background: var(--dixy-color-brand-9);
+  color: var(--dixy-color-brand-on-solid);
+}
+.exp-menubar-popup {
+  border: 3px solid var(--dixy-color-base-12);
+  box-shadow: 6px 6px 0 var(--dixy-color-base-12);
+  min-inline-size: 15rem;
+  padding: 6px;
+}
+.exp-menubar-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  font-family: "Bricolage Grotesque Variable", var(--dixy-font-sans);
+  font-size: 1.25rem;
+  min-block-size: 44px;
+}
+.exp-menubar-kbd {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: inherit;
+  opacity: 0.7;
+}
+
+/* 4. Grind --------------------------------------------------------- */
+.exp-stage-grind {
+  background: linear-gradient(
+    180deg,
+    var(--dixy-color-base-2),
+    var(--dixy-color-base-4)
+  );
+}
+.exp-grind-readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.exp-grind-num {
+  font-family: "Manrope Variable", var(--dixy-font-sans);
+  font-size: var(--dixy-font-display-3xl-size);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--dixy-color-brand-10);
+  font-variant-numeric: tabular-nums;
+}
+.exp-grind-method {
+  font: var(--dixy-font-title-lg);
+}
+.exp-stage-grind .exp-grind {
+  background: none;
+}
+.exp-grind-track {
+  /* A ruler: a tick every unit, a tall tick every five. */
+  background:
+    repeating-linear-gradient(
+        90deg,
+        var(--dixy-color-base-9) 0 1px,
+        transparent 1px calc(100% / 29)
+      )
+      top / 100% 10px no-repeat,
+    var(--dixy-color-base-6);
+}
+.exp-grind-scale {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: var(--dixy-font-label-md);
+  color: var(--dixy-color-text-secondary);
+}
+.exp-grind-scale [data-active] {
+  color: var(--dixy-color-text-primary);
+  box-shadow: inset 0 -2px var(--dixy-color-brand-9);
+}
+
+/* 5. Newsletters --------------------------------------------------- */
+.exp-stage-news {
+  background: var(--dixy-color-base-1);
+}
+.exp-stage-news .exp-news {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+.exp-news-legend {
+  margin-block-end: 12px;
+  padding: 0;
+  font: var(--dixy-font-label-sm);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--dixy-color-text-secondary);
+}
+.exp-news-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  padding-block: 6px;
+  padding-inline-start: 12px;
+  border-block-end: 1px solid var(--dixy-color-border-subtle);
+  box-shadow: inset 3px 0 transparent;
+  cursor: pointer;
+}
+.exp-news-row:has([data-checked]) {
+  box-shadow: inset 3px 0 var(--dixy-color-brand-9);
+}
+.exp-news-name {
+  font-family: "Fraunces Variable", Georgia, serif;
+  font-size: clamp(1.5rem, 1rem + 3cqi, 2.25rem);
+  line-height: 1.15;
+  color: var(--dixy-color-text-secondary);
+}
+.exp-news-row:has([data-checked]) .exp-news-name {
+  font-style: italic;
+  color: var(--dixy-color-text-primary);
+}
+.exp-news-when {
+  font-family: "IBM Plex Mono", var(--dixy-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dixy-color-text-secondary);
+}
+
+/* 6. Password ------------------------------------------------------ */
+.exp-stage-pass {
+  background: var(--dixy-color-brand-9);
+  color: var(--dixy-color-brand-on-solid);
+}
+.exp-pass-label {
+  font: var(--dixy-font-title-lg);
+}
+.exp-stage-pass .exp-pass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-block-end: 3px solid currentColor;
+  padding-block-end: 6px;
+}
+/* Scoped: the docs reset `input:not(.dixy-input)` would otherwise win. */
+.exp-stage-pass .exp-pass-control {
+  all: unset;
+  flex: 1;
+  min-inline-size: 0;
+  font-family: "Fredoka Variable", var(--dixy-font-sans);
+  font-size: clamp(1.75rem, 1rem + 4cqi, 2.75rem);
+  letter-spacing: 0.08em;
+  color: inherit;
+  caret-color: currentColor;
+}
+.exp-stage-pass .exp-pass-control:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 6px;
+}
+.exp-pass-toggle {
+  all: unset;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  cursor: pointer;
+  color: inherit;
+}
+.exp-pass-toggle:focus-visible {
+  outline: 2px solid currentColor;
+}
+.exp-pass-toggle .exp-pass-eye-off,
+.exp-pass-toggle[aria-pressed="true"] .exp-pass-eye {
+  display: none;
+}
+.exp-pass-toggle[aria-pressed="true"] .exp-pass-eye-off {
+  display: inline-flex;
+}
+.exp-pass-meter {
+  --dixy-component-fill: var(--dixy-color-brand-on-solid);
+}
+.exp-pass-meter :is(.dixy-meter-track) {
+  background: color-mix(in oklab, currentColor 25%, transparent);
+}
+.exp-pass-hint {
+  margin: 0;
+  font: var(--dixy-font-body-sm);
+}
+
+/* 7. Label maker --------------------------------------------------- */
+.exp-stage-labels {
+  background: var(--dixy-color-brand-4);
+  justify-content: start;
+}
+.exp-labels-hint {
+  margin: 0;
+  font: var(--dixy-font-body-sm);
+  color: var(--dixy-color-text-secondary);
+}
+.exp-labels-editor {
+  min-block-size: 10rem;
+  outline: none;
+  font-family: "JetBrains Mono", var(--dixy-font-mono);
+  font-size: clamp(1.25rem, 0.8rem + 3cqi, 2rem);
+  font-weight: 700;
+  line-height: 1.9;
+  text-transform: uppercase;
+  color: var(--dixy-color-text-primary);
+  caret-color: var(--dixy-color-brand-9);
+}
+.exp-labels-editor:focus-visible {
+  box-shadow: 0 0 0 2px var(--dixy-color-brand-9);
+}
+.exp-labels-editor[data-empty]::before {
+  content: attr(data-placeholder);
+  color: var(--dixy-color-text-tertiary);
+}
+.exp-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-inline-end: 0.35em;
+  padding: 0.1em 0.45em 0.1em 0.55em;
+  background: var(--dixy-color-base-1);
+  color: var(--dixy-color-base-12);
+  letter-spacing: 0.14em;
+  line-height: 1.3;
+  /* Embossed tape: a lit top edge and a cut, dashed tail. */
+  box-shadow:
+    inset 0 1px color-mix(in oklab, white 18%, transparent),
+    inset -6px 0 0 -4px var(--dixy-color-base-1),
+    0 2px 0 color-mix(in oklab, black 40%, transparent);
+  border-inline-end: 2px dashed var(--dixy-color-base-6);
+}
+.exp-label[data-selected] {
+  outline: 2px solid var(--dixy-color-brand-9);
+}
+.exp-label-remove {
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 0.8em;
+}
+.exp-label-remove:hover {
+  opacity: 1;
+}
+
+/* 8. Departures ---------------------------------------------------- */
+.exp-stage-transit {
+  background: var(--dixy-color-brand-9);
+  color: var(--dixy-color-brand-on-solid);
+}
+.exp-stage-transit .exp-transit {
+  background: none;
+  border: 0;
+  padding: 0;
+  max-block-size: none;
+  --dixy-font-display-xl:
+    400 var(--dixy-font-display-2xl-size) / 1 "Archivo Black",
+    var(--dixy-font-display);
+  --dixy-component-height: calc(var(--dixy-font-display-2xl-size) + 18px);
+}
+.exp-transit-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 0;
+  border-block-end: 3px solid currentColor;
+  color: var(--dixy-color-brand-on-solid);
+  text-transform: uppercase;
+  padding-inline-start: 28px;
+}
+.exp-transit-item[data-selected]::after {
+  content: none;
+}
+.exp-transit-item[data-selected] {
+  background: var(--dixy-color-base-12);
+  color: var(--dixy-color-base-1);
+}
+.exp-transit-platform {
+  position: absolute;
+  inset-inline-start: 4px;
+  inset-block-start: 8px;
+  font-family: var(--dixy-font-sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+.exp-transit-item[data-focus-visible] {
+  outline: 3px solid currentColor;
+  outline-offset: -3px;
+}
+
+.exp-sr {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

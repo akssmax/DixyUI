@@ -40,6 +40,9 @@ import { ledger } from "@dixy-ui/themes/ledger";
 import { mainframe } from "@dixy-ui/themes/mainframe";
 import { dispatch } from "@dixy-ui/themes/dispatch";
 import { signal } from "@dixy-ui/themes/signal";
+import { bloom } from "@dixy-ui/themes/bloom";
+import { pulse } from "@dixy-ui/themes/pulse";
+import { sorbet } from "@dixy-ui/themes/sorbet";
 export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/living-forest": livingForest,
   "dixy/retro-os": retroOS,
@@ -79,6 +82,9 @@ export const skinDefinitions: Readonly<Record<string, SkinDefinition>> = {
   "dixy/mainframe": mainframe,
   "dixy/dispatch": dispatch,
   "dixy/signal": signal,
+  "dixy/bloom": bloom,
+  "dixy/pulse": pulse,
+  "dixy/sorbet": sorbet,
 };
 export const ornamentRenderers: Record<
   string,
@@ -232,4 +238,7 @@ export const skinCSSLoaders: Readonly<
   "dixy/mainframe": () => import("@dixy-ui/themes/mainframe.css?inline"),
   "dixy/dispatch": () => import("@dixy-ui/themes/dispatch.css?inline"),
   "dixy/signal": () => import("@dixy-ui/themes/signal.css?inline"),
+  "dixy/bloom": () => import("@dixy-ui/themes/bloom.css?inline"),
+  "dixy/pulse": () => import("@dixy-ui/themes/pulse.css?inline"),
+  "dixy/sorbet": () => import("@dixy-ui/themes/sorbet.css?inline"),
 };

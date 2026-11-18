@@ -5,6 +5,7 @@ import type { ComponentProps } from "react";
 import { withClassName } from "../utilities/class-name";
 import type { Material, ShapePreset } from "@dixy-ui/tokens";
 import { useThemeSettings } from "../theme/theme";
+import { ShapeLoader } from "./shape-loader";
 
 export interface ButtonProps extends Omit<
   ComponentProps<typeof Primitive>,
@@ -14,14 +15,16 @@ export interface ButtonProps extends Omit<
   material?: Material;
   /** Geometry independent of emphasis. Inherits Theme; focus remains outside. */
   shape?: ShapePreset;
-  /** The height and horizontal padding. @default md */
-  size?: "sm" | "md" | "lg";
+  /** The height and horizontal padding. `xs` and `xl` are the expressive ends of the M3 scale: dense rows and hero actions. @default md */
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   /** The visual emphasis. @default solid */
   variant?: "solid" | "soft" | "outline" | "ghost";
   /** The semantic color palette. @default accent */
   color?: "accent" | "neutral" | "danger" | "success";
   /** Show progress and prevent repeated activation. @default false */
   loading?: boolean;
+  /** Expressive shape: fully round at rest, squarer while pressed, on the Theme's spring. Overrides `shape` rounding. @default Theme.morph */
+  morph?: boolean;
 }
 
 export function Button({
@@ -34,6 +37,7 @@ export function Button({
   children,
   material,
   shape,
+  morph,
   ...props
 }: ButtonProps) {
   const theme = useThemeSettings();
@@ -60,8 +64,14 @@ export function Button({
       data-color={color}
       data-material={material ?? group?.material ?? theme.material}
       data-dixy-shape={shape ?? theme.shape}
+      data-morph={(morph ?? theme.morph === "press") ? "" : undefined}
     >
-      {loading && <span className="dixy-spinner" aria-hidden="true" />}
+      {loading &&
+        (theme.progress === "wave" ? (
+          <ShapeLoader />
+        ) : (
+          <span className="dixy-spinner" aria-hidden="true" />
+        ))}
       {children}
     </Primitive>
   );

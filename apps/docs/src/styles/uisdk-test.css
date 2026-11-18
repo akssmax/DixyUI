@@ -1,0 +1,1722 @@
+/* UI SDK × Dixy test bench. Everything reads Dixy tokens, so skins (accent),
+   finishes (material) and light/dark flow through. */
+
+.uisdk-app {
+  min-height: 100dvh;
+  background:
+    radial-gradient(
+      120% 80% at 50% 0%,
+      color-mix(
+        in oklch,
+        var(--dixy-color-background-action-primary) 14%,
+        transparent
+      ),
+      transparent 60%
+    ),
+    var(--dixy-color-background-canvas);
+  color: var(--dixy-color-text-primary);
+}
+
+.uisdk-bench {
+  margin-inline: auto;
+  max-width: 72rem;
+  padding: clamp(16px, 4vw, 40px) 16px 64px;
+  display: grid;
+  gap: var(--dixy-spacing-stack-lg);
+}
+
+.uisdk-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--dixy-spacing-inline-md);
+}
+.uisdk-header p {
+  max-width: 60ch;
+}
+
+.uisdk-layout {
+  display: grid;
+  gap: var(--dixy-spacing-stack-lg);
+  align-items: start;
+}
+@media (min-width: 960px) {
+  .uisdk-layout {
+    grid-template-columns: minmax(0, 34rem) minmax(0, 1fr);
+  }
+}
+
+.uisdk-windows {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  --uisdk-lcd-bg: color-mix(
+    in oklch,
+    var(--dixy-color-background-action-primary) 7%,
+    oklch(0.1 0 0)
+  );
+  --uisdk-lcd-ink: color-mix(
+    in oklch,
+    var(--dixy-color-background-action-primary) 80%,
+    white
+  );
+}
+
+/* ---------- Window chrome ---------- */
+
+.uisdk-window {
+  /* Classic chrome: a black outline, then two steps of hard bevel. No blur. */
+  --uisdk-face: color-mix(
+    in oklch,
+    var(--dixy-color-background-action-primary) 5%,
+    var(--dixy-color-background-surface-raised)
+  );
+  --uisdk-hi: color-mix(in oklch, white 75%, transparent);
+  --uisdk-hi-2: color-mix(in oklch, white 30%, transparent);
+  --uisdk-lo: color-mix(in oklch, black 40%, transparent);
+  --uisdk-lo-2: color-mix(in oklch, black 16%, transparent);
+  border: 1px solid color-mix(in oklch, black 75%, var(--uisdk-face));
+  border-radius: 2px;
+  background: var(--uisdk-face);
+  box-shadow:
+    inset 1px 1px 0 var(--uisdk-hi),
+    inset -1px -1px 0 var(--uisdk-lo),
+    inset 2px 2px 0 var(--uisdk-hi-2),
+    inset -2px -2px 0 var(--uisdk-lo-2),
+    0 2px 0 color-mix(in oklch, black 25%, transparent);
+  padding: 4px 6px 8px;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.uisdk-windows[data-appearance="dark"] .uisdk-window,
+.uisdk-app[data-appearance="dark"] .uisdk-window {
+  --uisdk-hi: color-mix(in oklch, white 22%, transparent);
+  --uisdk-hi-2: color-mix(in oklch, white 8%, transparent);
+  --uisdk-lo: color-mix(in oklch, black 70%, transparent);
+  --uisdk-lo-2: color-mix(in oklch, black 35%, transparent);
+}
+
+/* A sunken panel: dark edge on top, light edge below. */
+.uisdk-well {
+  border-radius: 0;
+  box-shadow:
+    inset 1px 1px 0 color-mix(in oklch, black 75%, transparent),
+    inset -1px -1px 0 color-mix(in oklch, white 22%, transparent);
+}
+
+.uisdk-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: var(--dixy-color-text-secondary);
+}
+.uisdk-title {
+  font-family: "VT323", var(--dixy-font-mono, ui-monospace), monospace;
+  font-size: 17px;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.uisdk-main .uisdk-title {
+  letter-spacing: 0.32em;
+  color: var(--uisdk-ridge);
+}
+/* Engraved ridges: a lit line over a shadow line, repeated. */
+.uisdk-grip {
+  --uisdk-ridge: color-mix(
+    in oklch,
+    var(--dixy-color-text-action-primary) 55%,
+    oklch(0.84 0.12 85)
+  );
+  flex: 1;
+  min-width: 12px;
+  height: 9px;
+  background: repeating-linear-gradient(
+    180deg,
+    var(--uisdk-ridge) 0 1px,
+    color-mix(in oklch, black 55%, transparent) 1px 2px,
+    transparent 2px 3px
+  );
+  opacity: 0.75;
+}
+.uisdk-main {
+  --uisdk-ridge: color-mix(
+    in oklch,
+    var(--dixy-color-text-action-primary) 55%,
+    oklch(0.84 0.12 85)
+  );
+}
+.uisdk-titlebar-button {
+  margin-inline-start: 2px;
+}
+
+.uisdk-menubar {
+  justify-self: start;
+  max-width: 100%;
+  overflow-x: auto;
+}
+.uisdk-menu {
+  min-width: 13rem;
+}
+.uisdk-menu-kbd {
+  margin-inline-start: auto;
+  padding-inline-start: var(--dixy-spacing-inline-md);
+}
+
+/* ---------- LCD ---------- */
+
+.uisdk-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.uisdk-lcd {
+  /* The classic display is black with a lit accent ink. */
+  --uisdk-lcd-bg: color-mix(
+    in oklch,
+    var(--dixy-color-background-action-primary) 7%,
+    oklch(0.1 0 0)
+  );
+  --uisdk-lcd-ink: color-mix(
+    in oklch,
+    var(--dixy-color-background-action-primary) 80%,
+    white
+  );
+  --uisdk-lcd-dim: color-mix(in oklch, var(--uisdk-lcd-ink) 28%, transparent);
+  --uisdk-lcd-warm: oklch(0.88 0.17 100);
+  --uisdk-lcd-hot: oklch(0.66 0.21 32);
+  --uisdk-lcd-peak: oklch(0.82 0 0);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "time info vis"
+    "marquee marquee marquee";
+  gap: 6px 12px;
+  align-items: center;
+  padding: 8px 10px 6px;
+  border-radius: 0;
+  background: var(--uisdk-lcd-bg);
+  box-shadow:
+    inset 1px 1px 0 black,
+    inset -1px -1px 0 color-mix(in oklch, white 25%, transparent);
+  color: var(--uisdk-lcd-ink);
+  font-family: "VT323", var(--dixy-font-mono, ui-monospace), monospace;
+  text-shadow: 0 0 3px
+    color-mix(in oklch, var(--uisdk-lcd-ink) 45%, transparent);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.uisdk-lcd-left {
+  grid-area: time;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.uisdk-lcd-state {
+  font-size: 18px;
+  width: 1.4em;
+  text-align: center;
+}
+/* Docs reset `button:not([class*="dixy-"])` is (0,1,1); match it and win on order. */
+.uisdk-lcd button.uisdk-lcd-time {
+  all: unset;
+  cursor: pointer;
+  font-size: clamp(38px, 9vw, 52px);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  min-width: 3.2ch;
+  border-radius: 4px;
+}
+.uisdk-lcd button.uisdk-lcd-time:focus-visible {
+  outline: var(--dixy-focus-ring-width, 2px) solid var(--uisdk-lcd-ink);
+  outline-offset: 2px;
+}
+
+.uisdk-lcd-info {
+  grid-area: info;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 2px 6px;
+  justify-content: start;
+  align-items: center;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  min-width: 0;
+}
+.uisdk-lcd-label {
+  opacity: 0.85;
+}
+.uisdk-lcd .uisdk-lcd-badge {
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1;
+  min-height: 0;
+  padding: 1px 5px;
+  border-radius: 0;
+  background: black;
+  color: var(--uisdk-lcd-ink);
+  box-shadow:
+    inset 1px 1px 0 color-mix(in oklch, white 8%, transparent),
+    0 0 0 1px var(--uisdk-lcd-dim);
+}
+.uisdk-lcd-mode {
+  color: var(--uisdk-lcd-dim);
+  text-shadow: none;
+}
+.uisdk-lcd-mode[data-on] {
+  color: var(--uisdk-lcd-ink);
+  text-shadow: inherit;
+}
+
+.uisdk-vis {
+  grid-area: vis;
+  display: block;
+  width: 152px;
+  height: 40px;
+  border-bottom: 1px dotted var(--uisdk-lcd-dim);
+}
+
+.uisdk-lcd-marquee {
+  grid-area: marquee;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 22px;
+  letter-spacing: 0.12em;
+  padding: 2px 6px;
+  background: black;
+  box-shadow:
+    inset 1px 1px 0 color-mix(in oklch, black 80%, transparent),
+    0 0 0 1px var(--uisdk-lcd-dim);
+}
+.uisdk-lcd-marquee > [aria-hidden] {
+  display: inline-block;
+  text-transform: uppercase;
+}
+.uisdk-lcd-marquee[data-scrolling] > [aria-hidden] {
+  animation: uisdk-marquee 18s linear infinite;
+}
+@keyframes uisdk-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .uisdk-lcd-marquee[data-scrolling] > [aria-hidden] {
+    animation: none;
+  }
+}
+
+.uisdk-side {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+}
+.uisdk-led-toggle[data-pressed]::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-end: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dixy-color-background-action-primary);
+  box-shadow: 0 0 6px var(--dixy-color-background-action-primary);
+}
+.uisdk-led-toggle {
+  position: relative;
+}
+
+/* ---------- Controls ---------- */
+
+/* Classic slider: a sunken groove and a wide, square, bevelled block. */
+.uisdk-seek,
+.uisdk-volume,
+.uisdk-balance {
+  --dixy-track-size: 6px;
+}
+:is(.uisdk-seek, .uisdk-volume, .uisdk-balance) .dixy-slider-track {
+  border-radius: 0;
+}
+.uisdk-seek {
+  /* The wide block is centred on the value; keep it inside the window at 0:00. */
+  padding-inline: 13px;
+}
+.uisdk-seek .dixy-slider-thumb::before {
+  inline-size: 26px;
+  block-size: 12px;
+  border-radius: 1px;
+  background-color: var(--uisdk-face);
+}
+:is(.uisdk-volume, .uisdk-balance) .dixy-slider-thumb::before {
+  inline-size: 14px;
+  block-size: 12px;
+  border-radius: 1px;
+  background-color: var(--uisdk-face);
+}
+.uisdk-seek .dixy-slider-indicator {
+  background: transparent;
+}
+/* Volume runs green to yellow to red with the level, like the original. */
+.uisdk-volume .dixy-slider-indicator {
+  background-color: color-mix(
+    in oklch,
+    oklch(0.62 0.2 30) calc(var(--uisdk-level, 0.7) * 100%),
+    oklch(0.72 0.19 145)
+  );
+}
+.uisdk-balance .dixy-slider-track {
+  background-image: linear-gradient(
+    90deg,
+    transparent calc(50% - 1px),
+    var(--dixy-color-border-strong) calc(50% - 1px) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
+}
+
+.uisdk-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+/* Packed like the original transport strip; each button keeps its bevel. */
+.uisdk-transport {
+  gap: 1px;
+}
+.uisdk-transport .dixy-icon-button {
+  border-radius: 1px;
+}
+.uisdk-mixer {
+  display: grid;
+  grid-template-columns: auto minmax(5rem, 1fr) minmax(3.5rem, 0.6fr);
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+.uisdk-windows-toggles {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+}
+.uisdk-windows-toggles .dixy-toggle {
+  font: var(--dixy-font-label-sm);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  min-width: 2.6rem;
+  border-radius: 1px;
+}
+
+/* ---------- Windowshade ---------- */
+
+.uisdk-shade {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 6px;
+  border-radius: 0;
+  background: var(--uisdk-lcd-bg);
+  color: var(--uisdk-lcd-ink);
+  box-shadow:
+    inset 1px 1px 0 black,
+    inset -1px -1px 0 color-mix(in oklch, white 25%, transparent);
+  font-family: "VT323", monospace;
+  font-size: 20px;
+}
+.uisdk-shade-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+.uisdk-shade .dixy-icon-button {
+  color: inherit;
+}
+
+/* ---------- Playlist ---------- */
+
+.uisdk-playlist {
+  max-height: 15rem;
+  overflow: auto;
+  border-radius: 0;
+  background: var(--uisdk-lcd-bg);
+  color: var(--uisdk-lcd-ink);
+  font-family: var(--dixy-font-mono, ui-monospace), monospace;
+  box-shadow:
+    inset 1px 1px 0 black,
+    inset -1px -1px 0 color-mix(in oklch, white 25%, transparent);
+}
+.uisdk-playlist [role="option"] {
+  border-radius: 0;
+  color: inherit;
+}
+.uisdk-playlist [role="option"][aria-selected="true"] {
+  background: color-mix(
+    in oklch,
+    var(--dixy-color-background-action-primary) 45%,
+    oklch(0.25 0.12 265)
+  );
+}
+.uisdk-playlist [role="option"][data-focus-visible] {
+  outline: 2px dotted var(--uisdk-lcd-ink);
+  outline-offset: -2px;
+}
+.uisdk-playlist [role="option"] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.uisdk-pl-row {
+  display: grid;
+  grid-template-columns: 2.2ch minmax(0, 1fr) auto;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+  font-variant-numeric: tabular-nums;
+}
+.uisdk-pl-row[data-current] {
+  color: white;
+}
+.uisdk-pl-index,
+.uisdk-pl-time {
+  opacity: 0.85;
+}
+.uisdk-pl-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.uisdk-pl-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* ---------- Media library: UI SDK parts in Dixy tokens ---------- */
+
+.uisdk-ml {
+  display: grid;
+  gap: 8px;
+}
+.uisdk-ml-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+/* The SDK owns aria-pressed and data-pressed; Dixy owns the look. */
+.uisdk-sdk-toggle[data-pressed] {
+  background: var(--dixy-color-background-action-primary-subtle);
+  border-color: var(--dixy-color-border-focus);
+  color: var(--dixy-color-text-action-primary);
+}
+
+.uisdk-tree {
+  border: var(
+    --dixy-border-default,
+    1px solid var(--dixy-color-border-default)
+  );
+  border-radius: var(--dixy-radius-control);
+  background: var(--dixy-color-background-surface);
+  padding: 4px;
+  max-height: 16rem;
+  overflow: auto;
+  font: var(--dixy-font-body-sm);
+}
+.uisdk-tree [data-slot="tree-group"] {
+  overflow: hidden;
+}
+.uisdk-tree [data-slot="tree-item"] {
+  outline: none;
+}
+.uisdk-tree [data-slot="tree-label"] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding-inline: calc((var(--tree-level, 1) - 1) * 18px + 6px) 8px;
+  border-radius: calc(var(--dixy-radius-control) - 2px);
+  cursor: default;
+  user-select: none;
+}
+.uisdk-tree [data-slot="tree-label"] svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  color: var(--dixy-color-text-secondary);
+}
+.uisdk-tree [data-slot="tree-label"]:hover {
+  background: var(--dixy-color-background-subtle);
+}
+.uisdk-tree [data-slot="tree-label"][data-selected] {
+  background: var(--dixy-color-background-action-primary-subtle);
+  color: var(--dixy-color-text-action-primary);
+}
+.uisdk-tree [data-slot="tree-label"][data-selected] svg {
+  color: currentColor;
+}
+.uisdk-tree [data-slot="tree-label"][data-playing] .uisdk-tree-title {
+  font-weight: 650;
+}
+.uisdk-tree [data-slot="tree-label"][data-playing] .uisdk-tree-title::before {
+  content: "▶ ";
+  font-size: 0.7em;
+  vertical-align: 0.1em;
+}
+.uisdk-tree [data-slot="tree-item"]:focus-visible > [data-slot="tree-label"] {
+  outline: var(--dixy-focus-ring-width, 2px) solid
+    var(--dixy-color-border-focus);
+  outline-offset: -2px;
+}
+.uisdk-tree-chevron {
+  display: inline-grid;
+  transition: rotate var(--dixy-motion-duration-fast, 120ms) ease-out;
+}
+.uisdk-tree-chevron[data-expanded] {
+  rotate: 90deg;
+}
+.uisdk-tree-open,
+[data-slot="tree-label"][data-expanded] .uisdk-tree-closed {
+  display: none;
+}
+[data-slot="tree-label"][data-expanded] .uisdk-tree-open {
+  display: block;
+}
+.uisdk-tree-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.uisdk-tree-time {
+  color: var(--dixy-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+  .uisdk-tree-chevron {
+    transition: none;
+  }
+}
+
+.uisdk-ml-detail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+}
+.uisdk-ml-detail-text {
+  display: grid;
+  min-width: 0;
+}
+
+.uisdk-rating {
+  display: inline-flex;
+  gap: 2px;
+}
+.uisdk-rating [data-slot="rating-item"] {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--dixy-radius-control);
+  color: var(--dixy-color-border-strong);
+}
+.uisdk-rating [data-slot="rating-item"] svg {
+  width: 20px;
+  height: 20px;
+}
+.uisdk-rating [data-slot="rating-item"][data-filled],
+.uisdk-rating [data-slot="rating-item"][data-highlighted] {
+  color: var(--dixy-color-background-warning-bold, #e8a400);
+}
+.uisdk-rating [data-slot="rating-item"][data-filled] svg {
+  fill: currentColor;
+}
+.uisdk-rating [data-slot="rating-item"]:has(:focus-visible) {
+  outline: var(--dixy-focus-ring-width, 2px) solid
+    var(--dixy-color-border-focus);
+  outline-offset: 1px;
+}
+
+/* ---------- Conformance panel ---------- */
+
+.uisdk-checks {
+  position: sticky;
+  top: 16px;
+}
+.uisdk-check-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.uisdk-check {
+  border-top: 1px solid var(--dixy-color-border-subtle);
+  padding-block: 8px;
+}
+.uisdk-check:first-child {
+  border-top: 0;
+}
+.uisdk-check-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.uisdk-check-label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font: var(--dixy-font-label-md);
+}
+.uisdk-check-pattern {
+  font: var(--dixy-font-code-sm);
+  color: var(--dixy-color-text-secondary);
+}
+.uisdk-check-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  min-height: 32px;
+  font: var(--dixy-font-label-sm);
+  color: var(--dixy-color-text-link);
+}
+.uisdk-check-toggle[data-panel-open] svg {
+  rotate: 90deg;
+}
+.uisdk-check-problems {
+  margin: 4px 0 0;
+  padding-inline-start: 1.2em;
+  display: grid;
+  gap: 4px;
+  color: var(--dixy-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+.uisdk-check-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ---------- Dialogs ---------- */
+
+.uisdk-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--dixy-spacing-stack-md);
+}
+.uisdk-keys {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--dixy-spacing-stack-sm);
+  font: var(--dixy-font-body-sm);
+}
+.uisdk-keys th {
+  text-align: start;
+  font: var(--dixy-font-label-sm);
+  color: var(--dixy-color-text-secondary);
+  padding-block: 4px;
+}
+.uisdk-keys td {
+  border-top: 1px solid var(--dixy-color-border-subtle);
+  padding-block: 6px;
+}
+.uisdk-keys td:first-child {
+  width: 5rem;
+}
+
+.uisdk-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Narrow screens ---------- */
+
+@media (max-width: 520px) {
+  .uisdk-lcd {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "time info"
+      "vis vis"
+      "marquee marquee";
+  }
+  .uisdk-vis {
+    width: 100%;
+  }
+  .uisdk-mixer {
+    flex-basis: 100%;
+  }
+  .uisdk-windows-toggles {
+    margin-inline-start: 0;
+  }
+}
+
+/* ---------- Modern skin: the silver Winamp 5 look ----------
+   Colours are sampled from the Winamp Modern skin source (WACUP fork:
+   xml/system-colors.xml and screenshot.png), used here as a reference only;
+   no skin artwork is copied. Depth comes from navy rims, near-white convex
+   controls set into sunken trays, and a blue glass display. */
+
+.uisdk-app[data-skin="modern"] .uisdk-windows {
+  --m-rim: #0b1427;
+  --m-ink: #10182b;
+  --m-blue: #3e6bbd;
+  --m-face-hi: #c4cad5;
+  --m-face-lo: #a9b0bd;
+  --m-panel-hi: #ececef;
+  --m-panel-lo: #d8dae2;
+  --m-sunken: #ccd0d9;
+  --m-shadow: #777f8f;
+  /* Lists: wasabi.list.* */
+  --uisdk-lcd-bg: #1c3d7d;
+  --uisdk-lcd-ink: #ffffff;
+  --m-list-alt: #264787;
+  /* The skin's #d6e4ff on #6788c9 is about 2.8:1; same hue, darkened to
+     about 5:1 with white text so the selected row passes WCAG AA. */
+  --m-list-selected: #4a6cb0;
+  --m-list-selected-ink: #ffffff;
+  --m-list-current: #bbd2ff;
+}
+.uisdk-app[data-skin="modern"] .uisdk-window {
+  --uisdk-face: var(--m-face-lo);
+  overflow: hidden;
+  padding: 0 8px 8px;
+  border: 1px solid var(--m-rim);
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    var(--m-face-hi),
+    var(--m-face-lo) 60%,
+    #979eab
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 55%, transparent),
+    inset 0 -1px 0 #59616e,
+    0 3px 8px color-mix(in oklch, black 35%, transparent);
+  color: var(--m-ink);
+}
+
+/* Title bar: navy, with a light groove line and engraved grooves. */
+.uisdk-app[data-skin="modern"] .uisdk-titlebar {
+  margin-inline: -8px;
+  padding: 3px 8px;
+  min-height: 22px;
+  background: linear-gradient(
+    180deg,
+    #596580 0 2px,
+    #9ca3b0 2px 3px,
+    #2a3a5e 3px,
+    #16284e 70%,
+    #314162
+  );
+  border-block-end: 1px solid var(--m-rim);
+  color: #e3e8f3;
+}
+.uisdk-app[data-skin="modern"] .uisdk-grip {
+  height: 6px;
+  border-radius: 3px;
+  opacity: 1;
+  background: linear-gradient(180deg, #0b1427, #3a4a6e);
+  box-shadow:
+    inset 0 1px 1px black,
+    0 1px 0 #9ca3b0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-title {
+  font-family: var(--dixy-font-sans, system-ui), sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #c9d1e2;
+  text-shadow:
+    0 1px 0 var(--m-rim),
+    0 -1px 0 var(--m-rim);
+}
+
+/* Menu bar: a near-white strip over a sunken rule. */
+.uisdk-app[data-skin="modern"] .uisdk-menubar {
+  justify-self: stretch;
+  inline-size: auto;
+  max-inline-size: none;
+  margin-inline: -8px;
+  padding-inline: 4px;
+  border-radius: 0;
+  background: linear-gradient(180deg, #d7d9e1, #efeff2 45%, #efeff2);
+  border-block-end: 1px solid var(--m-sunken);
+  box-shadow: 0 1px 0 #aeb5c1;
+}
+.uisdk-app[data-skin="modern"] .uisdk-menubar [role="menuitem"] {
+  color: black;
+}
+
+/* Display: blue glass with a pale rim, lighter towards the bottom, and a
+   darker marquee band. */
+.uisdk-app[data-skin="modern"] .uisdk-lcd {
+  --uisdk-lcd-ink: #ffffff;
+  --uisdk-lcd-dim: color-mix(in oklch, white 28%, transparent);
+  --uisdk-lcd-warm: #e6eeff;
+  --uisdk-lcd-hot: #ffffff;
+  --uisdk-lcd-peak: #b2c6e7;
+  padding-block-end: 0;
+  border: 1px solid #11174c;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #294988, #254786 30%, #405d93);
+  box-shadow:
+    inset 0 1px 0 #b2c6e7,
+    inset 0 0 0 1px color-mix(in oklch, #b2c6e7 45%, transparent),
+    0 1px 0 color-mix(in oklch, white 70%, transparent);
+  text-shadow: 0 0 3px color-mix(in oklch, white 30%, transparent);
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd .uisdk-lcd-badge {
+  border-radius: 3px;
+  background: #f4f6fb;
+  color: #1c3d7d;
+  box-shadow: none;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-mode[data-on] {
+  padding-inline: 4px;
+  border-radius: 3px;
+  background: #f4f6fb;
+  color: #1c3d7d;
+  text-shadow: none;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-marquee {
+  margin-inline: -10px;
+  padding: 3px 12px 5px;
+  background: linear-gradient(180deg, #052562, #082863 30%, #253a68);
+  box-shadow: inset 0 1px 0 #11174c;
+}
+
+/* Convex near-white controls with black rims. */
+.uisdk-app[data-skin="modern"]
+  :is(
+    .uisdk-transport .dixy-icon-button,
+    .uisdk-side .dixy-toggle,
+    .uisdk-windows-toggles .dixy-toggle,
+    .uisdk-mixer .dixy-toggle,
+    .uisdk-titlebar-button
+  ) {
+  border: 2px solid var(--m-rim);
+  background: radial-gradient(
+    120% 90% at 50% 15%,
+    #fefefe,
+    #e4e6ec 45%,
+    #b1b7c3
+  );
+  box-shadow:
+    inset 0 -2px 2px color-mix(in oklch, black 18%, transparent),
+    0 1px 0 color-mix(in oklch, white 60%, transparent);
+  color: var(--m-ink);
+}
+.uisdk-app[data-skin="modern"]
+  :is(
+    .uisdk-transport .dixy-icon-button,
+    .uisdk-side .dixy-toggle,
+    .uisdk-windows-toggles .dixy-toggle,
+    .uisdk-mixer .dixy-toggle,
+    .uisdk-titlebar-button
+  ):is(:active, [data-pressed]:not([data-pressed="false"])) {
+  background: radial-gradient(
+    120% 90% at 50% 85%,
+    #fefefe,
+    #d9dce3 50%,
+    #a6adba
+  );
+  box-shadow: inset 0 2px 3px color-mix(in oklch, black 30%, transparent);
+}
+.uisdk-app[data-skin="modern"] .uisdk-transport .dixy-icon-button {
+  inline-size: 38px;
+  block-size: 38px;
+  border-radius: 50%;
+}
+.uisdk-app[data-skin="modern"] .uisdk-transport [aria-label="Play"] {
+  color: var(--m-blue);
+}
+.uisdk-app[data-skin="modern"] .uisdk-titlebar-button {
+  min-block-size: 0;
+  inline-size: 18px;
+  block-size: 16px;
+  padding: 0;
+  border-width: 1px;
+  border-radius: 2px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-mixer .dixy-toggle {
+  inline-size: 30px;
+  block-size: 30px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* Sunken trays group the controls; the mixer sits on the lighter panel. */
+.uisdk-app[data-skin="modern"] :is(.uisdk-transport, .uisdk-windows-toggles) {
+  padding: 3px 5px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8e96a3, #b8bec9);
+  box-shadow:
+    inset 0 2px 3px color-mix(in oklch, black 40%, transparent),
+    0 1px 0 color-mix(in oklch, white 60%, transparent);
+}
+.uisdk-app[data-skin="modern"] .uisdk-transport {
+  gap: 3px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-transport .dixy-toolbar-separator {
+  display: none;
+}
+.uisdk-app[data-skin="modern"] .uisdk-mixer {
+  padding: 4px 10px 4px 4px;
+  border-radius: 18px 4px 4px 18px;
+  background: linear-gradient(180deg, var(--m-panel-hi), var(--m-panel-lo));
+  box-shadow:
+    inset 0 1px 0 white,
+    inset 0 -1px 0 var(--m-shadow);
+}
+
+/* Repeat, shuffle, PL and ML are ovals; the LED sits beside the oval. */
+.uisdk-app[data-skin="modern"]
+  :is(.uisdk-side, .uisdk-windows-toggles)
+  .dixy-toggle {
+  border-radius: 999px;
+  min-inline-size: 2.8rem;
+  font-weight: 900;
+}
+.uisdk-app[data-skin="modern"] .uisdk-side {
+  padding-inline-end: 14px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-side .uisdk-led-toggle {
+  overflow: visible;
+}
+.uisdk-app[data-skin="modern"] .uisdk-side .uisdk-led-toggle::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(50% - 4px);
+  inset-inline-end: -15px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #e6e9ef, #8e96a3);
+  box-shadow: inset 0 0 0 1px color-mix(in oklch, black 35%, transparent);
+}
+.uisdk-app[data-skin="modern"]
+  .uisdk-side
+  .uisdk-led-toggle[data-pressed]::after {
+  background: radial-gradient(circle at 35% 35%, #d6e4ff, var(--m-blue) 65%);
+  box-shadow: 0 0 6px #6788c9;
+}
+.uisdk-app[data-skin="modern"] .uisdk-windows-toggles .uisdk-led-toggle::after {
+  display: none;
+}
+.uisdk-app[data-skin="modern"]
+  .uisdk-windows-toggles
+  .dixy-toggle[data-pressed] {
+  color: var(--m-blue);
+}
+
+/* Sliders: rounded grooves and long silver pill thumbs. */
+.uisdk-app[data-skin="modern"]
+  :is(.uisdk-seek, .uisdk-volume, .uisdk-balance)
+  .dixy-slider-track {
+  border-radius: 3px;
+  background: #8e96a3;
+  box-shadow:
+    inset 0 1px 1px color-mix(in oklch, black 55%, transparent),
+    0 1px 0 color-mix(in oklch, white 70%, transparent);
+}
+.uisdk-app[data-skin="modern"]
+  :is(.uisdk-seek, .uisdk-volume, .uisdk-balance)
+  .dixy-slider-thumb::before {
+  border: 1px solid #59616e;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fefefe, #e4e6ec 50%, #b1b7c3);
+  box-shadow: inset 0 1px 0 white;
+}
+.uisdk-app[data-skin="modern"] .uisdk-seek {
+  padding-inline: 26px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-seek .dixy-slider-indicator {
+  background: color-mix(in oklch, var(--m-blue) 70%, white);
+}
+.uisdk-app[data-skin="modern"] .uisdk-seek .dixy-slider-thumb::before {
+  inline-size: 52px;
+  block-size: 13px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-volume .dixy-slider-indicator {
+  background: var(--m-blue);
+}
+.uisdk-app[data-skin="modern"]
+  :is(.uisdk-volume, .uisdk-balance)
+  .dixy-slider-thumb::before {
+  inline-size: 28px;
+  block-size: 13px;
+}
+
+/* Lists use the skin's own list colours: alternating rows, a soft blue
+   selection bar and a pale current track. */
+.uisdk-app[data-skin="modern"] .uisdk-playlist {
+  border: 1px solid #11174c;
+  border-radius: 4px;
+  background: var(--uisdk-lcd-bg);
+  box-shadow: inset 0 1px 0 color-mix(in oklch, black 40%, transparent);
+}
+.uisdk-app[data-skin="modern"] .uisdk-playlist [role="option"]:nth-child(even) {
+  background: var(--m-list-alt);
+}
+.uisdk-app[data-skin="modern"]
+  .uisdk-playlist
+  [role="option"][aria-selected="true"] {
+  background: var(--m-list-selected);
+  color: var(--m-list-selected-ink);
+}
+.uisdk-app[data-skin="modern"] .uisdk-pl-row[data-current] {
+  color: var(--m-list-current);
+  font-weight: 700;
+}
+.uisdk-app[data-skin="modern"] .uisdk-shade {
+  border: 1px solid #11174c;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #294988, #405d93);
+  box-shadow: inset 0 1px 0 #b2c6e7;
+}
+.uisdk-app[data-skin="modern"] .uisdk-playlist {
+  padding: 0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-playlist [role="option"] {
+  margin: 0;
+  border-radius: 0;
+  min-block-size: 28px;
+}
+/* Selection wins over the current-track tint, keeping white on the bar. */
+.uisdk-app[data-skin="modern"]
+  .uisdk-playlist
+  [role="option"][aria-selected="true"]
+  .uisdk-pl-row {
+  color: var(--m-list-selected-ink);
+}
+
+/* ---------- Pieces shared by every skin ---------- */
+
+/* Time digits sit over their unlit segments in one grid cell. */
+.uisdk-lcd button.uisdk-lcd-time {
+  display: inline-grid;
+}
+.uisdk-lcd-time > * {
+  grid-area: 1 / 1;
+  justify-self: end;
+}
+.uisdk-lcd-ghost {
+  color: color-mix(in oklch, var(--uisdk-lcd-ink) 10%, transparent);
+  text-shadow: none;
+}
+
+.uisdk-vol-dots {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  min-height: 10px;
+}
+.uisdk-vol-dots i {
+  --size: 3px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: var(--dixy-color-border-default);
+}
+.uisdk-vol-dots i:nth-child(2) {
+  --size: 4px;
+}
+.uisdk-vol-dots i:nth-child(3) {
+  --size: 4px;
+}
+.uisdk-vol-dots i:nth-child(4) {
+  --size: 5px;
+}
+.uisdk-vol-dots i:nth-child(5) {
+  --size: 6px;
+}
+.uisdk-vol-dots i:nth-child(6) {
+  --size: 7px;
+}
+.uisdk-vol-dots i:nth-child(7) {
+  --size: 8px;
+}
+.uisdk-vol-dots i:nth-child(8) {
+  --size: 9px;
+}
+.uisdk-vol-dots i[data-on] {
+  background: var(--dixy-color-background-action-primary);
+}
+.uisdk-mixer {
+  grid-template-columns: auto minmax(5rem, 1fr) minmax(3rem, 0.5fr);
+  grid-template-areas:
+    "mute dots dots"
+    "mute vol bal";
+  row-gap: 2px;
+}
+.uisdk-mixer > .dixy-toggle {
+  grid-area: mute;
+}
+.uisdk-vol-dots {
+  grid-area: dots;
+}
+.uisdk-volume {
+  grid-area: vol;
+}
+.uisdk-balance {
+  grid-area: bal;
+}
+
+.uisdk-config {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.uisdk-config-label,
+.uisdk-logo,
+.uisdk-app-icon {
+  display: none;
+}
+
+/* ---------- Modern: the original's layout ----------
+   Title, menu, display + side ovals, then the seek bar with the eject/PL/ML
+   tray at its end, then transport | volume | config. Grid areas only; the
+   DOM and tab order stay as written. */
+
+.uisdk-app[data-skin="modern"] .uisdk-windows {
+  max-inline-size: 36rem;
+  /* Layout follows the player's own width, not the viewport: the player
+     sits in a page column whose width changes at the 960px breakpoint. */
+  container: uisdk-player / inline-size;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded]) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "title title title"
+    "menu menu menu"
+    "body body body"
+    "seek seek toggles"
+    "transport mixer config";
+  column-gap: 8px;
+  row-gap: 6px;
+  align-items: center;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main > .uisdk-titlebar {
+  grid-area: title;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main > .uisdk-menubar {
+  grid-area: menu;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main > .uisdk-body {
+  grid-area: body;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main > .uisdk-seek {
+  grid-area: seek;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main .uisdk-controls {
+  display: contents;
+}
+.uisdk-app[data-skin="modern"] .uisdk-transport {
+  grid-area: transport;
+  justify-self: start;
+  flex-wrap: nowrap;
+}
+.uisdk-app[data-skin="modern"] .uisdk-mixer {
+  grid-area: mixer;
+  min-inline-size: 11rem;
+}
+.uisdk-app[data-skin="modern"] .uisdk-windows-toggles {
+  grid-area: toggles;
+  margin-inline-start: 0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-config {
+  grid-area: config;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    "label logo"
+    "trigger logo";
+  justify-items: center;
+  align-items: center;
+  column-gap: 6px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-config-label {
+  display: block;
+  grid-area: label;
+  font:
+    700 10px/1 var(--dixy-font-sans, system-ui),
+    sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--m-ink);
+}
+.uisdk-app[data-skin="modern"] .uisdk-config .dixy-icon-button {
+  grid-area: trigger;
+  inline-size: 40px;
+  block-size: 18px;
+  min-block-size: 0;
+  border: 2px solid var(--m-rim);
+  border-radius: 999px;
+  background: radial-gradient(
+    120% 90% at 50% 15%,
+    #fefefe,
+    #e4e6ec 45%,
+    #b1b7c3
+  );
+  color: var(--m-ink);
+}
+.uisdk-app[data-skin="modern"] .uisdk-logo {
+  display: block;
+  grid-area: logo;
+  inline-size: 22px;
+  block-size: 22px;
+  color: #f08a10;
+  fill: #f7b52b;
+}
+
+/* Title bar: the app icon square on the left. */
+.uisdk-app[data-skin="modern"] .uisdk-app-icon {
+  display: block;
+  flex: none;
+  inline-size: 14px;
+  block-size: 14px;
+  border: 1px solid var(--m-rim);
+  border-radius: 2px;
+  background: linear-gradient(180deg, #c9d0dc, #7f8795);
+  box-shadow: inset 0 1px 0 white;
+}
+
+/* Side column: three ovals (visualizer, repeat, shuffle). */
+.uisdk-app[data-skin="modern"] .uisdk-side {
+  gap: 6px;
+  align-content: center;
+}
+.uisdk-app[data-skin="modern"] .uisdk-side .dixy-icon-button {
+  inline-size: 3rem;
+  min-block-size: 0;
+  block-size: 22px;
+  border: 2px solid var(--m-rim);
+  border-radius: 999px;
+  background: radial-gradient(
+    120% 90% at 50% 15%,
+    #fefefe,
+    #e4e6ec 45%,
+    #b1b7c3
+  );
+  color: var(--m-ink);
+}
+.uisdk-app[data-skin="modern"] .uisdk-side .dixy-toggle {
+  block-size: 26px;
+  min-block-size: 0;
+}
+
+/* Eject, PL, ML tray. */
+.uisdk-app[data-skin="modern"] .uisdk-windows-toggles .dixy-icon-button {
+  inline-size: 26px;
+  block-size: 26px;
+  min-block-size: 0;
+  padding: 0;
+  border: 2px solid var(--m-rim);
+  border-radius: 50%;
+  background: radial-gradient(
+    120% 90% at 50% 15%,
+    #fefefe,
+    #e4e6ec 45%,
+    #b1b7c3
+  );
+  color: var(--m-ink);
+}
+.uisdk-app[data-skin="modern"] .uisdk-windows-toggles .dixy-toggle {
+  block-size: 26px;
+  min-block-size: 0;
+}
+
+/* Volume panel: mute circle, growing dots over a slim slider. */
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i {
+  background: #c3c8d2;
+  box-shadow: inset 0 1px 1px color-mix(in oklch, black 25%, transparent);
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i[data-on] {
+  background: radial-gradient(circle at 35% 35%, #d6e4ff, var(--m-blue) 70%);
+}
+
+/* Display texture: a dot-matrix grid over the whole glass. */
+.uisdk-app[data-skin="modern"] .uisdk-lcd {
+  background:
+    radial-gradient(
+        circle,
+        color-mix(in oklch, white 9%, transparent) 0.7px,
+        transparent 1.1px
+      )
+      0 0 / 3px 3px,
+    linear-gradient(180deg, #294988, #254786 30%, #405d93);
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd button.uisdk-lcd-time {
+  font-size: clamp(40px, 9vw, 54px);
+  letter-spacing: 0.04em;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-ghost {
+  color: color-mix(in oklch, white 9%, transparent);
+}
+/* Labels and badges in a pixel face, as on the skin. */
+.uisdk-app[data-skin="modern"] .uisdk-lcd-info {
+  font-family: "Silkscreen", var(--dixy-font-mono, ui-monospace), monospace;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  gap: 3px 6px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd .uisdk-lcd-badge {
+  font-family: "Silkscreen", monospace;
+  font-size: 10px;
+  padding: 1px 8px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-label::after {
+  content: ":";
+}
+/* Song ticker: letters broken into LCD dots. */
+.uisdk-app[data-skin="modern"] .uisdk-lcd-marquee > [aria-hidden] {
+  font-size: 24px;
+  letter-spacing: 0.16em;
+  -webkit-mask-image: radial-gradient(circle, black 62%, transparent 66%);
+  mask-image: radial-gradient(circle, black 62%, transparent 66%);
+  -webkit-mask-size: 2.5px 2.5px;
+  mask-size: 2.5px 2.5px;
+}
+/* Visualizer framed by a dotted grid and bracket ticks. */
+.uisdk-app[data-skin="modern"] .uisdk-vis {
+  border-inline: 1px dotted color-mix(in oklch, white 45%, transparent);
+  border-block-end: 1px dotted color-mix(in oklch, white 45%, transparent);
+  background: radial-gradient(
+      circle,
+      color-mix(in oklch, white 18%, transparent) 0.8px,
+      transparent 1.2px
+    )
+    0 0 / 4px 4px;
+}
+
+/* The skin's transport glyphs are solid. */
+.uisdk-app[data-skin="modern"] .uisdk-transport svg {
+  fill: currentColor;
+}
+
+/* ---------- Modern, pass 3: overall proportions ----------
+   Measured side by side at equal width: the original is about 20% shorter,
+   the side ovals rise into the menu row, the lower panel is one continuous
+   lighter strip, and controls are larger and packed tighter. */
+
+.uisdk-app[data-skin="modern"] .uisdk-window {
+  border-radius: 6px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklch, white 55%, transparent),
+    inset 0 -1px 0 1px #59616e,
+    0 3px 8px color-mix(in oklch, black 35%, transparent);
+}
+.uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded]) {
+  position: relative;
+  /* The transport keeps its natural width; the volume column absorbs any
+     squeeze, so buttons never slide under each other. */
+  grid-template-columns: auto minmax(0, 1fr) auto 3.4rem;
+  grid-template-areas:
+    "title title title title"
+    "menu menu menu side"
+    "lcd lcd lcd side"
+    "seek seek toggles toggles"
+    "transport mixer config config";
+  column-gap: 6px;
+  row-gap: 4px;
+  padding-block-end: 6px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main > .uisdk-body {
+  display: contents;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main .uisdk-lcd {
+  grid-area: lcd;
+}
+.uisdk-app[data-skin="modern"] .uisdk-main .uisdk-side {
+  grid-area: side;
+  align-self: stretch;
+  align-content: start;
+  justify-items: start;
+  gap: 4px;
+  padding-block-start: 2px;
+  padding-inline-end: 0;
+}
+/* The column's own caption, as on the skin. Alt text is empty: decorative. */
+.uisdk-app[data-skin="modern"] .uisdk-main .uisdk-side::before {
+  content: "VIDEO/VIS" / "";
+  font:
+    9px/1 "Silkscreen",
+    monospace;
+  color: var(--m-ink);
+  justify-self: start;
+  margin-block-end: 1px;
+}
+
+/* Menu bar: compact, with larger text. */
+.uisdk-app[data-skin="modern"] .uisdk-menubar {
+  min-block-size: 0;
+  padding-block: 0;
+  margin-inline-end: 0;
+  border-start-end-radius: 0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-menubar [role="menuitem"] {
+  min-block-size: 22px;
+  padding-block: 0;
+  padding-inline: 8px;
+  font:
+    400 15px/22px Tahoma,
+    "Segoe UI",
+    var(--dixy-font-sans, system-ui),
+    sans-serif;
+}
+
+/* Display: shorter, info in one row, big tight digits, a full ticker. */
+.uisdk-app[data-skin="modern"] .uisdk-lcd {
+  gap: 2px 10px;
+  padding: 6px 10px 0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd button.uisdk-lcd-time {
+  font-size: clamp(38px, 8vw, 48px);
+  letter-spacing: 0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-info {
+  grid-template-columns: repeat(4, auto);
+  align-content: center;
+  gap: 4px 4px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-mode:last-child {
+  grid-column: span 2;
+  justify-self: start;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vis {
+  width: 132px;
+  height: 36px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-marquee {
+  margin-block-start: 2px;
+  padding: 1px 12px 3px;
+  font-size: 28px;
+  color: #d3def7;
+}
+.uisdk-app[data-skin="modern"] .uisdk-lcd-marquee > [aria-hidden] {
+  font-size: 28px;
+  letter-spacing: 0.1em;
+}
+
+/* Seek: a thick two-tone groove and a big outlined pill. */
+.uisdk-app[data-skin="modern"] .uisdk-seek {
+  --dixy-track-size: 7px;
+  padding-inline: 32px 0;
+}
+.uisdk-app[data-skin="modern"] .uisdk-seek .dixy-slider-track {
+  background: linear-gradient(180deg, #8b93a3, #d6dae2);
+  box-shadow:
+    inset 0 1px 1px #3d4554,
+    0 1px 0 white;
+}
+.uisdk-app[data-skin="modern"] .uisdk-seek .dixy-slider-indicator {
+  background: linear-gradient(180deg, #4a74c4, #8fb0ea);
+  border-radius: 3px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-seek .dixy-slider-thumb::before {
+  inline-size: 62px;
+  block-size: 17px;
+  border: 2px solid #1d2433;
+  background: linear-gradient(180deg, #ffffff, #eceef3 45%, #c3c9d4);
+}
+
+/* Transport: bigger buttons that nearly touch. */
+.uisdk-app[data-skin="modern"] .uisdk-transport {
+  gap: 1px;
+  padding: 3px 4px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-transport .dixy-icon-button {
+  inline-size: 44px;
+  block-size: 44px;
+  border-width: 3px;
+}
+
+/* One continuous, lighter lower panel behind volume and config, with a
+   curved leading edge. A pseudo-element is a grid item, so it can span. */
+.uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded])::before {
+  content: "";
+  grid-row: 5;
+  grid-column: 2 / -1;
+  align-self: stretch;
+  margin-inline-end: -8px;
+  margin-block-end: -6px;
+  border-start-start-radius: 26px;
+  background: linear-gradient(180deg, #f1f1f4, #d8dae2);
+  box-shadow:
+    inset 1px 1px 0 white,
+    -1px -1px 0 #8e96a3;
+}
+.uisdk-app[data-skin="modern"] .uisdk-mixer,
+.uisdk-app[data-skin="modern"] .uisdk-config {
+  position: relative;
+  z-index: 1;
+}
+.uisdk-app[data-skin="modern"] .uisdk-mixer {
+  grid-template-columns: auto minmax(7rem, 1fr);
+  grid-template-areas:
+    "mute dots"
+    "mute vol";
+  padding: 4px 4px 4px 10px;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots {
+  justify-content: flex-end;
+  padding-inline-end: 4px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px #9aa2b1;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i:nth-child(n + 5) {
+  --size: calc(var(--n, 1) * 1px);
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i:nth-child(5) {
+  --size: 7px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i:nth-child(6) {
+  --size: 8px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i:nth-child(7) {
+  --size: 10px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-vol-dots i:nth-child(8) {
+  --size: 12px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-config {
+  justify-self: end;
+  align-self: end;
+  padding-inline-end: 14px;
+}
+.uisdk-app[data-skin="modern"] .uisdk-logo {
+  inline-size: 28px;
+  block-size: 28px;
+}
+/* Resize grip in the corner. Decorative. */
+.uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded])::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 3px;
+  inset-block-end: 3px;
+  inline-size: 12px;
+  block-size: 12px;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 2px,
+    #8e96a3 2px 3px,
+    white 3px 4px
+  );
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+
+/* Title: larger, embossed. */
+.uisdk-app[data-skin="modern"] .uisdk-main .uisdk-title {
+  font-size: 17px;
+  letter-spacing: 0.02em;
+}
+
+/* Three widths: the full layout above 540px; a compact two-row bottom
+   from 421 to 540px; a single stacked column at 420px and below. All
+   follow the player's width, so they work in any page column. */
+@container uisdk-player (max-width: 540px) {
+  .uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded]) {
+    grid-template-columns: auto minmax(0, 1fr) auto 3.4rem;
+    grid-template-areas:
+      "title title title title"
+      "menu menu menu side"
+      "lcd lcd lcd side"
+      "seek seek seek seek"
+      "transport toggles toggles toggles"
+      "mixer mixer config config";
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded])::before {
+    grid-row: 6;
+    grid-column: 1 / -1;
+    margin-inline: -8px;
+    border-start-start-radius: 0;
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-windows-toggles {
+    justify-self: end;
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-vis {
+    width: 96px;
+  }
+}
+
+@container uisdk-player (max-width: 420px) {
+  .uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded]) {
+    grid-template-columns: minmax(0, 1fr) 3.4rem;
+    grid-template-areas:
+      "title title"
+      "menu menu"
+      "lcd side"
+      "seek seek"
+      "toggles toggles"
+      "transport transport"
+      "mixer mixer"
+      "config config";
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-main:not([data-shaded])::before {
+    grid-row: 7 / 9;
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-windows-toggles {
+    justify-self: stretch;
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-transport {
+    justify-self: center;
+  }
+}
+
+/* Phone-size players: time beside the visualizer, info on one row below. */
+@container uisdk-player (max-width: 420px) {
+  .uisdk-app[data-skin="modern"] .uisdk-lcd {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "time vis"
+      "info info"
+      "marquee marquee";
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-vis {
+    width: 100%;
+  }
+  .uisdk-app[data-skin="modern"] .uisdk-lcd-info {
+    justify-content: start;
+  }
+}
+
+/* Items with a shortcut hint: the check follows the label and the hint takes
+   the trailing slot, so hints line up whether or not the item is checked. */
+.dixy-menu-checkbox-item:has(.uisdk-menu-kbd)
+  .dixy-menu-checkbox-item-indicator {
+  margin-inline-start: 0;
+}

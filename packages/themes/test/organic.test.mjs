@@ -84,7 +84,7 @@ test("v2 saved documents migrate with per-frame defaults and keep geometry and p
     delete legacy.character;
     legacy.recipes.frame.parameters.paddingTop = 19;
     const migrated = parseThemeDocument(JSON.stringify(legacy));
-    assert.equal(migrated.schemaVersion, 6);
+    assert.equal(migrated.schemaVersion, 8);
     assert.equal(migrated.recipes.frame.parameters.paddingTop, 19);
     assert.deepEqual(
       migrated.recipes.frame.ornament,

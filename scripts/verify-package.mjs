@@ -31,9 +31,12 @@ try {
   manifest.dependencies["@dixy-ui/react"] = `file:${tarball}`;
   manifest.dependencies["@dixy-ui/tokens"] = `file:${tokensTarball}`;
   // pnpm 12 reads overrides from workspace configuration in this isolated app.
+  // csstype 3.2.4 (2026-11-17) adds `pathLength` to CSSProperties, which
+  // clashes with motion 14.2's MotionStyle typings; hold the version the
+  // workspace lockfile resolves until motion catches up.
   fs.writeFileSync(
     path.join(consumer, "pnpm-workspace.yaml"),
-    `overrides:\n  '@dixy-ui/tokens': ${JSON.stringify(`file:${tokensTarball}`)}\n`,
+    `overrides:\n  '@dixy-ui/tokens': ${JSON.stringify(`file:${tokensTarball}`)}\n  csstype: 3.2.3\n`,
   );
   fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
   // Reuse the workspace store, but never link the consumer to workspace source.
@@ -371,6 +374,9 @@ try {
     ["mainframe", "mainframeTheme"],
     ["dispatch", "dispatchTheme"],
     ["signal", "signalTheme"],
+    ["bloom", "bloomTheme"],
+    ["pulse", "pulseTheme"],
+    ["sorbet", "sorbetTheme"],
   ];
   for (const [slug, settings] of plainSkins) {
     fs.writeFileSync(

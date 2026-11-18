@@ -9,7 +9,7 @@ export const mainframe = {
     neutralColor: "neutral",
     radius: "none",
     density: "default",
-    material: "matte",
+    material: "bevel",
     shape: "square",
   },
 } as const satisfies SkinDefinition;
@@ -23,7 +23,7 @@ export const mainframeTheme = {
       neutralColor: "neutral",
       radius: "none",
       density: "default",
-      material: "matte",
+      material: "bevel",
       shape: "square",
     },
   },
@@ -36,6 +36,10 @@ export const mainframeTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"IBM Plex Sans Variable", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif',

@@ -1,15 +1,17 @@
 import { ButtonGroupContext } from "../utilities/visual-group-context";
-import type { ComponentProps } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 import { nativePart, type NativePartProps } from "../utilities/native-part";
 import { Mark } from "../utilities/default-artwork";
 import { useComponentVisuals } from "../utilities/component-visuals";
 import { withClassName } from "../utilities/class-name";
 import { Button } from "./button";
+import { ShapeLoader } from "./shape-loader";
+import { useThemeSettings } from "../theme/theme";
 import { TextField } from "./text-field";
 import { Collapsible } from "./collapsible";
 import { Drawer } from "./drawer";
 export interface ButtonGroupProps extends NativePartProps<"div"> {
-  /** Connected edges or separate actions. @default true */
+  /** Connected edges or separate actions. Separate actions under Theme morph="press" form an M3 standard group: the pressed button widens and its neighbours give way. @default true */
   attached?: boolean;
   /** Visual direction; buttons retain ordinary Tab stops. @default horizontal */
   orientation?: "horizontal" | "vertical";
@@ -28,6 +30,7 @@ export function ButtonGroup({
   variant = "outline",
   ...props
 }: ButtonGroupProps) {
+  const theme = useThemeSettings();
   return (
     <ButtonGroupContext.Provider
       value={{
@@ -44,6 +47,12 @@ export function ButtonGroup({
         role={role}
         data-attached={attached}
         data-orientation={orientation}
+        data-expressive={
+          (!attached &&
+            orientation === "horizontal" &&
+            theme.morph === "press") ||
+          undefined
+        }
       />
     </ButtonGroupContext.Provider>
   );
@@ -201,6 +210,10 @@ export interface SpinnerProps extends NativePartProps<
 > {
   /** Accessible loading message. @default Loading */
   label?: string;
+  /** Draw the loader on a circular tonal container, for loaders placed over content (M3). @default false */
+  contained?: boolean;
+  /** Milliseconds to keep the indicator invisible, so waits under it show nothing (M3 suggests 200). The status message is present throughout. @default 0 */
+  delay?: number;
 }
 const Loading = /* @__PURE__ */ nativePart("span", "dixy-loading", [
   "size",
@@ -208,17 +221,43 @@ const Loading = /* @__PURE__ */ nativePart("span", "dixy-loading", [
 ] as const);
 export function Spinner({
   label = "Loading",
+  contained = false,
+  delay = 0,
   children,
   ...props
 }: SpinnerProps) {
+  const theme = useThemeSettings();
+  const [waiting, setWaiting] = useState(delay > 0);
+  useEffect(() => {
+    if (delay <= 0) return setWaiting(false);
+    setWaiting(true);
+    const timer = setTimeout(() => setWaiting(false), delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
   return (
-    <Loading {...props} role="status">
-      <span className="dixy-spinner" aria-hidden="true" />
+    <Loading
+      {...props}
+      role="status"
+      data-contained={contained || undefined}
+      data-waiting={waiting || undefined}
+    >
+      {theme.progress === "wave" ? (
+        <ShapeLoader />
+      ) : (
+        <span className="dixy-spinner" aria-hidden="true" />
+      )}
       <span className="dixy-visually-hidden">{label}</span>
       {children}
     </Loading>
   );
 }
+/** A circle whose radius ripples ten times around: the wavy ring for Theme progress="wave". */
+const wavyRing = /* @__PURE__ */ (() =>
+  Array.from({ length: 181 }, (_, i) => {
+    const t = (i / 180) * Math.PI * 2;
+    const r = 15.5 + 1.1 * Math.cos(10 * t);
+    return `${i ? "L" : "M"}${(20 + r * Math.cos(t)).toFixed(2)} ${(20 + r * Math.sin(t)).toFixed(2)}`;
+  }).join("") + "Z")();
 export interface ProgressCircleProps extends Omit<
   NativePartProps<"div", "size" | "color">,
   "children"
@@ -226,15 +265,20 @@ export interface ProgressCircleProps extends Omit<
   /** Omit for indeterminate progress. */ value?: number;
   /** Maximum positive value. @default 100 */ max?: number;
   /** Required accessible name. */ "aria-label": string;
+  /** Show the percentage in the centre as a heavy, tabular numeral; give the ring a `size` of lg or more room. @default false */
+  showValue?: boolean;
 }
 export function ProgressCircle({
   value,
   max = 100,
   size,
   color,
+  showValue = false,
   className,
   ...props
 }: ProgressCircleProps) {
+  const theme = useThemeSettings();
+  const wave = theme.progress === "wave";
   const visual = useComponentVisuals({
     size,
     color,
@@ -252,19 +296,44 @@ export function ProgressCircle({
       aria-valuemin={0}
       aria-valuemax={maximum}
       aria-valuenow={bounded}
+      data-show-value={showValue && bounded !== undefined ? "" : undefined}
       className={["dixy-progress-circle", className].filter(Boolean).join(" ")}
     >
       <svg viewBox="0 0 40 40" aria-hidden="true">
-        <circle cx="20" cy="20" r="16" className="dixy-progress-ring-track" />
-        <circle
-          cx="20"
-          cy="20"
-          r="16"
-          pathLength="100"
-          strokeDasharray={`${bounded === undefined ? 25 : (bounded / maximum) * 100} 100`}
-          className="dixy-progress-ring-fill"
-        />
+        {wave ? (
+          <>
+            <path d={wavyRing} className="dixy-progress-ring-track" />
+            <path
+              d={wavyRing}
+              pathLength="100"
+              strokeDasharray={`${bounded === undefined ? 25 : (bounded / maximum) * 100} 100`}
+              className="dixy-progress-ring-fill"
+            />
+          </>
+        ) : (
+          <>
+            <circle
+              cx="20"
+              cy="20"
+              r="16"
+              className="dixy-progress-ring-track"
+            />
+            <circle
+              cx="20"
+              cy="20"
+              r="16"
+              pathLength="100"
+              strokeDasharray={`${bounded === undefined ? 25 : (bounded / maximum) * 100} 100`}
+              className="dixy-progress-ring-fill"
+            />
+          </>
+        )}
       </svg>
+      {showValue && bounded !== undefined && (
+        <span className="dixy-progress-circle-value" aria-hidden="true">
+          {Math.round((bounded / maximum) * 100)}
+        </span>
+      )}
     </div>
   );
 }

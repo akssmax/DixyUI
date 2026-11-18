@@ -73,8 +73,36 @@
       "default": "1"
     },
     {
+      "name": "highlight",
+      "type": "ThemeHighlight | undefined",
+      "required": false,
+      "description": "How list options mark the highlighted or selected row: a soft accent\ntint, or a full-ink band. Popups inherit it.",
+      "default": "tint"
+    },
+    {
+      "name": "morph",
+      "type": "ThemeMorph | undefined",
+      "required": false,
+      "description": "Default `morph` for Buttons and Toggles inside; each can still opt out.",
+      "default": "off"
+    },
+    {
+      "name": "progress",
+      "type": "ThemeProgress | undefined",
+      "required": false,
+      "description": "Default `wave` for Progress inside; each can still opt out.",
+      "default": "line"
+    },
+    {
+      "name": "avatarShape",
+      "type": "ThemeAvatarShape | undefined",
+      "required": false,
+      "description": "Clip Avatars to a library shape such as \"cookie-9\".",
+      "default": "none"
+    },
+    {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Default finish for supported controls and Box. Import materials.css.",
       "default": "matte"
@@ -88,7 +116,7 @@
     },
     {
       "name": "shape",
-      "type": "\"rounded\" | \"pill\" | \"square\" | undefined",
+      "type": "\"square\" | \"pill\" | \"rounded\" | undefined",
       "required": false,
       "description": "Semantic geometry for supported controls and Box; no clipping.",
       "default": "rounded"
@@ -174,7 +202,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -236,7 +264,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -266,7 +294,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -296,7 +324,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -326,7 +354,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -363,7 +391,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -400,7 +428,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -416,7 +444,7 @@
       "name": "attached",
       "type": "boolean | undefined",
       "required": false,
-      "description": "Connected edges or separate actions.",
+      "description": "Connected edges or separate actions. Separate actions under Theme morph=\"press\" form an M3 standard group: the pressed button widens and its neighbours give way.",
       "default": "true"
     },
     {
@@ -517,6 +545,20 @@
       "required": false,
       "description": "Accessible loading message.",
       "default": "Loading"
+    },
+    {
+      "name": "contained",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Draw the loader on a circular tonal container, for loaders placed over content (M3).",
+      "default": "false"
+    },
+    {
+      "name": "delay",
+      "type": "number | undefined",
+      "required": false,
+      "description": "Milliseconds to keep the indicator invisible, so waits under it show nothing (M3 suggests 200). The status message is present throughout.",
+      "default": "0"
     }
   ],
   "ProgressCircleProps": [
@@ -561,6 +603,13 @@
       "required": true,
       "description": "Required accessible name.",
       "default": "—"
+    },
+    {
+      "name": "showValue",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Show the percentage in the centre as a heavy, tabular numeral; give the ring a `size` of lg or more room.",
+      "default": "false"
     }
   ],
   "ScrollShadowProps": [
@@ -610,7 +659,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -647,7 +696,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -684,7 +733,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -723,23 +772,23 @@
   "ButtonProps": [
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional finish for solid/soft variants; requires materials.css. Inherits Theme.",
       "default": "—"
     },
     {
       "name": "shape",
-      "type": "\"rounded\" | \"pill\" | \"square\" | undefined",
+      "type": "\"square\" | \"pill\" | \"rounded\" | undefined",
       "required": false,
       "description": "Geometry independent of emphasis. Inherits Theme; focus remains outside.",
       "default": "—"
     },
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | undefined",
       "required": false,
-      "description": "The height and horizontal padding.",
+      "description": "The height and horizontal padding. `xs` and `xl` are the expressive ends of the M3 scale: dense rows and hero actions.",
       "default": "md"
     },
     {
@@ -762,6 +811,13 @@
       "required": false,
       "description": "Show progress and prevent repeated activation.",
       "default": "false"
+    },
+    {
+      "name": "morph",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Expressive shape: fully round at rest, squarer while pressed, on the Theme's spring. Overrides `shape` rounding.",
+      "default": "Theme.morph"
     }
   ],
   "IconButtonProps": [
@@ -797,7 +853,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -927,7 +983,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Static box finish; import materials.css.",
       "default": "Theme.material"
@@ -975,9 +1031,9 @@
   "ComboboxInputProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -996,7 +1052,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1005,9 +1061,9 @@
   "ComboboxInputGroupProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -1026,7 +1082,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1035,9 +1091,9 @@
   "ComboboxPopupProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -1056,7 +1112,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1116,7 +1172,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -1153,7 +1209,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -1204,7 +1260,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -1248,7 +1304,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -1292,7 +1348,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -1437,7 +1493,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1561,7 +1617,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -1591,7 +1647,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1621,10 +1677,84 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
+    }
+  ],
+  "FabMenuRootProps": [
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Accessible name for the closed FAB, e.g. \"Create\". The open FAB is named \"Close\".",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "description": "2–6 closely related FabMenu.Item actions, each with a label (M3).",
+      "default": "—"
+    },
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "The FAB's icon when closed.",
+      "default": "plus"
+    },
+    {
+      "name": "size",
+      "type": "\"md\" | \"lg\" | \"xl\" | undefined",
+      "required": false,
+      "description": "FAB size: lg for compact windows, xl for large ones.",
+      "default": "lg"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Colour set shared by the FAB and its items.",
+      "default": "accent"
+    },
+    {
+      "name": "open",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Controlled open state.",
+      "default": "—"
+    },
+    {
+      "name": "defaultOpen",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Initial open state when uncontrolled.",
+      "default": "false"
+    },
+    {
+      "name": "onOpenChange",
+      "type": "((open: boolean) => void) | undefined",
+      "required": false,
+      "description": "Called when the menu opens or closes.",
+      "default": "—"
+    },
+    {
+      "name": "className",
+      "type": "string | undefined",
+      "required": false,
+      "description": "Class for the FAB.",
+      "default": "—"
+    }
+  ],
+  "FabMenuItemProps": [
+    {
+      "name": "icon",
+      "type": "ReactNode",
+      "required": false,
+      "description": "Leading icon; keep it, it tells items apart (M3).",
+      "default": "—"
     }
   ],
   "FieldsetRootProps": [
@@ -1736,17 +1866,24 @@
   "BoxOwnProps": [
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional surface finish; import materials.css. Inherits Theme.",
       "default": "—"
     },
     {
       "name": "shape",
-      "type": "\"rounded\" | \"pill\" | \"square\" | undefined",
+      "type": "\"square\" | \"pill\" | \"rounded\" | undefined",
       "required": false,
       "description": "Semantic surface shape, without clipping children or focus. Inherits Theme.",
       "default": "—"
+    },
+    {
+      "name": "surface",
+      "type": "\"default\" | \"accent\" | undefined",
+      "required": false,
+      "description": "`accent` paints the Box with the brand solid and remaps text, border,\nbutton and highlight tokens so Dixy parts inside stay legible.",
+      "default": "default"
     }
   ],
   "ContainerOwnProps": [
@@ -1813,13 +1950,6 @@
       "default": "accent"
     },
     {
-      "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
-      "required": false,
-      "description": "Component proportions.",
-      "default": "md"
-    },
-    {
       "name": "radius",
       "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | \"full\" | undefined",
       "required": false,
@@ -1828,10 +1958,17 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
+      "required": false,
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
+      "default": "md"
     },
     {
       "name": "variant",
@@ -1844,9 +1981,9 @@
   "MenuPopupProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -1865,7 +2002,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1874,9 +2011,9 @@
   "MenuItemProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -1897,9 +2034,9 @@
   "MenuLinkItemProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -1964,7 +2101,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -1994,7 +2131,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2111,7 +2248,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2141,7 +2278,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2171,7 +2308,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2231,7 +2368,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2261,7 +2398,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2291,10 +2428,17 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
+    },
+    {
+      "name": "wave",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Expressive indicator: a moving wave with a gap before the remaining track. Still under reduced motion.",
+      "default": "Theme.progress"
     }
   ],
   "RadioGroupProps": [
@@ -2330,7 +2474,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2367,7 +2511,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -2499,9 +2643,9 @@
   "SelectTriggerProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -2520,7 +2664,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2529,9 +2673,9 @@
   "SelectPopupProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role.",
       "default": "md"
     },
     {
@@ -2550,7 +2694,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2568,9 +2712,9 @@
   "ShapeProps": [
     {
       "name": "kind",
-      "type": "\"flower\" | \"clover\" | \"arch\" | \"cut\" | undefined",
+      "type": "ShapeKind | undefined",
       "required": false,
-      "description": "Static decorative silhouette.",
+      "description": "Silhouette. The expressive set (`cookie-9`, `clover-4`, `burst`, `heart`\nand 31 more) shares one outline structure, so changing `kind` between\ntwo of them morphs on the Theme's spatial spring.",
       "default": "flower"
     },
     {
@@ -2605,7 +2749,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Static track finish; import materials.css.",
       "default": "Theme.material"
@@ -2635,7 +2779,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css. Inherits Theme.",
       "default": "—"
@@ -2718,6 +2862,81 @@
       "default": "—"
     }
   ],
+  "SplitButtonRootProps": [
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | undefined",
+      "required": false,
+      "description": "Both halves' height; the M3 split button comes in all five sizes.",
+      "default": "md"
+    },
+    {
+      "name": "variant",
+      "type": "\"soft\" | \"solid\" | \"outline\" | \"ghost\" | undefined",
+      "required": false,
+      "description": "Both halves' emphasis.",
+      "default": "solid"
+    },
+    {
+      "name": "color",
+      "type": "\"neutral\" | \"accent\" | \"danger\" | \"success\" | undefined",
+      "required": false,
+      "description": "Both halves' palette.",
+      "default": "accent"
+    }
+  ],
+  "SplitButtonActionProps": [],
+  "SplitButtonMenuProps": [
+    {
+      "name": "aria-label",
+      "type": "string",
+      "required": true,
+      "description": "Accessible name for the trailing menu button, e.g. \"More send options\".",
+      "default": "—"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "required": true,
+      "description": "Menu items (`Menu.Item`, groups, separators).",
+      "default": "—"
+    },
+    {
+      "name": "align",
+      "type": "\"center\" | \"end\" | \"start\" | undefined",
+      "required": false,
+      "description": "Menu alignment against the trailing button.",
+      "default": "end"
+    },
+    {
+      "name": "popup",
+      "type": "Omit<MenuPopupProps, \"children\"> | undefined",
+      "required": false,
+      "description": "Popup visuals.",
+      "default": "—"
+    },
+    {
+      "name": "open",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Controlled open state, passed to Menu.Root.",
+      "default": "—"
+    },
+    {
+      "name": "onOpenChange",
+      "type": "ComponentProps<typeof Menu.Root>[\"onOpenChange\"]",
+      "required": false,
+      "description": "Called when the menu opens or closes.",
+      "default": "—"
+    },
+    {
+      "name": "trigger",
+      "type": "Omit<ButtonProps, \"children\" | \"morph\"> | undefined",
+      "required": false,
+      "description": "Trailing button props (variant, color, disabled).",
+      "default": "—"
+    }
+  ],
   "SwitchRootProps": [
     {
       "name": "size",
@@ -2749,7 +2968,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Static track finish; import materials.css.",
       "default": "Theme.material"
@@ -2802,7 +3021,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Static selected-surface finish for filled variants; import materials.css.",
       "default": "Theme.material"
@@ -2862,7 +3081,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2917,7 +3136,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
@@ -2928,23 +3147,23 @@
       "name": "attached",
       "type": "boolean | undefined",
       "required": false,
-      "description": "Visually connect adjacent toggles without changing single/multiple selection.",
+      "description": "Visually connect adjacent toggles without changing single/multiple\nselection. Under Theme morph=\"press\" an attached group becomes an M3\nconnected button group: it spans its container in equal segments with\nsmall gaps and round ends, and only shape changes (the pressed segment\nsquares off, the selected one goes fully round). A separate group under\nmorph=\"press\" is an M3 standard group: the pressed toggle widens and its\nneighbours give way.",
       "default": "false"
     },
     {
       "name": "segmented",
       "type": "boolean | undefined",
       "required": false,
-      "description": "Draw the group as a segmented control: a sunken track with a raised\nsurface thumb on each pressed toggle. Replaces `attached` and overrides\nthe toggles' variant and color for the pressed state; selection,\nfocus and keyboard behaviour are unchanged.",
+      "description": "Draw the group as a segmented control: a sunken track with a raised\nsurface thumb on each pressed toggle. Replaces `attached` and overrides\nthe toggles' variant and color for the pressed state; selection,\nfocus and keyboard behaviour are unchanged. Under Theme morph=\"press\"\nit draws as a connected button group instead.",
       "default": "false"
     }
   ],
   "ToggleProps": [
     {
       "name": "size",
-      "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+      "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | undefined",
       "required": false,
-      "description": "Component proportions; preserves the shared interaction target.",
+      "description": "Component proportions; preserves the shared interaction target. `xs` and `xl` keep the label type.",
       "default": "md"
     },
     {
@@ -2970,10 +3189,24 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"
+    },
+    {
+      "name": "morph",
+      "type": "boolean | undefined",
+      "required": false,
+      "description": "Expressive shape: round when off, squarer when pressed or selected, on the Theme's spring. Attached groups keep their own corners.",
+      "default": "Theme.morph"
+    },
+    {
+      "name": "shapes",
+      "type": "readonly [off: \"circle\" | \"square\" | \"slanted\" | \"dome\" | \"semicircle\" | \"fan\" | \"oval\" | \"pill\" | \"triangle\" | \"arrow\" | \"diamond\" | \"clam-shell\" | \"pentagon\" | \"gem\" | \"sunny\" | \"very-sunny\" | ... 18 more ... | \"heart\", on: \"circle\" | ... 33 more ... | \"heart\"] | undefined",
+      "required": false,
+      "description": "Shape-backed icon toggle: the container is drawn as `[off, on]` library\nshapes and morphs between them on the spatial spring when selected\n(for example `[\"circle\", \"cookie-9\"]`). The hit area stays the square\ncontrol; the shape is decorative.",
+      "default": "—"
     }
   ],
   "ToolbarRootProps": [
@@ -2986,9 +3219,9 @@
     },
     {
       "name": "variant",
-      "type": "\"soft\" | \"outline\" | \"plain\" | undefined",
+      "type": "\"soft\" | \"outline\" | \"plain\" | \"floating\" | \"vibrant\" | undefined",
       "required": false,
-      "description": "Toolbar surface.",
+      "description": "Toolbar surface. `floating` is the M3 floating toolbar: a raised pill\nabove content for contextual actions, kept fully on screen. `vibrant` is\nits high-emphasis colour set, e.g. for an edit mode.",
       "default": "plain"
     },
     {
@@ -3023,7 +3256,7 @@
     },
     {
       "name": "material",
-      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | undefined",
+      "type": "\"matte\" | \"glossy\" | \"soft\" | \"metal\" | \"paper\" | \"bevel\" | undefined",
       "required": false,
       "description": "Optional static finish; import materials.css.",
       "default": "Theme.material"

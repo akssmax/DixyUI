@@ -9,7 +9,7 @@ export const arcadeCabinet = {
     neutralColor: "neutral",
     radius: "none",
     density: "default",
-    material: "matte",
+    material: "bevel",
     shape: "square",
   },
 } as const satisfies SkinDefinition;
@@ -23,7 +23,7 @@ export const arcadeCabinetTheme = {
       neutralColor: "neutral",
       radius: "none",
       density: "default",
-      material: "matte",
+      material: "bevel",
       shape: "square",
     },
   },
@@ -36,6 +36,10 @@ export const arcadeCabinetTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily: '"VT323", "Share Tech Mono", ui-monospace, monospace',
     "--dixy-font-sans": '"VT323", "Share Tech Mono", ui-monospace, monospace',

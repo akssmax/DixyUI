@@ -36,6 +36,10 @@ export const diwaliLightsTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily: '"Inter Variable", Inter, ui-sans-serif, system-ui, sans-serif',
     "--dixy-font-sans":

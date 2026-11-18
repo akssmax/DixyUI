@@ -13,11 +13,15 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AiExampleRouteImport } from './routes/ai-example'
 import { Route as DixyExampleRouteImport } from './routes/dixy-example'
 import { Route as PlaygroundRouteImport } from './routes/playground'
+import { Route as UiSdkExpRouteImport } from './routes/ui-sdk-exp'
+import { Route as UisdkTestRouteImport } from './routes/uisdk-test'
 import { Route as DocsAccessibilityRouteImport } from './routes/docs.accessibility'
 import { Route as DocsChangelogRouteImport } from './routes/docs.changelog'
 import { Route as DocsInstallationRouteImport } from './routes/docs.installation'
 import { Route as LabControlsRouteImport } from './routes/lab.controls'
+import { Route as LabExpressiveRouteImport } from './routes/lab.expressive'
 import { Route as LabKitchenSinkRouteImport } from './routes/lab.kitchen-sink'
+import { Route as LabPosterRouteImport } from './routes/lab.poster'
 import { Route as LabShadersRouteImport } from './routes/lab.shaders'
 import { Route as LabThemeAuditRouteImport } from './routes/lab.theme-audit'
 import { Route as DocsComponentsComponentRouteImport } from './routes/docs.components.$component'
@@ -43,6 +47,16 @@ const PlaygroundRoute = PlaygroundRouteImport.update({
   path: '/playground',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UiSdkExpRoute = UiSdkExpRouteImport.update({
+  id: '/ui-sdk-exp',
+  path: '/ui-sdk-exp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UisdkTestRoute = UisdkTestRouteImport.update({
+  id: '/uisdk-test',
+  path: '/uisdk-test',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DocsAccessibilityRoute = DocsAccessibilityRouteImport.update({
   id: '/docs/accessibility',
   path: '/docs/accessibility',
@@ -63,9 +77,19 @@ const LabControlsRoute = LabControlsRouteImport.update({
   path: '/lab/controls',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LabExpressiveRoute = LabExpressiveRouteImport.update({
+  id: '/lab/expressive',
+  path: '/lab/expressive',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LabKitchenSinkRoute = LabKitchenSinkRouteImport.update({
   id: '/lab/kitchen-sink',
   path: '/lab/kitchen-sink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LabPosterRoute = LabPosterRouteImport.update({
+  id: '/lab/poster',
+  path: '/lab/poster',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LabShadersRoute = LabShadersRouteImport.update({
@@ -95,11 +119,15 @@ export interface FileRoutesByFullPath {
   '/ai-example': typeof AiExampleRoute
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
+  '/ui-sdk-exp': typeof UiSdkExpRoute
+  '/uisdk-test': typeof UisdkTestRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/changelog': typeof DocsChangelogRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/lab/controls': typeof LabControlsRoute
+  '/lab/expressive': typeof LabExpressiveRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
+  '/lab/poster': typeof LabPosterRoute
   '/lab/shaders': typeof LabShadersRoute
   '/lab/theme-audit': typeof LabThemeAuditRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
@@ -110,11 +138,15 @@ export interface FileRoutesByTo {
   '/ai-example': typeof AiExampleRoute
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
+  '/ui-sdk-exp': typeof UiSdkExpRoute
+  '/uisdk-test': typeof UisdkTestRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/changelog': typeof DocsChangelogRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/lab/controls': typeof LabControlsRoute
+  '/lab/expressive': typeof LabExpressiveRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
+  '/lab/poster': typeof LabPosterRoute
   '/lab/shaders': typeof LabShadersRoute
   '/lab/theme-audit': typeof LabThemeAuditRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
@@ -126,11 +158,15 @@ export interface FileRoutesById {
   '/ai-example': typeof AiExampleRoute
   '/dixy-example': typeof DixyExampleRoute
   '/playground': typeof PlaygroundRoute
+  '/ui-sdk-exp': typeof UiSdkExpRoute
+  '/uisdk-test': typeof UisdkTestRoute
   '/docs/accessibility': typeof DocsAccessibilityRoute
   '/docs/changelog': typeof DocsChangelogRoute
   '/docs/installation': typeof DocsInstallationRoute
   '/lab/controls': typeof LabControlsRoute
+  '/lab/expressive': typeof LabExpressiveRoute
   '/lab/kitchen-sink': typeof LabKitchenSinkRoute
+  '/lab/poster': typeof LabPosterRoute
   '/lab/shaders': typeof LabShadersRoute
   '/lab/theme-audit': typeof LabThemeAuditRoute
   '/docs/components/$component': typeof DocsComponentsComponentRoute
@@ -143,11 +179,15 @@ export interface FileRouteTypes {
     | '/ai-example'
     | '/dixy-example'
     | '/playground'
+    | '/ui-sdk-exp'
+    | '/uisdk-test'
     | '/docs/accessibility'
     | '/docs/changelog'
     | '/docs/installation'
     | '/lab/controls'
+    | '/lab/expressive'
     | '/lab/kitchen-sink'
+    | '/lab/poster'
     | '/lab/shaders'
     | '/lab/theme-audit'
     | '/docs/components/$component'
@@ -158,11 +198,15 @@ export interface FileRouteTypes {
     | '/ai-example'
     | '/dixy-example'
     | '/playground'
+    | '/ui-sdk-exp'
+    | '/uisdk-test'
     | '/docs/accessibility'
     | '/docs/changelog'
     | '/docs/installation'
     | '/lab/controls'
+    | '/lab/expressive'
     | '/lab/kitchen-sink'
+    | '/lab/poster'
     | '/lab/shaders'
     | '/lab/theme-audit'
     | '/docs/components/$component'
@@ -173,11 +217,15 @@ export interface FileRouteTypes {
     | '/ai-example'
     | '/dixy-example'
     | '/playground'
+    | '/ui-sdk-exp'
+    | '/uisdk-test'
     | '/docs/accessibility'
     | '/docs/changelog'
     | '/docs/installation'
     | '/lab/controls'
+    | '/lab/expressive'
     | '/lab/kitchen-sink'
+    | '/lab/poster'
     | '/lab/shaders'
     | '/lab/theme-audit'
     | '/docs/components/$component'
@@ -189,11 +237,15 @@ export interface RootRouteChildren {
   AiExampleRoute: typeof AiExampleRoute
   DixyExampleRoute: typeof DixyExampleRoute
   PlaygroundRoute: typeof PlaygroundRoute
+  UiSdkExpRoute: typeof UiSdkExpRoute
+  UisdkTestRoute: typeof UisdkTestRoute
   DocsAccessibilityRoute: typeof DocsAccessibilityRoute
   DocsChangelogRoute: typeof DocsChangelogRoute
   DocsInstallationRoute: typeof DocsInstallationRoute
   LabControlsRoute: typeof LabControlsRoute
+  LabExpressiveRoute: typeof LabExpressiveRoute
   LabKitchenSinkRoute: typeof LabKitchenSinkRoute
+  LabPosterRoute: typeof LabPosterRoute
   LabShadersRoute: typeof LabShadersRoute
   LabThemeAuditRoute: typeof LabThemeAuditRoute
   DocsComponentsComponentRoute: typeof DocsComponentsComponentRoute
@@ -230,6 +282,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlaygroundRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ui-sdk-exp': {
+      id: '/ui-sdk-exp'
+      path: '/ui-sdk-exp'
+      fullPath: '/ui-sdk-exp'
+      preLoaderRoute: typeof UiSdkExpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/uisdk-test': {
+      id: '/uisdk-test'
+      path: '/uisdk-test'
+      fullPath: '/uisdk-test'
+      preLoaderRoute: typeof UisdkTestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/docs/accessibility': {
       id: '/docs/accessibility'
       path: '/docs/accessibility'
@@ -258,11 +324,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LabControlsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/lab/expressive': {
+      id: '/lab/expressive'
+      path: '/lab/expressive'
+      fullPath: '/lab/expressive'
+      preLoaderRoute: typeof LabExpressiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/lab/kitchen-sink': {
       id: '/lab/kitchen-sink'
       path: '/lab/kitchen-sink'
       fullPath: '/lab/kitchen-sink'
       preLoaderRoute: typeof LabKitchenSinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lab/poster': {
+      id: '/lab/poster'
+      path: '/lab/poster'
+      fullPath: '/lab/poster'
+      preLoaderRoute: typeof LabPosterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lab/shaders': {
@@ -301,11 +381,15 @@ const rootRouteChildren: RootRouteChildren = {
   AiExampleRoute: AiExampleRoute,
   DixyExampleRoute: DixyExampleRoute,
   PlaygroundRoute: PlaygroundRoute,
+  UiSdkExpRoute: UiSdkExpRoute,
+  UisdkTestRoute: UisdkTestRoute,
   DocsAccessibilityRoute: DocsAccessibilityRoute,
   DocsChangelogRoute: DocsChangelogRoute,
   DocsInstallationRoute: DocsInstallationRoute,
   LabControlsRoute: LabControlsRoute,
+  LabExpressiveRoute: LabExpressiveRoute,
   LabKitchenSinkRoute: LabKitchenSinkRoute,
+  LabPosterRoute: LabPosterRoute,
   LabShadersRoute: LabShadersRoute,
   LabThemeAuditRoute: LabThemeAuditRoute,
   DocsComponentsComponentRoute: DocsComponentsComponentRoute,

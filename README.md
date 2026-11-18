@@ -8,7 +8,7 @@
 
 <p align="center">
   <strong>Components with character.</strong><br />
-  Accessible React components on Base UI, with 38 starter themes that change the whole feel of your product.
+  Accessible React components on Base UI, with 41 starter themes that change the whole feel of your product.
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 ## Why Dixy
 
 - **Accessible by default.** Behaviour comes from [Base UI](https://base-ui.com) and [React Aria](https://react-spectrum.adobe.com/react-aria/), covering focus management, keyboard support and ARIA. Every component is checked with axe in the test suite.
-- **Themes, not just colours.** One `<Theme>` prop switches material, frame, typography and ornament. Pick from 38 starter themes or write your own with the theme authoring API.
+- **Themes, not just colours.** One `<Theme>` prop switches material, frame, typography and ornament. Pick from 41 starter themes or write your own with the theme authoring API.
 - **Semantic tokens.** 39 OKLCH palette families with 12 light and 12 dark stops each. Components use semantic roles (surface, text, border, action, feedback), so dark mode and custom accents just work.
 - **Motion with restraint.** Shared timings and easing, with optional springs through `@dixy-ui/react/motion`. Reduced motion is respected everywhere.
 - **No build step for styles.** Plain CSS in cascade layers, so your styles always win. No Tailwind compiler required, but Tailwind v4 bindings are available if you want them.
@@ -123,7 +123,7 @@ Every theme is a separate entry point, so you only ship the one you use. Try the
 | Package                                | Description                                                                                        |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | [`@dixy-ui/react`](./packages/react)   | The components, the `Theme` provider and the stylesheet                                            |
-| [`@dixy-ui/themes`](./packages/themes) | 38 optional starter themes and the theme authoring API                                             |
+| [`@dixy-ui/themes`](./packages/themes) | 41 optional starter themes and the theme authoring API                                             |
 | [`@dixy-ui/tokens`](./packages/tokens) | Framework-independent colour, type, size, space and motion tokens as plain CSS, TS and Tailwind v4 |
 
 ## Supported environments

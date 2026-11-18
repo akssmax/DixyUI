@@ -23,6 +23,29 @@
     --dixy-component-height: var(--dixy-size-control-lg);
     --dixy-component-font: var(--dixy-font-label-lg);
   }
+  /* Expressive size for list-like parts (ListBox, Select, Combobox, Menu):
+     poster type from the fluid display.xl role; the height grows with it. */
+  [data-dixy-visual][data-size="xl"] {
+    --dixy-component-height: calc(
+      var(--dixy-font-display-xl-size) + 2 * var(--dixy-space-150)
+    );
+    --dixy-component-font: var(--dixy-font-display-xl);
+  }
+  /* Tracking is in em, which resolves where it is declared. Declaring it on
+     the root would freeze it at the root's font size, so each descendant
+     declares it and resolves against its own size. */
+  [data-dixy-visual][data-size="xl"],
+  [data-dixy-visual][data-size="xl"] :where(*) {
+    letter-spacing: var(--dixy-font-display-xl-letter-spacing);
+  }
+  /* Grouped inputs inherit their font from the group, which sets none at
+     other sizes; at xl the group carries the display font. */
+  :is(
+    .dixy-combobox-input-group,
+    .dixy-autocomplete-input-group
+  )[data-size="xl"] {
+    font: var(--dixy-component-font);
+  }
   [data-dixy-visual][data-radius="none"] {
     --dixy-component-radius: var(--dixy-radius-0);
   }
@@ -336,11 +359,16 @@
       .dixy-combobox-item,
       .dixy-autocomplete-item
     )[data-highlighted]:not([data-disabled]) {
+    /* The band token (Theme highlight="band", or an accent surface) wins
+       over each item's own tint; unset, the item's tint applies. */
     background: var(
-      --dixy-component-subtle,
-      var(--dixy-color-background-selected)
+      --dixy-highlight-band,
+      var(--dixy-component-subtle, var(--dixy-color-background-selected))
     );
-    color: var(--dixy-component-text, var(--dixy-color-text-selected));
+    color: var(
+      --dixy-highlight-on-band,
+      var(--dixy-component-text, var(--dixy-color-text-selected))
+    );
   }
   :is(
     .dixy-menu-item,

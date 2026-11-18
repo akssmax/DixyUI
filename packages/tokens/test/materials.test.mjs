@@ -86,3 +86,30 @@ test("primary text on material surfaces retains contrast at the recipe shade ext
       }
     }
 });
+
+test("bevel inverts its edges for pressed controls and sunken wells", () => {
+  const { bevel } = materialRecipes;
+  // Raised: light top-left, dark bottom-right. Pressed and wells: the reverse.
+  const lightFirst = (edge) =>
+    /^inset 1px 1px 0 rgb\(255 255 255/.test(edge) &&
+    /inset -1px -1px 0 rgb\(0 0 0/.test(edge);
+  const darkFirst = (edge) =>
+    /^inset 1px 1px 0 rgb\(0 0 0/.test(edge) &&
+    /inset -1px -1px 0 rgb\(255 255 255/.test(edge);
+  for (const recipe of [bevel, bevel.dark]) {
+    assert.ok(lightFirst(recipe.edge));
+    assert.ok(darkFirst(recipe.pressedEdge));
+    assert.ok(darkFirst(recipe.wellEdge));
+    // Hard 1px edges only: no blur, and within the shadow-layer budget.
+    for (const edge of [recipe.edge, recipe.pressedEdge, recipe.wellEdge])
+      assert.ok(edge.split("inset").length - 1 <= materialBudgets.shadowLayers);
+  }
+  assert.equal(bevel.depth, "none");
+  const css = fs.readFileSync(
+    new URL("../../react/src/styles/materials.css", import.meta.url),
+    "utf8",
+  );
+  assert.match(css, /--dixy-material-bevel-pressed-edge:/);
+  assert.match(css, /--dixy-material-bevel-well-edge:/);
+  assert.match(css, /\[data-popup-open\]/);
+});

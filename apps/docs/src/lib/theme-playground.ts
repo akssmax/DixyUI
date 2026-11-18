@@ -5,6 +5,7 @@ import {
   type ThemeCharacter,
   isOrganicFrame,
   wellGrounds,
+  titleFont,
 } from "@dixy-ui/themes/authoring";
 import {
   compilePlaygroundDocument,
@@ -57,7 +58,8 @@ export interface ThemePreset {
   ornament: "quiet" | "balanced" | "expressive";
   relief: 0 | 1 | 2;
   effects: "static" | "backdrop" | "reduced";
-  material: "inherit" | "matte" | "glossy" | "soft" | "metal" | "paper";
+  material:
+    "inherit" | "matte" | "glossy" | "soft" | "metal" | "paper" | "bevel";
   shape: "inherit" | "rounded" | "pill" | "square";
   dir: "ltr" | "rtl";
   appearance: "light" | "dark";
@@ -179,7 +181,7 @@ const choices: Partial<Record<keyof ThemePreset, readonly unknown[]>> = {
   ornament: ["quiet", "balanced", "expressive"],
   relief: [0, 1, 2],
   effects: ["static", "backdrop", "reduced"],
-  material: ["inherit", "matte", "glossy", "soft", "metal", "paper"],
+  material: ["inherit", "matte", "glossy", "soft", "metal", "paper", "bevel"],
   shape: ["inherit", "rounded", "pill", "square"],
   dir: ["ltr", "rtl"],
 };
@@ -329,7 +331,9 @@ export function playgroundThemeProps(
     ...(preset.document
       ? compilePlaygroundDocument(preset.document).themeProps.style
       : {}),
-    ...themeFoundationStyle(preset),
+    ...themeFoundationStyle(preset, {
+      titles: source ? titleFont(source.character) : "heading",
+    }),
   };
   if (preset.customAccent)
     Object.assign(style, colorThemeVariables(palette, appearance));
@@ -343,6 +347,12 @@ export function playgroundThemeProps(
       : (ornamentRenderers[preset.skin] ?? null),
     ornament: preset.ornament,
     relief: preset.relief,
+    // Option highlight comes from the skin's character (tint or band).
+    highlight: source?.character.details.highlight ?? "tint",
+    // So does Button/Toggle corner morph (off or press).
+    morph: source?.character.details.morph ?? "off",
+    progress: source?.character.details.progress ?? "line",
+    avatarShape: source?.character.details.avatar ?? "none",
     material: preset.material === "inherit" ? undefined : preset.material,
     shape: preset.shape === "inherit" ? undefined : preset.shape,
     effects: preset.effects,

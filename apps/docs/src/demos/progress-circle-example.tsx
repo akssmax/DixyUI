@@ -7,11 +7,17 @@ export default function ProgressCircleExample({
   color = "accent",
   radius,
   material,
-}: VisualProps) {
+  showValue = false,
+}: VisualProps & { showValue?: boolean }) {
   const visual = { size, color };
   return (
     <Stack gap="md" style={{ width: "min(100%, 24rem)" }}>
-      <ProgressCircle {...visual} aria-label="Upload progress" value={65} />
+      <ProgressCircle
+        {...visual}
+        showValue={showValue}
+        aria-label="Upload progress"
+        value={65}
+      />
     </Stack>
   );
 }

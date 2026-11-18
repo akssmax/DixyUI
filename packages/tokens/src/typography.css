@@ -19,6 +19,9 @@
     --dixy-font-size-36: 2.25rem;
     --dixy-font-size-44: 2.75rem;
     --dixy-font-size-56: 3.5rem;
+    --dixy-font-size-72: 4.5rem;
+    --dixy-font-size-96: 6rem;
+    --dixy-font-size-128: 8rem;
     --dixy-line-height-16: 1rem;
     --dixy-line-height-20: 1.25rem;
     --dixy-line-height-24: 1.5rem;
@@ -30,6 +33,9 @@
     --dixy-line-height-44: 2.75rem;
     --dixy-line-height-52: 3.25rem;
     --dixy-line-height-64: 4rem;
+    --dixy-line-height-72: 4.5rem;
+    --dixy-line-height-96: 6rem;
+    --dixy-line-height-128: 8rem;
     --dixy-font-weight-regular: 400;
     --dixy-font-weight-medium: 500;
     --dixy-font-weight-label: 550;
@@ -39,12 +45,56 @@
   }
   :root,
   .dixy-theme {
+    --dixy-font-display-3xl-family: var(--dixy-font-display);
+    --dixy-font-display-3xl-size: clamp(
+      3.25rem,
+      1.6667rem + 7.9167cqi,
+      var(--dixy-font-size-128)
+    );
+    --dixy-font-display-3xl-line-height: 1;
+    --dixy-font-display-3xl-weight: var(--dixy-font-weight-bold);
+    --dixy-font-display-3xl-letter-spacing: -0.05em;
+    --dixy-font-display-3xl-stretch: normal;
+    --dixy-font-display-3xl: var(--dixy-font-display-3xl-stretch)
+      var(--dixy-font-display-3xl-weight)
+      var(--dixy-font-display-3xl-size)/var(--dixy-font-display-3xl-line-height)
+      var(--dixy-font-display-3xl-family);
+    --dixy-font-display-2xl-family: var(--dixy-font-display);
+    --dixy-font-display-2xl-size: clamp(
+      2.75rem,
+      1.6667rem + 5.4167cqi,
+      var(--dixy-font-size-96)
+    );
+    --dixy-font-display-2xl-line-height: 1;
+    --dixy-font-display-2xl-weight: var(--dixy-font-weight-bold);
+    --dixy-font-display-2xl-letter-spacing: -0.045em;
+    --dixy-font-display-2xl-stretch: normal;
+    --dixy-font-display-2xl: var(--dixy-font-display-2xl-stretch)
+      var(--dixy-font-display-2xl-weight)
+      var(--dixy-font-display-2xl-size)/var(--dixy-font-display-2xl-line-height)
+      var(--dixy-font-display-2xl-family);
+    --dixy-font-display-xl-family: var(--dixy-font-display);
+    --dixy-font-display-xl-size: clamp(
+      2.25rem,
+      1.5rem + 3.75cqi,
+      var(--dixy-font-size-72)
+    );
+    --dixy-font-display-xl-line-height: 1;
+    --dixy-font-display-xl-weight: var(--dixy-font-weight-bold);
+    --dixy-font-display-xl-letter-spacing: -0.04em;
+    --dixy-font-display-xl-stretch: normal;
+    --dixy-font-display-xl: var(--dixy-font-display-xl-stretch)
+      var(--dixy-font-display-xl-weight)
+      var(--dixy-font-display-xl-size)/var(--dixy-font-display-xl-line-height)
+      var(--dixy-font-display-xl-family);
     --dixy-font-display-lg-family: var(--dixy-font-display);
     --dixy-font-display-lg-size: var(--dixy-font-size-56);
     --dixy-font-display-lg-line-height: var(--dixy-line-height-64);
     --dixy-font-display-lg-weight: var(--dixy-font-weight-bold);
     --dixy-font-display-lg-letter-spacing: -0.035em;
-    --dixy-font-display-lg: var(--dixy-font-display-lg-weight)
+    --dixy-font-display-lg-stretch: normal;
+    --dixy-font-display-lg: var(--dixy-font-display-lg-stretch)
+      var(--dixy-font-display-lg-weight)
       var(--dixy-font-display-lg-size)/var(--dixy-font-display-lg-line-height)
       var(--dixy-font-display-lg-family);
     --dixy-font-display-md-family: var(--dixy-font-display);
@@ -52,7 +102,9 @@
     --dixy-font-display-md-line-height: var(--dixy-line-height-52);
     --dixy-font-display-md-weight: var(--dixy-font-weight-bold);
     --dixy-font-display-md-letter-spacing: -0.03em;
-    --dixy-font-display-md: var(--dixy-font-display-md-weight)
+    --dixy-font-display-md-stretch: normal;
+    --dixy-font-display-md: var(--dixy-font-display-md-stretch)
+      var(--dixy-font-display-md-weight)
       var(--dixy-font-display-md-size)/var(--dixy-font-display-md-line-height)
       var(--dixy-font-display-md-family);
     --dixy-font-display-sm-family: var(--dixy-font-display);
@@ -60,7 +112,9 @@
     --dixy-font-display-sm-line-height: var(--dixy-line-height-44);
     --dixy-font-display-sm-weight: var(--dixy-font-weight-strong);
     --dixy-font-display-sm-letter-spacing: -0.025em;
-    --dixy-font-display-sm: var(--dixy-font-display-sm-weight)
+    --dixy-font-display-sm-stretch: normal;
+    --dixy-font-display-sm: var(--dixy-font-display-sm-stretch)
+      var(--dixy-font-display-sm-weight)
       var(--dixy-font-display-sm-size)/var(--dixy-font-display-sm-line-height)
       var(--dixy-font-display-sm-family);
     --dixy-font-heading-lg-family: var(--dixy-font-sans);
@@ -68,7 +122,9 @@
     --dixy-font-heading-lg-line-height: var(--dixy-line-height-40);
     --dixy-font-heading-lg-weight: var(--dixy-font-weight-strong);
     --dixy-font-heading-lg-letter-spacing: -0.025em;
-    --dixy-font-heading-lg: var(--dixy-font-heading-lg-weight)
+    --dixy-font-heading-lg-stretch: normal;
+    --dixy-font-heading-lg: var(--dixy-font-heading-lg-stretch)
+      var(--dixy-font-heading-lg-weight)
       var(--dixy-font-heading-lg-size)/var(--dixy-font-heading-lg-line-height)
       var(--dixy-font-heading-lg-family);
     --dixy-font-heading-md-family: var(--dixy-font-sans);
@@ -76,7 +132,9 @@
     --dixy-font-heading-md-line-height: var(--dixy-line-height-36);
     --dixy-font-heading-md-weight: var(--dixy-font-weight-strong);
     --dixy-font-heading-md-letter-spacing: -0.02em;
-    --dixy-font-heading-md: var(--dixy-font-heading-md-weight)
+    --dixy-font-heading-md-stretch: normal;
+    --dixy-font-heading-md: var(--dixy-font-heading-md-stretch)
+      var(--dixy-font-heading-md-weight)
       var(--dixy-font-heading-md-size)/var(--dixy-font-heading-md-line-height)
       var(--dixy-font-heading-md-family);
     --dixy-font-heading-sm-family: var(--dixy-font-sans);
@@ -84,7 +142,9 @@
     --dixy-font-heading-sm-line-height: var(--dixy-line-height-32);
     --dixy-font-heading-sm-weight: var(--dixy-font-weight-strong);
     --dixy-font-heading-sm-letter-spacing: -0.015em;
-    --dixy-font-heading-sm: var(--dixy-font-heading-sm-weight)
+    --dixy-font-heading-sm-stretch: normal;
+    --dixy-font-heading-sm: var(--dixy-font-heading-sm-stretch)
+      var(--dixy-font-heading-sm-weight)
       var(--dixy-font-heading-sm-size)/var(--dixy-font-heading-sm-line-height)
       var(--dixy-font-heading-sm-family);
     --dixy-font-title-lg-family: var(--dixy-font-sans);
@@ -92,7 +152,9 @@
     --dixy-font-title-lg-line-height: var(--dixy-line-height-28);
     --dixy-font-title-lg-weight: var(--dixy-font-weight-semibold);
     --dixy-font-title-lg-letter-spacing: -0.01em;
-    --dixy-font-title-lg: var(--dixy-font-title-lg-weight)
+    --dixy-font-title-lg-stretch: normal;
+    --dixy-font-title-lg: var(--dixy-font-title-lg-stretch)
+      var(--dixy-font-title-lg-weight)
       var(--dixy-font-title-lg-size)/var(--dixy-font-title-lg-line-height)
       var(--dixy-font-title-lg-family);
     --dixy-font-title-md-family: var(--dixy-font-sans);
@@ -100,7 +162,9 @@
     --dixy-font-title-md-line-height: var(--dixy-line-height-26);
     --dixy-font-title-md-weight: var(--dixy-font-weight-semibold);
     --dixy-font-title-md-letter-spacing: -0.005em;
-    --dixy-font-title-md: var(--dixy-font-title-md-weight)
+    --dixy-font-title-md-stretch: normal;
+    --dixy-font-title-md: var(--dixy-font-title-md-stretch)
+      var(--dixy-font-title-md-weight)
       var(--dixy-font-title-md-size)/var(--dixy-font-title-md-line-height)
       var(--dixy-font-title-md-family);
     --dixy-font-title-sm-family: var(--dixy-font-sans);
@@ -108,7 +172,9 @@
     --dixy-font-title-sm-line-height: var(--dixy-line-height-24);
     --dixy-font-title-sm-weight: var(--dixy-font-weight-semibold);
     --dixy-font-title-sm-letter-spacing: 0em;
-    --dixy-font-title-sm: var(--dixy-font-title-sm-weight)
+    --dixy-font-title-sm-stretch: normal;
+    --dixy-font-title-sm: var(--dixy-font-title-sm-stretch)
+      var(--dixy-font-title-sm-weight)
       var(--dixy-font-title-sm-size)/var(--dixy-font-title-sm-line-height)
       var(--dixy-font-title-sm-family);
     --dixy-font-body-lg-family: var(--dixy-font-sans);
@@ -116,7 +182,9 @@
     --dixy-font-body-lg-line-height: var(--dixy-line-height-28);
     --dixy-font-body-lg-weight: var(--dixy-font-weight-regular);
     --dixy-font-body-lg-letter-spacing: 0em;
-    --dixy-font-body-lg: var(--dixy-font-body-lg-weight)
+    --dixy-font-body-lg-stretch: normal;
+    --dixy-font-body-lg: var(--dixy-font-body-lg-stretch)
+      var(--dixy-font-body-lg-weight)
       var(--dixy-font-body-lg-size)/var(--dixy-font-body-lg-line-height)
       var(--dixy-font-body-lg-family);
     --dixy-font-body-md-family: var(--dixy-font-sans);
@@ -124,7 +192,9 @@
     --dixy-font-body-md-line-height: var(--dixy-line-height-24);
     --dixy-font-body-md-weight: var(--dixy-font-weight-regular);
     --dixy-font-body-md-letter-spacing: 0em;
-    --dixy-font-body-md: var(--dixy-font-body-md-weight)
+    --dixy-font-body-md-stretch: normal;
+    --dixy-font-body-md: var(--dixy-font-body-md-stretch)
+      var(--dixy-font-body-md-weight)
       var(--dixy-font-body-md-size)/var(--dixy-font-body-md-line-height)
       var(--dixy-font-body-md-family);
     --dixy-font-body-sm-family: var(--dixy-font-sans);
@@ -132,7 +202,9 @@
     --dixy-font-body-sm-line-height: var(--dixy-line-height-20);
     --dixy-font-body-sm-weight: var(--dixy-font-weight-regular);
     --dixy-font-body-sm-letter-spacing: 0.005em;
-    --dixy-font-body-sm: var(--dixy-font-body-sm-weight)
+    --dixy-font-body-sm-stretch: normal;
+    --dixy-font-body-sm: var(--dixy-font-body-sm-stretch)
+      var(--dixy-font-body-sm-weight)
       var(--dixy-font-body-sm-size)/var(--dixy-font-body-sm-line-height)
       var(--dixy-font-body-sm-family);
     --dixy-font-label-lg-family: var(--dixy-font-sans);
@@ -140,7 +212,9 @@
     --dixy-font-label-lg-line-height: var(--dixy-line-height-24);
     --dixy-font-label-lg-weight: var(--dixy-font-weight-label);
     --dixy-font-label-lg-letter-spacing: 0em;
-    --dixy-font-label-lg: var(--dixy-font-label-lg-weight)
+    --dixy-font-label-lg-stretch: normal;
+    --dixy-font-label-lg: var(--dixy-font-label-lg-stretch)
+      var(--dixy-font-label-lg-weight)
       var(--dixy-font-label-lg-size)/var(--dixy-font-label-lg-line-height)
       var(--dixy-font-label-lg-family);
     --dixy-font-label-md-family: var(--dixy-font-sans);
@@ -148,7 +222,9 @@
     --dixy-font-label-md-line-height: var(--dixy-line-height-20);
     --dixy-font-label-md-weight: var(--dixy-font-weight-label);
     --dixy-font-label-md-letter-spacing: 0.005em;
-    --dixy-font-label-md: var(--dixy-font-label-md-weight)
+    --dixy-font-label-md-stretch: normal;
+    --dixy-font-label-md: var(--dixy-font-label-md-stretch)
+      var(--dixy-font-label-md-weight)
       var(--dixy-font-label-md-size)/var(--dixy-font-label-md-line-height)
       var(--dixy-font-label-md-family);
     --dixy-font-label-sm-family: var(--dixy-font-sans);
@@ -156,7 +232,9 @@
     --dixy-font-label-sm-line-height: var(--dixy-line-height-16);
     --dixy-font-label-sm-weight: var(--dixy-font-weight-label);
     --dixy-font-label-sm-letter-spacing: 0.01em;
-    --dixy-font-label-sm: var(--dixy-font-label-sm-weight)
+    --dixy-font-label-sm-stretch: normal;
+    --dixy-font-label-sm: var(--dixy-font-label-sm-stretch)
+      var(--dixy-font-label-sm-weight)
       var(--dixy-font-label-sm-size)/var(--dixy-font-label-sm-line-height)
       var(--dixy-font-label-sm-family);
     --dixy-font-caption-family: var(--dixy-font-sans);
@@ -164,7 +242,9 @@
     --dixy-font-caption-line-height: var(--dixy-line-height-16);
     --dixy-font-caption-weight: var(--dixy-font-weight-regular);
     --dixy-font-caption-letter-spacing: 0.01em;
-    --dixy-font-caption: var(--dixy-font-caption-weight)
+    --dixy-font-caption-stretch: normal;
+    --dixy-font-caption: var(--dixy-font-caption-stretch)
+      var(--dixy-font-caption-weight)
       var(--dixy-font-caption-size)/var(--dixy-font-caption-line-height)
       var(--dixy-font-caption-family);
     --dixy-font-code-md-family: var(--dixy-font-mono);
@@ -172,7 +252,9 @@
     --dixy-font-code-md-line-height: var(--dixy-line-height-24);
     --dixy-font-code-md-weight: var(--dixy-font-weight-regular);
     --dixy-font-code-md-letter-spacing: 0em;
-    --dixy-font-code-md: var(--dixy-font-code-md-weight)
+    --dixy-font-code-md-stretch: normal;
+    --dixy-font-code-md: var(--dixy-font-code-md-stretch)
+      var(--dixy-font-code-md-weight)
       var(--dixy-font-code-md-size)/var(--dixy-font-code-md-line-height)
       var(--dixy-font-code-md-family);
     --dixy-font-code-sm-family: var(--dixy-font-mono);
@@ -180,7 +262,9 @@
     --dixy-font-code-sm-line-height: var(--dixy-line-height-20);
     --dixy-font-code-sm-weight: var(--dixy-font-weight-regular);
     --dixy-font-code-sm-letter-spacing: 0em;
-    --dixy-font-code-sm: var(--dixy-font-code-sm-weight)
+    --dixy-font-code-sm-stretch: normal;
+    --dixy-font-code-sm: var(--dixy-font-code-sm-stretch)
+      var(--dixy-font-code-sm-weight)
       var(--dixy-font-code-sm-size)/var(--dixy-font-code-sm-line-height)
       var(--dixy-font-code-sm-family);
   }

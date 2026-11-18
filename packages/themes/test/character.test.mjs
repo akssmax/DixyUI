@@ -128,7 +128,8 @@ test("animated state cues and backdrops respect reductions", () => {
   for (const pattern of backdropPatterns) {
     document.character.backdrop.pattern = pattern;
     const output = compileThemeDocument(document).css;
-    assert.doesNotMatch(output, /url\(/, pattern);
+    // No image requests: only inline data: URIs (the shapes tile) are allowed.
+    assert.doesNotMatch(output, /url\((?!"data:)/, pattern);
     if (pattern !== "none")
       assert.match(output, /pointer-events:none/, pattern);
   }
@@ -177,10 +178,15 @@ test("window chrome rebuilds card parts without new markup and migrates from v4"
   const v4 = base();
   v4.schemaVersion = 4;
   delete v4.character.chrome;
+  delete v4.character.details.highlight;
+  delete v4.character.details.morph;
+  delete v4.character.details.progress;
+  delete v4.character.details.avatar;
+  delete v4.character.type.axes;
   for (const key of ["backdropBlur", "backdropSaturate"])
     delete v4.recipes.material.parameters[key];
   const migrated = parseThemeDocument(v4);
-  assert.equal(migrated.schemaVersion, 6);
+  assert.equal(migrated.schemaVersion, 8);
   assert.deepEqual(migrated.character.chrome, defaultChrome);
   assert.equal(compileThemeDocument(migrated).css, neutral);
   const scoped =
@@ -282,4 +288,106 @@ test("colour-carrying easings never overshoot, so hover tints cannot flash", () 
   const css = compileThemeDocument(springy).css;
   assert.match(css, /--dixy-motion-easing-spatial:linear\(/);
   assert.match(css, /--dixy-switch-motion-thumb-easing:linear\(/);
+});
+
+test("highlight compiles to a Theme prop, not skin CSS, so popups carry it", () => {
+  const tint = compileThemeDocument(base());
+  const banded = base();
+  banded.character.details.highlight = "band";
+  const band = compileThemeDocument(banded);
+  // The rule lives once in the library; skins stay inside their CSS budget.
+  assert.equal(band.css, tint.css);
+  assert.equal(tint.themeProps.highlight, "tint");
+  assert.equal(band.themeProps.highlight, "band");
+  const group = [
+    "swiss-poster",
+    "brutalist-concrete",
+    "tokyo-transit",
+    "riso-zine",
+    "freighter",
+    "signal",
+    "pulse",
+  ];
+  for (const d of themeDocuments)
+    assert.equal(
+      d.character.details.highlight,
+      group.includes(d.id.split("/")[1]) ? "band" : "tint",
+      d.id,
+    );
+});
+
+test("v6 documents migrate to a tint highlight and keep their CSS", () => {
+  const current = base();
+  const v6 = clone(current);
+  v6.schemaVersion = 6;
+  delete v6.character.details.highlight;
+  delete v6.character.details.morph;
+  delete v6.character.details.progress;
+  delete v6.character.details.avatar;
+  delete v6.character.type.axes;
+  const migrated = parseThemeDocument(v6);
+  assert.equal(migrated.schemaVersion, 8);
+  assert.equal(migrated.character.details.highlight, "tint");
+  assert.equal(
+    compileThemeDocument(migrated).css,
+    compileThemeDocument(current).css,
+  );
+  v6.character.details.highlight = "band";
+  assert.throws(() => parseThemeDocument(v6), ThemeDocumentError);
+});
+
+test("v7 documents migrate to fixed corners, flat progress and plain headings", () => {
+  const current = base();
+  const v7 = clone(current);
+  v7.schemaVersion = 7;
+  delete v7.character.details.morph;
+  delete v7.character.details.progress;
+  delete v7.character.details.avatar;
+  delete v7.character.type.axes;
+  const migrated = parseThemeDocument(v7);
+  assert.equal(migrated.schemaVersion, 8);
+  assert.equal(migrated.character.details.morph, "off");
+  assert.equal(migrated.character.details.progress, "line");
+  assert.equal(migrated.character.type.axes, "none");
+  assert.equal(migrated.character.details.avatar, "none");
+  assert.equal(
+    compileThemeDocument(migrated).css,
+    compileThemeDocument(current).css,
+  );
+  v7.character.details.morph = "press";
+  assert.throws(() => parseThemeDocument(v7), ThemeDocumentError);
+});
+
+test("expressive themes: morph and wave are Theme props; width rides in the font tokens", () => {
+  const plain = compileThemeDocument(base());
+  const doc = base();
+  doc.character.details.morph = "press";
+  doc.character.details.progress = "wave";
+  doc.character.type.axes = "condensed";
+  const expressive = compileThemeDocument(doc);
+  assert.equal(plain.themeProps.morph, "off");
+  assert.equal(plain.themeProps.progress, "line");
+  assert.equal(expressive.themeProps.morph, "press");
+  assert.equal(expressive.themeProps.progress, "wave");
+  assert.match(expressive.css, /--dixy-font-display-3xl-stretch:condensed;/);
+  assert.doesNotMatch(plain.css, /-stretch:/);
+  doc.character.type.axes = "soft";
+  assert.match(compileThemeDocument(doc).css, /"SOFT" 100, "WONK" 1/);
+  const group = ["bloom", "pulse", "sorbet"];
+  for (const d of themeDocuments) {
+    const on = group.includes(d.id.split("/")[1]);
+    assert.equal(d.character.details.morph, on ? "press" : "off", d.id);
+    assert.equal(d.character.details.progress, on ? "wave" : "line", d.id);
+    assert.equal(d.character.details.avatar !== "none", on, d.id);
+  }
+});
+
+test("shapes backdrop masks a tile of library shapes, inline and budgeted", () => {
+  const doc = base();
+  doc.character.backdrop = { pattern: "shapes", intensity: 0.7, scale: 1 };
+  const compiled = compileThemeDocument(doc);
+  assert.match(compiled.css, /mask:url\("data:image\/svg\+xml,/);
+  assert.doesNotMatch(compiled.css, /url\((?!"data:)/);
+  doc.character.details.avatar = "cookie-9";
+  assert.equal(compileThemeDocument(doc).themeProps.avatarShape, "cookie-9");
 });

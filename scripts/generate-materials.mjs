@@ -40,19 +40,29 @@ const shapes = `${header}@layer dixy.tokens {
   .dixy-button[data-dixy-shape]:not([data-dixy-shape="rounded"]) { border-radius: var(--dixy-shape-control); }
   .dixy-shape { display: inline-block; inline-size: 5rem; block-size: 5rem; flex: none; overflow: visible; }
 }`;
+// Optional state edges: a pressed (inverted) finish and a sunken well.
+const stateVars = (name, recipe) =>
+  [
+    recipe.pressedImage &&
+      `--dixy-material-${name}-pressed-image: ${recipe.pressedImage};`,
+    recipe.pressedEdge &&
+      `--dixy-material-${name}-pressed-edge: ${recipe.pressedEdge};`,
+    recipe.wellEdge && `--dixy-material-${name}-well-edge: ${recipe.wellEdge};`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+const vars = (name, recipe) =>
+  `--dixy-material-${name}-image: ${recipe.image};\n--dixy-material-${name}-edge: ${recipe.edge};\n--dixy-material-${name}-blend: ${recipe.blend};\n${stateVars(name, recipe)}`;
 const tokens = `${header}@layer dixy.tokens {
   :root { ${Object.entries(materialRecipes)
-    .map(
-      ([name, recipe]) =>
-        `--dixy-material-${name}-image: ${recipe.image};\n--dixy-material-${name}-edge: ${recipe.edge};\n--dixy-material-${name}-blend: ${recipe.blend};`,
-    )
+    .map(([name, recipe]) => vars(name, recipe))
     .join("\n")} }
   ${Object.entries(materialRecipes)
     .filter(([, recipe]) => recipe.dark)
     .map(
       ([name, recipe]) =>
-        `[data-appearance="light"] { --dixy-material-${name}-image: ${recipe.image}; --dixy-material-${name}-edge: ${recipe.edge}; --dixy-material-${name}-blend: ${recipe.blend}; }
-  [data-appearance="dark"] { --dixy-material-${name}-image: ${recipe.dark.image}; --dixy-material-${name}-edge: ${recipe.dark.edge}; --dixy-material-${name}-blend: ${recipe.dark.blend}; }`,
+        `[data-appearance="light"] { ${vars(name, recipe)} }
+  [data-appearance="dark"] { ${vars(name, recipe.dark)} }`,
     )
     .join("\n")}
 }`;
@@ -60,6 +70,8 @@ const button =
   '.dixy-button[data-material]:is([data-variant="solid"], [data-variant="soft"]):not([data-disabled])';
 const familySurfaces =
   ".dixy-card, .dixy-alert, .dixy-badge, .dixy-chip, .dixy-textarea, .dixy-native-select, .dixy-input-group, .dixy-list-box, .dixy-calendar, .dixy-range-calendar, .dixy-input, .dixy-select-trigger, .dixy-combobox-input-group, .dixy-autocomplete-input-group, .dixy-avatar-root, .dixy-toggle, .dixy-select-popup, .dixy-combobox-popup, .dixy-autocomplete-popup, .dixy-dialog-popup, .dixy-alert-dialog-popup, .dixy-drawer-popup, .dixy-popover-popup, .dixy-preview-card-popup, .dixy-tooltip-popup, .dixy-menu-popup, .dixy-context-menu-popup, .dixy-navigation-menu-popup, .dixy-toast-root";
+const wells =
+  ".dixy-textarea, .dixy-input-group, .dixy-list-box, .dixy-calendar, .dixy-range-calendar, .dixy-input, .dixy-combobox-input-group, .dixy-autocomplete-input-group";
 const material = `${header}@layer dixy.components {
   .dixy-box[data-material] {
     background-color: var(--dixy-color-background-surface-raised);
@@ -102,15 +114,46 @@ const material = `${header}@layer dixy.components {
   }`,
     )
     .join("\n")}
+  ${Object.entries(materialRecipes)
+    .filter(([, recipe]) => recipe.pressedEdge)
+    .map(
+      ([name]) => `/* ${name}: pressed controls and open triggers sink in. */
+  ${button.replace("[data-material]", `[data-material="${name}"]`)}:is(:active, [data-popup-open], [data-pressed]:not([data-pressed="false"])),
+  .dixy-toggle[data-material="${name}"]:not([data-disabled]):is(:active, [data-pressed]:not([data-pressed="false"])) {
+    background-image: var(--dixy-material-${name}-pressed-image); box-shadow: var(--dixy-material-${name}-pressed-edge);
+  }
+  /* Slider thumbs are raised blocks, not floating dots. */
+  .dixy-slider-root[data-material="${name}"]:not([data-disabled]) .dixy-slider-thumb::before {
+    background-image: var(--dixy-material-${name}-image); box-shadow: var(--dixy-material-${name}-edge);
+  }`,
+    )
+    .join("\n")}
+  ${Object.entries(materialRecipes)
+    .filter(([, recipe]) => recipe.wellEdge)
+    .map(
+      ([
+        name,
+      ]) => `/* ${name}: fields, lists, boxes and tracks are sunken wells. */
+  :is(${wells})[data-dixy-visual][data-material="${name}"]:not([data-disabled]):not([data-pressed="false"]),
+  .dixy-checkbox-root[data-material="${name}"]:not([data-disabled])::before,
+  .dixy-radio-root[data-material="${name}"]:not([data-disabled])::before,
+  .dixy-number-field-root[data-material="${name}"]:not([data-disabled]) .dixy-number-field-group,
+  .dixy-otp-field-root[data-material="${name}"]:not([data-disabled]) .dixy-otp-field-input,
+  :is(.dixy-progress-root,.dixy-meter-root,.dixy-slider-root)[data-material="${name}"]:not([data-disabled]) :is(.dixy-progress-track,.dixy-meter-track,.dixy-slider-track) {
+    background-image: none; box-shadow: var(--dixy-material-${name}-well-edge);
+  }`,
+    )
+    .join("\n")}
   /* Glossy keeps its enamel as two thin bands; other finishes cover the whole button. */
   ${button.replace("[data-material]", '[data-material="glossy"]')} { background-size: 100% 3px; background-repeat: no-repeat; background-position: top, bottom; }
-  [data-effects="reduced"] :is([data-dixy-visual],.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator,.dixy-number-field-group,.dixy-otp-field-input) { background-image: none !important; box-shadow: none !important; }
+  [data-effects="reduced"] :is([data-dixy-visual],.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator,.dixy-progress-track,.dixy-meter-track,.dixy-slider-track,.dixy-number-field-group,.dixy-otp-field-input) { background-image: none !important; box-shadow: none !important; }
   [data-effects="reduced"] .dixy-radio-root::before { background-image: none !important; box-shadow: none !important; }
   [data-effects="reduced"] .dixy-tabs-indicator { background-image: none !important; box-shadow: none !important; }
+  [data-effects="reduced"] .dixy-slider-root[data-material] .dixy-slider-thumb::before { background-image: none !important; box-shadow: var(--dixy-shadow-raised) !important; }
   [data-effects="reduced"] :is(.dixy-box, .dixy-button)[data-material] { background-image: none !important; box-shadow: none !important; }
   [data-effects="reduced"] :is(.dixy-switch-root, .dixy-checkbox-root)[data-material]::before { background-image: none !important; box-shadow: none !important; }
   @media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
-    :is([data-dixy-visual],.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator,.dixy-number-field-group,.dixy-otp-field-input) { background-image: none !important; box-shadow: none !important; }
+    :is([data-dixy-visual],.dixy-progress-indicator,.dixy-meter-indicator,.dixy-slider-indicator,.dixy-progress-track,.dixy-meter-track,.dixy-slider-track,.dixy-number-field-group,.dixy-otp-field-input) { background-image: none !important; box-shadow: none !important; }
     .dixy-radio-root::before { background-image: none !important; box-shadow: none !important; }
     .dixy-tabs-indicator { background-image: none !important; box-shadow: none !important; }
     :is(.dixy-box, .dixy-button)[data-material] { background-image: none !important; box-shadow: none !important; }

@@ -36,6 +36,10 @@ export const prismGlassTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"Manrope Variable", "Manrope", ui-sans-serif, system-ui, sans-serif',

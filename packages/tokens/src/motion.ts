@@ -156,3 +156,39 @@ export function motionTransition<T extends MotionTransition>(
 ): `var(--dixy-motion-transition-${T})` {
   return `var(--dixy-motion-transition-${role})`;
 }
+
+/**
+ * A spring as a CSS `linear()` easing plus its settle time, for CSS-only
+ * transitions (clip-path, SVG `d`, radius) that can't use a JS spring. The
+ * curve is simulated from the same token, so the overshoot matches. It can't
+ * carry velocity into an interrupted transition the way a JS spring does.
+ */
+export function springEasing(
+  scheme: MotionScheme = "standard",
+  kind: MotionKind = "spatial",
+  speed: MotionSpeed = "default",
+): { easing: string; duration: number } {
+  const { stiffness, dampingRatio, mass } = motionSprings[scheme][kind][speed];
+  const damping = 2 * dampingRatio * Math.sqrt(stiffness * mass);
+  const dt = 1 / 600;
+  let x = 0;
+  let v = 0;
+  let time = 0;
+  const samples: [number, number][] = [];
+  for (let step = 1; step <= 6000; step++) {
+    v += ((-stiffness * (x - 1) - damping * v) / mass) * dt;
+    x += v * dt;
+    time += dt;
+    if (step % 10 === 0) samples.push([time, x]);
+    if (Math.abs(1 - x) < 0.001 && Math.abs(v) < 0.01) break;
+  }
+  const points = samples
+    .map(
+      ([t, value]) => `${value.toFixed(3)} ${((t / time) * 100).toFixed(1)}%`,
+    )
+    .join(", ");
+  return {
+    easing: `linear(0, ${points}, 1)`,
+    duration: Math.round(time * 1000),
+  };
+}

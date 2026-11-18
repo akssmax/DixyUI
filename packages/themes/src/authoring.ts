@@ -9,6 +9,7 @@ import {
 import type { SkinDefinition } from "@dixy-ui/tokens";
 import { compileThemeCSS } from "./compile-css.ts";
 import { themeFoundationStyle } from "./foundations.ts";
+import { titleFont } from "./character.ts";
 import { parseThemeDocument } from "./theme-schema.ts";
 import { resolveThemeRecipe, themeRenderer } from "./resolve.ts";
 
@@ -48,7 +49,9 @@ export {
   numeralStyles,
   scrollbarStyles,
   selectionStyles,
+  highlightStyles,
   stateStyles,
+  titleFont,
 } from "./character.ts";
 export type { ThemeCharacter } from "./character.ts";
 export {
@@ -109,8 +112,14 @@ export function compileThemeDocument(input: unknown) {
       ornament,
       relief,
       effects,
+      // Option highlight is a Theme prop, so the library rule (and portals) carry it.
+      highlight: document.character.details.highlight,
+      // Corner morph is read by Button and Toggle from Theme context.
+      morph: document.character.details.morph,
+      progress: document.character.details.progress,
+      avatarShape: document.character.details.avatar,
       style: {
-        ...themeFoundationStyle(f),
+        ...themeFoundationStyle(f, { titles: titleFont(document.character) }),
         ...organicOrnamentVariables(
           document.recipes.frame.id,
           document.recipes.frame.ornament,
@@ -141,7 +150,9 @@ export function defineSkin(value: SkinDefinition): SkinDefinition {
     !neutralColorFamilies.includes(d.neutralColor) ||
     !Object.hasOwn(radiusPresets, d.radius) ||
     !Object.hasOwn(spacingDensity, d.density) ||
-    !["matte", "glossy", "soft", "metal", "paper"].includes(d.material) ||
+    !["matte", "glossy", "soft", "metal", "paper", "bevel"].includes(
+      d.material,
+    ) ||
     !["rounded", "pill", "square"].includes(d.shape)
   )
     throw new Error("Unsupported skin foundations.");

@@ -36,6 +36,10 @@ export const freighterTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "band",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily: '"Share Tech Mono", "VT323", ui-monospace, monospace',
     "--dixy-font-sans": '"Share Tech Mono", "VT323", ui-monospace, monospace',

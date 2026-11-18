@@ -7,7 +7,9 @@ import { styledPrimitive } from "../utilities/styled-primitive";
 export interface ListBoxRootProps<T extends object>
   extends
     Omit<Primitive.ListBoxProps<T>, keyof VisualProps>,
-    Pick<VisualProps, "size" | "color" | "radius" | "material"> {
+    Pick<VisualProps, "color" | "radius" | "material"> {
+  /** Component proportions; preserves the shared interaction target. `xl` sets options in the fluid display.xl role. @default md */
+  size?: "sm" | "md" | "lg" | "xl";
   /** Surface emphasis. @default outline */ variant?: "outline" | "soft";
 }
 function Root<T extends object>({

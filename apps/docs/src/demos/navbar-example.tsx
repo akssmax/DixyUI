@@ -13,7 +13,7 @@ export default function NavbarExample({
   size?: "sm" | "md" | "lg";
   variant?: "outline" | "soft" | "ghost";
   radius?: "none" | "sm" | "md" | "lg" | "full";
-  material?: "matte" | "glossy" | "soft" | "metal" | "paper";
+  material?: "matte" | "glossy" | "soft" | "metal" | "paper" | "bevel";
   collapseBelow?: "sm" | "md" | "lg" | "never";
 }) {
   const items = links.map((label, index) => (

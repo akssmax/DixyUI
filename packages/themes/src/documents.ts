@@ -1,7 +1,7 @@
 import { parseThemeDocument } from "./theme-schema.ts";
 import { applyThemeFix } from "./theme-fix.ts";
 import { themeFixes } from "./theme-fixes.ts";
-import type { ThemeCharacter } from "./character.ts";
+import type { AuthoredCharacter } from "./character.ts";
 import { defaultChrome, type ThemeChrome } from "./chrome.ts";
 import {
   launchCharacters,
@@ -86,7 +86,7 @@ const starterChrome: Record<string, Partial<ThemeChrome>> = {
 };
 
 /** Each starter's control language, motion, type voice, state cues, details and backdrop. */
-const starterCharacters: Record<string, Omit<ThemeCharacter, "chrome">> = {
+const starterCharacters: Record<string, AuthoredCharacter> = {
   "dixy/blueprint": {
     controls: "instrument",
     motion: {
@@ -132,6 +132,7 @@ const starterCharacters: Record<string, Omit<ThemeCharacter, "chrome">> = {
       focus: "offset",
       divider: "dotted",
       selection: "highlighter",
+      highlight: "band",
       scrollbar: "accent",
       iconStroke: 2.5,
     },
@@ -213,6 +214,7 @@ const starterCharacters: Record<string, Omit<ThemeCharacter, "chrome">> = {
       focus: "ring",
       divider: "line",
       selection: "accent",
+      highlight: "band",
       scrollbar: "native",
       iconStroke: 2,
     },
@@ -523,7 +525,7 @@ export const starterDocuments = [
       neutralColor: "sand",
       radius: "none",
       density: "default",
-      material: "matte",
+      material: "bevel",
       shape: "square",
       appearance: "light",
       bodyFont: "inter",
@@ -1397,6 +1399,8 @@ export const starterDocuments = [
   const migrated = parseThemeDocument(source);
   const ornament = starterOrnaments[migrated.id];
   const glass = starterMaterials[migrated.id];
+  const authored = (starterCharacters[migrated.id] ??
+    launchCharacters[migrated.id])!;
   return parseThemeDocument({
     ...migrated,
     recipes: {
@@ -1415,7 +1419,15 @@ export const starterDocuments = [
         : migrated.recipes.frame,
     },
     character: {
-      ...(starterCharacters[migrated.id] ?? launchCharacters[migrated.id]),
+      ...authored,
+      type: { axes: "none", ...authored.type },
+      details: {
+        highlight: "tint",
+        morph: "off",
+        progress: "line",
+        avatar: "none",
+        ...authored.details,
+      },
       chrome: {
         ...defaultChrome,
         ...(starterChrome[migrated.id] ?? launchChrome[migrated.id]),

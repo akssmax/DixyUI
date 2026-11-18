@@ -2472,3 +2472,503 @@ Measured on a production build served by `vite preview` (Cloudflare worker, port
   - No console errors.
   - No horizontal overflow at 375px; the filter wraps to two rows and works with arrow keys and Enter.
 - Not tested: the browser pane was hidden, so rAF and IntersectionObserver were paused. Recipes were mounted by setting card state, with reduced motion forced through `matchMedia`, so entrance animation and scroll-triggered loading weren't observed. Light mode was checked by the contrast test only, not visually. Screen readers, forced colors, touch tooltips and RTL weren't tested either.
+
+### 2026-11-15 — UI SDK pattern audit: aria-modal on dialogs, Home/End on Toolbar
+
+- Request: review Dixy with Vercel's UI SDK (ui-sdk.dev), then fix the real gaps.
+- Method: `checkPattern(root, pattern)` from `@ui-sdk/core/testing@0.1.0-beta.1`, installed in a scratch folder (not added to the workspace). It rendered 14 Dixy components in jsdom inside `<Theme>`. Popups were opened and given 150ms, because Base UI moves focus in on the next frame.
+- Before: 9 pass. Failures:
+  - Dialog and AlertDialog: modal, but no `aria-modal="true"`. Base UI 1.9.0 makes outside content inert and never sets the attribute.
+  - Toolbar: End did nothing. Base UI enables Home/End for Tabs, Menubar and ToggleGroup but not Toolbar (`enableHomeAndEndKeys` defaults to false). The APG marks them optional; UI SDK requires them.
+  - RadioGroup: false positive. The checker counts Base UI's hidden `<input type="radio" aria-hidden="true">` as a second radio.
+  - Menu: passed once focus was given a frame to settle.
+- Fixes (`@dixy-ui/react`):
+  - `Dialog.Root` is now a thin wrapper that shares `modal` through context (Base UI keeps it in a private store). `Dialog.Popup` sets `aria-modal` for `true` and `"trap-focus"`, and not for `false`. Consumers can still override with their own `aria-modal`.
+  - `AlertDialog.Popup` always sets `aria-modal`.
+  - `Toolbar.Root` handles unmodified Home/End by focusing the first or last enabled, visible item in that toolbar. The composite's own `onFocus` moves the roving tab stop. It skips text inputs and respects a consumer `onKeyDown` that calls `preventDefault`.
+- After: 13 of 14 pass (only the RadioGroup false positive remains).
+- Tests: `aria-patterns.test.tsx` (7 tests: four Dialog `modal` values, AlertDialog, Toolbar Home/End with disabled items and an input, consumer `preventDefault`). `pnpm check` (142 react tests) and `pnpm package:check` pass. Generated API metadata is unchanged.
+- Verified in the in-app browser (docs-alt, compiled packages, desktop light): the docs Dialog opens with `aria-modal="true"` and focus on its input. On the Toolbar page, End moves focus and `tabindex=0` from Save to Preview, Home moves back, and the page does not scroll.
+- Not tested: screen readers, mobile/touch, dark mode, RTL Home/End (direction-independent by design), Firefox and Safari.
+- Real-browser sweep (same day): `checkPattern` bundled into one ES module and served temporarily from `apps/docs/public`, then run inside 52 docs component pages (Chromium, pane visible, light, desktop width). Scope: widgets inside example preview panels, the props panel excluded. Every failure was re-run on a settled top-level page and replayed with real key presses before classifying.
+  - Pass: Tabs, Accordion, Collapsible, NavigationMenu and Navbar disclosures, Sidebar disclosure, Reasoning/Sources/Tool disclosures, Checkbox, CheckboxGroup, Switch, Slider, ColorPicker hue slider, Combobox, Autocomplete, Menubar, Toolbar, Message actions toolbar.
+  - Real gaps (not fixed yet):
+    - DatePicker and DateRangePicker calendar popovers hide the page (React Aria modal popover) but have no `aria-modal="true"`. Same gap as Dialog.
+    - Select popup and Command list (`role=listbox`) have no accessible name. The Select trigger is labelled ("Workspace plan"), but the listbox has no `aria-labelledby`.
+  - Upstream design, not wrapper-fixable: Select (Base UI) moves DOM focus into the options instead of `aria-activedescendant` on the trigger.
+  - Checker or timing artifacts, verified with real keys:
+    - Escape on Dialog, AlertDialog, Drawer, Popover, Menu, ContextMenu and DatePicker: the popup closes, but stays in the DOM with `data-ending-style` during its exit animation, and the checker counts it as open.
+    - Tab in Base UI dialogs: focus briefly lands on the `aria-hidden` focus-guard span, then wraps to the first field.
+    - React Aria ListBox Home: works with real keys.
+    - First-pass Tabs and Toolbar failures: came from lazy examples still mounting.
+    - ColorPicker 2D area: one range input per axis, not a 1D slider.
+    - RadioGroup: hidden native input counted as a radio.
+    - Command Escape and listbox tab stop: the list is inline and the input owns focus.
+  - No supported pattern: ToggleGroup (group of pressed buttons), Toggle, NumberField/DateField/TimeField (spinbutton), Calendar/RangeCalendar/TagGroup (grid), Tooltip, PreviewCard, Carousel, Resizable (separator), Pagination, NativeSelect, DataTable/DataList previews. Dixy has no Tree.
+  - Not tested: screen readers, touch/mobile, dark mode, RTL, Firefox/Safari, reduced motion.
+
+### 2026-11-15 — `/uisdk-test`: a classic media player built from Dixy, with UI SDK parts
+
+- Request: test the Dixy ↔ UI SDK integration on a new `/uisdk-test` route, built as a classic desktop media player ("DIXYAMP").
+- Setup: `@ui-sdk/core` and `@ui-sdk/react` 0.1.0-beta.1 are docs-app dependencies only; the library doesn't depend on them. The route opts out of the docs shell (`__root.tsx`). Files: `routes/uisdk-test.tsx`, `src/uisdk-test/*`, `styles/uisdk-test.css`.
+- What each library does:
+  - **Dixy:** Theme (appearance, accent per skin, material), Menubar/Menu (checkbox and radio items, Kbd hints), Toolbar with `render={<IconButton/>}`, Slider (seek, volume, balance), Toggle, ListBox (playlist), Dialog, Tooltip, Badge, Collapsible.
+  - **UI SDK:** Tree (media library), Rating, Toggle rendered as a Dixy `Button`, `useShortcut`/`useShortcutHint`/`shortcuts.list()` for Z X C V B R S, and a live `checkPattern` panel with 10 checks.
+- Playback is simulated. The clock advances by real elapsed time, so throttled timers don't slow it.
+- Integration findings:
+  1. **UI SDK shortcuts don't pause for Dixy dialogs.** UI SDK only treats popups in its own layer stack as blocking (`activeLayers().filter(l => l.blocking)`), not any `aria-modal` element. With About open, pressing X started playback. Its public `bindLayer` would also take over Escape and outside presses from Base UI. Fix: the shortcut's `when` also checks for an open `[aria-modal="true"]` dialog that isn't in its exit animation. Re-tested: X while About is open → still stopped; after Escape, X → playing.
+  2. **`shortcuts.list()` returns only what can run now**, so it's empty inside a modal or a menu. The help dialog therefore reads it once on mount; all 7 rows render.
+  3. Bare-letter shortcuts call `preventDefault()` when they match, so the guard has to live in `when`, not the handler, or menu, listbox and tree typeahead lose those letters.
+  4. UI SDK Rating fails its own `radio-group` check: its hidden `aria-hidden` inputs count as extra checked radios, the same false positive as Dixy's RadioGroup.
+  5. UI SDK Tree logs a dev hydration mismatch: the server renders `aria-level` 3, the client 2 for nested items. It corrects itself after hydration.
+  6. The playlist option's accessible name started with its index ("1. Cool Tide…"), which broke typeahead. Fixed by hiding the index with `aria-hidden`.
+- Conformance panel: menubar, seek, volume and balance pass. Settings menu and About dialog Escape fail only because of the exit animation. Transport toolbar, Tree ArrowLeft and Playlist Home fail only on timing in the hidden pane; each was re-checked with real keys.
+- Verified in the in-app browser (pane hidden, so it ran throttled):
+  - Dark mode.
+  - All four skins change the LCD hue (oklch hue 260/155/85/315).
+  - Metal, glossy and matte change the Dixy controls (striped / gloss highlight / flat) and leave the window chrome as is.
+  - Windowshade collapses the window from 387 to 98px.
+  - At 375px there's no horizontal overflow (`scrollWidth` 375).
+  - Reduced motion, forced by stubbing `matchMedia`: the marquee stops (`animation-name: none`, no `data-scrolling`) while playing.
+  - `pnpm check` passes.
+- Not tested:
+  - Visualizer motion with and without reduced motion: rAF barely runs while the pane is hidden.
+  - A real OS reduced-motion setting.
+  - Light mode for every skin.
+  - Screen readers, touch, Firefox/Safari, RTL.
+
+### 2026-11-15 — `/lab/poster`: prototype of a "poster" layer on Swiss Poster
+
+- Request: prototype a bolder preset, prompted by the UI SDK promo frame (accent-filled surface, huge type, solid selected row).
+- Finding first: Dixy already has 38 skins that bundle fonts, radius, material, border and depth, so a new preset system isn't needed. The prototype adds only what skins can't express today. It's a docs-only lab page; the library is unchanged.
+- The layer, as token overrides on top of the Swiss Poster skin:
+  1. **Type:** `--poster-display-size: clamp(2.5rem, 0.5rem + 11vw, 9rem)`, above display.lg's 56px ceiling.
+  2. **Surface:** the accent fills a section, and text, border, skin-edge, skin-surface and button tokens are remapped inside it.
+  3. **States:** highlighted and selected items become an inverse band (`base-12` fill, `base-1` text) instead of a tint. It's not a red band: on red-9, 14px white text wouldn't pass AA.
+- Library findings, which a real skin option would need to solve:
+  1. **Portals drop the Theme `className`.** `.dixy-portal-scope` copies Theme's inline `style` and data attributes, not its class. So the layer's tokens go through `style`, and part rules are gated with `@container style(--poster-layer: on)`.
+  2. **Selection isn't one token.** Menu and Select items read `--dixy-component-subtle` / `--dixy-component-text` first, which `[data-dixy-visual]` sets per element. Overriding `--dixy-color-background-selected` alone changed nothing.
+  3. **Buttons read their own tokens** (`--dixy-button-primary-*`, `--dixy-button-secondary-text`), not the action-primary ones. A coloured surface has to remap both sets.
+  4. **Dark solids are light.** In dark mode, `brand-9` is oklch 0.74 with dark ink, and `brand-10` is a pastel tint. A light band on that fill measured 2.12:1, so on the surface the band stays dark in both modes.
+- Contrast, measured in the browser:
+  - Light: ink on fill 6.89:1; band 16.25:1.
+  - Dark: ink on fill 8.17:1; band 17.06:1; band against the fill 8.04:1.
+- Verified in the in-app browser:
+  - Menu and Select popups show the band with the keyboard (ArrowDown).
+  - Turning the layer off restores the stock skin.
+  - Dark mode works.
+  - At 375px, the display size is 49px on one line with no horizontal scroll (it was 66px and broke mid-word before the fix).
+  - The ListBox focus ring is visible on the fill.
+  - `pnpm check` passes.
+- Not tested: screen readers, Firefox/Safari (container style queries), other skins under the layer, forced colours.
+
+### 2026-11-15 — Fluid poster display roles (`display.xl`, `2xl`, `3xl`)
+
+- Request: the promo video has many more UIs, so fix the type scale's ceiling.
+- The video (30s "what agents made with it" reel, frames every 2–3s) has about 14 UIs: an image cropper, a menubar with a hard offset shadow, a giant theme toggle, a grind slider on a metal panel, a serif newsletter list with radios, a label-maker token input, a transit-sign list, a stacked file list, a password field, a CRT name field, a Gantt chart, a playback-speed picker, a "Where to?" combobox and pill tags. In most of them, controls and options are set at 40–120px. Dixy's scale stopped at 56px (`display.lg`).
+- Change (contract in `packages/tokens/src/typography.ts`, CSS from `scripts/generate-typography.mjs`):
+  - Size and line-height primitives 72, 96 and 128.
+  - New roles:
+
+    | Role          | Range    | Tracking |
+    | ------------- | -------- | -------- |
+    | `display.xl`  | 36–72px  | -0.04em  |
+    | `display.2xl` | 44–96px  | -0.045em |
+    | `display.3xl` | 52–128px | -0.05em  |
+
+  - Optional `fluid: { min }` on a role. The generator emits `clamp(min, a rem + b cqi, var(--dixy-font-size-N))`, linear from a 320px to a 1280px container, with unitless leading (`1`). Without unitless leading, the `font` shorthand would keep 128px leading on a 52px line.
+  - Fixed roles are unchanged. Skins regenerate with weight and tracking overrides for the new roles. The docs control for Heading roles and the foundation copy list them.
+- Why `cqi`: the video's huge type sits inside panels, so it should scale with its box, not the window. With no size container, `cqi` uses the small viewport.
+- Tuning from the browser: the first minimums (60/52/44px, from 360px) broke "Nederlands" mid-word in a 263px box at 375px. Lowered to 52/44/36 from 320px. The lab also sets `lang` per language with `hyphens: auto`, so long words break at syllables ("Neder-lands") and screen readers get the language.
+- `/lab/poster` now uses `display.3xl` for the title and `display.xl` for options, with the surface as the size container. Its own `--poster-display-size` is removed.
+- Verified in the in-app browser:
+  - `/lab/poster` at 375px: title 52px on one line, options 36px, no horizontal scroll.
+  - About 678px window (594px container): 77px title and 51px options, matching the formula.
+  - 1440px: 109px title.
+  - The foundation page shows the new rows as fluid ranges ("52–128 / 1") with no overflow.
+- Checks:
+  - `pnpm check`: everything passes except docs typecheck at `src/lib/theme-playground.ts:493`. That error comes from the parallel session's in-progress `bevel` material, not this change.
+  - `pnpm package:check`: blocked before checking anything. Its offline install is missing `@rolldown/pluginutils@1.1.1` in the local store.
+- Not tested: Firefox/Safari `cqi` rendering, RTL, screen readers, and dark mode on the foundation page.
+
+### 2026-11-15 — `size="xl"` for list-like parts
+
+- Request: map component sizes onto the new display roles, so poster-size options don't need custom CSS.
+- Scope: only the parts the video sets at poster size: ListBox, Select (trigger and popup), Menu (popup, item, link item) and Combobox (input, group, popup). A 72px button or text field isn't a real use case, so those stay sm/md/lg. The type is `ExpressiveSize = ComponentSize | "xl"` in `utilities/component-visuals.ts`; each part opts in on its own `size` prop.
+- CSS, `styles/families.css`, one shared rule:
+  - `--dixy-component-font: var(--dixy-font-display-xl)`.
+  - `--dixy-component-height: calc(display-xl-size + 2 × space-150)`.
+  - Existing item styles already read these variables.
+- Two bugs found in the browser and fixed:
+  1. **Tracking froze at 16px.** Declared on the root, `-0.03em` (Swiss Poster's override) resolved at the root's 16px and inherited as -0.48px. Now it's declared on `:where(*)` descendants, so each element resolves its own: 46px items → -1.39px.
+  2. **Grouped Combobox input stayed at 16px.** Grouped inputs use `font: inherit` and the group sets no font. At xl only, the group sets `font: var(--dixy-component-font)`, so sm/md/lg are unchanged.
+- `/lab/poster`:
+  - The language ListBox uses `size="xl"`, replacing its custom font rule.
+  - The Select popup uses `xl`.
+  - A new "Where to?" Combobox at `xl`, with a fictional city list, shows the video's big-input case.
+- Verified in the in-app browser:
+  - About 678px window: ListBox items 46px (surface container), Combobox input and options 49px in 73px rows, Select options 49px.
+  - Typing "L" filters the cities; ArrowDown highlights "Lagos" with the inverse band; Escape closes.
+  - 375px: items 36px (60px rows), input 38px, no horizontal scroll.
+- Tests:
+  - `expressive-size.test.tsx`, 4 tests: data-size on ListBox, Menu item inheritance, Combobox group and input, and the CSS contract.
+  - The tokens typography test now expects 21 roles and allows solid leading only on fluid roles.
+  - API metadata regenerated.
+  - `pnpm check` passes (react: 19 files, 146 tests).
+- `pnpm package:check`: still blocked by its offline install, this time on `@babel/runtime@8.1.2`. The build and tree-shaking steps before the install ran.
+- Not tested: Autocomplete and TagGroup (no `xl` yet), screen readers, Firefox/Safari, RTL, and dark mode on the new Combobox.
+
+### 2026-11-15 — `bevel` material, and the player rebuilt against the Winamp Modern skin
+
+- Request: build a bevel material, then audit and improve `/uisdk-test` against the original look. The user's reference was the silver Winamp 5 "Modern" skin.
+- **`bevel` material** (`@dixy-ui/tokens`, `@dixy-ui/react`, `@dixy-ui/themes`):
+  - Recipe: two hard 1px inset edges, light top-left and dark bottom-right, plus one faint gradient. `depth: "none"`, so buttons get the edge instead of a blurred shadow. Light and dark variants.
+  - The recipe type gains optional `pressedImage`, `pressedEdge` and `wellEdge`. `generate-materials.mjs` emits them as tokens and adds rules:
+    - Pressed solid/soft buttons, pressed toggles and `[data-popup-open]` triggers sink in.
+    - Fields, list boxes, calendars, checkbox and radio boxes, number/OTP fields and slider/progress/meter tracks are wells.
+    - Slider thumbs get the raised edge.
+  - Focus rings are outlines, so the box-shadow edges never hide them (checked in `components.css`).
+  - Budget: `materials.css` grows from 2.2 to 2.6 KB gzip (limit 5 KB); every edge stays within the 2-layer shadow budget.
+  - Wired into the hand-written option lists (docs registries, demos, theme playground, check-examples), theme validation and the theme schema (`material` and `componentFinish`). Schema and `api.json` regenerated.
+  - Test: `materials.test.mjs` checks that raised edges are light-first, pressed and well edges are dark-first, no edge uses blur, and the generated CSS has the pressed, well and popup-open rules.
+- **Audit 1, against Winamp 2.x (black/green):** the player was too round, too soft and too roomy. Result: a "Classic" skin, pinned dark through a nested `Theme appearance="dark"`, with the bevel finish:
+  - Square 2-step window bevel.
+  - Black display; spectrum segments coloured by height (ink → yellow → red) with grey peaks.
+  - Square seek block; volume coloured by level.
+  - Black playlist.
+- **Audit 2, against the user's reference (Winamp 5 Modern):** the first audit had the wrong target. Reference sources:
+  - The maintained skin source, [WACUP/Winamp-Modern-Skin](https://github.com/WACUP/Winamp-Modern-Skin): `xml/system-colors.xml` for the list palette, and pixels sampled from its `screenshot.png` for the chrome.
+  - Used as a reference only; no artwork copied.
+- **New default "Modern" skin**, pinned light:
+  - Navy rim (`#0b1427`) and title bar (`#596580` → `#16284e`) with a `#9ca3b0` groove line and engraved grooves.
+  - Near-white menu strip.
+  - Blue glass display (`#254786` → `#405d93`) with a `#b2c6e7` rim, a darker marquee band, and white pill badges.
+  - Round near-white transport buttons with black rims in a sunken tray; blue play icon.
+  - Ovals with outside LEDs; PL/ML tray.
+  - Pill slider thumbs in rounded grooves.
+  - Flush alternating playlist rows (`#1c3d7d` / `#264787`).
+- **Accessibility deviation:** the skin's selection colours (`#d6e4ff` on `#6788c9`, 2.76:1) fail AA. The selection is now `#4a6cb0` with white text (5.17:1), and selected rows override the current-track tint. Other pairs: current track 6.84, alternate rows 9.0, display 9.04, menu 14.9, button icons 8.78, play icon 4.16 (non-text, needs 3:1).
+- **Fixes along the way:**
+  - The seek block was offset by a stray `translate`.
+  - The Modern display ink was overridden by the base display rule.
+  - The menu strip stopped short of the window edge.
+  - The mute button rendered as an oval.
+  - The dev server returned 500 after the packages were rebuilt under it: a duplicate React from Vite re-optimising. Fixed by restarting the server.
+- **Verified in the in-app browser:**
+  - Modern, Classic and Ocean (light) skins.
+  - Bevel computed edges: a raised button and an unpressed toggle are light-first; a pressed toggle is dark-first; tracks are wells.
+  - `aria-pressed` unchanged.
+  - Real Tab focus shows a 2px ring on the round transport buttons.
+  - Escape returns focus to the settings trigger.
+  - 375px with no overflow in Classic and Modern.
+  - `pnpm check` passes: 37 token, 29 themes, 30 docs tests and 19 React test files.
+- **`pnpm package:check`:** build, tree-shaking and packing pass. The packed-consumer step fails because its `pnpm install --offline` can't find `@babel/runtime@8.1.2`, then `@rolldown/pluginutils@1.1.1`, in `.pnpm-store`. That's an environment gap, not a package error.
+- **Not tested:**
+  - Bevel across the docs component pages and the theme audit page. No built-in theme changed; Retro OS still uses matte.
+  - Windows High Contrast with bevel (the generated rules strip it under `forced-colors`, but this wasn't observed).
+  - The Modern skin in Firefox and Safari, and in a dark OS theme (it is pinned light by design).
+  - Screen readers.
+
+### 2026-11-15 — `/ui-sdk-exp`: interface experiments in the spirit of the UI SDK reel
+
+- Request: a playground of interfaces like the UI SDK promo reel.
+- Route `/ui-sdk-exp` sits outside the docs shell. Files: `routes/ui-sdk-exp.tsx`, `src/ui-sdk-exp/{tile,experiments}.tsx`, `styles/ui-sdk-exp.css`.
+- Each tile is its own `Theme` (appearance and accent), so Dixy parts and their portalled popups match it. It's also a size container, so the fluid display roles scale with the tile. All content is original.
+- The eight experiments:
+
+  | Experiment           | Dixy                                                           | UI SDK                                          |
+  | -------------------- | -------------------------------------------------------------- | ----------------------------------------------- |
+  | Where to?            | Combobox `size="xl"`, input at display.3xl                     | —                                               |
+  | Playback speed       | display.2xl numerals                                           | SegmentedControl, vertical, with Indicator      |
+  | Shape editor menubar | Menubar, Menu, Kbd; hard offset shadow                         | —                                               |
+  | Grind setting        | Slider on the metal material, ruler track                      | —                                               |
+  | Your newsletters     | Checkbox, Fraunces serif                                       | —                                               |
+  | Password             | Meter, Icon                                                    | PasswordInput, Control, Toggle                  |
+  | Label maker          | mono type                                                      | TokenInput; Enter turns loose words into tokens |
+  | Departures           | ListBox `size="xl"` with Archivo Black, inverse selection band | —                                               |
+
+- Findings:
+  1. **ListBox.Item doesn't forward `aria-description`**: it measured `null`. The platform number moved into visually hidden text ("Harbour, platform 2").
+  2. **The docs reset beats experiment input styles.** `input:not(.dixy-input) { font: inherit }` (0,1,1) overrode `.exp-pass-control`; the rule is now scoped under the stage. Same trap as the `/uisdk-test` LCD button.
+  3. **Tile class collision.** The tile class `exp-${id}` collided with inner component classes; tiles now use `exp-stage-${id}`.
+  4. **SegmentedControl indicator variables live on the indicator element**, not the root. The bar is placed from `--segmented-control-indicator-top/height`.
+  5. **First load re-bundles.** On first load Vite re-optimized the new `@ui-sdk/react/*` imports, which briefly duplicated React ("Invalid hook call"). Later loads serve one deps hash, all 200s.
+- Verified in the in-app browser:
+  - Where to? filters ("Lj" → Ljubljana, Slovenia).
+  - Speed: ArrowDown checks "1.5 times" (`role=radio`, `aria-checked`), and the bar follows.
+  - Menubar: Enter opens File, ArrowRight moves to Edit, Escape closes.
+  - Departures: ArrowDown and Space select Museum with the band.
+  - Password: the toggle sets `aria-pressed="true"`, type `text`, and the icon swaps.
+  - Label maker: "compass" + Enter prints COMPASS; Backspace removes it.
+  - Dark page at 375px: no horizontal scroll. Contrast on every tile is at least 5:1 for small text; the grind numeral is 5.08:1 at 52px.
+  - `pnpm check` passes.
+- Not tested: screen readers (especially the contenteditable TokenInput), touch drag on the slider, Firefox/Safari, RTL, and reduced motion beyond the indicator transition rule.
+
+### 2026-11-15 — Modern skin, pass 2: layout and display matched to the original
+
+- Feedback: "still doesn't look like original". Compared side by side with the skin's own `screenshot.png` at 3× (pixelated) and the user's large reference.
+- **Layout:** the Modern main window is now a CSS grid with the original's rows:
+  - title / menu / display + side ovals / seek + eject-PL-ML tray / transport | volume panel | config.
+  - `.uisdk-controls` uses `display: contents` only in this skin, so the DOM and tab order stay as written.
+- **Markup** (every skin):
+  - Eject left the transport toolbar (now the five transport buttons, as in the original) and joined PL/ML in a `role="group"` labelled "Windows".
+  - The settings menu became its own Config group. Its trigger is named "Config, skin and finish" so the visible "Config" label is part of the accessible name.
+  - A visualizer oval (a menu button with Spectrum, Oscilloscope and Off) heads the side column.
+  - Decorative, `aria-hidden` volume dots and unlit "88:88" segments were added.
+- **Display:**
+  - A 3px dot-matrix texture over the glass.
+  - Ghost segments behind the time.
+  - The song ticker masked into 2.5px dots.
+  - Silkscreen pixel labels with colons.
+  - The visualizer framed by a dotted grid with bracket edges.
+- **Details:**
+  - The app-icon square in the title bar.
+  - Growing volume dots lit by level.
+  - The CONFIG label over a ▼ pill, beside a lightning mark.
+  - Solid transport glyphs.
+  - Transport held to one line.
+- **Verified:**
+  - Desktop and 375px with no overflow.
+  - Classic unaffected.
+  - Tab order: display time, visualizer, repeat, shuffle, seek, transport (one stop), mute, volume, balance, eject, PL, ML, config.
+  - `pnpm check` passes.
+- **Conformance, 3 of 10:**
+  - Seek now "fails" End because End jumps to the track's end, playback advances to the next track, and the value reads 0. That's correct player behaviour; the previous run passed because playback was stopped.
+  - Transport ArrowRight and the dialog failures are the known timing and exit-animation artifacts.
+- **Known differences from the original:**
+  - The eject/PL/ML tray comes after the volume panel in tab order although it sits on the seek row.
+  - The balance slider is kept (the original has it in the EQ drawer).
+  - No resize grip, and no minimise or close buttons (nothing to wire them to).
+  - The menu bar doesn't underline access keys, because the shortcuts don't exist.
+
+### UI SDK test bench: Winamp Modern, pass 3 (overall proportions)
+
+- **Method:** the WACUP Modern skin `screenshot.png` was placed above our main window at the same width (576px), for comparison only. Nothing from it is shipped.
+- **Before:** ours was 325px tall against the original's 267px, with a tall menu bar, a two-row LCD info block, a thin seek line, small, spaced transport buttons and separate trays at the bottom.
+- **Changes** (Modern skin CSS only, plus one markup change):
+  - **Grid:** the side column (visualizer, repeat, shuffle) now rises into the menu row under a "VIDEO/VIS" caption. This uses grid areas and `display: contents` on the body wrapper, so the DOM and tab order are unchanged.
+  - **Menu bar:** compact, at 22px with 15px text.
+  - **LCD:** info on one row, larger tight digits and a lighter, larger ticker.
+  - **Seek:** a recessed two-tone groove and a 62×17 outlined pill.
+  - **Transport:** 44px buttons with a 1px gap and 3px rings.
+  - **Lower panel:** one continuous, lighter panel with a curved leading edge behind volume and config, drawn by a `::before` that is a grid item. It has hollow volume rings, config and logo in the corner, and a decorative resize grip (`::after`).
+  - **Window:** 6px corners with an inner light frame line.
+  - **Balance:** removed from Modern only, because the original main window has none. Its balance lives in an EQ drawer this bench doesn't build.
+- **Bugs found while comparing:**
+  - The config area was one 54px column, so its 89px content overlapped the volume slider. It now spans two columns.
+  - On a phone, the one-row info clipped the kHz badge. It wraps to two columns at 520px or narrower.
+- **Verified:**
+  - Height 265px against the original's 267px.
+  - Desktop, and 375px with no overflow and no clipped LCD content.
+  - Tab order: windowshade, menu, time, visualizer, repeat, shuffle, seek, transport, mute, volume, eject, PL, ML, config.
+  - The only console errors are the known Tree hydration mismatch.
+  - `pnpm check` result is recorded below.
+- **Not tested:** reduced motion and dark OS theme on this pass. Modern pins `appearance="light"`, so the OS theme shouldn't affect it.
+- **Remaining differences:**
+  - The volume dots sit above the slider instead of beside it.
+  - The lower panel's curve is a radius, not the original's S-shaped notch.
+  - No minimise or close buttons.
+  - The eject/PL/ML tray still comes after the volume in tab order.
+- **Checks for pass 3:**
+  - The first `pnpm check` failed only on stale API metadata. The cause was another session's new Box `surface` prop. `api.json` was regenerated with `pnpm docs:generate`.
+  - The re-run then failed in `skins:check` (`$.character.details.highlight: Required field.`). That comes from a theme-schema `highlight` field another session is adding; the skins don't set it yet, and it appeared after this pass's earlier full check had passed.
+  - `docs:check` passes and Prettier is clean.
+  - `tsc` on the docs app reports a single error, in the other session's `theme-recipe-mixer.tsx`, for the same unbuilt export.
+  - A full `pnpm check` must be re-run once that work lands.
+
+### UI SDK test bench: responsive pass
+
+- **Report:** "it's not responsive".
+- **Measured** at 320, 375, 400, 450, 470, 500, 560, 600, 760, 960, 1024 and 1400px. An in-page check flags any two controls whose boxes overlap, any control outside the window, clipped display text, and page scroll.
+- **Bug 1 (real overlap):**
+  - Between about 530 and 620px the Next button slid under the mute button.
+  - Cause: the transport sat in a `minmax(0, 1fr)` column that could shrink below its buttons.
+  - Fix: the transport column is now `auto` and the volume column (`minmax(0, 1fr)`) absorbs the squeeze.
+- **Bug 2 (wrong breakpoint basis):**
+  - Modern's layout switched on the viewport, but the player sits in a page column whose width changes at 960px.
+  - Fix: `.uisdk-windows` is a size container (`container: uisdk-player / inline-size`) and Modern uses `@container` queries.
+  - There are now three layouts:
+    - Full, above 540px.
+    - Compact, 421–540px: transport beside eject/PL/ML, volume beside config.
+    - Stacked, 420px and below: time beside the visualizer, info on one row under it.
+- **Bug 3:** in the compact layout, config again had a 54px column and overlapped the volume slider. It now spans two columns.
+- **Bug 4 (menus):**
+  - Checked radio and checkbox items ("● Classic") were pushed to the right.
+  - Cause: Dixy's indicator uses `margin-inline-start: auto` and expects to follow the label, as in the library's own demos, but the player put it first.
+  - Fix: all 15 indicators now follow their labels.
+  - Repeat and Shuffle keep the shortcut hint in the trailing slot, with the check right after the label, so hints line up whether or not the item is checked.
+- **Verified:**
+  - Modern: no overlaps, nothing outside the window, no clipped LCD text and no page scroll at any measured width. Height is 265px at full width, 319px at 528px and 429px at 343px.
+  - Classic: clean at 320, 375, 560, 760 and 1400px.
+  - Menu labels start at the same 12px inset, checked or not.
+  - Escape returns focus to the Config trigger.
+  - Prettier is clean. The docs `tsc` shows only the other session's `theme-recipe-mixer.tsx` error.
+- **Not checked:** Ocean, Phosphor, Amber and Plum one by one (they share Classic's rules); reduced motion; touch input on a real phone.
+- **Full check after the responsive pass:**
+  - `pnpm docs:generate` was re-run, picking up another session's new `highlight` theme prop.
+  - Tokens, skins and docs metadata checks pass.
+  - React tests pass (19 files, 148 tests). `pnpm build` passes.
+  - Two failures remain, both in another session's in-progress work:
+    - The docs typecheck fails because `lab.poster.tsx` can't find `Box`.
+    - `theme-playground.test.mjs` expects schema version 6, but the new `highlight` field made it 7.
+  - None of the bench files are involved.
+
+### 2026-11-15 — Option highlight band, accent surface, and theme groups
+
+Turned the `/lab/poster` prototype into real options, then applied them to the theme groups.
+
+- **What changed:**
+  - **`Theme highlight="tint" | "band"`** (react). Renders `data-highlight` on the Theme root and the portal scope. A band Theme sets `--dixy-highlight-band: base-12` / `--dixy-highlight-on-band: base-1`; a tint Theme sets both to `initial`, so the nearest Theme wins. Option rules (Menu/Select/Combobox/Autocomplete `[data-highlighted]`, ListBox `[data-selected]`) read the band token before the item's own tint.
+  - **`Box surface="accent"`** (react). Brand solid fill (brand-10 light, brand-9 dark) with text, border, skin, material, button and band tokens remapped. Dark mode keeps a dark band on the light fill.
+  - **`character.details.highlight`** (themes). Schema v7 with a v6→v7 migration (`tint`). Compiles to `themeProps.highlight`, not CSS.
+  - **Group 1 → band:** swiss-poster, brutalist-concrete, tokyo-transit, riso-zine, freighter, signal.
+  - **Group 2/3 → `voice.display`:** 8 serif starters get a display word, 4 numeral starters a big numeral. The playground's overview wall shows it in a poster card.
+  - **Group 4 → `bevel`:** retro-os, mainframe, save-point, arcade-cabinet, ansi-panes default material.
+  - `/lab/poster` now uses `Box surface="accent"` and the skin's band; its token plumbing CSS (≈80 lines, a container style query and Theme `style` tokens) is gone.
+- **Why a Theme prop, not skin CSS:** the first version compiled the band into skin CSS. Freighter was 20 bytes under its 5 KB gzip budget and the generator refused it. A prop puts the rule once in the library, keeps every skin's CSS byte-identical, and gives non-skinned themes the option too.
+- **Plumbing gaps solved:** popups missing the class (data attribute copied to the portal scope); per-component selection variables (one token read first); button colour tokens (remapped by the surface).
+- **Accent fill bug found in the browser:** the Box rendered transparent because skins paint boxes with `--dixy-skin-surface` (which the first version set to `transparent`) and materials paint `.dixy-box[data-material]` with the raised-surface token. The surface now points both tokens at the fill instead of fighting specificity.
+- **Audit:** added an `option-selected` role (a selected ListBox option) to `/lab/theme-audit`. Full run: 38 themes, 0 fail, 0 warn, before and after bevel. Band options 16.16–17.17:1; lowest tint option 7.26:1 (ledger light). Nothing to patch with `pnpm themes:fix`.
+- **Verified in the browser:**
+  - Playground, Swiss Poster: the role menu band follows ArrowDown in the portal (light 0.235/0.99; dark inverts to 0.95/0.145 on a dark popup).
+  - `/lab/poster`: light ink on fill 6.89, band 16.25, filled button 16.25; dark 8.17, 17.06, band against fill 8.04. Select popup bands in dark.
+  - Display card: Winamp Signal "128" at 103px in a 962px wall; Sumi Ink 間 at the 52px minimum with `lang="ja"` at 375px, no horizontal overflow.
+- **Checks:** `pnpm check` passes (react 148, themes 31, tokens 37, docs 30). `pnpm package:check` packs all tarballs, then fails on the known offline `pnpm install --offline` store gap.
+- **Not done:** promoting the Modern skin into the catalog. Its colours are sampled from Winamp's own skin source, so shipping it as a built-in theme would ship another product's look; that needs a decision (an original silver/bevel starter instead).
+- **Not checked:** reduced motion on the band transition; screen readers; touch; nested `highlight="tint"` inside a band Theme was only unit-tested; the accent surface with skins other than Swiss Poster.
+
+### 2026-11-18 — `/lab/expressive`: Material 3 Expressive ideas, mocked in Dixy
+
+Reviewed the Sthira workout app's hand-built M3 Expressive pieces (cookie shapes from `r = R + a·cos(nθ)`, a connected group whose choice grows and goes round, wavy linear progress, a wavy ring, Roboto Flex weight/width) and researched M3 Expressive, then mocked the gaps as a docs lab page.
+
+- **What's on the page:**
+  - Hero on `Box surface="accent"`: display.3xl numeral in Bricolage Grotesque Variable at weight 800 / width 75%, cookie-9 streak badge, wavy progress, connected ToggleGroup (choice grows to 1.45×, goes round, shows a check).
+  - Shape library: 31 shapes (circle → heart) from formulas, each sampled at the same 96 angles, so any two morph with a plain `clip-path` transition.
+  - Shape on press and selection: five icon-button sizes (32/40/56/96/136px) that square off while pressed; toggles that change shape when selected.
+  - Loader morphing through seven shapes while turning; wavy linear bar; wavy ring.
+  - Split button (trigger turns round while open), floating Toolbar, FAB menu (squircle → circle with ×, labelled actions fan in).
+  - Emphasized type on display.xl–3xl using the variable font's weight and width axes.
+- **Springs in CSS:** `springEasing()` simulates Dixy's existing `motionSprings` (standard/expressive spatial) into CSS `linear()` easings and durations, so clip-path, radius and flex-grow transitions overshoot like the Motion-driven ones. A switch compares expressive and standard.
+- **Rule kept:** shapes are decorative layers (`aria-hidden` spans); they never clip content or focus rings, matching `shapePaths` in tokens.
+- **Bugs found in the browser:** `--xp-emph` referenced a missing token, so the whole font stack was invalid (fixed: `--dixy-font-display`). At width 75% the role's −0.05em tracking made digits touch (now −0.005em on condensed text). The FAB list's `display: grid` beat `hidden` (fixed with `[hidden]{display:none}`). The split trigger took the menu-trigger tint (now the primary button tokens).
+- **Verified:** mid-transition clip-path differs from both end shapes; split menu opens with Enter, first item highlighted, trigger radius 28px while open; FAB opens with Enter, Escape closes and returns focus; dark at 375px has no overflow, hero ink 8.61:1, selected chip, badge and CTA 17.06:1, type tags 10.76:1; numeral at its 52px minimum. `data-motion="reduced"` removes the loader animation and morph transitions.
+- **Not verified:** the OS reduced-motion media query (only the Theme attribute path); screen readers; touch. The square focus ring around the round FAB is a known limit of decorative shapes. The shapes are approximations, not Google's geometry. Spec numbers for button sizes and M3 spring values came from third-party sources.
+
+### 2026-11-18 — Expressive shapes move into the library
+
+The lab's formula shapes (`r = R + a·cos(nθ)`, sampled by angle) looked lumpy: uneven point spacing, soft corners that never resolved, cookies and clovers that read alike. Rebuilt them as a library feature.
+
+- **Engine (`packages/tokens/src/shape-geometry.ts`):** shapes are rounded polygons (regular polygons, stars, rectangles, pixel staircases, hand-placed vertices) with true circular fillets. Neighbouring corners share each edge in proportion to the rounding they ask for, so a sharp corner leaves room for a round neighbour (the first version capped every fillet at half an edge, which made bloom, clover and semicircle pointy). Outlines are resampled to 120 points evenly by arc length, starting exactly where the outline crosses the vertical centre line at the top, clockwise.
+- **Why that matters:** same point count, start and direction make every pair morph point-for-point. The test caught that the square started at a corner (no stored point mid-edge); the start is now the exact edge crossing.
+- **API:** `expressiveShapes`, `shapeOutline`, `shapeSvgPath`, `shapePolygon`, `springEasing` (tokens); `Shape kind="cookie-9"` and `ShapeKind` (react). Morphs transition the path's CSS `d` with the Theme's spatial spring; `[data-motion="reduced"]` and `prefers-reduced-motion` remove the transition.
+- **Tuning, by eye in the lab:** cookies needed tighter inner fillets to keep visible scallops once fillets shared edges; clover-4 got deeper notches so it doesn't read as cookie-4.
+- **Verified:** tokens tests (35 shapes, fitted, clockwise, start at top centre, even spacing, polygon/path counts). React tests (morph keeps the command list, legacy kinds keep their paths, CSS contract). In the browser, burst → heart scrubbed at 18%, 30% and 55% gives intermediate paths with no twisting, ending exactly on the target. The pane was hidden, so animations were scrubbed rather than watched live.
+- **Not done:** Safari has no CSS `d`, so shapes switch without morphing there (not tested on Safari). Shapes on Button/Toggle (press and selection morph) are still lab CSS, not library props. Shape art direction is a first pass.
+
+### 2026-11-18: Press morph, wavy progress and expressive themes
+
+Moved the lab's two remaining M3-Expressive ideas into the library and built themes that use them by default.
+
+- **Press morph (`morph` on Button, IconButton, Toggle):**
+  - Corners go from height/2 at rest to 22% of the height when pressed or selected, so the ratio holds at every size.
+  - The rule sits in a new `@layer dixy.expressive`, declared after `dixy.components`. An opt-in therefore beats skin corner rules without specificity tricks. Attached and segmented groups are excluded so joined corners stay joined.
+  - The spring comes from `springEasing(scheme, "spatial", "fast")`. Theme writes it as CSS variables, cached per scheme.
+  - Reduced motion drops only the corner transition; colour feedback stays.
+- **Wavy progress (`wave` on `Progress.Root`):**
+  - The indicator keeps Base UI's inline width. It is masked to a repeating SVG sine and animated along x.
+  - The track draws the flat remainder after a gap. Root writes `--dixy-progress-fraction`, because Base UI only puts the width on the indicator.
+  - First pass bug: skins' inset rings and finishes still outlined the track. Stripped in wave mode.
+- **Theme defaults:**
+  - `Theme morph` and `Theme progress`, fed from the theme character's `details.morph`, `details.progress` and `type.axes`.
+  - Schema v8, with a v7 to v8 migration. The v3 to v4 migration strips the new fields, like it does for `highlight`.
+- **Heading width:**
+  - A separate `font-variation-settings` rule failed: Chrome's `font` shorthand resets it, and the sample apps set `font:` in unlayered CSS. Verified in the browser.
+  - Width now rides inside every font-role shorthand as `var(--dixy-font-<role>-stretch)` (keywords `condensed` and `expanded`), so it survives any later `font:`.
+  - Fraunces' SOFT and WONK have no keyword, so `axes: "soft"` stays a rule, and a later `font:` shorthand can reset it.
+  - The docs `@font-face` rules now load the axis files (Bricolage and Fredoka "standard", Fraunces "full").
+- **Themes:** Bloom, Pulse and Sorbet, all on the new `tonal-surface` material (accent-tinted surfaces, no drop shadows).
+  - Bloom first used Bricolage 800; figures clipped and edges looked heavy, so it moved to Fraunces soft at 700 with a 40% edge.
+  - The starter uniqueness tests caught duplicate character and chrome signatures; changed backdrops and wells to keep every theme distinct.
+- **Verified:**
+  - Theme audit: 41/41 clean, 0 warnings, run three times as the themes changed.
+  - Fernpay with Pulse: buttons are 20px-radius pills on the 378ms spring; headings and figures compute `font-stretch: 75%`.
+  - Homepage dashboard with Pulse: three wavy goals, fraction 0.72, travel animation running.
+  - Bloom headings compute `"SOFT" 100, "WONK" 1`.
+  - Skin CSS: 3.4–3.5 KB gzip each, under the 5 KB budget.
+- **Not verified or known gaps:**
+  - The pressed state was not captured live: `:active` can't be triggered from script in the hidden pane, so only the rule is tested.
+  - Safari, touch and screen readers not tested.
+  - Fernpay's stat figures overflow their cards near 870px wide in every theme, including the default. This is a sample-app layout issue that predates this work.
+  - ProgressCircle has no wave yet.
+  - Consumers need the fontsource axis CSS (`standard.css`, `full.css`) for width and SOFT; the default package entry loads weight only.
+
+### 2026-11-18: Fernpay stat figures fit at every width
+
+The overview's three stat cards stayed three across down to 640px. A 28px "£37,062.44" overflowed its card at mid widths in every theme, including the default (156px of text in a 129px card at 868px).
+
+- **Fix (docs CSS only, `dixy-example.css`):**
+  - `.fp-grid` is a named inline-size container. Below 46rem of overview, the stats go two across and Savings rate takes the full row.
+  - Each stat card is also a size container, and its figure is `min(heading-md size, 11.5cqi)` with `nowrap`, so it shrinks with its card but never grows past the role size.
+  - 11.5cqi comes from the widest starter face: Orbitron sets this figure at about 7.2 times its font size. A first try at 15cqi still overflowed six wide-face themes.
+  - The phone swipe row resets the full-row span.
+- **Verified:** all 41 themes plus the default, measured as rendered text width against card content width at 375, 660, 868, 1024, 1140 and 1440px: 0 overflows. Default figure size stays 25–28px, and no page scrolls sideways.
+- **Note:** the first full sweep crashed the browser tab (about 250 iframes in one run). It was re-run one width at a time.
+
+### 2026-11-18: Expressive themes use the expressive components
+
+Feedback: the expressive themes should look like the `/lab/expressive` mock, with waves and the shape library, not only rounder buttons.
+
+- **Loader:** a new internal `ShapeLoader` renders a library `Shape` that steps through seven shapes every 650ms, morphing over the Theme spring, while CSS turns it. Spinner and Button use it when `Theme.progress` is "wave". The status role, label and `aria-busy` stay where they were. Under reduced motion the timer never starts and the rotation is off.
+- **Wavy ring:** ProgressCircle draws a 10-ripple ring path with pathLength 100, so the dash maths is unchanged.
+- **Connected groups:** ToggleGroup marks `data-connected` when attached or segmented under `morph="press"`. Segmented groups drop their sunken track for tonal choices and a filled pick. Fernpay and Wren's segmented controls pick this up with no app change.
+- **Shaped avatars:** `Theme avatarShape` (character `details.avatar`) clips Avatar to `shapePolygon()`. Border and shadow are dropped, because a clipped edge reads as a broken outline.
+- **Shapes backdrop:** a 260-unit tile of cookie-9, clover-4 and very-sunny, thinned to 40 points and whole units, as an inline mask.
+  - The first pass at 0.12 intensity painted at about 2% effective alpha and was invisible. Filled shapes need about 0.7, where line patterns sit near 0.15–0.3.
+  - Bloom's skin CSS is 3.9 KB gzip, under the 5 KB budget.
+- **Verified:**
+  - Fernpay with Bloom: avatar `data-shape="cookie-9"` with a polygon clip; Spending/Income connected (2px gap, pressed 20px full, neighbour 8/20/20/8); savings ring is the wavy path; backdrop visible on the Cards view.
+  - Theme audit 41/41 clean.
+  - React tests cover loader cycling and the reduced-motion hold, the wavy ring's progressbar values, connected groups and the avatar clip.
+- **Not verified:** the loader running live (the timer was tested with fake timers); Safari, where the shape morph snaps without CSS `d`; touch and screen readers.
+
+### 2026-11-18: M3 Expressive rules and the missing lab components
+
+Request: build the gaps between `/lab/expressive` and the library, fix where our rules differed from the M3 Expressive guidelines (m3.material.io button groups, buttons, split button, FAB menu, toolbars, loading and progress indicators, shape, typography and motion pages), and update the themes.
+
+- **Rules fixed:**
+  - Connected groups no longer grow the selected segment. They span their container (max 40rem) in equal segments; the pressed segment's inner corners square off and the selected one goes fully round. The lab hero group follows the same rule.
+  - Separate ToggleGroups and `ButtonGroup attached={false}` under `morph="press"` are M3 standard groups (`data-expressive`): the pressed item widens by half its padding and its neighbours give a quarter back, on the press spring.
+  - Wave progress draws a stop indicator at the end of the tonal track, shows a dot below 4%, and has an indeterminate wave that grows and shrinks as it travels (clipped to the track).
+  - Expressive themes (any `type.axes` other than none) keep the title roles on the body font. Display and headline keep the expressive face. `titleFont()` is exported from `@dixy-ui/themes/authoring`, and `themeFoundationStyle` takes `{ titles }`.
+- **Added:**
+  - Tokens: `control.xs` (28px) and `control.xl` (72px). Button, IconButton and Toggle take `size="xs" | "xl"`; labels stay on the label type at xl.
+  - `Toggle shapes={[off, on]}`: the container is a library shape that morphs when selected; the hit area stays the control's box.
+  - Spinner `contained` (circular tonal container; only the shape turns) and `delay` (indicator hidden, status present). Loader sizes are 20/24/48px for sm/md/lg.
+  - ProgressCircle `showValue`: a heavy, narrow, tabular numeral sized at 30% of the ring.
+  - `SplitButton` (Root, Action, Menu) on Base UI Menu: 2px apart, round outside and tight inside, the trailing half fully round while open, the chevron turning 180° on the standard curve, the menu 4px away and aligned to the end.
+  - `FabMenu` (Root, Item) on Base UI Menu: the FAB goes from rounded square to round and its icon from plus to close, it is renamed "Close" while open, and labelled pills fan out aligned to the trailing edge.
+  - Toolbar `variant="floating" | "vibrant"`.
+  - Docs: Split Button and FAB Menu pages, size and variant controls for Button, Toggle and Toolbar, Spinner "Container" and ProgressCircle "Show value" controls; the lab now uses the library parts instead of lab-local copies.
+- **Audit:** a new `expressive` check runs on specimens that morph or wave. It fails a title, body, muted or label role in the display font, and a wave under 3:1 with no stop indicator. It warns when a connected group's selected segment is wider than its neighbours. The specimen gained a progress bar.
+- **Verified:**
+  - `pnpm check` passes (react 165 tests, including 10 new).
+  - Theme audit: 41/41 clean. In the six Bloom, Pulse and Sorbet specimens, titles, body and labels compute Figtree, stops render and segments are equal. A negative run (forcing the display font, removing the stop, growing a segment) produced exactly the two fails and one warning.
+  - In the browser: the shaped Like toggle morphs circle to cookie-9; the split trigger rounds, flips its chevron and returns focus on Escape; the FAB opens three items aligned to its right edge, goes round and returns focus on Escape. Light and dark, desktop and 375px with no sideways scroll. Reduced motion stops the indeterminate wave, the loader and the chevron turn. Pulse's Billing period group fills its card in equal halves.
+- **Not verified:** the standard-group width change and pressed corners live (`:active` can't be held from script in the pane); screen readers, touch and Safari; `pnpm package:check` (fails on `ERR_PNPM_NO_OFFLINE_TARBALL` in this environment).
+
+### 2026-11-18: Wavy progress drawn as one path
+
+Feedback (screenshot): the waves were broken.
+
+- **Cause:** the wave was a CSS mask tiled from a 20×12 stroked SVG. Each tile cut its stroke on a slope at the tile edge, which left notches at every join, and the indicator's ends were cut flat. In the lab, the indeterminate bar sat directly under the determinate one with no gap, so its wave ran into the first bar and looked like a stray blob.
+- **Fix:**
+  - `Progress.Indicator` renders `WaveLine` when the root is a wave. This is one SVG path across the indicator's width with round caps at both ends (M3), stroked in `currentColor` (the indicator colour).
+  - The stroke is a third of the wave height and the wavelength is 5/3 of it, as before. Amplitude eases in over the first wavelength, so low values read as a dot or a short line, which replaces the `data-low` rule.
+  - The phase travels one wavelength per 1.2s on animation frames. Under reduced motion it draws once and redraws only on resize.
+  - The indeterminate wave drops the flat line underneath, so the moving segment doesn't cross it.
+  - Lab: the bars are spaced 16px apart, and the hero's stop dot takes the fill's ink.
+- **Verified:**
+  - `pnpm check` passes (react 166 tests). The new tests cover the round-capped path, no path on flat progress, and no animation frames under `motion="reduced"`.
+  - Theme audit: 41/41 clean.
+  - In the browser: the determinate bar is smooth with round caps, a gap and the stop dot; three frames of the indeterminate sweep each show a clean round-capped segment; the hero wave is white on the fill and moving.
+- **Not verified:** Safari and Firefox rendering; the cost of a per-frame path for many bars at once (each bar redraws about one point every 2px per frame).

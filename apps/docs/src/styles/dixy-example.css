@@ -304,6 +304,30 @@
   font: var(--dixy-font-heading-md);
   font-variant-numeric: tabular-nums;
 }
+/* A 28px "£37,062.44" outgrows a third of a narrow overview in every theme.
+   Two fixes: below 46rem of overview the stats go two across (savings rate
+   takes the full row), and each card is a size container whose figure
+   shrinks with it, never above its role size. 11.5cqi is the widest starter
+   face (Orbitron, about 7.2 times its size for this figure), so it stays one
+   unbroken number in all of them. */
+.fp-grid {
+  container: fp-overview / inline-size;
+}
+@container fp-overview (max-width: 46rem) {
+  .fp-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .fp-stats > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+.fp-stats > * {
+  container-type: inline-size;
+}
+.fp-stats .fp-figure {
+  font-size: min(var(--dixy-font-heading-md-size), 11.5cqi);
+  white-space: nowrap;
+}
 .fp-figure-sm {
   font: var(--dixy-font-title-lg);
   font-variant-numeric: tabular-nums;
@@ -562,6 +586,10 @@
   }
   .fp-stats > * {
     scroll-snap-align: start;
+  }
+  /* Undo the two-across span: on phones the stats are one swipeable row. */
+  .fp-stats > :last-child {
+    grid-column: auto;
   }
   .fp-page-header {
     min-height: 0;

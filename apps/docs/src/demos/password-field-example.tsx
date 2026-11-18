@@ -11,7 +11,7 @@ export default function PasswordFieldExample({
   size?: "sm" | "md" | "lg";
   variant?: "outline" | "soft";
   radius?: "none" | "sm" | "md" | "lg" | "full";
-  material?: "matte" | "glossy" | "soft" | "metal" | "paper";
+  material?: "matte" | "glossy" | "soft" | "metal" | "paper" | "bevel";
   disabled?: boolean;
 }) {
   return (

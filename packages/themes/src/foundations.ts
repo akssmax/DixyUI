@@ -140,11 +140,17 @@ export const themeFontPackages: Partial<
 };
 
 /** Shared by the compiled consumer settings and playground exports; no React or router import. */
+/**
+ * `titles: "body"` keeps the title roles on the body font. Expressive themes
+ * use it (M3: expressive fonts for display and headline, caution for
+ * titles, never body or label).
+ */
 export function themeFoundationStyle(
   settings: Pick<
     ThemeFoundations,
     "bodyFont" | "headingFont" | "border" | "depth"
   >,
+  { titles = "heading" }: { titles?: "heading" | "body" } = {},
 ): Readonly<Record<string, string> & { fontFamily: string }> {
   const style: Record<string, string> & { fontFamily: string } = {
     fontFamily: themeFonts[settings.bodyFont].value,
@@ -168,6 +174,10 @@ export function themeFoundationStyle(
   for (const role of Object.keys(typography))
     if (role.startsWith("heading.") || role.startsWith("title."))
       style[`--dixy-font-${role.replaceAll(".", "-")}-family`] =
-        themeFonts[settings.headingFont].value;
+        themeFonts[
+          titles === "body" && role.startsWith("title.")
+            ? settings.bodyFont
+            : settings.headingFont
+        ].value;
   return Object.freeze(style);
 }

@@ -36,6 +36,10 @@ export const tokyoTransitTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "band",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", ui-sans-serif, system-ui, sans-serif',

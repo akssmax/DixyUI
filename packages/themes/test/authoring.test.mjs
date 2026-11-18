@@ -182,7 +182,7 @@ test("v2 materials and frames compose independently and legacy documents migrate
   delete legacy.recipes.frame.ornament;
   delete legacy.character;
   const migrated = parseThemeDocument(legacy);
-  assert.equal(migrated.schemaVersion, 6);
+  assert.equal(migrated.schemaVersion, 8);
   assert.deepEqual(migrated.character, defaultCharacter);
   assert.equal(migrated.recipes.material.parameters.textureScale, 1);
   assert.equal(migrated.recipes.frame.id, "forest");

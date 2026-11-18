@@ -46,7 +46,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       { name: "attached", label: "Connected edges", initial: true },
@@ -66,6 +66,103 @@ export const additionComponentRegistry = {
     lesson:
       "Group ordinary buttons without changing their Tab order. Root supplies size, treatment, color and material defaults; explicit Button props override them. Use Toolbar when roving focus is intended.",
     token: "--dixy-color-background-surface",
+  },
+  "split-button": {
+    exportName: "SplitButton",
+    title: "Split Button",
+    category: "Actions",
+    description: "One action, with its options a tap away.",
+    detail:
+      "A leading action and a trailing menu button, 2px apart. While the menu is open the trailing half goes fully round and its chevron turns 180°. Both halves are ordinary tab stops; the menu is Base UI's.",
+    primitive: "Menu",
+    engine: "Base UI + native",
+    api: [
+      "SplitButtonRootProps",
+      "SplitButtonActionProps",
+      "SplitButtonMenuProps",
+    ],
+    source: "components/split-button.tsx",
+    load: () => import("../demos/split-button-example"),
+    code: () => import("../demos/split-button-example?raw"),
+    composition: {
+      tree: "SplitButton.Root (role=group, aria-label)\n\u251c\u2500\u2500 SplitButton.Action\n\u2514\u2500\u2500 SplitButton.Menu (aria-label) \u2192 Menu.Item\u2026",
+      detail:
+        "Root supplies the size, emphasis and colour of both halves. Keep the action to one or two words; the trailing button always shows the chevron. The menu aligns to the trailing button, 4px away.",
+    },
+    controls: [
+      {
+        name: "size",
+        label: "Size",
+        options: ["xs", "sm", "md", "lg", "xl"],
+        initial: "md",
+      },
+      {
+        name: "variant",
+        label: "Variant",
+        options: ["solid", "soft", "outline"],
+        initial: "solid",
+      },
+      {
+        name: "color",
+        label: "Color",
+        options: ["accent", "neutral", "danger", "success"],
+        initial: "accent",
+      },
+    ],
+    keyboard: [
+      ["Tab / Shift + Tab", "Move between the action and the menu button."],
+      ["Enter / Space", "Run the action, or open the menu."],
+      ["Arrow Down / Up", "Move through menu items once it is open."],
+      ["Escape", "Close the menu and return focus to the menu button."],
+    ],
+    accessibility:
+      "Name the group and the menu button (for example \u201cMore send options\u201d). The menu button exposes aria-expanded and aria-haspopup through Base UI Menu. Target WCAG 2.2 AA; assistive-technology verification remains pending.",
+    lesson:
+      "M3 split buttons pair a main action with related options. The trailing half changes shape when open; the chevron rotates on the standard curve rather than the spring.",
+    token: "--dixy-button-primary-background",
+  },
+  "fab-menu": {
+    exportName: "FabMenu",
+    title: "FAB Menu",
+    category: "Actions",
+    description: "A floating action that opens into a few related ones.",
+    detail:
+      "The FAB turns into the menu's close button, square to round, and 2\u20136 labelled pills fan out above it, aligned to the trailing edge. It is a Base UI Menu, so focus, arrow keys, typeahead and Escape are built in.",
+    primitive: "Menu",
+    engine: "Base UI + native",
+    api: ["FabMenuRootProps", "FabMenuItemProps"],
+    source: "components/fab-menu.tsx",
+    load: () => import("../demos/fab-menu-example"),
+    code: () => import("../demos/fab-menu-example?raw"),
+    composition: {
+      tree: "FabMenu.Root (aria-label)\n\u2514\u2500\u2500 FabMenu.Item (icon, label)\u2026",
+      detail:
+        "Use 2\u20136 closely related actions, each with a label. Don't pair a FAB menu with a toolbar or a navigation rail, and don't open one from anything but a FAB.",
+    },
+    controls: [
+      {
+        name: "size",
+        label: "Size",
+        options: ["md", "lg", "xl"],
+        initial: "lg",
+      },
+      {
+        name: "color",
+        label: "Color",
+        options: ["accent", "neutral", "danger", "success"],
+        initial: "accent",
+      },
+    ],
+    keyboard: [
+      ["Enter / Space", "Open the menu from the FAB."],
+      ["Arrow Down / Up", "Move through the actions."],
+      ["Escape", "Close the menu and return focus to the FAB."],
+    ],
+    accessibility:
+      "The closed FAB takes your label; the open FAB is named \u201cClose\u201d. Items are menu items with visible labels. Target WCAG 2.2 AA; assistive-technology verification remains pending.",
+    lesson:
+      "M3's FAB menu replaces speed dials: one prominent action that reveals a few related ones in the same place.",
+    token: "--dixy-color-brand-3",
   },
   "avatar-group": {
     exportName: "AvatarGroup",
@@ -113,7 +210,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -170,7 +267,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -227,7 +324,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -278,7 +375,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -335,7 +432,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -425,7 +522,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -479,7 +576,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -595,6 +692,7 @@ export const additionComponentRegistry = {
         options: ["accent", "neutral", "danger", "success"],
         initial: "accent",
       },
+      { name: "contained", label: "Container", initial: false },
     ],
     keyboard: [],
     accessibility:
@@ -802,7 +900,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -1298,6 +1396,7 @@ export const additionComponentRegistry = {
         options: ["accent", "neutral", "danger", "success"],
         initial: "accent",
       },
+      { name: "showValue", label: "Show value", initial: false },
     ],
     keyboard: [],
     accessibility:
@@ -1384,7 +1483,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -1439,7 +1538,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -1663,7 +1762,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -1923,7 +2022,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -1987,7 +2086,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -2182,7 +2281,7 @@ export const additionComponentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {

@@ -34,7 +34,7 @@ export const componentRegistry = {
       {
         name: "size",
         label: "Size",
-        options: ["sm", "md", "lg"],
+        options: ["xs", "sm", "md", "lg", "xl"],
         initial: "md",
       },
       {
@@ -46,7 +46,7 @@ export const componentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -106,7 +106,7 @@ export const componentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
       {
@@ -168,7 +168,7 @@ export const componentRegistry = {
       {
         name: "material",
         label: "Material",
-        options: ["matte", "glossy", "soft", "metal", "paper"],
+        options: ["matte", "glossy", "soft", "metal", "paper", "bevel"],
         initial: "matte",
       },
     ],
@@ -251,6 +251,9 @@ export const componentRegistry = {
         name: "headingVariant",
         label: "Heading role",
         options: [
+          "display.3xl",
+          "display.2xl",
+          "display.xl",
           "display.lg",
           "display.md",
           "display.sm",

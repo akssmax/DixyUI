@@ -36,6 +36,10 @@ export const atomicLoungeTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"Fredoka Variable", "Fredoka", ui-rounded, "SF Pro Rounded", "Nunito", sans-serif',

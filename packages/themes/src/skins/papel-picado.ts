@@ -36,6 +36,10 @@ export const papelPicadoTheme = {
   ornament: "balanced",
   relief: 1,
   effects: "static",
+  highlight: "tint",
+  morph: "off",
+  progress: "line",
+  avatarShape: "none",
   style: {
     fontFamily:
       '"Bricolage Grotesque Variable", "Bricolage Grotesque", ui-sans-serif, sans-serif',

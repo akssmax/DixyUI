@@ -62,6 +62,35 @@ const notifications = [
 
 const commands = ["New project", "Invite people", "Open settings"];
 
+/** The theme's large-type moment: one word or numeral in a fluid display role. */
+function DisplayCard({
+  display,
+}: {
+  display: NonNullable<ReturnType<typeof usePreviewVoice>["display"]>;
+}) {
+  const role = display.role.replace(".", "-");
+  return (
+    <Card.Root className="theme-wall-card theme-wall-display">
+      <Card.Content>
+        <p
+          className="theme-wall-display-text"
+          // Fluid roles measure the wall (a size container), not the viewport.
+          style={{
+            font: `var(--dixy-font-${role})`,
+            letterSpacing: `var(--dixy-font-${role}-letter-spacing)`,
+          }}
+          lang={
+            /[\u3040-\u30ff\u4e00-\u9fff]/.test(display.text) ? "ja" : undefined
+          }
+        >
+          {display.text}
+        </p>
+        <Text tone="muted">{display.caption}</Text>
+      </Card.Content>
+    </Card.Root>
+  );
+}
+
 function Wall() {
   const voice = usePreviewVoice();
   const manager = Toast.useToastManager();
@@ -91,6 +120,8 @@ function Wall() {
           Ten small compositions, one theme. Change anything on the right.
         </Text>
       </header>
+
+      {voice.display && <DisplayCard display={voice.display} />}
 
       <div className="theme-wall-grid">
         <div className="theme-wall-col">

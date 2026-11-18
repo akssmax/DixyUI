@@ -101,6 +101,12 @@
       var(--dixy-skin-control-edge), var(--dixy-skin-shadow);
     --dixy-skin-thumb: linear-gradient(180deg, #3dff6e, #1f9e44);
     --dixy-skin-mark-opacity: 1;
+    --dixy-font-display-3xl-weight: 400;
+    --dixy-font-display-3xl-letter-spacing: 0.04em;
+    --dixy-font-display-2xl-weight: 400;
+    --dixy-font-display-2xl-letter-spacing: 0.04em;
+    --dixy-font-display-xl-weight: 400;
+    --dixy-font-display-xl-letter-spacing: 0.04em;
     --dixy-font-display-lg-weight: 400;
     --dixy-font-display-lg-letter-spacing: 0.04em;
     --dixy-font-display-md-weight: 400;

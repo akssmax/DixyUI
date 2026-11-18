@@ -268,7 +268,7 @@ for (const drawerDirection of ["up", "down", "left", "right"])
 // Public expressive examples: each independent control and representative combinations.
 const expressiveExamples = {
   material: [
-    ...["matte", "glossy", "soft", "metal", "paper"].map((finish) => ({
+    ...["matte", "glossy", "soft", "metal", "paper", "bevel"].map((finish) => ({
       finish,
     })),
     ...["rounded", "pill", "square"].map((shape) => ({ shape })),
