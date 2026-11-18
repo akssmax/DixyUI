@@ -43,8 +43,8 @@ sample.style.minBlockSize = size("control", controlSize);
 sample.style.maxInlineSize = container(containerSize);
 sample.style.paddingInline = layoutGutter;
 sample.dataset.mediaQuery = minWidth("lg");
-// @ts-expect-error Control sizes do not include icon xs.
-size("control", "xs");
+// @ts-expect-error Control sizes stop at xl; 2xl is an icon size.
+size("control", "2xl");
 // @ts-expect-error Containers are finite contracts, not arbitrary pixels.
 container("900");
 // @ts-expect-error Breakpoints are typed identifiers.
